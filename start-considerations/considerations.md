@@ -1,6 +1,6 @@
 # Considerations for the transit planner app
 
-## Funcionality
+## **Funcionality**
 - Set transfer times to more/less aggressive
     - **3 value switch** - long/normal/short transfers
     - i.e. set the risk level I'm willing to take (for example when running late for a lecture, one might set the risk level to high, as he has nothing to lose. When one is for example travelling with their grandma or kids, he may set the risk to very low, to accomodate longer transfers)
@@ -15,7 +15,7 @@
     - for example if I know that a certain transfer at a certain station takes me less time than the app usually plans, I may manually set it to less, so that the app finds me an earlier connection
     - can be set for long/normal/short
 - Set walking reluctance walue - how much I do/don't mind walking, (if it saves time)
-    - **2 value switch** - don't mind walking/less walking (i.e. like other apps)
+    - **2/3 value switch** - don't mind walking/less walking (i.e. like other apps)
 - Find the connection from more than just the one nearest starting stop
     - i.e. if one stop is 100m from me, but only has 1 bus in 20 minutes, but there is a second stop 500m away with a bus in 8 minutes, the app should prefer the second one
     - depends on the walking reluctance value - if reluctance is set to high, only nearer stops will be considered
@@ -28,8 +28,9 @@
 
 - use as little mobile data as possible
 
-## Available data
 -----------------
+## **Available data**
+
 - **Overview page**
     - https://pid.cz/o-systemu/opendata/
 ----------------
@@ -46,14 +47,14 @@
     - https://opendata.praha.eu/datasets/https%3A%2F%2Fapi.opendata.praha.eu%2Flod%2Fcatalog%2F7a430e0e-eb8d-4039-b35e-57fd3a55c9c9
 
 ------------------
-## App mockups
+## **App mockups**
 
 - Online on [Figma](https://www.figma.com/file/nEyf3GvAmGA7qbupyGQsxn/Untitled?node-id=0%3A1&t=KiPEdD8hvWAdyEQN-1)
 - local [PDF](TravelPlanner-app-mockups.pdf)
 
 -------------
 
-## Existing options
+## **Existing options comparison**
 
 | Functionality\Apps | Jízdní řády | IDOS | Lítačka | Google maps
 | --- | --- | --- | --- | --- |
@@ -66,7 +67,7 @@
 | **More start/end stops** | <g>YES</g> | <r>NO</r> | <r>NO</r> | <g>YES</g>
 | **Delay included in planning** | <r>NO</r> | <y>IDK</y> | <r>NO</r> | <y>PROBABLY</y>
 | **Exact metro departure times** | <r>NO</r> | <r>NO</r> | <r>NO</r> | <r>NO</r>
-| **Small data usage** | <g>YES</g> | <g>YES</g> | <g>YES</g> | <r>NO</r>
+| **Low data usage** | <g>YES</g> | <g>YES</g> | <g>YES</g> | <r>NO</r>
 
 
 <style>
