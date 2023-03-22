@@ -26,6 +26,7 @@
 - Ideally include shared bikes (at least nextbikes) in the route-planning (probably mainly in the first and/or last leg of the trip)
     - **true/false switch** - this can be turned on and off, or the maximum time can be set to 15 minutes
 
+- use as little mobile data as possible
 
 ## Available data
 -----------------
@@ -49,3 +50,28 @@
 
 - Online on [Figma](https://www.figma.com/file/nEyf3GvAmGA7qbupyGQsxn/Untitled?node-id=0%3A1&t=KiPEdD8hvWAdyEQN-1)
 - local [PDF](TravelPlanner-app-mockups.pdf)
+
+-------------
+
+## Existing options
+
+| Functionality\Apps | Jízdní řády | IDOS | Lítačka | Google maps
+| --- | --- | --- | --- | --- |
+| **Transfer aggressivity** | <r>NO</r> | <r>NO</r> | <g>YES</g> | <r>NO</r>
+| **Time/Comfort balance** | <r>ONLY DIRECT</r> | <r>ONLY DIRECT</r> | <o>ONLY MAX TRANSFERS</o> | <y>PARTLY<y>
+| **Custom walking/cycling speed** | <r>NO</r> | <r>NO</r> | <r>NO</r> | <r>NO</r>
+| **Manual transfer times** | <r>NO</r> | <o>ONLY GLOBAL</o> | <r>NO</r> | <r>NO</r>
+| **Walking reluctance settings** | <r>NO</r> | <r>NO</r> | <r>NO</r> | <g>ALMOST</g>
+| **Shared bikes support** | <r>NO</r> | <r>NO</r> | <y>POSSIBLY in future</y> | <r>NO</r>
+| **More start/end stops** | <g>YES</g> | <r>NO</r> | <r>NO</r> | <g>YES</g>
+| **Delay included in planning** | <r>NO</r> | <y>IDK</y> | <r>NO</r> | <y>PROBABLY</y>
+| **Exact metro departure times** | <r>NO</r> | <r>NO</r> | <r>NO</r> | <r>NO</r>
+| **Small data usage** | <g>YES</g> | <g>YES</g> | <g>YES</g> | <r>NO</r>
+
+
+<style>
+r { color: Red }
+y { color: Yellow }
+g { color: LightGreen }
+o { color: Orange }
+</style>
