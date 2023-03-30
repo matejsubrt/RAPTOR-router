@@ -54,7 +54,11 @@
 - All bikes API?
     - **JSON API** mojepraha: https://mojepraha.eu/apispecs#for-mobile-app-only-shared-bikes-get
     - **Documentation**: https://mojeprahaapi.docs.apiary.io/#introduction/versions
+-----------------
+## **Implementation possibilities**
 
+- A* algorithm: https://www.geeksforgeeks.org/a-search-algorithm/
+- RAPTOR algorithm for public transit: https://www.microsoft.com/en-us/research/wp-content/uploads/2012/01/raptor_alenex.pdf
 ------------------
 ## **App mockups**
 
