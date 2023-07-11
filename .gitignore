@@ -1,0 +1,14 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/RAPTOR-Router/.vs
+/.vs/RAPTOR-router/FileContentIndex
+/.vs/RAPTOR-router/v17/TestStore/0
+/.vs/slnx.sqlite
+/.vs/VSWorkspaceState.json
+/example-gtfs
+/RAPTOR-Router/RAPTOR-Router/bin/Debug/net7.0
+/RAPTOR-Router/RAPTOR-Router/obj/Debug/net7.0/ref
+/RAPTOR-Router/RAPTOR-Router/obj/Debug/net7.0/refint
+/RAPTOR-Router/RAPTOR-Router/obj

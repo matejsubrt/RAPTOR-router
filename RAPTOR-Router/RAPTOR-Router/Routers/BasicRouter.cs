@@ -129,10 +129,6 @@ namespace RAPTOR_Router.Routers
                                 stopRoutingInfo[currStop].tripToReach = t;
                                 stopRoutingInfo[currStop].getOnStopToReach = getOnStop;
                                 stopRoutingInfo[currStop].transferToReach = null;
-                                if(currStop.Name == "Chodov" && getOnStop.Name == "Letňany")
-                                {
-                                    Console.WriteLine("coze dopici");
-                                }
 
                                 markedStops.Add(currStop);
                             }
@@ -171,10 +167,6 @@ namespace RAPTOR_Router.Routers
                 }
                 markedStops.UnionWith(newMarkedStops);
                 newMarkedStops = new();
-                if(markedStops.Count == 0)
-                {
-                    Console.WriteLine("ENDE");
-                }
             }
             return new SearchResult(stopRoutingInfo, toStop, fromStop);
         }
