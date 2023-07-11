@@ -25,6 +25,7 @@
     - So that everyone can see what time thay have left until it departs
 - Ideally include shared bikes (at least nextbikes) in the route-planning (probably mainly in the first and/or last leg of the trip)
     - **true/false switch** - this can be turned on and off, or the maximum time can be set to 15 minutes
+- The user selects the route he is taking, the app then notifies him if anything changes along the way
 
 - use as little mobile data as possible
 
@@ -53,7 +54,7 @@
 
 - All bikes API?
     - **JSON API** mojepraha: https://mojepraha.eu/apispecs#for-mobile-app-only-shared-bikes-get
-    - **Documentation**: https://mojeprahaapi.docs.apiary.io/#introduction/versions
+    - **Documentation**: https://mojeprahaapi.docs.apiary.io/#introduction/versions 
 -----------------
 ## **Implementation possibilities**
 
