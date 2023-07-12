@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace RAPTOR_Router.GTFSParsing
 {
-    internal class GTFS
+    internal class GTFS : IDisposable
     {
         public Dictionary<string, GTFSAgency> agencies { get; private set; } = new();
         public Dictionary<string, GTFSCalendar> calendars { get; private set; } = new();
@@ -157,6 +157,7 @@ namespace RAPTOR_Router.GTFSParsing
             }
             return gtfs;
         }
+        /*
         public Dictionary<string, GTFSStop> GetGtfsStops()
         {
             return this.stops;
@@ -176,6 +177,17 @@ namespace RAPTOR_Router.GTFSParsing
         public Dictionary<string, List<GTFSStopTime>> GetGtfsStopTimes()
         {
             return this.stopTimes;
+        }
+        */
+        public void Dispose()
+        {
+            stops = null;
+            calendars = null;
+            routes = null;
+            stopTimes = null;
+            trips = null;
+            calendarDates = null;
+            agencies = null;
         }
     }
 }

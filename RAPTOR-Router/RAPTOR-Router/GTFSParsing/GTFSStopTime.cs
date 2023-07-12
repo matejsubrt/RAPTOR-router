@@ -19,6 +19,7 @@ namespace RAPTOR_Router.GTFSParsing
         public TimeOnly DepartureTime { get; set; }
         [Name("stop_id")]
         public string StopId { get; set; }
+        /*
         [Name("stop_sequence")]
         public int StopSequence { get; set; }
         [Name("stop_headsign")]
@@ -33,6 +34,7 @@ namespace RAPTOR_Router.GTFSParsing
         public int OperationType { get; set; }
         [Name("bikes_allowed")]
         public int BikesAllowed { get; set; }
+        */
 
         public string GetId()
         {

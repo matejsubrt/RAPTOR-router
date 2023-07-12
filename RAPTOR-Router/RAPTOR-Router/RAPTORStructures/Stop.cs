@@ -37,8 +37,8 @@ namespace RAPTOR_Router.RAPTORStructures
         }
         public static int SimplifiedDistanceBetween(Stop stop1, Stop stop2)
         {
-            const double latConst = 111113.9;
-            const double lonConst50N = 71583;
+            const double latConst = 111113.9; //distance between latitudes of 1 degree
+            const double lonConst50N = 71583; //distance between 2 longitude lines at 50 degrees north
             var lat1 = stop1.Lat * latConst;
             var lon1 = stop1.Lon * lonConst50N;
             var lat2 = stop2.Lat * latConst;

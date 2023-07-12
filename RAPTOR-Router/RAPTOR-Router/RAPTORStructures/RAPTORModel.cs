@@ -18,24 +18,33 @@ namespace RAPTOR_Router.RAPTORStructures
         {
             LoadDataFromGtfs(gtfs);
         }
-        private void LoadDataFromGtfs(GTFS gtfs)
+        public RAPTORModel(GTFS gtfs, Stopwatch stopwatch)
         {
-            var watch = new Stopwatch();
-            Console.WriteLine("GTFS loaded");
-            Console.WriteLine("Starting stopwatch");
-            watch.Start();
             LoadStopsFromGtfsStops(gtfs.stops);
-            Console.WriteLine(watch.Elapsed + " - Stops loaded");
+            Console.WriteLine(stopwatch.Elapsed + ": Stops loaded, \tMemory:" + GC.GetTotalMemory(false));
 
             LoadAllUniqueRoutesFromGtfs(gtfs);
-            Console.WriteLine(watch.Elapsed + " - Routes loaded");
+            Console.WriteLine(stopwatch.Elapsed + ": Routes loaded, \tMemory:" + GC.GetTotalMemory(false));
 
             LoadStopRoutes();
-            Console.WriteLine(watch.Elapsed + " - StopRoutes loaded");
+            Console.WriteLine(stopwatch.Elapsed + ": StopRoutes loaded, \tMemory:" + GC.GetTotalMemory(false));
 
             LoadStopTransfers();
-            Console.WriteLine(watch.Elapsed + " - Transfers loaded");
-            watch.Stop();
+            Console.WriteLine(stopwatch.Elapsed + ": Transfers loaded, \tMemory:" + GC.GetTotalMemory(false));
+        }
+        private void LoadDataFromGtfs(GTFS gtfs)
+        {
+            LoadStopsFromGtfsStops(gtfs.stops);
+
+            LoadAllUniqueRoutesFromGtfs(gtfs);
+
+            LoadStopRoutes();
+
+            LoadStopTransfers();
+        }
+        private void LoadRoutes(GTFS gtfs)
+        {
+
         }
         private void LoadAllUniqueRoutesFromGtfs(GTFS gtfs)
         {

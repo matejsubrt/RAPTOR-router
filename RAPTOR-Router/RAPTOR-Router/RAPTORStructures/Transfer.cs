@@ -18,7 +18,6 @@ namespace RAPTOR_Router.RAPTORStructures
             From = from;
             To = to;
             Distance = dist;
-            //TODO:Calculate time
             Time = (int)(dist / 1000.0 * 720);
         }
     }

@@ -15,6 +15,7 @@ namespace RAPTOR_Router.GTFSParsing
         public string ServiceId { get; set; }
         [Name("trip_id")]
         public string Id { get; set; }
+        /*
         [Name("trip_headsign")]
         public string Headsign { get; set; }
         [Name("trip_short_name")]
@@ -33,6 +34,7 @@ namespace RAPTOR_Router.GTFSParsing
         public bool Exceptional { get; set; }
         [Name("sub_agency_id")]
         public int SubAgencyId { get; set; }
+        */
 
         public string GetId()
         {
