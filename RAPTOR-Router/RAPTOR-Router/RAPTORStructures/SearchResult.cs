@@ -9,21 +9,19 @@ namespace RAPTOR_Router.RAPTORStructures
 {
     internal class SearchResult
     {
-        DateOnly DepartureDate { get; set; }
         List<Trip> UsedTrips { get; set; }
         List<Transfer> usedTransfers { get; set; }
         Dictionary<Trip, Stop> GetOnStops { get; set; } = new();
-        Dictionary<Trip, Stop> GetOffStops { get; set; } = new();
         Stop toStop;
-        public SearchResult(Dictionary<Stop, BasicRouter.StopRoutingInfo> stopRoutingInfo, Stop toStop, Stop fromStop)
+        public SearchResult(Dictionary<Stop, BasicRouterNew.StopRoutingInfo> stopRoutingInfo, List<Stop> toStops, List<Stop> fromStops)
         {
-            this.toStop = toStop;
 
             LinkedList<Trip> usedTrips = new LinkedList<Trip>();
             LinkedList<Transfer> usedTransfers = new LinkedList<Transfer>();
+            toStop = StopWithMinArrivalTime(toStops, stopRoutingInfo);
             Stop currStop = toStop;
 
-            while(currStop != fromStop)
+            while(!fromStops.Contains(currStop))
             {
                 Trip usedTrip = stopRoutingInfo[currStop].tripToReach;
                 Transfer usedTransfer = stopRoutingInfo[currStop].transferToReach;
@@ -44,6 +42,18 @@ namespace RAPTOR_Router.RAPTORStructures
             this.UsedTrips = usedTrips.ToList();
             this.usedTransfers = usedTransfers.ToList();
 
+        }
+        private Stop StopWithMinArrivalTime(List<Stop> toStops, Dictionary<Stop, BasicRouterNew.StopRoutingInfo> routingInfo)
+        {
+            Stop stopWithMinArrTime = toStops[0];
+            foreach(Stop stop in toStops)
+            {
+                if (routingInfo[stop].earliestArrival < routingInfo[stopWithMinArrTime].earliestArrival)
+                {
+                    stopWithMinArrTime = stop;
+                }
+            }
+            return stopWithMinArrTime;
         }
         public string ToString()
         {

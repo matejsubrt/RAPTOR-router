@@ -9,6 +9,6 @@ namespace RAPTOR_Router.Routers
 {
     internal interface IRouter
     {
-        SearchResult FindConnection(string fromStopId, string toStopId, DateTime departureTime);
+        SearchResult FindConnection(List<string> fromStopIds, List<string> toStopIds, DateTime departureTime);
     }
 }

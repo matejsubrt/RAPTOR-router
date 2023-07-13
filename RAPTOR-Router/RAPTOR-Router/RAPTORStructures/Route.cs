@@ -14,8 +14,7 @@ namespace RAPTOR_Router.RAPTORStructures
         public string ShortName { get; }
         public string LongName { get; }
         public List<Stop> RouteStops { get; set; } = new();
-        public List<Trip> RouteTrips { get; set; } = new();
-
+        public Dictionary<DateOnly, List<Trip>> RouteTrips { get; set; } = new();
         public Route(string id, string gtfsId, string shortName, string longName)
         {
             Id = id;
@@ -26,27 +25,51 @@ namespace RAPTOR_Router.RAPTORStructures
         public int GetStopIndex(Stop stop)
         {
             int res = RouteStops.IndexOf(stop);
-            if(res == -1)
+            if (res == -1)
             {
                 throw new InvalidOperationException("Stop not found");
             }
             return res;
         }
-        public Trip GetEarliestTripAtStop(Stop stop, DateTime dateTime)
+        public Trip GetEarliestTripAtStop(Stop stop, DateOnly date, TimeOnly time, int maxDaysAfter, out DateOnly tripDate)
         {
-            int stopIndex = RouteStops.IndexOf(stop);
-            int i = 0;
-            DateTime departureDateTime = new DateTime(RouteTrips[i].Date.Year, RouteTrips[i].Date.Month, RouteTrips[i].Date.Day, RouteTrips[i].StopTimes[stopIndex].DepartureTime.Hour, RouteTrips[i].StopTimes[stopIndex].DepartureTime.Minute, RouteTrips[i].StopTimes[stopIndex].DepartureTime.Second);
-            while (departureDateTime < dateTime)
-            {                
-                i++;
-                if (i >= RouteTrips.Count)
+            int stopIndex = GetStopIndex(stop);
+            DateOnly currDate = date;
+            DateOnly maxDate = date.AddDays(maxDaysAfter);
+
+            List<Trip> tripsOnDate;
+            if (RouteTrips.ContainsKey(currDate))
+            {
+                tripsOnDate = RouteTrips[currDate];
+
+                TimeOnly departureTime;
+                //Scan the first day for trips leaving after specified time
+                for (int i = 0; i < tripsOnDate.Count; i++)
                 {
-                    return null;
+                    departureTime = tripsOnDate[i].StopTimes[stopIndex].DepartureTime;
+                    if (departureTime >= time)
+                    {
+                        tripDate = currDate;
+                        return tripsOnDate[i];
+                    }
                 }
-                departureDateTime = new DateTime(RouteTrips[i].Date.Year, RouteTrips[i].Date.Month, RouteTrips[i].Date.Day, RouteTrips[i].StopTimes[stopIndex].DepartureTime.Hour, RouteTrips[i].StopTimes[stopIndex].DepartureTime.Minute, RouteTrips[i].StopTimes[stopIndex].DepartureTime.Second);
             }
-            return RouteTrips[i];
+
+            
+            //scan the following days till maxDay and select first available trip
+            while(currDate < maxDate)
+            {
+                currDate = currDate.AddDays(1);
+
+                if(RouteTrips.ContainsKey(currDate) && RouteTrips[currDate].Count > 0)
+                {
+                    tripDate = currDate;
+                    return RouteTrips[currDate][0];
+                }
+            }
+            //No trip found in the specified timeframe
+            tripDate = new DateOnly();
+            return null;
         }
     }
 }

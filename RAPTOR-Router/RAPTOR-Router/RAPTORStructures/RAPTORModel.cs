@@ -23,7 +23,7 @@ namespace RAPTOR_Router.RAPTORStructures
             LoadStopsFromGtfsStops(gtfs.stops);
             Console.WriteLine(stopwatch.Elapsed + ": Stops loaded, \tMemory:" + GC.GetTotalMemory(false));
 
-            LoadAllUniqueRoutesFromGtfs(gtfs);
+            LoadRoutes(gtfs);
             Console.WriteLine(stopwatch.Elapsed + ": Routes loaded, \tMemory:" + GC.GetTotalMemory(false));
 
             LoadStopRoutes();
@@ -36,7 +36,7 @@ namespace RAPTOR_Router.RAPTORStructures
         {
             LoadStopsFromGtfsStops(gtfs.stops);
 
-            LoadAllUniqueRoutesFromGtfs(gtfs);
+            LoadRoutes();
 
             LoadStopRoutes();
 
@@ -44,13 +44,8 @@ namespace RAPTOR_Router.RAPTORStructures
         }
         private void LoadRoutes(GTFS gtfs)
         {
-
-        }
-        private void LoadAllUniqueRoutesFromGtfs(GTFS gtfs)
-        {
             Dictionary<string, Route> uniqueRoutes = new Dictionary<string, Route>();
-
-            List<GTFSTrip> gtfsTrips = gtfs.trips.Values.ToList();
+            var gtfsTrips = gtfs.trips.Values;
 
             foreach(GTFSTrip gtfsTrip in gtfsTrips)
             {
@@ -59,7 +54,8 @@ namespace RAPTOR_Router.RAPTORStructures
                 GTFSCalendar gtfsCalendar = gtfs.calendars[gtfsTrip.ServiceId];
                 List<GTFSStopTime> gtfsStopTimes = gtfs.stopTimes[gtfsTrip.Id];
                 List<GTFSCalendarDate> gtfsCalendarDates = new List<GTFSCalendarDate>();
-                if (gtfs.calendarDates.ContainsKey(gtfsTrip.ServiceId)){
+                if (gtfs.calendarDates.ContainsKey(gtfsTrip.ServiceId))
+                {
                     gtfsCalendarDates = gtfs.calendarDates[gtfsTrip.ServiceId];
                 }
 
@@ -81,32 +77,57 @@ namespace RAPTOR_Router.RAPTORStructures
                         route.RouteStops.Add(stops[stopId]);
                     }
                 }
+                Trip trip = new Trip(gtfsStopTimes, route);
+
                 //add all instances of current trip to the route's RouteTrips
                 //mam kalendar - rika kdy jede, a calendardates - kdy nejede
                 DateOnly from = gtfsCalendar.StartDate;
                 DateOnly to = gtfsCalendar.EndDate;
                 foreach(DateOnly date in DatesBetween(from, to))
                 {
-                    int index = gtfsCalendarDates.FindIndex(item => item.Date == date);
-                    if (gtfsCalendar.IsOperating(date) && (index < 0 || gtfsCalendarDates[index].ExceptionType != 2))
+                    if(IsNormallyOperating(gtfsCalendar, gtfsCalendarDates, date))
                     {
-                        Trip trip = new Trip(gtfsStopTimes, route, date);
-                        route.RouteTrips.Add(trip);
+                        if (route.RouteTrips.ContainsKey(date))
+                        {
+                            route.RouteTrips[date].Add(trip);
+                        }
+                        else
+                        {
+                            route.RouteTrips.Add(date, new List<Trip> { trip });
+                        }
                     }
                 }
-                IEnumerable<GTFSCalendarDate> exceptionOperationDates = 
-                    from gtfsCalendarDate 
-                    in gtfsCalendarDates 
-                    where gtfsCalendarDate.ExceptionType == 1 
+                IEnumerable<GTFSCalendarDate> exceptionOperationDates =
+                    from gtfsCalendarDate
+                    in gtfsCalendarDates
+                    where gtfsCalendarDate.ExceptionType == 1
                     select gtfsCalendarDate;
-                foreach(GTFSCalendarDate calendarDate in exceptionOperationDates)
+                foreach (GTFSCalendarDate calendarDate in exceptionOperationDates)
                 {
-                    Trip trip = new Trip(gtfsStopTimes, route, calendarDate.Date);
-                    route.RouteTrips.Add(trip);
+                    if (route.RouteTrips.ContainsKey(calendarDate.Date))
+                    {
+                        route.RouteTrips[calendarDate.Date].Add(trip);
+                    }
+                    else
+                    {
+                        route.RouteTrips.Add(calendarDate.Date, new List<Trip> { trip });
+                    }
                 }
-                route.RouteTrips.Sort(Trip.CompareTrips);
+
+                foreach(List<Trip> tripsOnDate in route.RouteTrips.Values)
+                {
+                    tripsOnDate.Sort(Trip.CompareTrips);
+                }
             }
             routes = uniqueRoutes;
+        }
+        private bool IsNormallyOperating(GTFSCalendar calendar, List<GTFSCalendarDate> calendarDates, DateOnly date)
+        {
+            int index = calendarDates.FindIndex(item => item.Date == date);
+
+            //Normally operates on the date and is not cancelled
+            bool result = (calendar.IsOperating(date) && (index < 0 || calendarDates[index].ExceptionType != 2));
+            return result;
         }
         private IEnumerable<DateOnly> DatesBetween(DateOnly from, DateOnly to)
         {
@@ -160,58 +181,17 @@ namespace RAPTOR_Router.RAPTORStructures
                 }
             }
         }
-        /*
-        private void LoadUniqueRoutesFromGtfsRoutes(
-            Dictionary<string, GTFSRoute> gtfsRoutes, 
-            Dictionary<string, GTFSCalendar> gtfsCalendars, 
-            Dictionary<string, GTFSTrip> gtfsTrips,
-            Dictionary<string, List<GTFSStopTime>> gtfsStopTimes
-        ){
-            Dictionary<string, Route> uniqueRoutes = new Dictionary<string, Route>();
-
-            foreach(var keyValuePair in gtfsTrips)
-            {
-                Route route;
-                GTFSTrip gtfsTrip = keyValuePair.Value;
-
-                GTFSRoute gtfsRoute = gtfsRoutes[gtfsTrip.RouteId];
-                GTFSCalendar gtfsCalendar = gtfsCalendars[gtfsTrip.ServiceId];
-                List<GTFSStopTime> gtfsTripStopTimes = gtfsStopTimes[gtfsTrip.Id];
-
-                List<string> tripStopsIds = gtfsTripStopTimes.GetStopIds();
-
-                //as every route in routes.txt can have multiple different versions of trips (i.e. tram returning to depot after 1/2 of the route)
-                string uniqueRouteIdentifier = String.Concat(gtfsRoute.Id, String.Join(String.Empty, tripStopsIds));
-
-                if (uniqueRoutes.ContainsKey(uniqueRouteIdentifier))
-                {
-                    route = uniqueRoutes[uniqueRouteIdentifier];
-                }
-                else
-                {
-                    route = new Route(uniqueRouteIdentifier, gtfsRoute.Id, gtfsRoute.ShortName, gtfsRoute.LongName);
-                    route.RouteStops = GetStopsFromIds(tripStopsIds);
-                    uniqueRoutes.Add(uniqueRouteIdentifier, route);
-                }
-                //List<Trip> allTripsByCalendar = gtfsTrip.GenerateAllTripsbyCalendar(gtfsCalendar, gtfsTripStopTimes);
-
-                //Trip trip = new Trip(gtfsTripStopTimes, route);
-                //route.RouteTrips.Add(trip);
-            }
-            routes = uniqueRoutes;
-            Console.WriteLine();
-        }
-        */
-        /*
-        private List<Stop> GetStopsFromIds(List<string> ids)
+        public List<string> GetStopsIdByName(string stopName)
         {
-            List<Stop> stopsList = new List<Stop>();
-            foreach(string id in ids)
+            List<string> result = new();
+            foreach(Stop stop in stops.Values)
             {
-                stopsList.Add(stops[id]);
+                if(stop.Name == stopName)
+                {
+                    result.Add(stop.Id);
+                }
             }
-            return stopsList;
+            return result;
         }
-        */
     }
 }

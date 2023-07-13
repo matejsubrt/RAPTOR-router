@@ -9,6 +9,7 @@ namespace RAPTOR_Router
     {
         static void Main(string[] args)
         {
+            
             RAPTORModel raptor;
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -20,10 +21,20 @@ namespace RAPTOR_Router
                 Console.WriteLine(stopwatch.Elapsed + ": RAPTOR Model loaded, \tMemory:" + GC.GetTotalMemory(false));
             }
             GC.Collect();
-            IRouter router = new BasicRouter(raptor);
+            IRouter router = new BasicRouterNew(raptor);
             Console.WriteLine(stopwatch.Elapsed + ": Router created, \tMemory:" + GC.GetTotalMemory(false));
-            //From Vetrnik to Motol
-            var result = router.FindConnection("U844Z1P", "U394Z1P", new DateTime(2023, 7, 11, 17, 43, 0));
+
+
+
+            Console.WriteLine("Enter the source stop:");
+            string sourceStop = Console.ReadLine();
+            Console.WriteLine("Enter the destination stop:");
+            string destStop = Console.ReadLine();
+
+            List<string> sourceStopIds = raptor.GetStopsIdByName(sourceStop);
+            List<string> destStopIds = raptor.GetStopsIdByName(destStop);
+
+            var result = router.FindConnection(sourceStopIds, destStopIds, DateTime.Now);
             Console.WriteLine(stopwatch.Elapsed + ": Connection successfully found, \tMemory:" + GC.GetTotalMemory(false));
             Console.WriteLine(result.ToString());
         }
