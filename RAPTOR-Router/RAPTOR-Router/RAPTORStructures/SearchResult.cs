@@ -10,7 +10,7 @@ namespace RAPTOR_Router.RAPTORStructures
     internal class SearchResult
     {
         List<Trip> UsedTrips { get; set; }
-        List<Transfer> usedTransfers { get; set; }
+        List<Transfer> UsedTransfers { get; set; }
         Dictionary<Trip, Stop> GetOnStops { get; set; } = new();
         Stop toStop;
         public SearchResult(Dictionary<Stop, BasicRouterNew.StopRoutingInfo> stopRoutingInfo, List<Stop> toStops, List<Stop> fromStops)
@@ -21,11 +21,16 @@ namespace RAPTOR_Router.RAPTORStructures
             toStop = StopWithMinArrivalTime(toStops, stopRoutingInfo);
             Stop currStop = toStop;
 
+            Trip lastTrip = null;
             while(!fromStops.Contains(currStop))
             {
                 Trip usedTrip = stopRoutingInfo[currStop].tripToReach;
                 Transfer usedTransfer = stopRoutingInfo[currStop].transferToReach;
 
+                if(lastTrip != null && usedTrip != null)
+                {
+                    usedTransfers.AddFirst(new Transfer(currStop, currStop, 0));
+                }
                 if(usedTrip != null)
                 {
                     usedTrips.AddFirst(usedTrip);
@@ -37,10 +42,11 @@ namespace RAPTOR_Router.RAPTORStructures
                     usedTransfers.AddFirst(usedTransfer);
                     currStop = usedTransfer.From;
                 }
+                lastTrip = usedTrip;
             }
 
-            this.UsedTrips = usedTrips.ToList();
-            this.usedTransfers = usedTransfers.ToList();
+            this.UsedTrips = usedTrips.ToList();            
+            this.UsedTransfers = usedTransfers.ToList();
 
         }
         private Stop StopWithMinArrivalTime(List<Stop> toStops, Dictionary<Stop, BasicRouterNew.StopRoutingInfo> routingInfo)
@@ -70,19 +76,19 @@ namespace RAPTOR_Router.RAPTORStructures
                     //sb.AppendLine("\tRoute " + trip.Route.ShortName + " from " + GetOnStops[trip].ToString() + " to " + usedTransfers[i].From.ToString());
                     sb.AppendLine("\tRoute " + trip.Route.ShortName);
                     sb.AppendLine("\t\tFrom " + GetOnStops[trip].ToString() + " at " + trip.StopTimes[trip.Route.GetStopIndex(GetOnStops[trip])].DepartureTime.ToLongTimeString());
-                    sb.AppendLine("\t\tTo: " + usedTransfers[i].From.ToString() + " at " + trip.StopTimes[trip.Route.GetStopIndex(usedTransfers[i].From)].ArrivalTime.ToLongTimeString());
-                    sb.AppendLine("\tTransfer " + usedTransfers[i].Time + " s");
+                    sb.AppendLine("\t\tTo: " + UsedTransfers[i].From.ToString() + " at " + trip.StopTimes[trip.Route.GetStopIndex(UsedTransfers[i].From)].ArrivalTime.ToLongTimeString());
+                    sb.AppendLine("\tTransfer " + UsedTransfers[i].Time + " s");
                 }
                 else if(i == UsedTrips.Count-1)
                 {
                     //sb.AppendLine("\tRoute " + trip.Route.ShortName + " from " + GetOnStops[trip].ToString() + " to " + toStop.ToString());
                     sb.AppendLine("\tRoute " + trip.Route.ShortName);
                     sb.AppendLine("\t\tFrom " + GetOnStops[trip].ToString() + " at " + trip.StopTimes[trip.Route.GetStopIndex(GetOnStops[trip])].DepartureTime.ToLongTimeString());
-                    if(UsedTrips.Count == usedTransfers.Count)
+                    if(UsedTrips.Count == UsedTransfers.Count)
                     {
-                        sb.AppendLine("\t\tTo: " + usedTransfers[i].From.ToString() + " at " + trip.StopTimes[trip.Route.GetStopIndex(usedTransfers[i].From)].ArrivalTime.ToLongTimeString());
+                        sb.AppendLine("\t\tTo: " + UsedTransfers[i].From.ToString() + " at " + trip.StopTimes[trip.Route.GetStopIndex(UsedTransfers[i].From)].ArrivalTime.ToLongTimeString());
 
-                        sb.AppendLine("\tTransfer " + usedTransfers[i].Time + " s");
+                        sb.AppendLine("\tTransfer " + UsedTransfers[i].Time + " s");
                         sb.AppendLine("\tArrived at " + toStop.ToString());
                     }
                     else

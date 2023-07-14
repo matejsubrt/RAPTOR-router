@@ -27,11 +27,7 @@ namespace RAPTOR_Router.Routers
         {
             public DateTime earliestArrival;
             public List<DateTime> earliestArrivalRounds;
-            public List<Trip> tripsToReach;
-            public List<Transfer> transfersToReach;
-            public List<Stop> stopsToReach;
 
-            public DateTime[] earliestArrivalRoundsArr;
             public Trip tripToReach;
             public Stop getOnStopToReach;
             public Transfer transferToReach;
@@ -39,9 +35,6 @@ namespace RAPTOR_Router.Routers
             {
                 this.earliestArrival = DateTime.MaxValue;
                 this.earliestArrivalRounds = Enumerable.Repeat(DateTime.MaxValue, ROUNDS + 1).ToList();
-                this.tripsToReach = new List<Trip>();
-                this.transfersToReach = new List<Transfer>();
-                this.stopsToReach = new List<Stop>();
             }
         }
 
@@ -80,7 +73,7 @@ namespace RAPTOR_Router.Routers
                 markedStops.Add(stop);
             }
 
-            for(int round = 1; round < ROUNDS; round++)
+            for(int round = 1; round <= ROUNDS; round++)
             {
                 //Accumulate routes serving marked stops from previous round
                 routeGetOnStops = new();

@@ -36,7 +36,7 @@ namespace RAPTOR_Router.RAPTORStructures
         {
             LoadStopsFromGtfsStops(gtfs.stops);
 
-            LoadRoutes();
+            LoadRoutes(gtfs);
 
             LoadStopRoutes();
 
@@ -181,7 +181,7 @@ namespace RAPTOR_Router.RAPTORStructures
                 }
             }
         }
-        public List<string> GetStopsIdByName(string stopName)
+        public List<string> GetStopIdsByName(string stopName)
         {
             List<string> result = new();
             foreach(Stop stop in stops.Values)

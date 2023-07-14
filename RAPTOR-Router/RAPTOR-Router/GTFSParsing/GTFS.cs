@@ -105,7 +105,11 @@ namespace RAPTOR_Router.GTFSParsing
                 List<GTFSStop> list = csv.GetRecords<GTFSStop>().ToList();
                 foreach (var stop in list)
                 {
-                    stops.Add(stop.GetId(), stop);
+                    //virtual stops for trains, where the trains do not stop are present in the file
+                    if (stop.Id[0] != 'T')
+                    {
+                        stops.Add(stop.GetId(), stop);
+                    }
                 }
             }
         }
@@ -118,13 +122,14 @@ namespace RAPTOR_Router.GTFSParsing
                 List<GTFSStopTime> list = csv.GetRecords<GTFSStopTime>().ToList();
                 foreach (var stopTime in list)
                 {
-                    if (stopTimes.ContainsKey(stopTime.GetId()))
+                    string tripId = stopTime.GetId();
+                    if (stopTimes.ContainsKey(tripId) && stopTime.StopId[0] != 'T')
                     {
-                        stopTimes[stopTime.GetId()].Add(stopTime);
+                        stopTimes[tripId].Add(stopTime);
                     }
-                    else
+                    else if (stopTime.StopId[0]!= 'T')
                     {
-                        stopTimes.Add(stopTime.GetId(), new List<GTFSStopTime> { stopTime });
+                        stopTimes.Add(tripId, new List<GTFSStopTime> { stopTime });
                     }
                 }
             }

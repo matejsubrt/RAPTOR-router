@@ -25,18 +25,24 @@ namespace RAPTOR_Router
             Console.WriteLine(stopwatch.Elapsed + ": Router created, \tMemory:" + GC.GetTotalMemory(false));
 
 
+            while (true)
+            {
+                Console.WriteLine("Enter the source stop:");
+                string sourceStop = Console.ReadLine();
+                Console.WriteLine("Enter the destination stop:");
+                string destStop = Console.ReadLine();
 
-            Console.WriteLine("Enter the source stop:");
-            string sourceStop = Console.ReadLine();
-            Console.WriteLine("Enter the destination stop:");
-            string destStop = Console.ReadLine();
+                List<string> sourceStopIds = raptor.GetStopIdsByName(sourceStop);
+                List<string> destStopIds = raptor.GetStopIdsByName(destStop);
 
-            List<string> sourceStopIds = raptor.GetStopsIdByName(sourceStop);
-            List<string> destStopIds = raptor.GetStopsIdByName(destStop);
+                var result = router.FindConnection(sourceStopIds, destStopIds, DateTime.Now);
+                Console.WriteLine(stopwatch.Elapsed + ": Connection successfully found, \tMemory:" + GC.GetTotalMemory(false));
+                Console.WriteLine(result.ToString());
+                Console.WriteLine("------------------------------------------\n");
 
-            var result = router.FindConnection(sourceStopIds, destStopIds, DateTime.Now);
-            Console.WriteLine(stopwatch.Elapsed + ": Connection successfully found, \tMemory:" + GC.GetTotalMemory(false));
-            Console.WriteLine(result.ToString());
+                router = new BasicRouterNew(raptor);
+            }
+            
         }
     }
 }
