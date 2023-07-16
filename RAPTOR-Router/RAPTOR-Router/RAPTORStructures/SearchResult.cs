@@ -65,14 +65,16 @@ namespace RAPTOR_Router.RAPTORStructures
             this.UsedTransfers = usedTransfers.ToList();
 
         }
-        private Stop StopWithMinArrivalTime(List<Stop> toStops, Dictionary<Stop, JourneySearchModel.StopRoutingInfo> routingInfo)
+        private Stop? StopWithMinArrivalTime(List<Stop> toStops, Dictionary<Stop, JourneySearchModel.StopRoutingInfo> routingInfo)
         {
-            Stop stopWithMinArrTime = toStops[0];
+            Stop? stopWithMinArrTime = null;
+            DateTime earliestArrival = DateTime.MaxValue;
             foreach (Stop stop in toStops)
             {
-                if (routingInfo[stop].earliestArrival < routingInfo[stopWithMinArrTime].earliestArrival)
+                if (routingInfo.ContainsKey(stop) && routingInfo[stop].earliestArrival < earliestArrival)
                 {
                     stopWithMinArrTime = stop;
+                    earliestArrival = routingInfo[stop].earliestArrival;
                 }
             }
             return stopWithMinArrTime;
@@ -83,15 +85,22 @@ namespace RAPTOR_Router.RAPTORStructures
             //sb.AppendLine("Get On:");
             //sb.AppendLine("\t" + GetOnStops[UsedTrips[0]]);
 
+            if (UsedTransfers.Count > 0 && (UsedTrips.Count == 0 || (UsedTrips.Count > 0 && UsedTransfers[0].To == GetOnStops[UsedTrips[0]])))
+            {
+                sb.AppendLine("\tTransfer " + UsedTransfers[0].Time + " s");
+                UsedTransfers.RemoveAt(0);
+            }
+
             for (int i = 0; i < UsedTrips.Count; i++)
             {
                 Trip trip = UsedTrips[i];
-                sb.AppendLine("Trip:");
+                sb.AppendLine("Trip:");                
+
                 if (i < UsedTrips.Count - 1)
                 {
                     //sb.AppendLine("\tRoute " + trip.Route.ShortName + " from " + GetOnStops[trip].ToString() + " to " + usedTransfers[i].From.ToString());
                     sb.AppendLine("\tRoute " + trip.Route.ShortName);
-                    sb.AppendLine("\t\tFrom " + GetOnStops[trip].ToString() + " at " + trip.StopTimes[trip.Route.GetStopIndex(GetOnStops[trip])].DepartureTime.ToLongTimeString());
+                    sb.AppendLine("\t\tFrom: " + GetOnStops[trip].ToString() + " at " + trip.StopTimes[trip.Route.GetStopIndex(GetOnStops[trip])].DepartureTime.ToLongTimeString());
                     sb.AppendLine("\t\tTo: " + UsedTransfers[i].From.ToString() + " at " + trip.StopTimes[trip.Route.GetStopIndex(UsedTransfers[i].From)].ArrivalTime.ToLongTimeString());
                     sb.AppendLine("\tTransfer " + UsedTransfers[i].Time + " s");
                 }
@@ -99,7 +108,7 @@ namespace RAPTOR_Router.RAPTORStructures
                 {
                     //sb.AppendLine("\tRoute " + trip.Route.ShortName + " from " + GetOnStops[trip].ToString() + " to " + toStop.ToString());
                     sb.AppendLine("\tRoute " + trip.Route.ShortName);
-                    sb.AppendLine("\t\tFrom " + GetOnStops[trip].ToString() + " at " + trip.StopTimes[trip.Route.GetStopIndex(GetOnStops[trip])].DepartureTime.ToLongTimeString());
+                    sb.AppendLine("\t\tFrom: " + GetOnStops[trip].ToString() + " at " + trip.StopTimes[trip.Route.GetStopIndex(GetOnStops[trip])].DepartureTime.ToLongTimeString());
                     if (UsedTrips.Count == UsedTransfers.Count)
                     {
                         sb.AppendLine("\t\tTo: " + UsedTransfers[i].From.ToString() + " at " + trip.StopTimes[trip.Route.GetStopIndex(UsedTransfers[i].From)].ArrivalTime.ToLongTimeString());

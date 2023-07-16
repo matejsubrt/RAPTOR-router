@@ -25,6 +25,7 @@ namespace RAPTOR_Router.Routers
         {
             searchModel.SetSourceStopsEarliestArrival();
             MarkSourceStops();
+            ImproveByTransfers();
 
             void MarkSourceStops()
             {
@@ -104,13 +105,17 @@ namespace RAPTOR_Router.Routers
 
                         if (DepartureIsLaterThanLastRoundArrival(currStop, departureTime))
                         {
-                            trip = route.GetEarliestTripAtStop(
+                            Trip newTrip = route.GetEarliestTripAtStop(
                                 currStop,
                                 DateOnly.FromDateTime(searchModel.GetEarliestArrivalInRound(currStop, round - 1)),
                                 TimeOnly.FromDateTime(searchModel.GetEarliestArrivalInRound(currStop, round - 1)),
                                 Settings.MAX_TRIP_LENGTH_DAYS,
                                 out tripDate);
-                            getOnStop = currStop;
+                            if(newTrip != trip || searchModel.GetEarliestArrival(currStop) < searchModel.GetEarliestArrival(getOnStop))
+                            {
+                                trip = newTrip;
+                                getOnStop = currStop;
+                            }
                         }
                     }
                 }
