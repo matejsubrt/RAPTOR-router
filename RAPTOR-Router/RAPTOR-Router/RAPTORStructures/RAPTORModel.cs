@@ -193,5 +193,18 @@ namespace RAPTOR_Router.RAPTORStructures
             }
             return result;
         }
+
+        public List<Stop> GetStopsByName(string stopName)
+        {
+            List<Stop> result = new();
+            foreach(Stop stop in stops.Values)
+            {
+                if(stop.Name == stopName)
+                {
+                    result.Add(stop);
+                }
+            }
+            return result;
+        }
     }
 }

@@ -33,6 +33,10 @@ namespace RAPTOR_Router.RAPTORStructures
         }
         public Trip GetEarliestTripAtStop(Stop stop, DateOnly date, TimeOnly time, int maxDaysAfter, out DateOnly tripDate)
         {
+            if(stop.Name == "Ostrčilovo náměstí" && date.Day == 15 && time.Hour == 21 && time.Minute == 36 && time.Second == 9)
+            {
+                Console.WriteLine();
+            }
             int stopIndex = GetStopIndex(stop);
             DateOnly currDate = date;
             DateOnly maxDate = date.AddDays(maxDaysAfter);
@@ -47,6 +51,13 @@ namespace RAPTOR_Router.RAPTORStructures
                 for (int i = 0; i < tripsOnDate.Count; i++)
                 {
                     departureTime = tripsOnDate[i].StopTimes[stopIndex].DepartureTime;
+
+                    if(departureTime < tripsOnDate[i].StopTimes[0].DepartureTime)
+                    {
+                        tripDate = currDate.AddDays(1);
+                        return tripsOnDate[i];
+                    }
+
                     if (departureTime >= time)
                     {
                         tripDate = currDate;
@@ -70,6 +81,11 @@ namespace RAPTOR_Router.RAPTORStructures
             //No trip found in the specified timeframe
             tripDate = new DateOnly();
             return null;
+        }
+
+        public override string ToString()
+        {
+            return ShortName + ": From " + RouteStops[0] + " to " + RouteStops[RouteStops.Count - 1];
         }
     }
 }

@@ -20,4 +20,11 @@ namespace RAPTOR_Router.RAPTORStructures
             return ids;
         }
     }
+    internal static class DateTimeExtensions
+    {
+        public static DateTime FromDateAndTime(DateOnly date, TimeOnly time)
+        {
+            return new DateTime(date.Year, date.Month, date.Day, time.Hour, time.Minute, time.Second);
+        }
+    }
 }

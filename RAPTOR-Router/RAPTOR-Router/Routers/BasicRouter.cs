@@ -1,187 +1,201 @@
-﻿using RAPTOR_Router.RAPTORStructures;
+﻿using RAPTOR_Router.Problems;
+using RAPTOR_Router.RAPTORStructures;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-//using static RAPTOR_Router.Routers.BasicRouter;
 
 namespace RAPTOR_Router.Routers
 {
-    internal class BasicRouterNew : IRouter
+    internal class BasicRouter : IRouter
     {
-        private static int ROUNDS = 5;
-        private static int MAX_LENGTH_DAYS = 1;
-        private RAPTORModel model;
-        private Stop fromStop;
-        private Stop toStop;
-        private List<Stop> fromStops = new();
-        private List<Stop> toStops = new();
-        private DateTime earliestArrival = DateTime.MaxValue;
-        private Dictionary<Stop, StopRoutingInfo> stopRoutingInfo = new();
+        private JourneySearchModel searchModel;
         private HashSet<Stop> markedStops = new();
-        private HashSet<Route> markedRoutes = new();
-        private Dictionary<Route, Stop> routeGetOnStops = new();
+        private Dictionary<Route, Stop> markedRoutesWithGetOnStops = new();
+        private Settings settings;
 
-        public class StopRoutingInfo
+        private int round = 0;
+
+        public BasicRouter(Settings settings)
         {
-            public DateTime earliestArrival;
-            public List<DateTime> earliestArrivalRounds;
-
-            public Trip tripToReach;
-            public Stop getOnStopToReach;
-            public Transfer transferToReach;
-            public StopRoutingInfo()
-            {
-                this.earliestArrival = DateTime.MaxValue;
-                this.earliestArrivalRounds = Enumerable.Repeat(DateTime.MaxValue, ROUNDS + 1).ToList();
-            }
+            this.settings = settings;
         }
-
-        public BasicRouterNew(RAPTORModel model)
+        private void InitiateSearch()
         {
-            this.model = model;
-        }
+            searchModel.SetSourceStopsEarliestArrival();
+            MarkSourceStops();
 
-        public SearchResult FindConnection(List<string> fromStopIds, List<string> toStopIds, DateTime departureTime)
-        {
-            //this.fromStops = model.stops[fromStopId];
-            //this.toStops = model.stops[toStopId];
-            foreach(string id in fromStopIds)
+            void MarkSourceStops()
             {
-                fromStops.Add(model.stops[id]);
-            }
-            foreach (string id in toStopIds)
-            {
-                toStops.Add(model.stops[id]);
-            }
-
-            foreach (Stop stop in model.stops.Values)
-            {
-                stopRoutingInfo.Add(stop, new StopRoutingInfo());
-            }
-            /*
-            stopRoutingInfo[fromStop].earliestArrival = departureTime;
-            stopRoutingInfo[fromStop].earliestArrivalRounds[0] = departureTime;
-            markedStops.Add(fromStop);
-            */
-
-            foreach(Stop stop in fromStops)
-            {
-                stopRoutingInfo[stop].earliestArrival = departureTime;
-                stopRoutingInfo[stop].earliestArrivalRounds[0] = departureTime;
-                markedStops.Add(stop);
-            }
-
-            for(int round = 1; round <= ROUNDS; round++)
-            {
-                //Accumulate routes serving marked stops from previous round
-                routeGetOnStops = new();
-                foreach (Stop markedStop in markedStops)
+                foreach (Stop sourceStop in searchModel.sourceStops)
                 {
-                    foreach (Route route in markedStop.StopRoutes)
+                    markedStops.Add(sourceStop);
+                }
+            }
+        }
+        private void AccumulateRoutes()
+        {
+            markedRoutesWithGetOnStops.Clear();
+            foreach (Stop markedStop in markedStops)
+            {
+                foreach (Route route in markedStop.StopRoutes)
+                {
+                    if (markedRoutesWithGetOnStops.ContainsKey(route))
                     {
-                        if (routeGetOnStops.ContainsKey(route))
+                        if (route.GetStopIndex(markedRoutesWithGetOnStops[route]) > route.GetStopIndex(markedStop))
                         {
-                            if (route.GetStopIndex(routeGetOnStops[route]) > route.GetStopIndex(markedStop))
-                            {
-                                routeGetOnStops[route] = markedStop;
-                            }
+                            markedRoutesWithGetOnStops[route] = markedStop;
                         }
+                    }
+                    else
+                    {
+                        markedRoutesWithGetOnStops.Add(route, markedStop);
+                    }
+                }
+                //TODO: Is this neccessary?
+                markedStops.Remove(markedStop);
+            }
+        }
+        private void TraverseMarkedRoutes()
+        {
+            foreach (KeyValuePair<Route, Stop> pair in markedRoutesWithGetOnStops)
+            {
+                Route route = pair.Key;
+                Stop getOnStop = pair.Value;
+                DateOnly tripDate;
+
+                Trip trip = route.GetEarliestTripAtStop(
+                    getOnStop,
+                    DateOnly.FromDateTime(searchModel.GetEarliestArrivalInRound(getOnStop, round - 1)),
+                    TimeOnly.FromDateTime(searchModel.GetEarliestArrivalInRound(getOnStop, round - 1)),
+                    Settings.MAX_TRIP_LENGTH_DAYS,
+                    out tripDate
+                );
+
+                TraverseRoute(route, getOnStop, trip, tripDate);
+            }
+
+            void TraverseRoute(Route route, Stop getOnStop, Trip trip, DateOnly tripDate)
+            {
+                for (int i = route.GetStopIndex(getOnStop); i < route.RouteStops.Count; i++)
+                {
+                    Stop currStop = route.RouteStops[i];
+
+                    if (trip is not null)
+                    {
+                        StopTime stopTime = trip.StopTimes[i];
+
+                        DateOnly realDate;
+                        if (TripGoesOverMidnight(trip, route.GetStopIndex(getOnStop), i))
+                            realDate = tripDate.AddDays(1);
                         else
+                            realDate = tripDate;
+
+
+                        DateTime arrivalTime = DateTimeExtensions.FromDateAndTime(realDate, stopTime.ArrivalTime);
+                        DateTime departureTime = DateTimeExtensions.FromDateAndTime(realDate, stopTime.DepartureTime);
+
+                        if (ArrivalTimeImprovesCurrBest(arrivalTime, currStop))
                         {
-                            //markedRoutes.Add(route);
-                            routeGetOnStops.Add(route, markedStop);
+                            ImproveArrivalByTrip(currStop, arrivalTime, trip, getOnStop);
+                            markedStops.Add(currStop);
+                        }
+
+                        if (DepartureIsLaterThanLastRoundArrival(currStop, departureTime))
+                        {
+                            trip = route.GetEarliestTripAtStop(
+                                currStop,
+                                DateOnly.FromDateTime(searchModel.GetEarliestArrivalInRound(currStop, round - 1)),
+                                TimeOnly.FromDateTime(searchModel.GetEarliestArrivalInRound(currStop, round - 1)),
+                                Settings.MAX_TRIP_LENGTH_DAYS,
+                                out tripDate);
+                            getOnStop = currStop;
                         }
                     }
-                    //?
-                    markedStops.Remove(markedStop);
                 }
 
-                //Traverse each route
-                foreach (KeyValuePair<Route, Stop> keyValuePair in routeGetOnStops)
+                bool TripGoesOverMidnight(Trip trip, int getOnStopIndex, int currStopIndex)
                 {
-                    Route route = keyValuePair.Key;
-                    Stop getOnStop = keyValuePair.Value;
-                    DateOnly tripDate;
-                    Trip trip = route.GetEarliestTripAtStop(
-                        getOnStop, 
-                        DateOnly.FromDateTime(stopRoutingInfo[getOnStop].earliestArrivalRounds[round - 1]), 
-                        TimeOnly.FromDateTime(stopRoutingInfo[getOnStop].earliestArrivalRounds[round - 1]), 
-                        MAX_LENGTH_DAYS,
-                        out tripDate
-                    ); //The current trip
-
-                    for (int i = route.GetStopIndex(getOnStop); i < route.RouteStops.Count; i++)
-                    {
-                        Stop currStop = route.RouteStops[i];
-                        //TODO: bacha na pulnoc
-
-                        //Can the label be improved in this round? Includes local and target pruning
-                        if (trip is not null)
-                        {
-                            DateOnly realDate;
-                            if (trip.StopTimes[route.GetStopIndex(getOnStop)].DepartureTime > trip.StopTimes[i].ArrivalTime)
-                            {
-                                realDate = tripDate.AddDays(1);
-                            }
-                            else
-                            {
-                                realDate = tripDate;
-                            }
-                            DateTime arrivalTime = new DateTime(realDate.Year, realDate.Month, realDate.Day, trip.StopTimes[i].ArrivalTime.Hour, trip.StopTimes[i].ArrivalTime.Minute, trip.StopTimes[i].ArrivalTime.Second);
-                            DateTime departureTime1 = new DateTime(realDate.Year, realDate.Month, realDate.Day, trip.StopTimes[i].DepartureTime.Hour, trip.StopTimes[i].DepartureTime.Minute, trip.StopTimes[i].DepartureTime.Second);
-                            if (arrivalTime < stopRoutingInfo[currStop].earliestArrival && arrivalTime < earliestArrival && arrivalTime <= departureTime.AddDays(1))
-                            {
-                                stopRoutingInfo[currStop].earliestArrivalRounds[round] = arrivalTime;
-                                stopRoutingInfo[currStop].earliestArrival = arrivalTime;
-                                //new
-                                stopRoutingInfo[currStop].tripToReach = trip;
-                                stopRoutingInfo[currStop].getOnStopToReach = getOnStop;
-                                stopRoutingInfo[currStop].transferToReach = null;
-                                
-                                if(toStops.Contains(currStop) && arrivalTime < earliestArrival)
-                                {
-                                    earliestArrival = arrivalTime;
-                                }
-                                markedStops.Add(currStop);
-                                
-                            }
-                            //Can we catch an earlier trip at pi
-                            if (stopRoutingInfo[currStop].earliestArrivalRounds[round - 1] <= departureTime1)
-                            {
-                                trip = route.GetEarliestTripAtStop(currStop, DateOnly.FromDateTime(stopRoutingInfo[currStop].earliestArrivalRounds[round - 1]), TimeOnly.FromDateTime(stopRoutingInfo[currStop].earliestArrivalRounds[round - 1]), MAX_LENGTH_DAYS, out tripDate);
-                                //new
-                                getOnStop = currStop;
-                            }
-                        }
-                    }
+                    return trip.StopTimes[getOnStopIndex].DepartureTime > trip.StopTimes[currStopIndex].ArrivalTime;
                 }
-
-                HashSet<Stop> newMarkedStops = new();
-                foreach (Stop markedStop in markedStops)
+                bool ArrivalTimeImprovesCurrBest(DateTime arrivalTime, Stop stop)
                 {
-                    foreach (Transfer transfer in markedStop.Transfers)
-                    {
-                        if (stopRoutingInfo[transfer.To].earliestArrivalRounds[round] > stopRoutingInfo[markedStop].earliestArrivalRounds[round].AddSeconds(transfer.Time))
-                        {
-                            stopRoutingInfo[transfer.To].earliestArrivalRounds[round] = stopRoutingInfo[markedStop].earliestArrivalRounds[round].AddSeconds(transfer.Time);
-                            if (stopRoutingInfo[transfer.To].earliestArrival > stopRoutingInfo[transfer.To].earliestArrivalRounds[round])
-                            {
-                                stopRoutingInfo[transfer.To].earliestArrival = stopRoutingInfo[transfer.To].earliestArrivalRounds[round];
+                    return arrivalTime < searchModel.GetEarliestArrival(stop)
+                            && arrivalTime < searchModel.GetCurrentBestArrivalTime()
+                            && arrivalTime <= searchModel.GetDepartureTime().AddDays(Settings.MAX_TRIP_LENGTH_DAYS);
+                }
+                bool DepartureIsLaterThanLastRoundArrival(Stop stop, DateTime departureTime)
+                {
+                    return searchModel.GetEarliestArrivalInRound(stop, round - 1) <= departureTime;
+                }
+                void ImproveArrivalByTrip(Stop stop, DateTime arrivalTime, Trip trip, Stop getOnStop)
+                {
+                    searchModel.SetEarliestArrivalInRound(stop, round, arrivalTime);
+                    searchModel.SetEarliestArrival(stop, arrivalTime);
 
-                                stopRoutingInfo[transfer.To].tripToReach = null;
-                                stopRoutingInfo[transfer.To].getOnStopToReach = null;
-                                stopRoutingInfo[transfer.To].transferToReach = transfer;
-                            }
-                            newMarkedStops.Add(transfer.To);
-                        }
+                    searchModel.SetTripToReachInRound(stop, round, trip);
+                    searchModel.SetGetOnStopToReachInRound(stop, round, getOnStop);
+                    searchModel.SetTransferToReachInRound(stop, round, null);
+
+                    if (searchModel.destinationStops.Contains(stop) && arrivalTime < searchModel.GetCurrentBestArrivalTime())
+                    {
+                        searchModel.SetCurrentBestArrivalTime(arrivalTime);
                     }
                 }
-                markedStops.UnionWith(newMarkedStops);
-                newMarkedStops = new();
             }
-            return new SearchResult(stopRoutingInfo, toStops, fromStops);
+        }
+        private void ImproveByTransfers()
+        {
+            HashSet<Stop> newMarkedStops = new();
+            foreach (Stop markedStop in markedStops)
+            {
+                foreach (Transfer transfer in markedStop.Transfers)
+                {
+                    if (TransferImprovesArrivalTime(transfer) && !searchModel.StopIsReachedByTransferInRound(markedStop, round))
+                    {
+                        ImproveArrivalByTransfer(transfer);
+                        newMarkedStops.Add(transfer.To);
+                    }
+                }
+            }
+            markedStops.UnionWith(newMarkedStops);
+
+
+            bool TransferImprovesArrivalTime(Transfer transfer)
+            {
+                return searchModel.GetEarliestArrivalInRound(transfer.To, round) > searchModel.GetEarliestArrivalInRound(transfer.From, round).AddSeconds(transfer.Time);
+            }
+            void ImproveArrivalByTransfer(Transfer transfer)
+            {
+                searchModel.SetEarliestArrivalInRound(transfer.To, round, searchModel.GetEarliestArrivalInRound(transfer.From, round).AddSeconds(transfer.Time));
+                if (searchModel.GetEarliestArrival(transfer.To) > searchModel.GetEarliestArrivalInRound(transfer.To, round))
+                {
+                    searchModel.SetEarliestArrival(transfer.To, searchModel.GetEarliestArrivalInRound(transfer.To, round));
+
+                    searchModel.SetTripToReachInRound(transfer.To, round, null);
+                    searchModel.SetGetOnStopToReachInRound(transfer.To, round, null);
+                    searchModel.SetTransferToReachInRound(transfer.To, round, transfer);
+                }
+            }
+        }
+
+
+        public SearchResult FindConnection(JourneySearchModel searchModel)
+        {
+            this.searchModel = searchModel;
+
+            InitiateSearch();
+            while (round <= Settings.ROUNDS - 1)
+            {
+                round++;
+                AccumulateRoutes();
+                TraverseMarkedRoutes();
+                ImproveByTransfers();
+            }
+            markedStops.Clear();
+            markedRoutesWithGetOnStops.Clear();
+            return new SearchResult(searchModel);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using RAPTOR_Router.GTFSParsing;
+using RAPTOR_Router.Problems;
 using RAPTOR_Router.RAPTORStructures;
 using RAPTOR_Router.Routers;
 using System.Diagnostics;
@@ -9,11 +10,12 @@ namespace RAPTOR_Router
     {
         static void Main(string[] args)
         {
-            
-            RAPTORModel raptor;
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
             Console.WriteLine(stopwatch.Elapsed + ": Stopwatch started");
+
+            Settings settings = Settings.Default;
+            RAPTORModel raptor;
             using (GTFS gtfs = GTFS.ParseZipFile("..\\..\\example-gtfs\\PID_GTFS.zip"))
             {
                 Console.WriteLine(stopwatch.Elapsed + ": GTFS Loaded, \t\tMemory:" + GC.GetTotalMemory(false));
@@ -21,10 +23,12 @@ namespace RAPTOR_Router
                 Console.WriteLine(stopwatch.Elapsed + ": RAPTOR Model loaded, \tMemory:" + GC.GetTotalMemory(false));
             }
             GC.Collect();
-            IRouter router = new BasicRouterNew(raptor);
+            //IRouter router = new BasicRouter(raptor);
+            IRouter router = new BasicRouter(settings);
+
             Console.WriteLine(stopwatch.Elapsed + ": Router created, \tMemory:" + GC.GetTotalMemory(false));
 
-
+            
             while (true)
             {
                 Console.WriteLine("Enter the source stop:");
@@ -32,17 +36,17 @@ namespace RAPTOR_Router
                 Console.WriteLine("Enter the destination stop:");
                 string destStop = Console.ReadLine();
 
-                List<string> sourceStopIds = raptor.GetStopIdsByName(sourceStop);
-                List<string> destStopIds = raptor.GetStopIdsByName(destStop);
+                List<Stop> sourceStops = raptor.GetStopsByName(sourceStop);
+                List<Stop> destStops = raptor.GetStopsByName(destStop);
 
-                var result = router.FindConnection(sourceStopIds, destStopIds, DateTime.Now);
-                Console.WriteLine(stopwatch.Elapsed + ": Connection successfully found, \tMemory:" + GC.GetTotalMemory(false));
+                JourneySearchModel searchModel = new JourneySearchModel(raptor, sourceStops, destStops, DateTime.Now.AddDays(-10));
+
+                var result = router.FindConnection(searchModel);
                 Console.WriteLine(result.ToString());
-                Console.WriteLine("------------------------------------------\n");
+                //Console.WriteLine(stopwatch.Elapsed + ": Result found, \tMemory:" + GC.GetTotalMemory(false));
 
-                router = new BasicRouterNew(raptor);
+                router = new BasicRouter(settings);
             }
-            
         }
     }
 }
