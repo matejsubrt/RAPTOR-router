@@ -10,10 +10,11 @@ namespace RAPTOR_Router.RAPTORStructures
 {
     internal class SearchResult
     {
-        List<Trip> UsedTrips { get; set; }
-        List<Transfer> UsedTransfers { get; set; }
-        Dictionary<Trip, Stop> GetOnStops { get; set; } = new();
-        Stop toStop;
+        public List<Trip> UsedTrips { get; set; }
+        public Dictionary<Trip, Stop> GetOnStops { get; set; } = new();
+        public Stop toStop;
+        public Stop fromStop;
+        public List<Transfer> UsedTransfers { get; set; } = new List<Transfer>();
 
         public SearchResult(JourneySearchModel searchModel)
         {
@@ -60,6 +61,7 @@ namespace RAPTOR_Router.RAPTORStructures
                 }
                 lastTrip = usedTrip;
             }
+            fromStop = currStop;
 
             this.UsedTrips = usedTrips.ToList();
             this.UsedTransfers = usedTransfers.ToList();
@@ -79,6 +81,7 @@ namespace RAPTOR_Router.RAPTORStructures
             }
             return stopWithMinArrTime;
         }
+        /*
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
@@ -123,6 +126,92 @@ namespace RAPTOR_Router.RAPTORStructures
                 }
             }
             return sb.ToString();
+        }
+        */
+    }
+    public record SearchResultDTO
+    {
+
+        public List<UsedTrip> Trips { get; set; } = new List<UsedTrip>();
+        public List<UsedTransfer> Transfers { get; set; } = new List<UsedTransfer>();
+
+
+        internal SearchResultDTO(SearchResult result)
+        {
+            int tripIndex = 0;
+            int transferIndex = 0;
+            int segmentIndex = 0;
+
+            bool startsWithTransfer = result.UsedTransfers[0].From == result.fromStop;
+            bool endsWithTransfer = result.UsedTransfers[result.UsedTransfers.Count-1].To == result.toStop;
+
+            if (startsWithTransfer)
+            {
+                Transfer firstTransfer = result.UsedTransfers[0];
+                Transfers.Add(new UsedTransfer { segmentIndex = 0, srcStop = firstTransfer.From.Name, destStop = firstTransfer.To.Name, distance = firstTransfer.Distance, time = firstTransfer.Time });
+                transferIndex++;
+                segmentIndex++;
+            }
+
+            while(tripIndex < result.UsedTrips.Count && transferIndex < result.UsedTransfers.Count)
+            {
+                Trip currTrip = result.UsedTrips[tripIndex];
+                Transfer currTransfer = result.UsedTransfers[transferIndex];
+
+                Trips.Add(new UsedTrip
+                {
+                    segmentIndex = segmentIndex,
+                    getOnStopIndex = currTrip.Route.RouteStops.IndexOf(result.GetOnStops[currTrip]),
+                    getOffStopIndex = currTrip.Route.RouteStops.IndexOf(currTransfer.From),
+                    stops = (from stop in currTrip.Route.RouteStops select stop.Name).ToList(),
+                    getOnTime = currTrip.StopTimes[currTrip.Route.RouteStops.IndexOf(result.GetOnStops[currTrip])].DepartureTime,
+                    getOffTime = currTrip.StopTimes[currTrip.Route.RouteStops.IndexOf(currTransfer.From)].ArrivalTime,
+                    routeName = currTrip.Route.ShortName
+                });
+                segmentIndex++;
+                tripIndex++;
+                Transfers.Add(new UsedTransfer { segmentIndex = segmentIndex, srcStop = currTransfer.From.Name, destStop = currTransfer.To.Name, distance = currTransfer.Distance, time = currTransfer.Time });
+                segmentIndex++;
+                transferIndex++;
+            }
+            
+            
+            if (!endsWithTransfer)
+            {
+                Trip lastTrip = result.UsedTrips[result.UsedTrips.Count - 1];
+                Trips.Add(new UsedTrip
+                {
+                    segmentIndex = segmentIndex,
+                    getOnStopIndex = lastTrip.Route.RouteStops.IndexOf(result.GetOnStops[lastTrip]),
+                    getOffStopIndex = lastTrip.Route.RouteStops.IndexOf(result.toStop),
+                    stops = (from stop in lastTrip.Route.RouteStops select stop.Name).ToList(),
+                    getOnTime = lastTrip.StopTimes[lastTrip.Route.RouteStops.IndexOf(result.GetOnStops[lastTrip])].DepartureTime,
+                    getOffTime = lastTrip.StopTimes[lastTrip.Route.RouteStops.IndexOf(result.toStop)].ArrivalTime,
+                    routeName = lastTrip.Route.ShortName
+                });
+            }
+        }
+
+
+
+
+        public class UsedTrip
+        {
+            public int segmentIndex { get; set; }
+            public List<string> stops { get; set; } = new List<string>();
+            public int getOnStopIndex { get; set; }
+            public int getOffStopIndex { get; set; }
+            public TimeOnly getOnTime { get; set; }
+            public TimeOnly getOffTime { get; set; }
+            public string routeName { get; set; }
+        }
+        public class UsedTransfer
+        {
+            public int segmentIndex { get; set; }
+            public string srcStop { get; set; }
+            public string destStop { get; set; }
+            public int time { get; set; }
+            public int distance { get; set; }
         }
     }
 }
