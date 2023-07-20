@@ -8,6 +8,9 @@ using CsvHelper.TypeConversion;
 
 namespace RAPTOR_Router.GTFSParsing
 {
+    /// <summary>
+    /// Class representing the calendars information from the calendars.txt gtfs file
+    /// </summary>
     internal class GTFSCalendar : IIdentifiable
     {
         [Name("service_id")]

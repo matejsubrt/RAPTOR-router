@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace RAPTOR_Router.GTFSParsing
 {
+    /// <summary>
+    /// Class representing the trips information from the trips.txt gtfs file
+    /// </summary>
     internal class GTFSTrip : IIdentifiable
     {
         [Name("route_id")]

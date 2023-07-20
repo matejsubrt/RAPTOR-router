@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace RAPTOR_Router.GTFSParsing
 {
+    /// <summary>
+    /// Class representing all the loaded GTFS data
+    /// </summary>
     internal class GTFS : IDisposable
     {
         public Dictionary<string, GTFSAgency> agencies { get; private set; } = new();
@@ -19,24 +22,10 @@ namespace RAPTOR_Router.GTFSParsing
         public Dictionary<string, List<GTFSStopTime>> stopTimes { get; private set; } = new();
         public Dictionary<string, GTFSTrip> trips { get; private set; } = new();
 
-
-        public void LoadFile<T>(string pathToZipFile, string fileName, T type) where T : IIdentifiable
-        {
-            using (ZipArchive archive = ZipFile.Open(pathToZipFile, ZipArchiveMode.Read))
-            {
-                ZipArchiveEntry entry = archive.GetEntry(fileName);
-                using (StreamReader reader = new StreamReader(entry.Open()))
-                using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-                {
-                    List<T> list = csv.GetRecords<T>().ToList();
-                    foreach(T t in list)
-                    {
-
-                    }
-                }
-                entry.LastWriteTime = DateTimeOffset.UtcNow.LocalDateTime;
-            }
-        }
+        /// <summary>
+        /// Loads the agencies info from the agencies.txt GTFS file
+        /// </summary>
+        /// <param name="archive">The zip archive the file is located in</param>
         public void LoadAgencies(ZipArchive archive)
         {
             ZipArchiveEntry entry = archive.GetEntry("agency.txt");
@@ -50,6 +39,10 @@ namespace RAPTOR_Router.GTFSParsing
                 }
             }
         }
+        /// <summary>
+        /// Loads the calendars info from the calendars.txt GTFS file
+        /// </summary>
+        /// <param name="archive">The zip archive the file is located in</param>
         public void LoadCalendars(ZipArchive archive)
         {
             ZipArchiveEntry entry = archive.GetEntry("calendar.txt");
@@ -63,6 +56,10 @@ namespace RAPTOR_Router.GTFSParsing
                 }
             }
         }
+        /// <summary>
+        /// Loads the calůendar dates info from the calendar_dates.txt GTFS file
+        /// </summary>
+        /// <param name="archive">The zip archive the file is located in</param>
         public void LoadCalendarDates(ZipArchive archive)
         {
             ZipArchiveEntry entry = archive.GetEntry("calendar_dates.txt");
@@ -83,6 +80,10 @@ namespace RAPTOR_Router.GTFSParsing
                 }
             }
         }
+        /// <summary>
+        /// Loads the routes info from the routes.txt GTFS file
+        /// </summary>
+        /// <param name="archive">The zip archive the file is located in</param>
         public void LoadRoutes(ZipArchive archive)
         {
             ZipArchiveEntry entry = archive.GetEntry("routes.txt");
@@ -96,6 +97,10 @@ namespace RAPTOR_Router.GTFSParsing
                 }
             }
         }
+        /// <summary>
+        /// Loads the stops info from the stops.txt GTFS file
+        /// </summary>
+        /// <param name="archive">The zip archive the file is located in</param>
         public void LoadStops(ZipArchive archive)
         {
             ZipArchiveEntry entry = archive.GetEntry("stops.txt");
@@ -113,6 +118,10 @@ namespace RAPTOR_Router.GTFSParsing
                 }
             }
         }
+        /// <summary>
+        /// Loads the stop times info from the stop_times.txt GTFS file
+        /// </summary>
+        /// <param name="archive">The zip archive the file is located in</param>
         public void LoadStopTimes(ZipArchive archive)
         {
             ZipArchiveEntry entry = archive.GetEntry("stop_times.txt");
@@ -134,6 +143,10 @@ namespace RAPTOR_Router.GTFSParsing
                 }
             }
         }
+        /// <summary>
+        /// Loads the trips info from the trips.txt GTFS file
+        /// </summary>
+        /// <param name="archive">The zip archive the file is located in</param>
         public void LoadTrips(ZipArchive archive)
         {
             ZipArchiveEntry entry = archive.GetEntry("trips.txt");
@@ -147,6 +160,11 @@ namespace RAPTOR_Router.GTFSParsing
                 }
             }
         }
+        /// <summary>
+        /// Loads all the necessary GTFS data from the specified zip archive into strongly typed objects in memory
+        /// </summary>
+        /// <param name="pathToZipFile">The path to the zip archive with the GTFS data files</param>
+        /// <returns>The representation of the loaded GTFS data</returns>
         public static GTFS ParseZipFile(string pathToZipFile)
         {
             GTFS gtfs = new GTFS();
@@ -162,28 +180,9 @@ namespace RAPTOR_Router.GTFSParsing
             }
             return gtfs;
         }
-        /*
-        public Dictionary<string, GTFSStop> GetGtfsStops()
-        {
-            return this.stops;
-        }
-        public Dictionary<string, GTFSRoute> GetGtfsRoutes()
-        {
-            return this.routes;
-        }
-        public Dictionary<string, GTFSCalendar> GetGtfsCalendars()
-        {
-            return this.calendars;
-        }
-        public Dictionary<string, GTFSTrip> GetGtfsTrips()
-        {
-            return this.trips;
-        }
-        public Dictionary<string, List<GTFSStopTime>> GetGtfsStopTimes()
-        {
-            return this.stopTimes;
-        }
-        */
+        /// <summary>
+        /// Removes all the pointers to the GTFS data - to be used after the GTFS data is used for creating the RAPTOR routing data and is no longer needed
+        /// </summary>
         public void Dispose()
         {
             stops = null;

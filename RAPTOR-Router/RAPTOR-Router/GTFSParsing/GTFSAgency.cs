@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace RAPTOR_Router.GTFSParsing
 {
+    /// <summary>
+    /// Class representing the agencies information from the agencies.txt gtfs file
+    /// </summary>
     internal class GTFSAgency : IIdentifiable
     {
         [Name("agency_id")]

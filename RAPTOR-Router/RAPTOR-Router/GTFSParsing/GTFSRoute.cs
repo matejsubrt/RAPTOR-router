@@ -7,6 +7,9 @@ using CsvHelper.Configuration.Attributes;
 
 namespace RAPTOR_Router.GTFSParsing
 {
+    /// <summary>
+    /// Class representing the routes information from the routes.txt gtfs file
+    /// </summary>
     internal class GTFSRoute : IIdentifiable
     {
         [Name("route_id")]

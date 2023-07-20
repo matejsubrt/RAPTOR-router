@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace RAPTOR_Router.GTFSParsing
 {
+    /// <summary>
+    /// Class for converting DateTimes in gtfs text form to DateTime objects
+    /// </summary>
     public class GTFSDateTimeConverter : DefaultTypeConverter
     {
         public override object ConvertFromString(string text, IReaderRow row, MemberMapData memberMapData)
@@ -18,6 +21,9 @@ namespace RAPTOR_Router.GTFSParsing
             return new DateTime(int.Parse(text.Substring(0, 4)), int.Parse(text.Substring(4, 2)), int.Parse(text.Substring(6, 2)));
         }
     }
+    /// <summary>
+    /// Class for converting Dates in gtfs text form to DateOnly objects
+    /// </summary>
     public class GTFSDateOnlyConverter : DefaultTypeConverter
     {
         public override object? ConvertFromString(string? text, IReaderRow row, MemberMapData memberMapData)
@@ -25,6 +31,9 @@ namespace RAPTOR_Router.GTFSParsing
             return new DateOnly(int.Parse(text.Substring(0, 4)), int.Parse(text.Substring(4, 2)), int.Parse(text.Substring(6, 2)));
         }
     }
+    /// <summary>
+    /// Class for converting Times in gtfs text form to TimeOnly objects
+    /// </summary>
     public class GTFSTimeOnlyConverter : DefaultTypeConverter
     {
         public override object? ConvertFromString(string? text, IReaderRow row, MemberMapData memberMapData)

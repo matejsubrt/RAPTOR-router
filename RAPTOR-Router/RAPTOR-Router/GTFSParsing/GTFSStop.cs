@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace RAPTOR_Router.GTFSParsing
 {
+    /// <summary>
+    /// Class representing the stops information from the stops.txt gtfs file
+    /// </summary>
     internal class GTFSStop : IIdentifiable
     {
         [Name("stop_id")]
