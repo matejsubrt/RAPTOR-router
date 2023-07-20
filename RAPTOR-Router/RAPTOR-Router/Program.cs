@@ -30,6 +30,10 @@ namespace RAPTOR_Router
 			BuildConsoleApp(raptor);
 #endif
 		}
+		/// <summary>
+		/// Builds the console routing app, runs it
+		/// </summary>
+		/// <param name="raptor">The RAPTOR model of the timetable to use for routing</param>
 		static void BuildConsoleApp(RAPTORModel raptor)
 		{
 			Settings settings = Settings.Default;

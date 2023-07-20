@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace RAPTOR_Router.RAPTORStructures
 {
+    /// <summary>
+    /// Class representing a foot transfer between two stops
+    /// </summary>
     internal class Transfer
     {
         public Stop From { get; }

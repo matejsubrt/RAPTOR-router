@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace RAPTOR_Router.RAPTORStructures
 {
+    /// <summary>
+    /// Class representing a unique public transit trip
+    /// </summary>
     internal class Trip
     {
         public Route Route;
@@ -25,6 +28,12 @@ namespace RAPTOR_Router.RAPTORStructures
         {
             return Route.ShortName + ": " + StopTimes[0].DepartureTime;
         }
+        /// <summary>
+        /// Compares 2 trips by their departure times from their first stop
+        /// </summary>
+        /// <param name="trip1">First trip</param>
+        /// <param name="trip2">Second trip</param>
+        /// <returns>1 if trip1 departureTime is later, 0 if equal, -1 if earlier</returns>
         public static int CompareTrips(Trip trip1, Trip trip2)
         {
             return trip1.StopTimes[0].DepartureTime.CompareTo(trip2.StopTimes[0].DepartureTime);

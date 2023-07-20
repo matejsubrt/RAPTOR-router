@@ -8,18 +8,37 @@ using System.Threading.Tasks;
 
 namespace RAPTOR_Router.RAPTORStructures
 {
+    /// <summary>
+    /// Class representing a result of a connection search
+    /// </summary>
     public class SearchResult
     {
+        /// <summary>
+        /// The trips used during the best found connection
+        /// </summary>
         public List<UsedTrip> Trips { get; private set; } = new List<UsedTrip>();
+        /// <summary>
+        /// The transfers used during the best found connection
+        /// </summary>
         public List<UsedTransfer> Transfers { get; private set; } = new List<UsedTransfer>();
 
+        /// <summary>
+        /// Creates the SearchResult from basic information about the found connection
+        /// </summary>
+        /// <param name="usedTrips">List of the used trips</param>
+        /// <param name="usedTransfers">List of the used transfers</param>
+        /// <param name="getOnStops">Get on stops for every used trip</param>
+        /// <param name="getOffStops">Get off stops for every used trip</param>
+        /// <param name="sourceStop">The stop from the source node with the best trip to destination leaving from it</param>
+        /// <param name="destStop">The stop from the destination node with the best possible arrival time</param>
         internal SearchResult
         (
             List<Trip> usedTrips,
             List<Transfer> usedTransfers,
             Dictionary<Trip, Stop> getOnStops,
             Dictionary<Trip, Stop> getOffStops,
-            Stop sourceStop, Stop destStop
+            Stop sourceStop, 
+            Stop destStop
         ){
             if(usedTransfers.Count == 0 && usedTrips.Count == 1)
             {
@@ -129,22 +148,64 @@ namespace RAPTOR_Router.RAPTORStructures
             return sb.ToString();
         }
 
+        /// <summary>
+        /// Class representing a trip used in a found connection
+        /// </summary>
         public class UsedTrip
         {
+            /// <summary>
+            /// The index of this trip in the list of links on the connection (including the transfers)
+            /// </summary>
             public int segmentIndex { get; set; }
+            /// <summary>
+            /// The list of stop names the trip passes through
+            /// </summary>
             public List<string> stops { get; set; } = new List<string>();
+            /// <summary>
+            /// The index of the stop where the trip is boarded
+            /// </summary>
             public int getOnStopIndex { get; set; }
+            /// <summary>
+            /// The index of the stop where the trip is gotten out of
+            /// </summary>
             public int getOffStopIndex { get; set; }
+            /// <summary>
+            /// The time when the trip is boarded
+            /// </summary>
             public TimeOnly getOnTime { get; set; }
+            /// <summary>
+            /// The timr when the trip is gotten out of
+            /// </summary>
             public TimeOnly getOffTime { get; set; }
+            /// <summary>
+            /// The name (i.e. the headsign) of the route of the trip
+            /// </summary>
             public string routeName { get; set; }
         }
+        /// <summary>
+        /// Class representing a used transfer in a found connection
+        /// </summary>
         public class UsedTransfer
         {
+            /// <summary>
+            /// The index of this trip in the list of links on the connection (including the transfers)
+            /// </summary>
             public int segmentIndex { get; set; }
+            /// <summary>
+            /// The name of the stop where the transfer begins
+            /// </summary>
             public string srcStop { get; set; }
+            /// <summary>
+            /// The name of the stop where the trnsfer ends
+            /// </summary>
             public string destStop { get; set; }
+            /// <summary>
+            /// The approximate number of seconds it takes to walk this transfer
+            /// </summary>
             public int time { get; set; }
+            /// <summary>
+            /// The straight line distance between the 2 stops in the transfer in meters
+            /// </summary>
             public int distance { get; set; }
         }
     }

@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace RAPTOR_Router.RAPTORStructures
 {
+    /// <summary>
+    /// Class representing an unique public transit route, there is a different instance for each variation of one "normal" route - i.e. tram trips returning to depot, ...
+    /// </summary>
     internal class Route
     {
         public string Id { get; }
@@ -22,6 +25,12 @@ namespace RAPTOR_Router.RAPTORStructures
             ShortName = shortName;
             LongName = longName;
         }
+        /// <summary>
+        /// Finds the index of a specified stop in the route's list of stops
+        /// </summary>
+        /// <param name="stop">The stop to find the index of</param>
+        /// <returns>The index of the stop in the stops list</returns>
+        /// <exception cref="InvalidOperationException">Thrown if stop is not found in the stops list</exception>
         public int GetStopIndex(Stop stop)
         {
             int res = RouteStops.IndexOf(stop);
@@ -31,6 +40,15 @@ namespace RAPTOR_Router.RAPTORStructures
             }
             return res;
         }
+        /// <summary>
+        /// Finds the earliest trip serving the route at the specified stop leaving after the specified time
+        /// </summary>
+        /// <param name="stop">The stop to find the earliest trip from</param>
+        /// <param name="date">The earliest possible date of the trip</param>
+        /// <param name="time">The earliest possible time of the trip</param>
+        /// <param name="maxDaysAfter">The maximum number of days between the specified earliest time and the trip departure time</param>
+        /// <param name="tripDate">The date on which the trip actually leaves -> if the first found trip is after midnight, this date is different than the date input parameter</param>
+        /// <returns>The earliest trip, that leaves the stop after the specified time on the route, null if no trip is found</returns>
         public Trip GetEarliestTripAtStop(Stop stop, DateOnly date, TimeOnly time, int maxDaysAfter, out DateOnly tripDate)
         {
             if(stop.Name == "Ostrčilovo náměstí" && date.Day == 15 && time.Hour == 21 && time.Minute == 36 && time.Second == 9)

@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace RAPTOR_Router.Routers
 {
+    /// <summary>
+    /// Basic router used for finding the best connection from a source stop to a destination stop using only public transit. It only takes the arrival time into account, i.e. is to be used in situations, where the arrival time is the only important factor (doesn't take into account comfort/transfers/...
+    /// </summary>
     internal class BasicRouter : IRouter
     {
         private SearchModel searchModel;
@@ -21,6 +24,9 @@ namespace RAPTOR_Router.Routers
         {
             this.settings = settings;
         }
+        /// <summary>
+        /// Initiates the search by setting earliest arrival for source stops, marks them and improves arrival times for their neighbors in round 0
+        /// </summary>
         private void InitiateSearch()
         {
             searchModel.SetSourceStopsEarliestArrival();
@@ -35,6 +41,9 @@ namespace RAPTOR_Router.Routers
                 }
             }
         }
+        /// <summary>
+        /// Accumulates all routes passing through the marked stops and finds the earliest marked stop for them
+        /// </summary>
         private void AccumulateRoutes()
         {
             markedRoutesWithGetOnStops.Clear();
@@ -58,6 +67,9 @@ namespace RAPTOR_Router.Routers
                 markedStops.Remove(markedStop);
             }
         }
+        /// <summary>
+        /// Traverses all the marked routes, improving the arrival times and info for all stops where it is possible
+        /// </summary>
         private void TraverseMarkedRoutes()
         {
             foreach (KeyValuePair<Route, Stop> pair in markedRoutesWithGetOnStops)
@@ -150,6 +162,9 @@ namespace RAPTOR_Router.Routers
                 }
             }
         }
+        /// <summary>
+        /// Takes all the stops that have been improved in current round and tries to improve all their neighbors by transfers
+        /// </summary>
         private void ImproveByTransfers()
         {
             HashSet<Stop> newMarkedStops = new();
@@ -184,6 +199,11 @@ namespace RAPTOR_Router.Routers
                 }
             }
         }
+        /// <summary>
+        /// Finds the connection with the earliest arrival to one of the destinationStations in the searchModel
+        /// </summary>
+        /// <param name="searchModel">The search model to be used for finding the connection</param>
+        /// <returns>The quickest connection from one of the sourceStops to one of the destinationStops in the searchModel</returns>
         public SearchResult FindConnection(SearchModel searchModel)
         {
             this.searchModel = searchModel;

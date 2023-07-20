@@ -5,6 +5,9 @@ using RAPTOR_Router.Routers;
 
 namespace RAPTOR_Router.Web
 {
+    /// <summary>
+    /// Class representing the web API for the algorithm
+    /// </summary>
     internal class API
     {
         RAPTORModel raptor;
@@ -12,6 +15,9 @@ namespace RAPTOR_Router.Web
         {
             this.raptor = raptor;
         }
+        /// <summary>
+        /// Builds and runs the web application with the API
+        /// </summary>
         internal void BuildWebApp()
         {
             var builder = WebApplication.CreateBuilder();
@@ -20,6 +26,13 @@ namespace RAPTOR_Router.Web
 
             app.Run();
         }
+        /// <summary>
+        /// Finds a result connection between stops with the specified names on the specified date and time
+        /// </summary>
+        /// <param name="srcStopName">The name of the source stop</param>
+        /// <param name="destStopName">The name of the destination stop</param>
+        /// <param name="dateTime">The date and time of the earliest possible departure in YYYYMMDDhhmmss format</param>
+        /// <returns>The result of the connection search to be converted to json by the API</returns>
         SearchResult HandleRequest(string srcStopName, string destStopName, string dateTime)
         {
             IRouter router = new BasicRouter(Settings.Default);

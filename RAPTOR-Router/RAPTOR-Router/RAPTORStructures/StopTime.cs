@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace RAPTOR_Router.RAPTORStructures
 {
+    /// <summary>
+    /// Struct representing a stop time of a single trip in a single stop
+    /// </summary>
     internal struct StopTime
     {
         public TimeOnly ArrivalTime { get; set; }
