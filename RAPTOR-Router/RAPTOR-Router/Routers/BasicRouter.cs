@@ -1,4 +1,4 @@
-﻿using RAPTOR_Router.Problems;
+﻿using RAPTOR_Router.SearchModels;
 using RAPTOR_Router.RAPTORStructures;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ namespace RAPTOR_Router.Routers
 {
     internal class BasicRouter : IRouter
     {
-        private JourneySearchModel searchModel;
+        private SearchModel searchModel;
         private HashSet<Stop> markedStops = new();
         private Dictionary<Route, Stop> markedRoutesWithGetOnStops = new();
         private Settings settings;
@@ -184,9 +184,7 @@ namespace RAPTOR_Router.Routers
                 }
             }
         }
-
-
-        public SearchResult FindConnection(JourneySearchModel searchModel)
+        public SearchResult FindConnection(SearchModel searchModel)
         {
             this.searchModel = searchModel;
 
@@ -200,7 +198,7 @@ namespace RAPTOR_Router.Routers
             }
             markedStops.Clear();
             markedRoutesWithGetOnStops.Clear();
-            return new SearchResult(searchModel);
+            return searchModel.ExtractResult();
         }
     }
 }

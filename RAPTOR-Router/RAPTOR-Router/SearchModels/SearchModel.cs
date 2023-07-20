@@ -5,20 +5,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RAPTOR_Router.Problems
+namespace RAPTOR_Router.SearchModels
 {
-    internal class JourneySearchModel
+    internal class SearchModel
     {
-        private RAPTORModel model;
         internal List<Stop> sourceStops { get; set; }
         internal List<Stop> destinationStops { get; set; }
         private Dictionary<Stop, StopRoutingInfo> routingInfo = new();
         private DateTime departureTime;
         private DateTime bestCurrentArrivalTime = DateTime.MaxValue;
 
-        public JourneySearchModel(RAPTORModel model, List<Stop> sourceStops, List<Stop> destinationStops, DateTime departureTime)
+        public SearchModel(List<Stop> sourceStops, List<Stop> destinationStops, DateTime departureTime)
         {
-            this.model = model;
             this.sourceStops = sourceStops;
             this.destinationStops = destinationStops;
             this.departureTime = departureTime;
@@ -28,8 +26,6 @@ namespace RAPTOR_Router.Problems
         {
             internal DateTime earliestArrival;
             internal DateTime[] earliestArrivalRounds;
-            //TODO: Add multiple trip/stop/transfer support
-            //TODO: Convert to arrays
             internal Trip[] tripsToReachRounds;
             internal Stop[] getOnStopsToReachRounds;
             internal Transfer[] transfersToReachRounds;
@@ -45,11 +41,98 @@ namespace RAPTOR_Router.Problems
                 transfersToReachRounds = new Transfer[Settings.ROUNDS + 1];
             }
         }
-        //TODO: Delete following 3
-        public Dictionary<Stop, StopRoutingInfo> GetRoutingInfo()
+        public SearchResult ExtractResult()
         {
-            return routingInfo;
+            Stop? earliestDestStop = GetDestStopWithMinArrivalTime();
+            if(earliestDestStop is null)
+            {
+                return null;
+            }
+
+
+            int round = GetFirstEarliestRound();
+            List<Trip> usedTrips = new();
+            List<Transfer> usedTransfers = new();
+            Dictionary<Trip, Stop> getOnStops = new();
+            Dictionary<Trip, Stop> getOffStops = new();
+            Stop sourceStop;
+            ExtractUsedTripsAndTransfers();
+
+            SearchResult result = new SearchResult
+            (
+                usedTrips,
+                usedTransfers,
+                getOnStops,
+                getOffStops,
+                sourceStop,
+                earliestDestStop
+            );
+
+            return result;
+
+            void ExtractUsedTripsAndTransfers()
+            {
+                Stop currStop = earliestDestStop;
+                Trip lastTrip = null;
+                while(!sourceStops.Contains(currStop) && round >= 0)
+                {
+                    Trip usedTrip = routingInfo[currStop].tripsToReachRounds[round];
+                    Transfer usedTransfer = routingInfo[currStop].transfersToReachRounds[round];
+
+                    //lastTrip ended in the same stop as currTrip begins - i.e. no transfer
+                    if (lastTrip != null && usedTrip != null)
+                    {
+                        usedTransfers.Add(new Transfer(currStop, currStop, 0));
+                    }
+                    //currently processing a trip
+                    if (usedTrip != null)
+                    {
+                        usedTrips.Add(usedTrip);
+                        getOnStops.Add(usedTrip, routingInfo[currStop].getOnStopsToReachRounds[round]);
+                        getOffStops.Add(usedTrip, currStop);
+                        currStop = routingInfo[currStop].getOnStopsToReachRounds[round];
+                        round--;
+                    }
+                    //currently processing a transfer
+                    else if (usedTransfer != null)
+                    {
+                        usedTransfers.Add(usedTransfer);
+                        currStop = usedTransfer.From;
+                    }
+                    lastTrip = usedTrip;
+                }
+                sourceStop = currStop;
+                usedTransfers.Reverse();
+                usedTrips.Reverse();
+            }
+            int GetFirstEarliestRound()
+            {
+                for(int i = 0; i<=Settings.ROUNDS; i++)
+                {
+                    var info = routingInfo[earliestDestStop];
+                    if (info.earliestArrivalRounds[i] == info.earliestArrival)
+                    {
+                        return i;
+                    }
+                }
+                return -1;
+            }
+            Stop? GetDestStopWithMinArrivalTime()
+            {
+                Stop? stopWithMinArrTime = null;
+                DateTime earliestArrival = DateTime.MaxValue;
+                foreach (Stop stop in destinationStops)
+                {
+                    if (routingInfo.ContainsKey(stop) && routingInfo[stop].earliestArrival < earliestArrival)
+                    {
+                        stopWithMinArrTime = stop;
+                        earliestArrival = routingInfo[stop].earliestArrival;
+                    }
+                }
+                return stopWithMinArrTime;
+            }
         }
+
         public bool StopIsReachedByTransferInRound(Stop stop, int round)
         {
             return GetRoutingInfo(stop).transfersToReachRounds[round] is not null;

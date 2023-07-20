@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using RAPTOR_Router.Problems;
+using RAPTOR_Router.SearchModels;
 using RAPTOR_Router.RAPTORStructures;
 using RAPTOR_Router.Routers;
 
@@ -8,11 +8,11 @@ namespace RAPTOR_Router.Web
     internal class API
     {
         RAPTORModel raptor;
-        public API(RAPTORModel raptor)
+        internal API(RAPTORModel raptor)
         {
             this.raptor = raptor;
         }
-        public void BuildWebApp()
+        internal void BuildWebApp()
         {
             var builder = WebApplication.CreateBuilder();
             var app = builder.Build();
@@ -20,7 +20,7 @@ namespace RAPTOR_Router.Web
 
             app.Run();
         }
-        SearchResultDTO HandleRequest(string srcStopName, string destStopName, string dateTime)
+        SearchResult HandleRequest(string srcStopName, string destStopName, string dateTime)
         {
             IRouter router = new BasicRouter(Settings.Default);
             List<Stop> sourceStops = raptor.GetStopsByName(srcStopName);
@@ -28,10 +28,10 @@ namespace RAPTOR_Router.Web
 
             DateTime departureTime = new DateTime(int.Parse(dateTime.Substring(0, 4)), int.Parse(dateTime.Substring(4, 2)), int.Parse(dateTime.Substring(6, 2)), int.Parse(dateTime.Substring(8, 2)), int.Parse(dateTime.Substring(10, 2)), int.Parse(dateTime.Substring(12, 2)));
 
-            JourneySearchModel searchModel = new JourneySearchModel(raptor, sourceStops, destStops, departureTime);
+            SearchModel searchModel = new SearchModel(sourceStops, destStops, departureTime);
             var result = router.FindConnection(searchModel);
 
-            return new SearchResultDTO(result);
+            return result;
         }
     }
 }

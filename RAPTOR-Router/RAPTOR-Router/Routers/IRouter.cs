@@ -1,4 +1,4 @@
-﻿using RAPTOR_Router.Problems;
+﻿using RAPTOR_Router.SearchModels;
 using RAPTOR_Router.RAPTORStructures;
 using System;
 using System.Collections.Generic;
@@ -10,6 +10,6 @@ namespace RAPTOR_Router.Routers
 {
     internal interface IRouter
     {
-        SearchResult FindConnection(JourneySearchModel searchModel);
+        SearchResult FindConnection(SearchModel searchModel);
     }
 }
