@@ -1,11 +1,13 @@
 ﻿//#define WEB_API
 //#define DEFAULT_GTFS_ARCHIVE
+//#define DEFAULT_DEPARTURE_TIME
 
 using RAPTOR_Router.GTFSParsing;
 using RAPTOR_Router.SearchModels;
 using RAPTOR_Router.RAPTORStructures;
 using RAPTOR_Router.Routers;
 using RAPTOR_Router.Web;
+using System;
 
 
 namespace RAPTOR_Router
@@ -26,6 +28,8 @@ namespace RAPTOR_Router
                 gtfsZipArchiveLocation = Console.ReadLine();
             }
 #endif
+
+
 			Settings settings = Settings.Default;
 			RAPTORModel raptor;
 			using (GTFS gtfs = GTFS.ParseZipFile(gtfsZipArchiveLocation))
@@ -66,13 +70,20 @@ namespace RAPTOR_Router
                     Console.WriteLine("Incorrect stop name/s");
 					continue;
                 }
-				SearchModel searchModel = new SearchModel(sourceStops, destStops, DateTime.Now.AddDays(-10));
+				DateTime departureTime;
+#if DEFAULT_DEPARTURE_TIME
+				departureTime = new DateTime(2023, 07, 07, 07, 07, 07); //The default departureTime
+#else
+                Console.WriteLine("Enter the departure time in the YYYYMMDDhhmmss format (i.e. 20230707070707 corresponds to 7.7.2023, 7:07:07):");
+                string dateTime = Console.ReadLine();
+				departureTime = new DateTime(int.Parse(dateTime.Substring(0, 4)), int.Parse(dateTime.Substring(4, 2)), int.Parse(dateTime.Substring(6, 2)), int.Parse(dateTime.Substring(8, 2)), int.Parse(dateTime.Substring(10, 2)), int.Parse(dateTime.Substring(12, 2)));
+#endif
 
-				var result = router.FindConnection(searchModel);
-				Console.WriteLine(result.ToString());
-
-				router = new BasicRouter(settings);
-			}
-		}
+                SearchModel searchModel = new SearchModel(sourceStops, destStops, DateTime.Now.AddDays(-10));
+                var result = router.FindConnection(searchModel);
+                Console.WriteLine(result.ToString());
+                router = new BasicRouter(settings);
+            }
+        }
 	}
 }

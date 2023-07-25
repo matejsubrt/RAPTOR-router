@@ -5,3 +5,5 @@
 - can be used as a web application with an API or a console application
 
 For developer documentation, see [Dev docs](https://matejsubrt.github.io/RAPTOR-router/html/index.html)
+
+For user documentation, see [User docs](docs/user_docs.md)
