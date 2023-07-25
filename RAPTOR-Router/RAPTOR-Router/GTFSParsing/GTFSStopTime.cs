@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 namespace RAPTOR_Router.GTFSParsing
 {
     /// <summary>
-    /// Class representing the stop times information from the stop_times.txt gtfs file
+    /// Class representing the stop times information from the stop_times.txt gtfs file.
+    /// The properties correspond to the entries in the file.
     /// </summary>
     internal class GTFSStopTime : IIdentifiable
     {

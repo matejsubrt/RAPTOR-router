@@ -12,12 +12,38 @@ namespace RAPTOR_Router.RAPTORStructures
     /// </summary>
     internal class Route
     {
+        /// <summary>
+        /// The Id of this unique route - combination of the GTFSId and the stop Id's of the unique route. Is unique for every Route object.
+        /// </summary>
         public string Id { get; }
+        /// <summary>
+        /// The GTFS Id of the GTFS Route entry associated with the unique route. 
+        /// Is NOT unique for every Route object - for example a single tram line (single GTFS Route) can have multiple unique Routes associated with it (trams returning to depot/coming out of it, shortened trips, ...)
+        /// </summary>
         public string GTFSId { get; }
+        /// <summary>
+        /// The short name of the associated GTFS Route
+        /// </summary>
         public string ShortName { get; }
+        /// <summary>
+        /// The long name of the associated GTFS Route
+        /// </summary>
         public string LongName { get; }
+        /// <summary>
+        /// The list of all stops on the route in correct order on the route
+        /// </summary>
         public List<Stop> RouteStops { get; set; } = new();
+        /// <summary>
+        /// A dictionary, which for every date when the Route has at least one operating trip contains the list of trips that operate on the day. This is necessary, as a trip does NOT contain information about the day, only about time.
+        /// </summary>
         public Dictionary<DateOnly, List<Trip>> RouteTrips { get; set; } = new();
+        /// <summary>
+        /// Creates a new Route object
+        /// </summary>
+        /// <param name="id">The unique Route Id to use (Should be unique for each Route object)</param>
+        /// <param name="gtfsId">The Id of the associated GTFS route (does not have to be unique for each Route object)</param>
+        /// <param name="shortName">The short name of the route</param>
+        /// <param name="longName">The long name of the route</param>
         public Route(string id, string gtfsId, string shortName, string longName)
         {
             Id = id;

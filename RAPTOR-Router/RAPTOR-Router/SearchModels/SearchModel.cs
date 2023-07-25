@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 namespace RAPTOR_Router.SearchModels
 {
     /// <summary>
-    /// Class representing a single connection search
+    /// Class representing a single connection search. One exists for every connection search problem being solved.
+    /// Typically is first initiated by adding sourceStops, destinationStops and the departure time, and then is provided to a router, which uses the object as the data holding object for its connection search algorithm.
     /// </summary>
     internal class SearchModel
     {
@@ -20,10 +21,25 @@ namespace RAPTOR_Router.SearchModels
         /// List of stops considered as the destination
         /// </summary>
         internal List<Stop> destinationStops { get; set; }
+        /// <summary>
+        /// A dictionary containing the current routing information for every stop
+        /// </summary>
         private Dictionary<Stop, StopRoutingInfo> routingInfo = new();
+        /// <summary>
+        /// The departure time, at which the connection search starts - i.e. the earliest possible time, at which the first trip/transfer leaves the source stop
+        /// </summary>
         private DateTime departureTime;
+        /// <summary>
+        /// The currently best found arrival time to the destination stop
+        /// </summary>
         private DateTime bestCurrentArrivalTime = DateTime.MaxValue;
 
+        /// <summary>
+        /// Creates a new SearchModel object
+        /// </summary>
+        /// <param name="sourceStops">The list of stops considered as the source stops - typically stops from one node sharing the same name</param>
+        /// <param name="destinationStops">The list of stops considered as the destination stops - typically stops from one node sharing the same name</param>
+        /// <param name="departureTime">The earliest possible departure time of the found connection</param>
         public SearchModel(List<Stop> sourceStops, List<Stop> destinationStops, DateTime departureTime)
         {
             this.sourceStops = sourceStops;
@@ -36,12 +52,33 @@ namespace RAPTOR_Router.SearchModels
         /// </summary>
         internal class StopRoutingInfo
         {
+            /// <summary>
+            /// The current earliest possible arrival time at the stop
+            /// </summary>
             internal DateTime earliestArrival;
+            /// <summary>
+            /// The current earliest possible arrival at the stop, separately for each round
+            /// </summary>
             internal DateTime[] earliestArrivalRounds;
+            /// <summary>
+            /// The trip used to reach the stop for each round.
+            /// </summary>
+            /// <remarks>Null if stop cannot be reached in said round, or is reached sooner by a transfer in said round.</remarks>
             internal Trip[] tripsToReachRounds;
+            /// <summary>
+            /// The get on stop used to reach the stop for each round - the stop, on which the tripToReach in the same round was boarded to reach the stop.
+            /// </summary>
+            /// <remarks>Null if stop cannot be reached in said round, or is reached sooner by a transfer in said round.</remarks>
             internal Stop[] getOnStopsToReachRounds;
+            /// <summary>
+            /// The transfer used to reach the stop for each round.
+            /// </summary>
+            /// <remarks>Null if stop cannot be reached in said round, or is reached sooner by a trip in said round.</remarks>
             internal Transfer[] transfersToReachRounds;
 
+            /// <summary>
+            /// Creates a new StopRoutingInfo object with all the arrivalTimes set to the maxValue
+            /// </summary>
             internal StopRoutingInfo()
             {
                 earliestArrival = DateTime.MaxValue;
@@ -152,8 +189,8 @@ namespace RAPTOR_Router.SearchModels
         /// <summary>
         /// Finds out if it is possible and fastest to reach the stop by transfer in the specified round, rather by by trip
         /// </summary>
-        /// <param name="stop"></param>
-        /// <param name="round"></param>
+        /// <param name="stop">The stop to use</param>
+        /// <param name="round">The round in which the reaching method is to be found</param>
         /// <returns></returns>
         public bool StopIsReachedByTransferInRound(Stop stop, int round)
         {

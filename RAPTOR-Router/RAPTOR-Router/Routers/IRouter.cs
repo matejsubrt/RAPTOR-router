@@ -13,6 +13,11 @@ namespace RAPTOR_Router.Routers
     /// </summary>
     internal interface IRouter
     {
+        /// <summary>
+        /// The function of a router, which solves the provided connection search problem (i.e. SearchModel)
+        /// </summary>
+        /// <param name="searchModel">The initiated search model to be used for the algorithm</param>
+        /// <returns>The resulting best connection</returns>
         SearchResult FindConnection(SearchModel searchModel);
     }
 }

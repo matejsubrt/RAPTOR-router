@@ -10,7 +10,14 @@ namespace RAPTOR_Router.Web
     /// </summary>
     internal class API
     {
-        RAPTORModel raptor;
+        /// <summary>
+        /// The RAPTOR Model, which should be used to search for the connections
+        /// </summary>
+        private RAPTORModel raptor;
+        /// <summary>
+        /// Creates a new API
+        /// </summary>
+        /// <param name="raptor">The RAPTOR Model to be used for the connection searches of the API</param>
         internal API(RAPTORModel raptor)
         {
             this.raptor = raptor;

@@ -11,13 +11,38 @@ namespace RAPTOR_Router.RAPTORStructures
     /// </summary>
     internal class Stop
     {
+        /// <summary>
+        /// The unique Id of the stop (different even for each stop in a Node sharing the same name)
+        /// </summary>
         public string Id { get; private set; }
+        /// <summary>
+        /// The human-friendly name of the stop
+        /// </summary>
         public string Name { get; private set; }
+        /// <summary>
+        /// The latitude of the stop
+        /// </summary>
         public double Lat { get; private set; }
+        /// <summary>
+        /// The longitude of the stop
+        /// </summary>
         public double Lon { get; private set; }
+        /// <summary>
+        /// A list of all routes that contain the stop
+        /// </summary>
         public List<Route> StopRoutes { get; private set; } = new List<Route>();
+        /// <summary>
+        /// A list of all possible transfers that can be made from the stop
+        /// </summary>
         public List<Transfer> Transfers { get; private set; } = new List<Transfer>();
 
+        /// <summary>
+        /// Creates a new Stop object
+        /// </summary>
+        /// <param name="id">The unique Id of the stop</param>
+        /// <param name="name">The name of the stop</param>
+        /// <param name="lat">The latitude of the stop</param>
+        /// <param name="lon">The longitude of the stop</param>
         public Stop(string id, string name, double lat, double lon)
         {
             Id = id;
@@ -25,7 +50,7 @@ namespace RAPTOR_Router.RAPTORStructures
             Lat = lat;
             Lon = lon;
         }
-        public string ToString()
+        public override string ToString()
         {
             return Name + "  " + Id;
         }

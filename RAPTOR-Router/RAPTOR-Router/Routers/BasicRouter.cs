@@ -9,17 +9,36 @@ using System.Threading.Tasks;
 namespace RAPTOR_Router.Routers
 {
     /// <summary>
-    /// Basic router used for finding the best connection from a source stop to a destination stop using only public transit. It only takes the arrival time into account, i.e. is to be used in situations, where the arrival time is the only important factor (doesn't take into account comfort/transfers/...
+    /// Basic router used for finding the best connection from a source stop to a destination stop using only public transit. It only takes the arrival time into account, i.e. is to be used in situations, where the arrival time is the only important factor (doesn't take into account comfort/transfers/...)
     /// </summary>
     internal class BasicRouter : IRouter
     {
+        /// <summary>
+        /// The search model, that the router will use for the connection searching algorithm
+        /// </summary>
         private SearchModel searchModel;
+        /// <summary>
+        /// A set of currently marked stops
+        /// </summary>
         private HashSet<Stop> markedStops = new();
+        /// <summary>
+        /// A dictionary storing for every currently marked route the stop at which it first can be boarded - i.e. the first marked stop it passes through
+        /// </summary>
         private Dictionary<Route, Stop> markedRoutesWithGetOnStops = new();
+        /// <summary>
+        /// The settings to be used for the connection search
+        /// </summary>
         private Settings settings;
 
+        /// <summary>
+        /// The current round of the RAPTOR algorithm
+        /// </summary>
         private int round = 0;
 
+        /// <summary>
+        /// Creates a new BasicRouter object
+        /// </summary>
+        /// <param name="settings">The settings to be used for the connection search</param>
         public BasicRouter(Settings settings)
         {
             this.settings = settings;

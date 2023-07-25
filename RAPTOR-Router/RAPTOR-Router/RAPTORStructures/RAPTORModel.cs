@@ -20,23 +20,13 @@ namespace RAPTOR_Router.RAPTORStructures
         public Dictionary<string, Route> routes { get; private set; } = new Dictionary<string, Route>();
         public Dictionary<string, Stop> stops { get; private set; } = new Dictionary<string, Stop>();
 
+        /// <summary>
+        /// Constructs the RAPTOR model object from the provided GTFS object
+        /// </summary>
+        /// <param name="gtfs">The GTFS object containing the timetable GTFS data to be used for routing</param>
         public RAPTORModel(GTFS gtfs)
         {
             LoadDataFromGtfs(gtfs);
-        }
-        public RAPTORModel(GTFS gtfs, Stopwatch stopwatch)
-        {
-            LoadStopsFromGtfsStops(gtfs.stops);
-            Console.WriteLine(stopwatch.Elapsed + ": Stops loaded, \tMemory:" + GC.GetTotalMemory(false));
-
-            LoadRoutes(gtfs);
-            Console.WriteLine(stopwatch.Elapsed + ": Routes loaded, \tMemory:" + GC.GetTotalMemory(false));
-
-            LoadStopRoutes();
-            Console.WriteLine(stopwatch.Elapsed + ": StopRoutes loaded, \tMemory:" + GC.GetTotalMemory(false));
-
-            LoadStopTransfers();
-            Console.WriteLine(stopwatch.Elapsed + ": Transfers loaded, \tMemory:" + GC.GetTotalMemory(false));
         }
         /// <summary>
         /// Loads the raw gtfs date into useful structures to later be used by the router

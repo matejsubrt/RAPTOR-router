@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 namespace RAPTOR_Router.GTFSParsing
 {
     /// <summary>
-    /// Class representing the calendar dates information from the calendar_dates.txt gtfs file
+    /// Class representing the calendar dates information from the calendar_dates.txt gtfs file.
+    /// The properties correspond to the entries in the file.
     /// </summary>
     internal class GTFSCalendarDate : IIdentifiable
     {

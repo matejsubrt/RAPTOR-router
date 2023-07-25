@@ -9,7 +9,8 @@ using CsvHelper.TypeConversion;
 namespace RAPTOR_Router.GTFSParsing
 {
     /// <summary>
-    /// Class representing the calendars information from the calendars.txt gtfs file
+    /// Class representing the calendars information from the calendars.txt gtfs file.
+    /// The properties correspond to the entries in the file.
     /// </summary>
     internal class GTFSCalendar : IIdentifiable
     {
@@ -40,6 +41,11 @@ namespace RAPTOR_Router.GTFSParsing
         {
             return ServiceId;
         }
+        /// <summary>
+        /// Finds out, whether the service (calendar) is operating on the provided date. Does NOT take into account the exception operations from calendar_dates
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns></returns>
         public bool IsOperating(DateOnly date)
         {
             if(date < StartDate || date > EndDate)

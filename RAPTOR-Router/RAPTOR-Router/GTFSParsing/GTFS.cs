@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace RAPTOR_Router.GTFSParsing
 {
     /// <summary>
-    /// Class representing all the loaded GTFS data
+    /// Class representing all the loaded GTFS data. Typically used for parsing the GTFS files to objects in memory, which later will be used to construct the objects useful for the connection searching.
     /// </summary>
     internal class GTFS : IDisposable
     {
@@ -28,7 +28,11 @@ namespace RAPTOR_Router.GTFSParsing
         /// <param name="archive">The zip archive the file is located in</param>
         public void LoadAgencies(ZipArchive archive)
         {
-            ZipArchiveEntry entry = archive.GetEntry("agency.txt");
+            ZipArchiveEntry? entry = archive.GetEntry("agency.txt");
+            if(entry is null)
+            {
+                throw new FileNotFoundException("The agency.txt file is missing in the archive");
+            }
             using (StreamReader reader = new StreamReader(entry.Open()))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
@@ -45,7 +49,11 @@ namespace RAPTOR_Router.GTFSParsing
         /// <param name="archive">The zip archive the file is located in</param>
         public void LoadCalendars(ZipArchive archive)
         {
-            ZipArchiveEntry entry = archive.GetEntry("calendar.txt");
+            ZipArchiveEntry? entry = archive.GetEntry("calendar.txt");
+            if (entry is null)
+            {
+                throw new FileNotFoundException("The calendar.txt file is missing in the archive");
+            }
             using (StreamReader reader = new StreamReader(entry.Open()))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
@@ -62,7 +70,11 @@ namespace RAPTOR_Router.GTFSParsing
         /// <param name="archive">The zip archive the file is located in</param>
         public void LoadCalendarDates(ZipArchive archive)
         {
-            ZipArchiveEntry entry = archive.GetEntry("calendar_dates.txt");
+            ZipArchiveEntry? entry = archive.GetEntry("calendar_dates.txt");
+            if (entry is null)
+            {
+                throw new FileNotFoundException("The calendar_dates.txt file is missing in the archive");
+            }
             using (StreamReader reader = new StreamReader(entry.Open()))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
@@ -86,7 +98,11 @@ namespace RAPTOR_Router.GTFSParsing
         /// <param name="archive">The zip archive the file is located in</param>
         public void LoadRoutes(ZipArchive archive)
         {
-            ZipArchiveEntry entry = archive.GetEntry("routes.txt");
+            ZipArchiveEntry? entry = archive.GetEntry("routes.txt");
+            if (entry is null)
+            {
+                throw new FileNotFoundException("The routes.txt file is missing in the archive");
+            }
             using (StreamReader reader = new StreamReader(entry.Open()))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
@@ -103,7 +119,11 @@ namespace RAPTOR_Router.GTFSParsing
         /// <param name="archive">The zip archive the file is located in</param>
         public void LoadStops(ZipArchive archive)
         {
-            ZipArchiveEntry entry = archive.GetEntry("stops.txt");
+            ZipArchiveEntry? entry = archive.GetEntry("stops.txt");
+            if (entry is null)
+            {
+                throw new FileNotFoundException("The stops.txt file is missing in the archive");
+            }
             using (StreamReader reader = new StreamReader(entry.Open()))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
@@ -124,7 +144,11 @@ namespace RAPTOR_Router.GTFSParsing
         /// <param name="archive">The zip archive the file is located in</param>
         public void LoadStopTimes(ZipArchive archive)
         {
-            ZipArchiveEntry entry = archive.GetEntry("stop_times.txt");
+            ZipArchiveEntry? entry = archive.GetEntry("stop_times.txt");
+            if (entry is null)
+            {
+                throw new FileNotFoundException("The stop_times.txt file is missing in the archive");
+            }
             using (StreamReader reader = new StreamReader(entry.Open()))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
@@ -149,7 +173,11 @@ namespace RAPTOR_Router.GTFSParsing
         /// <param name="archive">The zip archive the file is located in</param>
         public void LoadTrips(ZipArchive archive)
         {
-            ZipArchiveEntry entry = archive.GetEntry("trips.txt");
+            ZipArchiveEntry? entry = archive.GetEntry("trips.txt");
+            if (entry is null)
+            {
+                throw new FileNotFoundException("The trips.txt file is missing in the archive");
+            }
             using (StreamReader reader = new StreamReader(entry.Open()))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
@@ -181,10 +209,11 @@ namespace RAPTOR_Router.GTFSParsing
             return gtfs;
         }
         /// <summary>
-        /// Removes all the pointers to the GTFS data - to be used after the GTFS data is used for creating the RAPTOR routing data and is no longer needed
+        /// Removes all the pointers to the GTFS data - to be used after the GTFS data is used for creating the RAPTOR routing data and is no longer needed, so that memory can be freed.
         /// </summary>
         public void Dispose()
         {
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
             stops = null;
             calendars = null;
             routes = null;
@@ -192,6 +221,7 @@ namespace RAPTOR_Router.GTFSParsing
             trips = null;
             calendarDates = null;
             agencies = null;
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
         }
     }
 }

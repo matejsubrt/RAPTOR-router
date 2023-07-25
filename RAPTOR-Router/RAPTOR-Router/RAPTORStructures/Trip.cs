@@ -12,8 +12,19 @@ namespace RAPTOR_Router.RAPTORStructures
     /// </summary>
     internal class Trip
     {
+        /// <summary>
+        /// The route, on which the trip operates
+        /// </summary>
         public Route Route;
+        /// <summary>
+        /// A list of all stop times on the trip. The indices correspond to the indices of the stops on the associated route - i.e. the stop time for the first stop is at the index 0
+        /// </summary>
         public List<StopTime> StopTimes;
+        /// <summary>
+        /// Creates a new Trip object
+        /// </summary>
+        /// <param name="gtfsTripStopTimes">A list of the GTFSStopTimes of the trip</param>
+        /// <param name="route">The associated route on which the trip is operating</param>
         public Trip(List<GTFSStopTime> gtfsTripStopTimes, Route route)
         {
             this.Route = route;

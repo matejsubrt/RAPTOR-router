@@ -31,7 +31,7 @@ namespace RAPTOR_Router
 #endif
 		}
 		/// <summary>
-		/// Builds the console routing app, runs it
+		/// Builds the console routing app and runs it
 		/// </summary>
 		/// <param name="raptor">The RAPTOR model of the timetable to use for routing</param>
 		static void BuildConsoleApp(RAPTORModel raptor)
