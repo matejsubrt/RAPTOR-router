@@ -1,5 +1,7 @@
 # A Prague public transport app
-- with extended user configuration options
-- including shared bikes
+- will include extended user configuration options
+- will include shared bikes
+- currently finds the fastest possible connection between two stops using only public transit
+- can be used as a web application with an API or a console application
 
-At the moment, see [Start considerations](start-considerations/considerations.md)
+For developer documentation, see [Dev docs](https://matejsubrt.github.io/RAPTOR-router/html/index.html)
