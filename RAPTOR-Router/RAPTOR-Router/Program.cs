@@ -1,5 +1,5 @@
 ﻿//#define WEB_API
-
+//#define DEFAULT_GTFS_ARCHIVE
 
 using RAPTOR_Router.GTFSParsing;
 using RAPTOR_Router.SearchModels;
@@ -14,9 +14,21 @@ namespace RAPTOR_Router
 	{
 		static void Main(string[] args)
 		{
+            string gtfsZipArchiveLocation;
+#if DEFAULT_GTFS_ARCHIVE
+			gtfsZipArchiveLocation = "..\\..\\example-gtfs\\PID_GTFS.zip";
+#else
+			Console.WriteLine("Enter the path to the GTFS archive that should be used for the connection search:");
+            gtfsZipArchiveLocation = Console.ReadLine();
+			while(!File.Exists(gtfsZipArchiveLocation))
+			{
+                Console.WriteLine("The path to the gtfs archive is incorrect. Please specify the correct path:");
+                gtfsZipArchiveLocation = Console.ReadLine();
+            }
+#endif
 			Settings settings = Settings.Default;
 			RAPTORModel raptor;
-			using (GTFS gtfs = GTFS.ParseZipFile("..\\..\\example-gtfs\\PID_GTFS.zip"))
+			using (GTFS gtfs = GTFS.ParseZipFile(gtfsZipArchiveLocation))
 			{
 				raptor = new RAPTORModel(gtfs);
 			}
