@@ -9,7 +9,7 @@ namespace RAPTOR_Router.RAPTORStructures
     /// <summary>
     /// Class representing the settings to use for the connection search
     /// </summary>
-    internal class Settings
+    public class Settings
     {
         /// <summary>
         /// The maximum number of trips to be used for the searched connection
@@ -54,7 +54,7 @@ namespace RAPTOR_Router.RAPTORStructures
     /// <summary>
     /// Enum representing the transfer risk value of the user
     /// </summary>
-    internal enum TransferLength
+    public enum TransferLength
     {
         Short = 0,
         Normal = 1,
@@ -63,7 +63,7 @@ namespace RAPTOR_Router.RAPTORStructures
     /// <summary>
     /// enum representing the comfort balance of the user
     /// </summary>
-    internal enum ComfortBalance
+    public enum ComfortBalance
     {
         ShortestTime = 0,
         Balanced = 1,
@@ -72,7 +72,7 @@ namespace RAPTOR_Router.RAPTORStructures
     /// <summary>
     /// Enum representing the walking preference of the user
     /// </summary>
-    internal enum WalkingPreference
+    public enum WalkingPreference
     {
         High = 0,
         Normal = 1,

@@ -42,7 +42,7 @@ namespace RAPTOR_Router.Web
         /// <returns>The result of the connection search to be converted to json by the API</returns>
         SearchResult HandleRequest(string srcStopName, string destStopName, string dateTime)
         {
-            IRouter router = new BasicRouter(Settings.Default);
+            BasicRouter router = new BasicRouter(Settings.Default, raptor);
             List<Stop> sourceStops = raptor.GetStopsByName(srcStopName);
             List<Stop> destStops = raptor.GetStopsByName(destStopName);
 

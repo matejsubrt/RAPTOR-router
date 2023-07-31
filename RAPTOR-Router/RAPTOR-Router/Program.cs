@@ -1,6 +1,6 @@
 ﻿//#define WEB_API
-//#define DEFAULT_GTFS_ARCHIVE
-//#define DEFAULT_DEPARTURE_TIME
+#define DEFAULT_GTFS_ARCHIVE
+#define DEFAULT_DEPARTURE_TIME
 
 using RAPTOR_Router.GTFSParsing;
 using RAPTOR_Router.SearchModels;
@@ -16,6 +16,7 @@ namespace RAPTOR_Router
 	{
 		static void Main(string[] args)
 		{
+            /*
             string gtfsZipArchiveLocation;
 #if DEFAULT_GTFS_ARCHIVE
 			gtfsZipArchiveLocation = "..\\..\\example-gtfs\\PID_GTFS.zip";
@@ -44,16 +45,15 @@ namespace RAPTOR_Router
 			api.BuildWebApp();
 #else
 			BuildConsoleApp(raptor);
+			
 #endif
-		}
-		/// <summary>
-		/// Builds the console routing app and runs it
-		/// </summary>
-		/// <param name="raptor">The RAPTOR model of the timetable to use for routing</param>
-		static void BuildConsoleApp(RAPTORModel raptor)
+			*/
+        }
+        static void BuildConsoleApp(RAPTORModel raptor)
 		{
+			/*
 			Settings settings = Settings.Default;
-			IRouter router = new BasicRouter(settings);
+			IRouter router = new BasicRouter(settings, raptor);
 
 			while (true)
 			{
@@ -84,6 +84,7 @@ namespace RAPTOR_Router
                 Console.WriteLine(result.ToString());
                 router = new BasicRouter(settings);
             }
+			*/
         }
 	}
 }

@@ -5,14 +5,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RAPTOR_Router.GTFSParsing;
 
 namespace RAPTOR_Router.Routers
 {
     /// <summary>
     /// Basic router used for finding the best connection from a source stop to a destination stop using only public transit. It only takes the arrival time into account, i.e. is to be used in situations, where the arrival time is the only important factor (doesn't take into account comfort/transfers/...)
     /// </summary>
-    internal class BasicRouter : IRouter
+    public class BasicRouter : IRouter
     {
+        private RAPTORModel raptorModel;
         /// <summary>
         /// The search model, that the router will use for the connection searching algorithm
         /// </summary>
@@ -39,10 +41,12 @@ namespace RAPTOR_Router.Routers
         /// Creates a new BasicRouter object
         /// </summary>
         /// <param name="settings">The settings to be used for the connection search</param>
-        public BasicRouter(Settings settings)
+        internal BasicRouter(Settings settings, RAPTORModel raptorModel)
         {
             this.settings = settings;
+            this.raptorModel = raptorModel;
         }
+
         /// <summary>
         /// Initiates the search by setting earliest arrival for source stops, marks them and improves arrival times for their neighbors in round 0
         /// </summary>
@@ -223,9 +227,33 @@ namespace RAPTOR_Router.Routers
         /// </summary>
         /// <param name="searchModel">The search model to be used for finding the connection</param>
         /// <returns>The quickest connection from one of the sourceStops to one of the destinationStops in the searchModel</returns>
-        public SearchResult FindConnection(SearchModel searchModel)
+        internal SearchResult FindConnection(SearchModel searchModel)
         {
             this.searchModel = searchModel;
+
+            InitiateSearch();
+            while (round <= Settings.ROUNDS - 1)
+            {
+                round++;
+                AccumulateRoutes();
+                TraverseMarkedRoutes();
+                ImproveByTransfers();
+            }
+            markedStops.Clear();
+            markedRoutesWithGetOnStops.Clear();
+            return searchModel.ExtractResult();
+        }
+        public SearchResult FindConnection(string sourceStop, string destStop, DateTime departureTime)
+        {
+            List<Stop> sourceStops = raptorModel.GetStopsByName(sourceStop);
+            List<Stop> destStops = raptorModel.GetStopsByName(destStop);
+            if (sourceStops.Count == 0 || destStops.Count == 0)
+            {
+                Console.WriteLine("Incorrect stop name/s");
+                return null;
+            }
+            this.searchModel = new SearchModel(sourceStops, destStops, departureTime);
+
 
             InitiateSearch();
             while (round <= Settings.ROUNDS - 1)

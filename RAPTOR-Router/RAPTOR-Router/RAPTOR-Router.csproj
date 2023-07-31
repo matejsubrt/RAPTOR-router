@@ -10,15 +10,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Documentation\**" />
+    <EmbeddedResource Remove="Documentation\**" />
+    <None Remove="Documentation\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CsvHelper" Version="30.0.1" />
   </ItemGroup>
 	
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-  </ItemGroup>
-	
-  <ItemGroup>
-    <Folder Include="Documentation\" />
   </ItemGroup>
 	
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

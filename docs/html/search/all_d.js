@@ -9,10 +9,11 @@ var searchData=
   ['rounds_6',['ROUNDS',['../class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_settings.html#ad326bb8835e5bff0197bff6dad87331e',1,'RAPTOR_Router::RAPTORStructures::Settings']]],
   ['route_7',['Route',['../class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_route.html',1,'RAPTOR_Router.RAPTORStructures.Route'],['../class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_trip.html#a1b2f897704c67bd4f4caefce16262fd0',1,'RAPTOR_Router.RAPTORStructures.Trip.Route()'],['../class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_route.html#a2c0e85fc339f4b2265c1c83e78c9c8ba',1,'RAPTOR_Router.RAPTORStructures.Route.Route()']]],
   ['routename_8',['routeName',['../class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_search_result_1_1_used_trip.html#a29bfea0ad31911a5ff3a3e3416ef9b37',1,'RAPTOR_Router::RAPTORStructures::SearchResult::UsedTrip']]],
-  ['routers_9',['Routers',['../namespace_r_a_p_t_o_r___router_1_1_routers.html',1,'RAPTOR_Router']]],
-  ['routestops_10',['RouteStops',['../class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_route.html#a04748559808f15813b675dc44ad4d6c3',1,'RAPTOR_Router::RAPTORStructures::Route']]],
-  ['routetrips_11',['RouteTrips',['../class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_route.html#ae6c217cf0cdbc6990ac44d96481ebc33',1,'RAPTOR_Router::RAPTORStructures::Route']]],
-  ['routinginfo_12',['routingInfo',['../class_r_a_p_t_o_r___router_1_1_search_models_1_1_search_model.html#af43ef3b3e857c135cde342b06d1e695b',1,'RAPTOR_Router::SearchModels::SearchModel']]],
-  ['searchmodels_13',['SearchModels',['../namespace_r_a_p_t_o_r___router_1_1_search_models.html',1,'RAPTOR_Router']]],
-  ['web_14',['Web',['../namespace_r_a_p_t_o_r___router_1_1_web.html',1,'RAPTOR_Router']]]
+  ['routerbuilder_9',['RouterBuilder',['../class_r_a_p_t_o_r___router_1_1_routers_1_1_router_builder.html',1,'RAPTOR_Router::Routers']]],
+  ['routers_10',['Routers',['../namespace_r_a_p_t_o_r___router_1_1_routers.html',1,'RAPTOR_Router']]],
+  ['routestops_11',['RouteStops',['../class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_route.html#a04748559808f15813b675dc44ad4d6c3',1,'RAPTOR_Router::RAPTORStructures::Route']]],
+  ['routetrips_12',['RouteTrips',['../class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_route.html#ae6c217cf0cdbc6990ac44d96481ebc33',1,'RAPTOR_Router::RAPTORStructures::Route']]],
+  ['routinginfo_13',['routingInfo',['../class_r_a_p_t_o_r___router_1_1_search_models_1_1_search_model.html#af43ef3b3e857c135cde342b06d1e695b',1,'RAPTOR_Router::SearchModels::SearchModel']]],
+  ['searchmodels_14',['SearchModels',['../namespace_r_a_p_t_o_r___router_1_1_search_models.html',1,'RAPTOR_Router']]],
+  ['web_15',['Web',['../namespace_r_a_p_t_o_r___router_1_1_web.html',1,'RAPTOR_Router']]]
 ];

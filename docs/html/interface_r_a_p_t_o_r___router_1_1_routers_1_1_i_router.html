@@ -94,15 +94,15 @@ Inheritance diagram for RAPTOR_Router.Routers.IRouter:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a188b5280e69bd54f590f7eb9062cba58"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_search_result.html">SearchResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_r_a_p_t_o_r___router_1_1_routers_1_1_i_router.html#a188b5280e69bd54f590f7eb9062cba58">FindConnection</a> (<a class="el" href="class_r_a_p_t_o_r___router_1_1_search_models_1_1_search_model.html">SearchModel</a> searchModel)</td></tr>
-<tr class="memdesc:a188b5280e69bd54f590f7eb9062cba58"><td class="mdescLeft">&#160;</td><td class="mdescRight">The function of a router, which solves the provided connection search problem (i.e. SearchModel)  <br /></td></tr>
-<tr class="separator:a188b5280e69bd54f590f7eb9062cba58"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8041c098874c625468f015fbf657f285"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_search_result.html">SearchResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_r_a_p_t_o_r___router_1_1_routers_1_1_i_router.html#a8041c098874c625468f015fbf657f285">FindConnection</a> (string sourceStop, string destStop, DateTime departureTime)</td></tr>
+<tr class="memdesc:a8041c098874c625468f015fbf657f285"><td class="mdescLeft">&#160;</td><td class="mdescRight">The function of a router, which solves the provided connection search problem (i.e. SearchModel)  <br /></td></tr>
+<tr class="separator:a8041c098874c625468f015fbf657f285"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>An interface to use for any router class - any class that is supposed to find a connection in a SearchModel. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a188b5280e69bd54f590f7eb9062cba58" name="a188b5280e69bd54f590f7eb9062cba58"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a188b5280e69bd54f590f7eb9062cba58">&#9670;&#160;</a></span>FindConnection()</h2>
+<a id="a8041c098874c625468f015fbf657f285" name="a8041c098874c625468f015fbf657f285"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8041c098874c625468f015fbf657f285">&#9670;&#160;</a></span>FindConnection()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -110,9 +110,25 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_search_result.html">SearchResult</a> RAPTOR_Router.Routers.IRouter.FindConnection </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="class_r_a_p_t_o_r___router_1_1_search_models_1_1_search_model.html">SearchModel</a>&#160;</td>
-          <td class="paramname"><em>searchModel</em></td><td>)</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>sourceStop</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>destStop</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">DateTime&#160;</td>
+          <td class="paramname"><em>departureTime</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -126,7 +142,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting best connection</dd></dl>
 
-<p>Implemented in <a class="el" href="class_r_a_p_t_o_r___router_1_1_routers_1_1_basic_router.html#af525e3169b082984f27f1b0a9c6ff6f4">RAPTOR_Router.Routers.BasicRouter</a>.</p>
+<p>Implemented in <a class="el" href="class_r_a_p_t_o_r___router_1_1_routers_1_1_basic_router.html#a8219eb0fdb9c019de814549d6d82420f">RAPTOR_Router.Routers.BasicRouter</a>.</p>
 
 </div>
 </div>

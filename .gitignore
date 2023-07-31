@@ -15,3 +15,6 @@
 /.vs
 /RAPTOR-Router/RAPTOR-Router/bin/Release/net7.0
 /RAPTOR-Router/RAPTOR-Router/Properties/launchSettings.json
+/RAPTOR-Router/CLIApp/bin/Debug/net7.0
+/RAPTOR-Router/CLIApp/obj
+/RAPTOR-Router/WebAPI/bin/Debug/net7.0
