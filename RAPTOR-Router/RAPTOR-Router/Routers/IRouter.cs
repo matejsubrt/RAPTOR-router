@@ -16,8 +16,10 @@ namespace RAPTOR_Router.Routers
         /// <summary>
         /// The function of a router, which solves the provided connection search problem (i.e. SearchModel)
         /// </summary>
-        /// <param name="searchModel">The initiated search model to be used for the algorithm</param>
-        /// <returns>The resulting best connection</returns>
+        /// <param name="sourceStop">The exact name of the source stop</param>
+        /// <param name="destStop">The exact name of the destination stop</param>
+        /// <param name="departureTime">The departure date and time</param>
+        /// <returns>The resulting best connection, null if one id found</returns>
         SearchResult FindConnection(string sourceStop, string destStop, DateTime departureTime);
     }
 }

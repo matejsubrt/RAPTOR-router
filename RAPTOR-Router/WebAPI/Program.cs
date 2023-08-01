@@ -9,6 +9,10 @@ namespace WebAPI
     {
         private static RouterBuilder routerBuilder;
         private static Settings settings;
+        /// <summary>
+        /// Parses the gtfs data in the configured zip archive, initiates a web API on /connection, that returns a JSON representation of the result of the search.
+        /// </summary>
+        /// <param name="args"></param>
         public static void Main(string[] args)
         {
             settings = Settings.Default;
@@ -46,13 +50,21 @@ namespace WebAPI
             app.UseExceptionHandler(exceptionHandlerApp
     => exceptionHandlerApp.Run(async context => await Results.Problem().ExecuteAsync(context)));
 
-            app.MapGet("/connection", (string srcStopName, string destStopName, string dateTime) => HandleRequest(routerBuilder.CreateRouter(settings), srcStopName, destStopName, dateTime))
+            app.MapGet("/connection", (string srcStopName, string destStopName, string departureDateTime) => HandleRequest(routerBuilder.CreateRouter(settings), srcStopName, destStopName, departureDateTime))
             .WithName("GetConnection")
             .WithOpenApi();
 
             app.Run();
         }
         
+        /// <summary>
+        /// Handles a connection search request using the provided router.
+        /// </summary>
+        /// <param name="router">The initialized router to use</param>
+        /// <param name="srcStopName">The exact name of the source stop</param>
+        /// <param name="destStopName">The exxact name of the destination stop</param>
+        /// <param name="departureDateTime">The DateTime of the departure</param>
+        /// <returns>The found earliest possible connection, null if none could be found.</returns>
         static SearchResult HandleRequest(RAPTOR_Router.Routers.IRouter router, string srcStopName, string destStopName, string departureDateTime)
         {
             DateTime departureTime;

@@ -243,13 +243,20 @@ namespace RAPTOR_Router.Routers
             markedRoutesWithGetOnStops.Clear();
             return searchModel.ExtractResult();
         }
+        /// <summary>
+        /// Finds the connection with the earliest arrival to a destination stop with the provided name, that departs from the source stop after the specified time.
+        /// </summary>
+        /// <param name="sourceStop">The exact name of the source stop</param>
+        /// <param name="destStop">The exact name of the destination stop</param>
+        /// <param name="departureTime">The departure date and time</param>
+        /// <returns>The result of the search, null if no conection could be found.</returns>
         public SearchResult FindConnection(string sourceStop, string destStop, DateTime departureTime)
         {
             List<Stop> sourceStops = raptorModel.GetStopsByName(sourceStop);
             List<Stop> destStops = raptorModel.GetStopsByName(destStop);
             if (sourceStops.Count == 0 || destStops.Count == 0)
             {
-                Console.WriteLine("Incorrect stop name/s");
+                //Console.WriteLine("Incorrect stop name/s");
                 return null;
             }
             this.searchModel = new SearchModel(sourceStops, destStops, departureTime);

@@ -8,6 +8,10 @@ namespace CLIApp
 {
     internal class Program
     {
+        /// <summary>
+        /// Parses the data from the gtfsArchive (the location s specified in the config file), builds a model, runs the CLI application.
+        /// </summary>
+        /// <param name="args"></param>
         static void Main(string[] args)
         {
             var config = new ConfigurationBuilder()

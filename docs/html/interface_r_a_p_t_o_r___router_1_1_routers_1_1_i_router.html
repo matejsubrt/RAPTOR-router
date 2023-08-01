@@ -136,11 +136,13 @@ Public Member Functions</h2></td></tr>
 <p>The function of a router, which solves the provided connection search problem (i.e. SearchModel) </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">searchModel</td><td>The initiated search model to be used for the algorithm</td></tr>
+    <tr><td class="paramname">sourceStop</td><td>The exact name of the source stop</td></tr>
+    <tr><td class="paramname">destStop</td><td>The exact name of the destination stop</td></tr>
+    <tr><td class="paramname">departureTime</td><td>The departure date and time</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The resulting best connection</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The resulting best connection, null if one id found</dd></dl>
 
 <p>Implemented in <a class="el" href="class_r_a_p_t_o_r___router_1_1_routers_1_1_basic_router.html#a8219eb0fdb9c019de814549d6d82420f">RAPTOR_Router.Routers.BasicRouter</a>.</p>
 
