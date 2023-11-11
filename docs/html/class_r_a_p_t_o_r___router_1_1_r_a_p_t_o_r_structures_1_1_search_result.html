@@ -78,6 +78,8 @@ $(function() {
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pac-methods">Package Functions</a> &#124;
 <a href="#properties">Properties</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_search_result-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">RAPTOR_Router.RAPTORStructures.SearchResult Class Reference</div></div>
 </div><!--header-->
@@ -103,9 +105,9 @@ override string&#160;</td><td class="memItemRight" valign="bottom"><b>ToString</
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:a304a73f8e9b798f3906b266983bfd7b5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_search_result.html#a304a73f8e9b798f3906b266983bfd7b5">SearchResult</a> (List&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_trip.html">Trip</a> &gt; usedTrips, List&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_transfer.html">Transfer</a> &gt; usedTransfers, Dictionary&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_trip.html">Trip</a>, <a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_stop.html">Stop</a> &gt; getOnStops, Dictionary&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_trip.html">Trip</a>, <a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_stop.html">Stop</a> &gt; getOffStops, <a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_stop.html">Stop</a> sourceStop, <a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_stop.html">Stop</a> destStop)</td></tr>
-<tr class="memdesc:a304a73f8e9b798f3906b266983bfd7b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates the SearchResult from basic information about the found connection.  <br /></td></tr>
-<tr class="separator:a304a73f8e9b798f3906b266983bfd7b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a422e67ad0f8a35689fdb98edb05dc491"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_search_result.html#a422e67ad0f8a35689fdb98edb05dc491">SearchResult</a> (List&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_trip.html">Trip</a> &gt; usedTrips, List&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_transfer.html">Transfer</a> &gt; usedTransfers, Dictionary&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_trip.html">Trip</a>, <a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_stop.html">Stop</a> &gt; getOnStops, Dictionary&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_trip.html">Trip</a>, <a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_stop.html">Stop</a> &gt; getOffStops, <a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_stop.html">Stop</a> sourceStop, <a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_stop.html">Stop</a> destStop, <a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_settings.html">Settings</a> settings, DateTime startingTime)</td></tr>
+<tr class="memdesc:a422e67ad0f8a35689fdb98edb05dc491"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates the SearchResult from basic information about the found connection.  <br /></td></tr>
+<tr class="separator:a422e67ad0f8a35689fdb98edb05dc491"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -117,12 +119,27 @@ List&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structur
 List&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_search_result_1_1_used_transfer.html">UsedTransfer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>Transfers</b> = new List&lt;<a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_search_result_1_1_used_transfer.html">UsedTransfer</a>&gt;()<code> [get, private set]</code></td></tr>
 <tr class="memdesc:aee34116d217c62179b8fb887b90b2d91"><td class="mdescLeft">&#160;</td><td class="mdescRight">The transfers used during the best found connection. <br /></td></tr>
 <tr class="separator:aee34116d217c62179b8fb887b90b2d91"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a872cb8cf7b0f9f0c63365ee4ffa86486"><td class="memItemLeft" align="right" valign="top"><a id="a872cb8cf7b0f9f0c63365ee4ffa86486" name="a872cb8cf7b0f9f0c63365ee4ffa86486"></a>
+DateTime&#160;</td><td class="memItemRight" valign="bottom"><b>ArrivalDateTime</b><code> [get, private set]</code></td></tr>
+<tr class="separator:a872cb8cf7b0f9f0c63365ee4ffa86486"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a857d7d80ad475b4d87cacaf33280452e"><td class="memItemLeft" align="right" valign="top"><a id="a857d7d80ad475b4d87cacaf33280452e" name="a857d7d80ad475b4d87cacaf33280452e"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>SetArrivalDateTime</b> (DateTime departureDateTime, TimeOnly arrivalTime)</td></tr>
+<tr class="separator:a857d7d80ad475b4d87cacaf33280452e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a70ccf5199a442116d5ee1d24a3f588c8"><td class="memItemLeft" align="right" valign="top"><a id="a70ccf5199a442116d5ee1d24a3f588c8" name="a70ccf5199a442116d5ee1d24a3f588c8"></a>
+<a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_settings.html">Settings</a>&#160;</td><td class="memItemRight" valign="bottom"><b>settingsUsed</b></td></tr>
+<tr class="separator:a70ccf5199a442116d5ee1d24a3f588c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class representing a result of a connection search. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a304a73f8e9b798f3906b266983bfd7b5" name="a304a73f8e9b798f3906b266983bfd7b5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a304a73f8e9b798f3906b266983bfd7b5">&#9670;&#160;</a></span>SearchResult()</h2>
+<a id="a422e67ad0f8a35689fdb98edb05dc491" name="a422e67ad0f8a35689fdb98edb05dc491"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a422e67ad0f8a35689fdb98edb05dc491">&#9670;&#160;</a></span>SearchResult()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -164,7 +181,19 @@ List&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structur
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_stop.html">Stop</a>&#160;</td>
-          <td class="paramname"><em>destStop</em>&#160;</td>
+          <td class="paramname"><em>destStop</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_settings.html">Settings</a>&#160;</td>
+          <td class="paramname"><em>settings</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">DateTime&#160;</td>
+          <td class="paramname"><em>startingTime</em>&#160;</td>
         </tr>
         <tr>
           <td></td>

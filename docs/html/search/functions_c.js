@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['searchmodel_0',['SearchModel',['../class_r_a_p_t_o_r___router_1_1_search_models_1_1_search_model.html#a15c32dae476d00e1abe8f1f454c07b6f',1,'RAPTOR_Router::SearchModels::SearchModel']]],
-  ['searchresult_1',['SearchResult',['../class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_search_result.html#a304a73f8e9b798f3906b266983bfd7b5',1,'RAPTOR_Router::RAPTORStructures::SearchResult']]],
+  ['searchmodel_0',['SearchModel',['../class_r_a_p_t_o_r___router_1_1_search_models_1_1_search_model.html#a10ac2c2840d960f54c3dac43c37bf425',1,'RAPTOR_Router::SearchModels::SearchModel']]],
+  ['searchresult_1',['SearchResult',['../class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_search_result.html#a422e67ad0f8a35689fdb98edb05dc491',1,'RAPTOR_Router::RAPTORStructures::SearchResult']]],
   ['setcurrentbestarrivaltime_2',['SetCurrentBestArrivalTime',['../class_r_a_p_t_o_r___router_1_1_search_models_1_1_search_model.html#a9f2451e2a9546913680f45e7eb083350',1,'RAPTOR_Router::SearchModels::SearchModel']]],
   ['setearliestarrival_3',['SetEarliestArrival',['../class_r_a_p_t_o_r___router_1_1_search_models_1_1_search_model.html#a70c215f29cf8924878563547c6857164',1,'RAPTOR_Router::SearchModels::SearchModel']]],
   ['setearliestarrivalinround_4',['SetEarliestArrivalInRound',['../class_r_a_p_t_o_r___router_1_1_search_models_1_1_search_model.html#a77b30c54b40e02831b10ea95e027e698',1,'RAPTOR_Router::SearchModels::SearchModel']]],
