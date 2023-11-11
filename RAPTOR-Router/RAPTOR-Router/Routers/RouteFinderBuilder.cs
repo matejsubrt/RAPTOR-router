@@ -11,7 +11,7 @@ namespace RAPTOR_Router.Routers
     /// <summary>
     /// A class used for creating separate routers to be used for connection searching.
     /// </summary>
-    public class RouterBuilder
+    public class RouteFinderBuilder
     {
         /// <summary>
         /// The RAPTOR model that the routers should use
@@ -21,7 +21,7 @@ namespace RAPTOR_Router.Routers
         /// Initializes the builder by parsing the GTFS data from the zip archive and preparing the RAPTOR model
         /// </summary>
         /// <param name="gtfsZipArchiveLocation">The path to the zip gtfs archive.</param>
-        public RouterBuilder(string gtfsZipArchiveLocation)
+        public RouteFinderBuilder(string gtfsZipArchiveLocation)
         {
             RAPTORModel raptor;
             using (GTFS gtfs = GTFS.ParseZipFile(gtfsZipArchiveLocation))
@@ -37,9 +37,15 @@ namespace RAPTOR_Router.Routers
         /// </summary>
         /// <param name="settings"></param>
         /// <returns></returns>
-        public IRouter CreateRouter(Settings settings)
+        public IRouteFinder CreateRouter(Settings settings)
         {
-            IRouter router = new BasicRouter(settings, raptorModel);
+            IRouteFinder router = new BasicRouteFinder(settings, raptorModel);
+            return router;
+        }
+
+        public IRouteFinder CreateAdvancedRouter(Settings settings)
+        {
+            IRouteFinder router = new AdvancedRouteFinder(settings, raptorModel);
             return router;
         }
     }

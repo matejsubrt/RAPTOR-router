@@ -7,7 +7,7 @@ namespace WebAPI
 {
     public class Program
     {
-        private static RouterBuilder routerBuilder;
+        private static RouteFinderBuilder routerBuilder;
         private static Settings settings;
         /// <summary>
         /// Parses the gtfs data in the configured zip archive, initiates a web API on /connection, that returns a JSON representation of the result of the search.
@@ -28,7 +28,7 @@ namespace WebAPI
                 Console.WriteLine("Change the gtfs location in the config.json file, so that the path is correct");
                 return;
             }
-            routerBuilder = new RouterBuilder(gtfsZipArchiveLocation);
+            routerBuilder = new RouteFinderBuilder(gtfsZipArchiveLocation);
 
 
             var appBuilder = WebApplication.CreateBuilder(args);
@@ -62,10 +62,10 @@ namespace WebAPI
         /// </summary>
         /// <param name="router">The initialized router to use</param>
         /// <param name="srcStopName">The exact name of the source stop</param>
-        /// <param name="destStopName">The exxact name of the destination stop</param>
+        /// <param name="destStopName">The exact name of the destination stop</param>
         /// <param name="departureDateTime">The DateTime of the departure</param>
         /// <returns>The found earliest possible connection, null if none could be found.</returns>
-        static SearchResult HandleRequest(RAPTOR_Router.Routers.IRouter router, string srcStopName, string destStopName, string departureDateTime)
+        static SearchResult HandleRequest(RAPTOR_Router.Routers.IRouteFinder router, string srcStopName, string destStopName, string departureDateTime)
         {
             DateTime departureTime;
             if (!DateTime.TryParse(departureDateTime, out departureTime))

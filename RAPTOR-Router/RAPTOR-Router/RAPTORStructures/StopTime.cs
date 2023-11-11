@@ -30,5 +30,9 @@ namespace RAPTOR_Router.RAPTORStructures
             ArrivalTime = arrivalTime;
             DepartureTime = departureTime;
         }
+        public override string ToString()
+        {
+            return "Arr: " + ArrivalTime.ToString() + ", Dep: " + DepartureTime.ToString();
+        }
     }
 }

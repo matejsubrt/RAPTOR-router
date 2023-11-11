@@ -11,7 +11,7 @@ namespace RAPTOR_Router.Routers
     /// <summary>
     /// An interface to use for any router class - any class that is supposed to find a connection in a SearchModel
     /// </summary>
-    public interface IRouter
+    public interface IRouteFinder
     {
         /// <summary>
         /// The function of a router, which solves the provided connection search problem (i.e. SearchModel)

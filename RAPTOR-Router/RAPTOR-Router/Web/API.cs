@@ -42,13 +42,13 @@ namespace RAPTOR_Router.Web
         /// <returns>The result of the connection search to be converted to json by the API</returns>
         SearchResult HandleRequest(string srcStopName, string destStopName, string dateTime)
         {
-            BasicRouter router = new BasicRouter(Settings.Default, raptor);
+            BasicRouteFinder router = new BasicRouteFinder(Settings.GetDefaultSettings(), raptor);
             List<Stop> sourceStops = raptor.GetStopsByName(srcStopName);
             List<Stop> destStops = raptor.GetStopsByName(destStopName);
 
             DateTime departureTime = new DateTime(int.Parse(dateTime.Substring(0, 4)), int.Parse(dateTime.Substring(4, 2)), int.Parse(dateTime.Substring(6, 2)), int.Parse(dateTime.Substring(8, 2)), int.Parse(dateTime.Substring(10, 2)), int.Parse(dateTime.Substring(12, 2)));
 
-            SearchModel searchModel = new SearchModel(sourceStops, destStops, departureTime);
+            SearchModel searchModel = new SearchModel(sourceStops, destStops, departureTime, Settings.GetDefaultSettings()); //TODO: add settings support
             var result = router.FindConnection(searchModel);
 
             return result;

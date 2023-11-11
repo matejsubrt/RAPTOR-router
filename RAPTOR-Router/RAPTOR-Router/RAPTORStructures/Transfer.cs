@@ -20,10 +20,6 @@ namespace RAPTOR_Router.RAPTORStructures
         /// </summary>
         public Stop To { get;}
         /// <summary>
-        /// The estimated time it takes to perform the transfer (on foot)
-        /// </summary>
-        public int Time { get;}
-        /// <summary>
         /// The straight-line distance between the start and end of the transfer
         /// </summary>
         public int Distance { get;}
@@ -39,11 +35,14 @@ namespace RAPTOR_Router.RAPTORStructures
             From = from;
             To = to;
             Distance = dist;
-            Time = (int)(dist / 1000.0 * 720);
         }
         public override string ToString()
         {
             return "Transfer from " + From.Name + " to " + To.Name;
+        }
+        public int GetTransferTime(int walkingPace)
+        {
+            return (int)(Distance / 1000.0 * walkingPace * 60);
         }
     }
 }

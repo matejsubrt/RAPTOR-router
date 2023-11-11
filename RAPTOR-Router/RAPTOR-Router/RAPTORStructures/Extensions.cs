@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace RAPTOR_Router.RAPTORStructures
 {
@@ -36,6 +37,19 @@ namespace RAPTOR_Router.RAPTORStructures
         public static DateTime FromDateAndTime(DateOnly date, TimeOnly time)
         {
             return new DateTime(date.Year, date.Month, date.Day, time.Hour, time.Minute, time.Second);
+        }
+    }
+
+    internal static class TimeOnlyExtensions
+    {
+        public static TimeOnly AddSeconds(this TimeOnly time, int seconds)
+        {
+            long newTicks = time.Ticks + ((long)seconds * 10_000_000);
+            if(newTicks < 0)
+            {
+                return new TimeOnly(TimeOnly.MaxValue.Ticks + newTicks);
+            }
+            return new TimeOnly(newTicks);
         }
     }
 }
