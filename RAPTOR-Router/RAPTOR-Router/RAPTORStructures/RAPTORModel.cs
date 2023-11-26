@@ -42,6 +42,23 @@ namespace RAPTOR_Router.RAPTORStructures
 
             LoadStopTransfers();
         }
+
+        /// <summary>
+        /// Loads all the stops from the GTFS stops
+        /// </summary>
+        /// <param name="gtfsStops">The dictionary of stop ids and their GTFSStop objects</param>
+        private void LoadStopsFromGtfsStops(Dictionary<string, GTFSStop> gtfsStops)
+        {
+            foreach(var gtfsStop in gtfsStops.Values)
+            {
+                if(gtfsStop.LocationType == 0)
+                {
+                    Stop stop = new Stop(gtfsStop.Id, gtfsStop.Name, gtfsStop.Lat, gtfsStop.Lon);
+                    stops.Add(gtfsStop.Id, stop);
+                }                
+            }
+        }
+
         /// <summary>
         /// Collects the unique routes from the raw GTFS data (where the GTFSRoutes are not unique), loads all the trips serving the routes and all the stops they serve
         /// </summary>
@@ -51,7 +68,7 @@ namespace RAPTOR_Router.RAPTORStructures
             Dictionary<string, Route> uniqueRoutes = new Dictionary<string, Route>();
             var gtfsTrips = gtfs.trips.Values;
 
-            foreach(GTFSTrip gtfsTrip in gtfsTrips)
+            foreach (GTFSTrip gtfsTrip in gtfsTrips)
             {
                 Route route;
                 GTFSRoute gtfsRoute = gtfs.routes[gtfsTrip.RouteId];
@@ -87,9 +104,9 @@ namespace RAPTOR_Router.RAPTORStructures
                 //mam kalendar - rika kdy jede, a calendardates - kdy nejede
                 DateOnly from = gtfsCalendar.StartDate;
                 DateOnly to = gtfsCalendar.EndDate;
-                foreach(DateOnly date in DatesBetween(from, to))
+                foreach (DateOnly date in DatesBetween(from, to))
                 {
-                    if(IsNormallyOperating(gtfsCalendar, gtfsCalendarDates, date))
+                    if (IsNormallyOperating(gtfsCalendar, gtfsCalendarDates, date))
                     {
                         if (route.RouteTrips.ContainsKey(date))
                         {
@@ -118,63 +135,36 @@ namespace RAPTOR_Router.RAPTORStructures
                     }
                 }
 
-                foreach(List<Trip> tripsOnDate in route.RouteTrips.Values)
+                foreach (List<Trip> tripsOnDate in route.RouteTrips.Values)
                 {
                     tripsOnDate.Sort(Trip.CompareTrips);
                 }
             }
             routes = uniqueRoutes;
-        }
-        /// <summary>
-        /// Finds out if the specified service (GTFSCalendar) is operating on the specified date and is not cancelled
-        /// </summary>
-        /// <param name="calendar">The service (GTFSCalendar) - see GTFS documentation</param>
-        /// <param name="calendarDates">List of the calendar dates for the service (i.e. exceptions, see GTFS documentation)</param>
-        /// <param name="date"></param>
-        /// <returns></returns>
-        private bool IsNormallyOperating(GTFSCalendar calendar, List<GTFSCalendarDate> calendarDates, DateOnly date)
-        {
-            int index = calendarDates.FindIndex(item => item.Date == date);
 
-            //Normally operates on the date and is not cancelled
-            bool result = (calendar.IsOperating(date) && (index < 0 || calendarDates[index].ExceptionType != 2));
-            return result;
-        }
-        /// <summary>
-        /// Creates an enumerable of days/dates between two specified dates
-        /// </summary>
-        /// <param name="from">The first date</param>
-        /// <param name="to">The last date - inclusive</param>
-        /// <returns>An enumerable of dates between the dates</returns>
-        /// <exception cref="InvalidOperationException">Throws if fromDate is later than toDate</exception>
-        private IEnumerable<DateOnly> DatesBetween(DateOnly from, DateOnly to)
-        {
-            if(to < from)
+            bool IsNormallyOperating(GTFSCalendar calendar, List<GTFSCalendarDate> calendarDates, DateOnly date)
             {
-                throw new InvalidOperationException();
+                int index = calendarDates.FindIndex(item => item.Date == date);
+
+                //Normally operates on the date and is not cancelled
+                bool result = (calendar.IsOperating(date) && (index < 0 || calendarDates[index].ExceptionType != 2));
+                return result;
             }
-            DateOnly currDate = from;
-            while(currDate <= to)
+            IEnumerable<DateOnly> DatesBetween(DateOnly from, DateOnly to)
             {
-                yield return currDate;
-                currDate = currDate.AddDays(1);
-            }
-        }
-        /// <summary>
-        /// Loads all the stops from the GTFS stops
-        /// </summary>
-        /// <param name="gtfsStops">The dictionary of stop ids and their GTFSStop objects</param>
-        private void LoadStopsFromGtfsStops(Dictionary<string, GTFSStop> gtfsStops)
-        {
-            foreach(var gtfsStop in gtfsStops.Values)
-            {
-                if(gtfsStop.LocationType == 0)
+                if (to < from)
                 {
-                    Stop stop = new Stop(gtfsStop.Id, gtfsStop.Name, gtfsStop.Lat, gtfsStop.Lon);
-                    stops.Add(gtfsStop.Id, stop);
-                }                
+                    throw new InvalidOperationException();
+                }
+                DateOnly currDate = from;
+                while (currDate <= to)
+                {
+                    yield return currDate;
+                    currDate = currDate.AddDays(1);
+                }
             }
         }
+
         /// <summary>
         /// Loads all the routes serving all the stops
         /// </summary>
@@ -191,6 +181,7 @@ namespace RAPTOR_Router.RAPTORStructures
                 }
             }
         }
+
         /// <summary>
         /// Loads all the possible transfers at each stop
         /// </summary>

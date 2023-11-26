@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33815.320
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RAPTOR-Router", "RAPTOR-Router.csproj", "{FBFBD302-3566-4158-9FDC-00617CB3FBD2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FBFBD302-3566-4158-9FDC-00617CB3FBD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBFBD302-3566-4158-9FDC-00617CB3FBD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBFBD302-3566-4158-9FDC-00617CB3FBD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBFBD302-3566-4158-9FDC-00617CB3FBD2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EC77DACD-AE4B-49A5-AFC9-932343D05449}
+	EndGlobalSection
+EndGlobal

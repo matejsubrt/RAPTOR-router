@@ -256,7 +256,6 @@ namespace RAPTOR_Router.Routers
             List<Stop> destStops = raptorModel.GetStopsByName(destStop);
             if (sourceStops.Count == 0 || destStops.Count == 0)
             {
-                //Console.WriteLine("Incorrect stop name/s");
                 return null;
             }
             this.searchModel = new SearchModel(sourceStops, destStops, departureTime, settings);

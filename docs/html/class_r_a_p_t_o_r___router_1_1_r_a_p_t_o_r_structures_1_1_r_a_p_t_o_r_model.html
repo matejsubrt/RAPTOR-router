@@ -109,18 +109,12 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:a6b1cb89bbfe13d36de70091ebcec8bb6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_r_a_p_t_o_r_model.html#a6b1cb89bbfe13d36de70091ebcec8bb6">LoadDataFromGtfs</a> (<a class="el" href="class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s.html">GTFS</a> gtfs)</td></tr>
 <tr class="memdesc:a6b1cb89bbfe13d36de70091ebcec8bb6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads the raw gtfs date into useful structures to later be used by the router.  <br /></td></tr>
 <tr class="separator:a6b1cb89bbfe13d36de70091ebcec8bb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8ae8797e6ac55f13ccc5dacb400b9a0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_r_a_p_t_o_r_model.html#ad8ae8797e6ac55f13ccc5dacb400b9a0">LoadRoutes</a> (<a class="el" href="class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s.html">GTFS</a> gtfs)</td></tr>
-<tr class="memdesc:ad8ae8797e6ac55f13ccc5dacb400b9a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Collects the unique routes from the raw GTFS data (where the GTFSRoutes are not unique), loads all the trips serving the routes and all the stops they serve.  <br /></td></tr>
-<tr class="separator:ad8ae8797e6ac55f13ccc5dacb400b9a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a36bb23ad6b348697cd2465ce95049199"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_r_a_p_t_o_r_model.html#a36bb23ad6b348697cd2465ce95049199">IsNormallyOperating</a> (<a class="el" href="class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_calendar.html">GTFSCalendar</a> calendar, List&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_calendar_date.html">GTFSCalendarDate</a> &gt; calendarDates, DateOnly date)</td></tr>
-<tr class="memdesc:a36bb23ad6b348697cd2465ce95049199"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds out if the specified service (GTFSCalendar) is operating on the specified date and is not cancelled.  <br /></td></tr>
-<tr class="separator:a36bb23ad6b348697cd2465ce95049199"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afcfc3c12b808f2b9d8523cdb25f67019"><td class="memItemLeft" align="right" valign="top">IEnumerable&lt; DateOnly &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_r_a_p_t_o_r_model.html#afcfc3c12b808f2b9d8523cdb25f67019">DatesBetween</a> (DateOnly from, DateOnly to)</td></tr>
-<tr class="memdesc:afcfc3c12b808f2b9d8523cdb25f67019"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates an enumerable of days/dates between two specified dates.  <br /></td></tr>
-<tr class="separator:afcfc3c12b808f2b9d8523cdb25f67019"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aea2ac5cc523f08a6171234f80f98ca31"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_r_a_p_t_o_r_model.html#aea2ac5cc523f08a6171234f80f98ca31">LoadStopsFromGtfsStops</a> (Dictionary&lt; string, <a class="el" href="class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_stop.html">GTFSStop</a> &gt; gtfsStops)</td></tr>
 <tr class="memdesc:aea2ac5cc523f08a6171234f80f98ca31"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads all the stops from the GTFS stops.  <br /></td></tr>
 <tr class="separator:aea2ac5cc523f08a6171234f80f98ca31"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8ae8797e6ac55f13ccc5dacb400b9a0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_r_a_p_t_o_r_model.html#ad8ae8797e6ac55f13ccc5dacb400b9a0">LoadRoutes</a> (<a class="el" href="class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s.html">GTFS</a> gtfs)</td></tr>
+<tr class="memdesc:ad8ae8797e6ac55f13ccc5dacb400b9a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Collects the unique routes from the raw GTFS data (where the GTFSRoutes are not unique), loads all the trips serving the routes and all the stops they serve.  <br /></td></tr>
+<tr class="separator:ad8ae8797e6ac55f13ccc5dacb400b9a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a78735fc98ca8fa7d059d7d9a63f0fdd7"><td class="memItemLeft" align="right" valign="top"><a id="a78735fc98ca8fa7d059d7d9a63f0fdd7" name="a78735fc98ca8fa7d059d7d9a63f0fdd7"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>LoadStopRoutes</b> ()</td></tr>
 <tr class="memdesc:a78735fc98ca8fa7d059d7d9a63f0fdd7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads all the routes serving all the stops. <br /></td></tr>
@@ -167,58 +161,6 @@ const int&#160;</td><td class="memItemRight" valign="bottom"><b>MAX_TRANSFER_DIS
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="afcfc3c12b808f2b9d8523cdb25f67019" name="afcfc3c12b808f2b9d8523cdb25f67019"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afcfc3c12b808f2b9d8523cdb25f67019">&#9670;&#160;</a></span>DatesBetween()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">IEnumerable&lt; DateOnly &gt; RAPTOR_Router.RAPTORStructures.RAPTORModel.DatesBetween </td>
-          <td>(</td>
-          <td class="paramtype">DateOnly&#160;</td>
-          <td class="paramname"><em>from</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">DateOnly&#160;</td>
-          <td class="paramname"><em>to</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Creates an enumerable of days/dates between two specified dates. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">from</td><td>The first date</td></tr>
-    <tr><td class="paramname">to</td><td>The last date - inclusive</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>An enumerable of dates between the dates</dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">InvalidOperationException</td><td>Throws if fromDate is later than toDate</td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
 <a id="a34a1e59775213477598881daa7e8b235" name="a34a1e59775213477598881daa7e8b235"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a34a1e59775213477598881daa7e8b235">&#9670;&#160;</a></span>GetStopsByName()</h2>
 
@@ -243,59 +185,6 @@ const int&#160;</td><td class="memItemRight" valign="bottom"><b>MAX_TRANSFER_DIS
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>List of all the stops with the specified name</dd></dl>
-
-</div>
-</div>
-<a id="a36bb23ad6b348697cd2465ce95049199" name="a36bb23ad6b348697cd2465ce95049199"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a36bb23ad6b348697cd2465ce95049199">&#9670;&#160;</a></span>IsNormallyOperating()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool RAPTOR_Router.RAPTORStructures.RAPTORModel.IsNormallyOperating </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_calendar.html">GTFSCalendar</a>&#160;</td>
-          <td class="paramname"><em>calendar</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">List&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_calendar_date.html">GTFSCalendarDate</a> &gt;&#160;</td>
-          <td class="paramname"><em>calendarDates</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">DateOnly&#160;</td>
-          <td class="paramname"><em>date</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Finds out if the specified service (GTFSCalendar) is operating on the specified date and is not cancelled. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">calendar</td><td>The service (GTFSCalendar) - see GTFS documentation</td></tr>
-    <tr><td class="paramname">calendarDates</td><td>List of the calendar dates for the service (i.e. exceptions, see GTFS documentation)</td></tr>
-    <tr><td class="paramname">date</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd></dd></dl>
 
 </div>
 </div>

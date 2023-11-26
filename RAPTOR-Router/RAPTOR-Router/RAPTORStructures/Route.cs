@@ -77,10 +77,6 @@ namespace RAPTOR_Router.RAPTORStructures
         /// <returns>The earliest trip, that leaves the stop after the specified time on the route, null if no trip is found</returns>
         public Trip GetEarliestTripAtStop(Stop stop, DateOnly date, TimeOnly time, int maxDaysAfter, out DateOnly tripDate)
         {
-            if(stop.Name == "Ostrčilovo náměstí" && date.Day == 15 && time.Hour == 21 && time.Minute == 36 && time.Second == 9)
-            {
-                Console.WriteLine();
-            }
             int stopIndex = GetStopIndex(stop);
             DateOnly currDate = date;
             DateOnly maxDate = date.AddDays(maxDaysAfter);

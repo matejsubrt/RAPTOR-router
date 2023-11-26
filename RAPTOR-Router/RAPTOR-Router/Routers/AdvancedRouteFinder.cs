@@ -294,6 +294,10 @@ namespace RAPTOR_Router.Routers
         /// <returns>The result of the search, null if no conection could be found.</returns>
         public SearchResult FindConnection(string sourceStop, string destStop, DateTime departureTime)
         {
+            if(sourceStop == destStop)
+            {
+                return null;
+            }
             List<Stop> sourceStops = raptorModel.GetStopsByName(sourceStop);
             List<Stop> destStops = raptorModel.GetStopsByName(destStop);
             if (sourceStops.Count == 0 || destStops.Count == 0)

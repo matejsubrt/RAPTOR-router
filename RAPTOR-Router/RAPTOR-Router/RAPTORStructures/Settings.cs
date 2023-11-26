@@ -35,7 +35,7 @@ namespace RAPTOR_Router.RAPTORStructures
         /// <summary>
         /// Specifies the selected transfer length to use in the connection search - i.e. how aggressive and risky the transfers can be
         /// </summary>
-        public TransferLength TransferLength { get; set; } = TransferLength.Normal;
+        public TransferTime TransferTime { get; set; } = TransferTime.Normal;
         /// <summary>
         /// Specifies the comfort balance to be used in the connection search - i.e. how strongly less transfers should be preferred over shortest time
         /// </summary>
@@ -63,15 +63,15 @@ namespace RAPTOR_Router.RAPTORStructures
         /// <exception cref="InvalidDataException">Thrown when the TransferLength property is set to an invalid value</exception>
         public double GetMovingTransferLengthMultiplier()
         {
-            switch (TransferLength)
+            switch (TransferTime)
             {
-                case TransferLength.UltraShort:
+                case TransferTime.UltraShort:
                     return 1.0;
-                case TransferLength.Short:
+                case TransferTime.Short:
                     return 1.0;
-                case TransferLength.Normal:
+                case TransferTime.Normal:
                     return 1.25;
-                case TransferLength.Long:
+                case TransferTime.Long:
                     return 1.5;
                 default:
                     throw new InvalidDataException("Invalid value of enum TransferLength");
@@ -84,15 +84,15 @@ namespace RAPTOR_Router.RAPTORStructures
         /// <exception cref="InvalidDataException">Thrown when the TransferLength property is set to an invalid value</exception>
         public int GetStationaryTransferMinimumSeconds()
         {
-            switch (TransferLength)
+            switch (TransferTime)
             {
-                case TransferLength.UltraShort:
+                case TransferTime.UltraShort:
                     return 0;
-                case TransferLength.Short:
+                case TransferTime.Short:
                     return 30;
-                case TransferLength.Normal:
+                case TransferTime.Normal:
                     return 60;
-                case TransferLength.Long:
+                case TransferTime.Long:
                     return 60;
                 default:
                     throw new InvalidDataException("Invalid value of enum TransferLength");
@@ -146,7 +146,7 @@ namespace RAPTOR_Router.RAPTORStructures
     /// Enum representing the transfer risk value of the user
     /// 
     /// </summary>
-    public enum TransferLength
+    public enum TransferTime
     {
         /// <summary>
         /// Moving transfer: calculated time, stationary transfer: 0 minutes allowed

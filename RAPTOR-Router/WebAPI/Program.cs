@@ -15,7 +15,7 @@ namespace WebAPI
         /// <param name="args"></param>
         public static void Main(string[] args)
         {
-            settings = Settings.Default;
+            settings = Settings.GetDefaultSettings();
             var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory() + "..")
                 .AddJsonFile("config.json", optional: false, reloadOnChange: true)
@@ -28,7 +28,8 @@ namespace WebAPI
                 Console.WriteLine("Change the gtfs location in the config.json file, so that the path is correct");
                 return;
             }
-            routerBuilder = new RouteFinderBuilder(gtfsZipArchiveLocation);
+            routerBuilder = new RouteFinderBuilder();
+            routerBuilder.LoadDataFromGtfs(gtfsZipArchiveLocation);
 
 
             var appBuilder = WebApplication.CreateBuilder(args);

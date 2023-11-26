@@ -92,242 +92,156 @@ namespace RAPTOR_Router.SearchModels
 				transfersToReachRounds = new Transfer[Settings.ROUNDS + 1];
 			}
 		}
-		/// <summary>
-		/// Generates the result of the search after the search algorithm has been finished
-		/// </summary>
-		/// <returns>The result of the search - i.e. the representation of the fastest possible connection</returns>
-		public SearchResult ExtractResult()
+
+        /// <summary>
+        /// Generates the result of the search after the search algorithm has been finished
+        /// </summary>
+        /// <returns>The result of the search - i.e. the representation of the fastest possible connection</returns>
+        public SearchResult ExtractResult()
 		{
+			// For each round, get the stop with earliest arrival
 			Stop[] earliestDestStopsRounds = new Stop[Settings.ROUNDS];
+            for (int round = 0; round < Settings.ROUNDS; round++)
+            {
+                earliestDestStopsRounds[round] = GetDestStopWithMinArrivalTimeInRound(round);
+            }
+
+			// Calculate the arrival times in each round including the penalties according to settings used
+			// Find out which round is fastest
+			// Array -> possible future returning of multiple results if it makes sense
+			DateTime[] earliestArrivalRounds = new DateTime[Settings.ROUNDS];
+			DateTime earliestArrival = DateTime.MaxValue;
+			int fastestRound = -1;
 			for(int round = 0; round < Settings.ROUNDS; round++)
 			{
-				earliestDestStopsRounds[round] = GetDestStopWithMinArrivalTimeInRound(round);
-			}
-
-			SearchResult[] searchResultsRounds = new SearchResult[Settings.ROUNDS];
-			for (int round = 0; round < Settings.ROUNDS; round++)
-			{
-				if (earliestDestStopsRounds[round] is not null)
+				Stop? earliestDestStopInCurrRound = earliestDestStopsRounds[round];
+				if(earliestDestStopInCurrRound is null)
 				{
-					List<Trip> usedTrips;
-					List<Transfer> usedTransfers;
-					Dictionary<Trip, Stop> getOnStops;
-					Dictionary<Trip, Stop> getOffStops;
-					Stop sourceStop;
-					ExtractUsedTripsAndTransfersRounds(round, out usedTrips, out usedTransfers, out getOnStops, out getOffStops, out sourceStop);
-
-					SearchResult result = new SearchResult
-					(
-						usedTrips,
-						usedTransfers,
-						getOnStops,
-						getOffStops,
-						sourceStop,
-						earliestDestStopsRounds[round],
-						settingsUsed,
-						departureTime
-					);
-					searchResultsRounds[round] = result;
-				}
+					earliestArrivalRounds[round] = DateTime.MaxValue;
+                }
 				else
 				{
-					searchResultsRounds[round] = null;
-				}
-			}
+					int penaltySecondsPerTransfer = settingsUsed.GetTransferPenaltySeconds();
+					int transferCount = round == 0 ? round : round-1;
+					DateTime arrivalTimeWithPenalty = routingInfo[earliestDestStopInCurrRound].earliestArrivalRounds[round].AddSeconds(transferCount * penaltySecondsPerTransfer);
+                    earliestArrivalRounds[round] = arrivalTimeWithPenalty;
 
-			DateTime earliestArrivalAdjusted = DateTime.MaxValue;
-			int earliestRoundAdjusted = -1;
-
-			for(int round = 0; round <= Settings.ROUNDS - 1; round++)
-			{
-				if (searchResultsRounds[round] is not null)
-				{
-					SearchResult bestResultInRound = searchResultsRounds[round];
-					DateTime arrivalAdjusted = bestResultInRound.ArrivalDateTime.AddSeconds((bestResultInRound.Transfers.Count)*settingsUsed.GetTransferPenaltySeconds());
-					if(arrivalAdjusted < earliestArrivalAdjusted)
+					if(arrivalTimeWithPenalty < earliestArrival)
 					{
-						earliestArrivalAdjusted = arrivalAdjusted;
-						earliestRoundAdjusted = round;
+						earliestArrival = arrivalTimeWithPenalty;
+						fastestRound = round;
 					}
-				}
-			}
-			if(earliestRoundAdjusted == -1)
-			{
-				return null;
-			}
-			else
-			{
-				return searchResultsRounds[earliestRoundAdjusted];
-			}
+                }
+            }
 
-			/*
-			Stop? earliestDestStop = GetDestStopWithMinArrivalTime();
-			if(earliestDestStop is null)
+			// No connection could be found
+			if(fastestRound == -1)
 			{
 				return null;
 			}
 
-
-			int round = GetFirstEarliestRound();
-			List<Trip> usedTrips = new();
-			List<Transfer> usedTransfers = new();
-			Dictionary<Trip, Stop> getOnStops = new();
-			Dictionary<Trip, Stop> getOffStops = new();
-			Stop sourceStop;
-			ExtractUsedTripsAndTransfers();
-
-			SearchResult result = new SearchResult
-			(
-				usedTrips,
-				usedTransfers,
-				getOnStops,
-				getOffStops,
-				sourceStop,
-				earliestDestStop,
-				settingsUsed
-			);
-			
+			// Get stop with earliest adjusted arrival
+			Stop arrivalStop = earliestDestStopsRounds[fastestRound];
+            var result = CreateResultFromStopInRound(arrivalStop, fastestRound);
 			return result;
 
-			void ExtractUsedTripsAndTransfers()
-			{
-				Stop currStop = earliestDestStop;
-				Trip lastTrip = null;
-				while(!sourceStops.Contains(currStop) && round >= 0)
-				{
-					Trip usedTrip = routingInfo[currStop].tripsToReachRounds[round];
-					Transfer usedTransfer = routingInfo[currStop].transfersToReachRounds[round];
 
-					//lastTrip ended in the same stop as currTrip begins - i.e. no transfer
-					if (lastTrip != null && usedTrip != null)
-					{
-						usedTransfers.Add(new Transfer(currStop, currStop, 0));
-					}
-					//currently processing a trip
-					if (usedTrip != null)
-					{
-						usedTrips.Add(usedTrip);
-						getOnStops.Add(usedTrip, routingInfo[currStop].getOnStopsToReachRounds[round]);
-						getOffStops.Add(usedTrip, currStop);
-						currStop = routingInfo[currStop].getOnStopsToReachRounds[round];
-						round--;
-					}
-					//currently processing a transfer
-					else if (usedTransfer != null)
-					{
-						usedTransfers.Add(usedTransfer);
-						currStop = usedTransfer.From;
-					}
-					lastTrip = usedTrip;
-				}
-				sourceStop = currStop;
-				usedTransfers.Reverse();
-				usedTrips.Reverse();
-			}
-			*/
-			void ExtractUsedTripsAndTransfersRounds(int round, out List<Trip> usedTrips, out List<Transfer> usedTransfers, out Dictionary<Trip, Stop> getOnStops, out Dictionary<Trip, Stop> getOffStops, out Stop sourceStop)
-			{
-				usedTrips = new();
-				usedTransfers = new();
-				getOnStops = new();
-				getOffStops = new();
 
-				Stop currStop = earliestDestStopsRounds[round];
-
-				Trip lastTrip = null;
-				while (!sourceStops.Contains(currStop) && round >= 0)
-				{
-					Trip usedTrip = routingInfo[currStop].tripsToReachRounds[round];
-					Transfer usedTransfer = routingInfo[currStop].transfersToReachRounds[round];
-
-					//lastTrip ended in the same stop as currTrip begins - i.e. no transfer
-					if (lastTrip != null && usedTrip != null)
-					{
-						usedTransfers.Add(new Transfer(currStop, currStop, 0));
-					}
-					//currently processing a trip
-					if (usedTrip != null)
-					{
-						usedTrips.Add(usedTrip);
-						getOnStops.Add(usedTrip, routingInfo[currStop].getOnStopsToReachRounds[round]);
-						getOffStops.Add(usedTrip, currStop);
-						currStop = routingInfo[currStop].getOnStopsToReachRounds[round];
-						round--;
-					}
-					//currently processing a transfer
-					else if (usedTransfer != null)
-					{
-						usedTransfers.Add(usedTransfer);
-						currStop = usedTransfer.From;
-					}
-					lastTrip = usedTrip;
-				}
-				sourceStop = currStop;
-				usedTransfers.Reverse();
-				usedTrips.Reverse();
-			}
-			/*
-			int GetFirstEarliestRound()
+			SearchResult CreateResultFromStopInRound(Stop stop, int round)
 			{
-				for(int i = 0; i<=Settings.ROUNDS; i++)
+				SearchResult result = new(settingsUsed);
+				StopRoutingInfo currStopInfo = routingInfo[stop];
+
+				
+
+				Stop nextRoundStartStop = stop;				
+                int currRound = round;
+                while (currRound > 0)
 				{
-					var info = routingInfo[earliestDestStop];
-					if (info.earliestArrivalRounds[i] == info.earliestArrival)
+                    bool transferUsed = false;
+
+                    Transfer transferToReachStop = currStopInfo.transfersToReachRounds[currRound];
+					if(transferToReachStop is not null)
 					{
-						return i;
+						result.AddUsedTransfer(transferToReachStop);
+						transferUsed = true;
 					}
+
+					Stop currStop;
+					// In current round, transfer has been used after  the trip
+                    if (transferUsed)
+					{
+						currStop = transferToReachStop.From;
+					}
+					// In current round, no transfer has been used, i.e. we are continuing from the exact same stop -> we add a new 0 length transfer
+					else
+					{						
+						currStop = nextRoundStartStop;
+						// in last round, we do not add a transfer
+						if(currRound != round)
+						{
+                            result.AddUsedTransfer(new Transfer(currStop, currStop, 0));
+                        }
+                    }
+
+					currStopInfo = routingInfo[currStop];
+					Trip tripToReachStop = currStopInfo.tripsToReachRounds[currRound];
+					Stop getOnStop = currStopInfo.getOnStopsToReachRounds[currRound];
+					if(tripToReachStop is null || getOnStop is null)
+					{
+						throw new ApplicationException("Trip and getOnStop cannot be null in an used round");
+					}
+					result.AddUsedTrip(tripToReachStop, getOnStop, currStop);
+
+					currStop = getOnStop;
+					currStopInfo = routingInfo[currStop];
+					nextRoundStartStop = currStop;
+					currRound--;
 				}
-				return -1;
-			}
-			*/
-			Stop? GetDestStopWithMinArrivalTime()
-			{
-				Stop? stopWithMinArrTime = null;
-				DateTime earliestArrival = DateTime.MaxValue;
-				foreach (Stop stop in destinationStops)
+
+				Transfer transferToReachFirstTripGetOnStop = currStopInfo.transfersToReachRounds[0];
+				if(transferToReachFirstTripGetOnStop is not null)
 				{
-					if (routingInfo.ContainsKey(stop) && routingInfo[stop].earliestArrival < earliestArrival)
-					{
-						stopWithMinArrTime = stop;
-						earliestArrival = routingInfo[stop].earliestArrival;
-					}
+					result.AddUsedTransfer(transferToReachFirstTripGetOnStop);
 				}
-				return stopWithMinArrTime;
+
+				return result;
 			}
 
-			Stop? GetDestStopWithMinArrivalTimeInRound(int round)
-			{
-				Stop? stopWithMinArrTime = null;
-				DateTime earliestArrival = DateTime.MaxValue;
-				foreach (Stop stop in destinationStops)
-				{
-					//arrival is earlier than best we found so far AND it is better than in last round - otherwise we do not process this round
-					if (
-						routingInfo.ContainsKey(stop) 
-						&& routingInfo[stop].earliestArrivalRounds[round] < earliestArrival 
-						&& (round == 0 || ArrivalAtStopInRoundIsBetterThanAllEarlierRounds(stop, round))
-					){
-						stopWithMinArrTime = stop;
-						earliestArrival = routingInfo[stop].earliestArrivalRounds[round];
-					}
-				}
-				return stopWithMinArrTime;
-			}
-		}
+            Stop? GetDestStopWithMinArrivalTimeInRound(int round)
+            {
+                Stop? stopWithMinArrTime = null;
+                DateTime earliestArrival = DateTime.MaxValue;
+                foreach (Stop stop in destinationStops)
+                {
+                    //arrival is earlier than best we found so far AND it is better than in last round - otherwise we do not process this round
+                    if (
+                        routingInfo.ContainsKey(stop)
+                        && routingInfo[stop].earliestArrivalRounds[round] < earliestArrival
+                        && (round == 0 || ArrivalAtStopInRoundIsBetterThanAllEarlierRounds(stop, round))
+                    )
+                    {
+                        stopWithMinArrTime = stop;
+                        earliestArrival = routingInfo[stop].earliestArrivalRounds[round];
+                    }
+                }
+                return stopWithMinArrTime;
+            }
 
-		bool ArrivalAtStopInRoundIsBetterThanAllEarlierRounds(Stop stop, int round)
-		{
-			DateTime bestEarlierArrival = DateTime.MaxValue;
-			for(int i = 0; i < round; i++)
-			{
-				DateTime arrivalInRoundI = routingInfo[stop].earliestArrivalRounds[i];
-				if(arrivalInRoundI < bestEarlierArrival)
-				{
-					bestEarlierArrival = arrivalInRoundI;
-				}
-			}
-			return bestEarlierArrival > routingInfo[stop].earliestArrivalRounds[round];
-		}
+            bool ArrivalAtStopInRoundIsBetterThanAllEarlierRounds(Stop stop, int round)
+            {
+                DateTime bestEarlierArrival = DateTime.MaxValue;
+                for (int i = 0; i < round; i++)
+                {
+                    DateTime arrivalInRoundI = routingInfo[stop].earliestArrivalRounds[i];
+                    if (arrivalInRoundI < bestEarlierArrival)
+                    {
+                        bestEarlierArrival = arrivalInRoundI;
+                    }
+                }
+                return bestEarlierArrival > routingInfo[stop].earliestArrivalRounds[round];
+            }
+        }		
 
 		/// <summary>
 		/// Finds out if it is possible and fastest to reach the stop by transfer in the specified round, rather by by trip
