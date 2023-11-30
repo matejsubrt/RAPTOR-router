@@ -23,8 +23,6 @@
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 	
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="doxygen ..\..\docs\doxyfile.doxygen" />
-  </Target>
+  
 
 </Project>
