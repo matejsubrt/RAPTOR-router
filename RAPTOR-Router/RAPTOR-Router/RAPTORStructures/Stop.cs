@@ -11,6 +11,8 @@ namespace RAPTOR_Router.RAPTORStructures
     /// </summary>
     internal class Stop
     {
+        const double latConst = 111113.9; //distance between latitudes of 1 degree
+        const double lonConst50N = 71583; //distance between 2 longitude lines at 50 degrees north
         /// <summary>
         /// The unique Id of the stop (different even for each stop in a Node sharing the same name)
         /// </summary>
@@ -79,8 +81,7 @@ namespace RAPTOR_Router.RAPTORStructures
         /// <returns>The approximate distance between the stops, assuming they are both near the </returns>
         public static int SimplifiedDistanceBetween(Stop stop1, Stop stop2)
         {
-            const double latConst = 111113.9; //distance between latitudes of 1 degree
-            const double lonConst50N = 71583; //distance between 2 longitude lines at 50 degrees north
+            
             var lat1 = stop1.Lat * latConst;
             var lon1 = stop1.Lon * lonConst50N;
             var lat2 = stop2.Lat * latConst;
@@ -88,6 +89,14 @@ namespace RAPTOR_Router.RAPTORStructures
 
             var result = (int)(Math.Sqrt((lat2 - lat1) * (lat2 - lat1) + (lon2 - lon1) * (lon2 - lon1)));
             return result;
+        }
+
+        public static bool TooFarInOneDirection(Stop stop1, Stop stop2, int maxMeters)
+        {
+            var latDiffMeters = Math.Abs(stop1.Lat - stop2.Lat) * latConst;
+            var lonDiffMeters = Math.Abs(stop1.Lon - stop2.Lon) * lonConst50N;
+
+            return(latDiffMeters > maxMeters || lonDiffMeters > maxMeters);
         }
     }
 }

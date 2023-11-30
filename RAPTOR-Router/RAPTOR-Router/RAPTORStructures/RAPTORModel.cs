@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RAPTOR_Router.GTFSParsing;
+﻿using RAPTOR_Router.GTFSParsing;
 
 namespace RAPTOR_Router.RAPTORStructures
 {
@@ -90,7 +84,7 @@ namespace RAPTOR_Router.RAPTORStructures
                 else
                 {
                     //create new route
-                    route = new Route(uniqueRouteId, gtfsRoute.Id, gtfsRoute.ShortName, gtfsRoute.LongName);
+                    route = new Route(uniqueRouteId, gtfsRoute);
                     uniqueRoutes.Add(uniqueRouteId, route);
                     //fill the route's RouteStops
                     foreach (string stopId in tripStopIds)
@@ -101,7 +95,7 @@ namespace RAPTOR_Router.RAPTORStructures
                 Trip trip = new Trip(gtfsStopTimes, route);
 
                 //add all instances of current trip to the route's RouteTrips
-                //mam kalendar - rika kdy jede, a calendardates - kdy nejede
+                //calendar - when does a trip normally operate, calendar date - exceptions
                 DateOnly from = gtfsCalendar.StartDate;
                 DateOnly to = gtfsCalendar.EndDate;
                 foreach (DateOnly date in DatesBetween(from, to))
@@ -191,8 +185,32 @@ namespace RAPTOR_Router.RAPTORStructures
             {
                 foreach(Stop destStop in stops.Values)
                 {
+                    // Speeds up the calculation by pruning off stops that are already too far from each other in just one coordinate
+                    if(Stop.TooFarInOneDirection(sourceStop, destStop, MAX_TRANSFER_DISTANCE))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        var distance = Stop.SimplifiedDistanceBetween(sourceStop, destStop);
+                        if (distance > 0 && distance < MAX_TRANSFER_DISTANCE)
+                        {
+                            Transfer transferToDest = new Transfer(sourceStop, destStop, distance);
+                            sourceStop.Transfers.Add(transferToDest);
+                        }
+                    }                    
+                }
+            }
+        }
+
+        private void LoadStopTransfersOld()
+        {
+            foreach (Stop sourceStop in stops.Values)
+            {
+                foreach (Stop destStop in stops.Values)
+                {
                     var distance = Stop.SimplifiedDistanceBetween(sourceStop, destStop);
-                    if(distance > 0 && distance < MAX_TRANSFER_DISTANCE)
+                    if (distance > 0 && distance < MAX_TRANSFER_DISTANCE)
                     {
                         Transfer transferToDest = new Transfer(sourceStop, destStop, distance);
                         sourceStop.Transfers.Add(transferToDest);

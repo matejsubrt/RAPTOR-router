@@ -198,7 +198,7 @@ namespace RAPTOR_Router.GTFSParsing
             GTFS gtfs = new GTFS();
             using (ZipArchive archive = ZipFile.Open(pathToZipFile, ZipArchiveMode.Read))
             {
-                gtfs.LoadAgencies(archive);
+                //gtfs.LoadAgencies(archive);
                 gtfs.LoadCalendars(archive);
                 gtfs.LoadCalendarDates(archive);
                 gtfs.LoadRoutes(archive);

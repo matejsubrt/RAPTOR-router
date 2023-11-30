@@ -209,13 +209,22 @@ namespace RAPTOR_Router.Routers
         /// </summary>
         private void ImproveByTransfers()
         {
+            int maxTransferDistance = settings.GetMaxTransferDistance();
             HashSet<Stop> newMarkedStops = new();
             foreach (Stop markedStop in markedStops)
             {
                 foreach (Transfer transfer in markedStop.Transfers)
                 {
-                    if ((transfer.Distance <= settings.GetMaxTransferDistance()  || transfer.From.Name == transfer.To.Name) && TransferImprovesArrivalTime(transfer) && !searchModel.StopIsReachedByTransferInRound(markedStop, round))
+                    if ((transfer.Distance <= maxTransferDistance || transfer.From.Name == transfer.To.Name) && TransferImprovesArrivalTime(transfer) && !searchModel.StopIsReachedByTransferInRound(transfer.From, round))
                     {
+                        if(transfer.To.Name == "Palackého náměstí" /*&& transfer.To.Name == "Karlovo náměstí"*/)
+                        {
+                            Console.WriteLine();
+                        }
+                        if (transfer.From.Name == "Palackého náměstí" && transfer.To.Name == "Karlovo náměstí")
+                        {
+                            Console.WriteLine();
+                        }
                         ImproveArrivalByTransfer(transfer);
                         newMarkedStops.Add(transfer.To);
                     }
@@ -226,7 +235,8 @@ namespace RAPTOR_Router.Routers
 
             bool TransferImprovesArrivalTime(Transfer transfer)
             {
-                DateTime currEarliestArrival = searchModel.GetEarliestArrivalInRound(transfer.To, round);
+                //DateTime currEarliestArrival = searchModel.GetEarliestArrivalInRound(transfer.To, round);
+                DateTime currEarliestArrival = searchModel.GetEarliestArrival(transfer.To);
                 DateTime earliestArrivalWithTransfer = searchModel.GetEarliestArrivalInRound(transfer.From, round);
                 
                 if(transfer.From == transfer.To)
@@ -256,11 +266,12 @@ namespace RAPTOR_Router.Routers
                 searchModel.SetEarliestArrivalInRound(transfer.To, round, earliestArrivalWithTransfer);
                 if (searchModel.GetEarliestArrival(transfer.To) > searchModel.GetEarliestArrivalInRound(transfer.To, round))
                 {
-                    searchModel.SetEarliestArrival(transfer.To, searchModel.GetEarliestArrivalInRound(transfer.To, round));
 
+                    searchModel.SetTransferToReachInRound(transfer.To, round, transfer);
                     searchModel.SetTripToReachInRound(transfer.To, round, null);
                     searchModel.SetGetOnStopToReachInRound(transfer.To, round, null);
-                    searchModel.SetTransferToReachInRound(transfer.To, round, transfer);
+
+                    searchModel.SetEarliestArrival(transfer.To, searchModel.GetEarliestArrivalInRound(transfer.To, round));
                 }
             }
         }

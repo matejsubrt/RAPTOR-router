@@ -15,9 +15,11 @@ namespace RAPTOR_Router.GTFSParsing
     {
         [Name("service_id")]
         public string ServiceId { get; set; }
+
         [Name("date")]
         [TypeConverter(typeof(GTFSDateOnlyConverter))]
         public DateOnly Date { get; set; }
+
         [Name("exception_type")]
         public int ExceptionType { get; set; }
 

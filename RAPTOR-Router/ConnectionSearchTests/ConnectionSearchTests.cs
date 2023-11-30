@@ -15,7 +15,7 @@ namespace ConnectionSearchTests
     {
         public IEnumerable<object[]> GetData(MethodInfo methodInfo)
         {
-			string dataLocation = "C:\\Users\\matej.LAPTOP-PB84M7CF\\Documents\\RAPTOR-router\\RAPTOR-Router\\ConnectionSearchTests\\TestData\\Data.csv";
+			string dataLocation = "C:\\Users\\matej\\Documents\\RAPTOR-router\\RAPTOR-Router\\ConnectionSearchTests\\TestData\\Data.csv";
             IEnumerable<string> lines = File.ReadLines(dataLocation);
 
 			Console.WriteLine(dataLocation);
@@ -71,11 +71,10 @@ namespace ConnectionSearchTests
 		[StopsDataSource]
         public void ConnectionFoundDayTest(string srcStopName, string destStopName)
 		{
-			Console.WriteLine("WTF");
 			Settings settings = Settings.GetDefaultSettings();
 			IRouteFinder router = builder.CreateAdvancedRouter(settings);
 			DateTime departureTime;
-			DateTime.TryParse("11/11/2023 07:07:07", out departureTime);
+			DateTime.TryParse("27/11/2023 07:07:07", out departureTime);
 
 
 			var result = router.FindConnection(srcStopName, destStopName, departureTime);
@@ -96,13 +95,12 @@ namespace ConnectionSearchTests
 			Settings settings = Settings.GetDefaultSettings();
 			IRouteFinder router = builder.CreateAdvancedRouter(settings);
 			DateTime departureTime;
-			DateTime.TryParse("10/11/2023 23:47:07", out departureTime);
+			DateTime.TryParse("27/11/2023 23:47:07", out departureTime);
 
 
 			var result = router.FindConnection(srcStopName, destStopName, departureTime);
 			string resultStartStopName = result.UsedSegments[0].GetStartStopName();
 			string resultEndStopName = result.UsedSegments[result.UsedSegments.Count - 1].GetEndStopName();
-
 
 			Assert.IsNotNull(result);
 			Assert.AreEqual(srcStopName, resultStartStopName);
@@ -110,10 +108,10 @@ namespace ConnectionSearchTests
 		}
 
 		[DataRow("Chodov", "Chodov")]
-		[DataRow("VìtXrník", "Chodov")]
-		[DataRow("Pelc Tyrolka", "Bílá hora")]
-		[DataRow("Èerveòanského", "Donova lská")]
-		[DataRow("Geologická", "Hulická ")]
+		[DataRow("VÄ›tXrnÃ­k", "Chodov")]
+		[DataRow("Pelc Tyrolka", "BÃ­lÃ¡ hora")]
+		[DataRow("ÄŒerveÅˆanskÃ©ho", "Donova lskÃ¡")]
+		[DataRow("GeologickÃ¡", "HulickÃ¡ ")]
 		[DataRow("xyz", "Chvaly")]
 		[DataTestMethod]
 		public void ImpossibleConnectionNotFoundTest(string srcStopName, string destStopName)
@@ -121,7 +119,7 @@ namespace ConnectionSearchTests
 			Settings settings = Settings.GetDefaultSettings();
 			IRouteFinder router = builder.CreateAdvancedRouter(settings);
 			DateTime departureTime;
-			DateTime.TryParse("11/11/2023 07:07:07", out departureTime);
+			DateTime.TryParse("27/11/2023 07:07:07", out departureTime);
 
 
 			var result = router.FindConnection(srcStopName, destStopName, departureTime);
@@ -158,7 +156,7 @@ namespace ConnectionSearchTests
 			IRouteFinder router4 = builder.CreateAdvancedRouter(settings4);
 
 			DateTime departureTime;
-			DateTime.TryParse("11/11/2023 07:07:07", out departureTime);
+			DateTime.TryParse("27/11/2023 07:07:07", out departureTime);
 
 
 			var result1 = router1.FindConnection(srcStopName, destStopName, departureTime);
@@ -200,7 +198,7 @@ namespace ConnectionSearchTests
 			int maxTrDist3 = settings3.GetMaxTransferDistance();
 
             DateTime departureTime;
-            DateTime.TryParse("11/11/2023 07:07:07", out departureTime);
+            DateTime.TryParse("27/11/2023 07:07:07", out departureTime);
 
             IRouteFinder router1 = builder.CreateAdvancedRouter(settings1);
             IRouteFinder router2 = builder.CreateAdvancedRouter(settings2);
@@ -264,7 +262,7 @@ namespace ConnectionSearchTests
             int minStTime4 = settings4.GetStationaryTransferMinimumSeconds();
 
             DateTime departureTime;
-            DateTime.TryParse("11/11/2023 07:07:07", out departureTime);
+            DateTime.TryParse("27/11/2023 07:07:07", out departureTime);
 
             IRouteFinder router1 = builder.CreateAdvancedRouter(settings1);
             IRouteFinder router2 = builder.CreateAdvancedRouter(settings2);
@@ -331,7 +329,7 @@ namespace ConnectionSearchTests
             IRouteFinder router1 = builder.CreateAdvancedRouter(settings1);
             IRouteFinder router2 = builder.CreateAdvancedRouter(settings2);
             DateTime departureTime;
-            DateTime.TryParse("11/11/2023 07:07:07", out departureTime);
+            DateTime.TryParse("27/11/2023 07:07:07", out departureTime);
 
 
             var result1 = router1.FindConnection(srcStopName, destStopName, departureTime);

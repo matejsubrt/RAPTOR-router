@@ -22,3 +22,11 @@
 /RAPTOR-Router/WebAPI/obj
 /RAPTOR-Router/ConnectionSearchTests/bin/Debug/net7.0
 /RAPTOR-Router/ConnectionSearchTests/obj/Debug/net7.0
+/RAPTOR-Router/CLIApp/bin/Release/net7.0
+/RAPTOR-Router/ConnectionSearchTests/bin/Release/net7.0
+/RAPTOR-Router/ConnectionSearchTests/obj/Release/net7.0
+/RAPTOR-Router/ConnectionSearchTests/obj
+/RAPTOR-Router/GUI/bin/Debug/net7.0-windows
+/RAPTOR-Router/GUI/bin/Release/net7.0-windows
+/RAPTOR-Router/GUI/obj/Debug/net7.0-windows
+/RAPTOR-Router/GUI/obj

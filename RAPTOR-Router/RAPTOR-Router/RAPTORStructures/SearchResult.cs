@@ -53,6 +53,7 @@ namespace RAPTOR_Router.RAPTORStructures
             usedTrip.getOnTime = trip.StopTimes[trip.Route.RouteStops.IndexOf(getOnStop)].DepartureTime;
 			usedTrip.getOffTime = trip.StopTimes[trip.Route.RouteStops.IndexOf(getOffStop)].ArrivalTime;
 			usedTrip.routeName = trip.Route.ShortName;
+			usedTrip.Color = trip.Route.Color;
 
 			UsedSegments.Insert(0, usedTrip);
 			UsedTrips.Insert(0, usedTrip);
@@ -218,6 +219,7 @@ namespace RAPTOR_Router.RAPTORStructures
 			/// The name (i.e. the headsign) of the route of the trip
 			/// </summary>
 			public string routeName { get; set; }
+			public Color Color { get; set; }
 
 			public string GetStartStopName()
 			{

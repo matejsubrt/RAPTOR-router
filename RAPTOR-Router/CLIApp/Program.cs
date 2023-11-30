@@ -60,7 +60,7 @@ namespace CLIApp
 
 
                 DateTime departureTime;
-                DateTime.TryParse("05/11/2023 07:07:07", out departureTime);
+                DateTime.TryParse("27/11/2023 07:07:07", out departureTime);
 
                 var result = router.FindConnection(sourceStop, destStop, departureTime);
                 if (result is null)
@@ -78,18 +78,19 @@ namespace CLIApp
         static void RunAdvancedRouting(string gtfsZipArchiveLocation)
         {
             Settings settings1 = Settings.GetDefaultSettings();
-            settings1.ComfortBalance = ComfortBalance.ShortestTimeAbsolute;
+            //settings1.ComfortBalance = ComfortBalance.ShortestTimeAbsolute;
             settings1.WalkingPreference = WalkingPreference.Low;
 
             Settings settings2 = Settings.GetDefaultSettings();
-            settings2.ComfortBalance = ComfortBalance.ShortestTime;
-            settings2.WalkingPreference = WalkingPreference.High;
+            //settings2.ComfortBalance = ComfortBalance.ShortestTime;
+            settings2.WalkingPreference = WalkingPreference.Normal;
 
             Settings settings3 = Settings.GetDefaultSettings();
-            settings3.ComfortBalance = ComfortBalance.Balanced;
+            //settings3.ComfortBalance = ComfortBalance.Balanced;
+            settings3.WalkingPreference = WalkingPreference.High;
 
             Settings settings4 = Settings.GetDefaultSettings();
-            settings4.ComfortBalance = ComfortBalance.LeastTransfers;
+            //settings4.ComfortBalance = ComfortBalance.LeastTransfers;
 
 
             var builder = new RouteFinderBuilder();
@@ -111,7 +112,7 @@ namespace CLIApp
 
                 DateTime departureTime;
 #if DEBUG
-                DateTime.TryParse("11/11/2023 07:07:07", out departureTime);
+                DateTime.TryParse("27/11/2023 07:07:07", out departureTime);
 #else
                 Console.WriteLine("Enter the departure time in the DD/MM/YYYY hh:mm:ss format (i.e. \"07/07/2023 07:07:07\" corresponds to 7.7.2023, 7:07:07):");
                 string dateTime = Console.ReadLine();
