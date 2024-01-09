@@ -29,6 +29,10 @@ namespace RAPTOR_Router.RAPTORStructures
 		public int TransferCount { get; private set; }
 		public int TripCount { get; private set; }
 
+		//TODO: add time support
+		public DateTime DepartureDateTime { get; set; }
+		public DateTime ArrivalDateTime { get; set; }
+
 
 		internal SearchResult(Settings settings)
 		{
@@ -41,8 +45,15 @@ namespace RAPTOR_Router.RAPTORStructures
 		/// <param name="trip">The trip to add</param>
 		/// <param name="getOnStop">The get on stop of this segment</param>
 		/// <param name="getOffStop">The get off stop of this segment</param>
-		internal void AddUsedTrip(Trip trip, Stop getOnStop, Stop getOffStop)
+		internal void AddUsedTrip(Trip trip, Stop getOnStop, Stop getOffStop, DateTime destArrivalTime)
 		{
+			if(UsedSegments.Count == 0)
+			{
+                ArrivalDateTime = destArrivalTime;
+            }
+
+			
+
 			UsedTrip usedTrip = new UsedTrip();
 
 			usedTrip.segmentIndex = 0; // TODO: remove this
@@ -55,7 +66,24 @@ namespace RAPTOR_Router.RAPTORStructures
 			usedTrip.routeName = trip.Route.ShortName;
 			usedTrip.Color = trip.Route.Color;
 
-			UsedSegments.Insert(0, usedTrip);
+			usedTrip.getOffDateTime = destArrivalTime;
+
+			// trip goes over midnight
+			if(usedTrip.getOnTime > usedTrip.getOffTime)
+			{
+				var modifiedGetOffTime = usedTrip.getOffDateTime.AddDays(-1);
+
+                DateOnly getOnDate = new DateOnly(modifiedGetOffTime.Year, modifiedGetOffTime.Month, modifiedGetOffTime.Day);
+				usedTrip.getOnDateTime = new DateTime(getOnDate.Year, getOnDate.Month, getOnDate.Day, usedTrip.getOnTime.Hour, usedTrip.getOnTime.Minute, usedTrip.getOnTime.Second);
+			}
+			else
+			{
+				usedTrip.getOnDateTime = new DateTime(usedTrip.getOffDateTime.Year, usedTrip.getOffDateTime.Month, usedTrip.getOffDateTime.Day, usedTrip.getOnTime.Hour, usedTrip.getOnTime.Minute, usedTrip.getOnTime.Second);
+			}
+
+            DepartureDateTime = usedTrip.getOnDateTime;
+
+            UsedSegments.Insert(0, usedTrip);
 			UsedTrips.Insert(0, usedTrip);
 			TripCount++;
         }
@@ -63,9 +91,14 @@ namespace RAPTOR_Router.RAPTORStructures
 		/// Creates an used transfer from the provided transfer, pushes it TO THE START of UsedSegments
 		/// </summary>
 		/// <param name="transfer">The transfer to add</param>
-		internal void AddUsedTransfer(Transfer transfer)
+		internal void AddUsedTransfer(Transfer transfer, DateTime destArrivalTime)
 		{
-			UsedTransfer usedTransfer = new UsedTransfer();
+            if (UsedSegments.Count == 0)
+            {
+                ArrivalDateTime = destArrivalTime;
+            }
+
+            UsedTransfer usedTransfer = new UsedTransfer();
 
 			usedTransfer.segmentIndex = 0; //TODO: remove
 			usedTransfer.srcStopName = transfer.From.Name;
@@ -215,6 +248,9 @@ namespace RAPTOR_Router.RAPTORStructures
 			/// The timr when the trip is gotten out of
 			/// </summary>
 			public TimeOnly getOffTime { get; set; }
+
+			public DateTime getOnDateTime { get; set; }
+			public DateTime getOffDateTime { get; set; }
 			/// <summary>
 			/// The name (i.e. the headsign) of the route of the trip
 			/// </summary>

@@ -49,7 +49,7 @@ namespace RAPTOR_Router.RAPTORStructures
                 {
                     Stop stop = new Stop(gtfsStop.Id, gtfsStop.Name, gtfsStop.Lat, gtfsStop.Lon);
                     stops.Add(gtfsStop.Id, stop);
-                }                
+                }              
             }
         }
 

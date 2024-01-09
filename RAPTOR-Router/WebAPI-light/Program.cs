@@ -1,21 +1,24 @@
 using RAPTOR_Router.RAPTORStructures;
 using RAPTOR_Router.Routers;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using System.Web.Http;
+using Microsoft.AspNetCore.Http;
 
-namespace WebAPI
+namespace WebAPI_light
 {
     public class Program
     {
         private static RouteFinderBuilder routerBuilder;
-        private static Settings settings;
         /// <summary>
         /// Parses the gtfs data in the configured zip archive, initiates a web API on /connection, that returns a JSON representation of the result of the search.
         /// </summary>
         /// <param name="args"></param>
         public static void Main(string[] args)
         {
-            settings = Settings.GetDefaultSettings();
             var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory() + "..")
+                .SetBasePath(Directory.GetCurrentDirectory() + "..\\..\\..\\..")
                 .AddJsonFile("config.json", optional: false, reloadOnChange: true)
                 .Build();
             string gtfsZipArchiveLocation = config["gtfsArchiveLocation"];
@@ -35,31 +38,35 @@ namespace WebAPI
             appBuilder.Services.AddAuthorization();
             appBuilder.Services.AddEndpointsApiExplorer();
             appBuilder.Services.AddSwaggerGen();
+
+            
+
             var app = appBuilder.Build();
-
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+            app.UseSwagger();
+            app.UseSwaggerUI();
+            app.MapSwagger();
             app.UseHttpsRedirection();
-            app.UseAuthorization();
             app.UseExceptionHandler(exceptionHandlerApp
-                => exceptionHandlerApp.Run(async context => await Results.Problem().ExecuteAsync(context)));
+                => exceptionHandlerApp.Run(async context
+                    => await Results.Problem()
+                        .ExecuteAsync(context)));
 
-            app.MapGet("/connection", (string srcStopName, string destStopName, string departureDateTime) => HandleRequest(routerBuilder.CreateRouter(settings), srcStopName, destStopName, departureDateTime))
-            .WithName("GetConnection")
-            .WithOpenApi();
+
+
+            app.MapGet("/connection", (string srcStopName, string destStopName, string departureDateTime) => 
+                HandleRequest(routerBuilder, srcStopName, destStopName, departureDateTime))
+                .WithName("GetConnection")
+                .WithOpenApi();
 
             app.MapGet("/adv-connection", (string srcStopName, string destStopName, string departureDateTime, int walkingPace, int transferTime, int comfortBalance, int walkingPreference) =>
                 HandleRequestAdvanced(routerBuilder, srcStopName, destStopName, departureDateTime, walkingPace, transferTime, comfortBalance, walkingPreference))
                 .WithName("GetAdvancedConnection")
                 .WithOpenApi();
 
-
             app.Run();
+
         }
-        
+
         /// <summary>
         /// Handles a connection search request using the provided router.
         /// </summary>
@@ -68,42 +75,67 @@ namespace WebAPI
         /// <param name="destStopName">The exact name of the destination stop</param>
         /// <param name="departureDateTime">The DateTime of the departure</param>
         /// <returns>The found earliest possible connection, null if none could be found.</returns>
-        static SearchResult HandleRequest(RAPTOR_Router.Routers.IRouteFinder router, string srcStopName, string destStopName, string departureDateTime)
+        static IResult HandleRequest(RouteFinderBuilder builder, string srcStopName, string destStopName, string departureDateTime)
         {
             Console.WriteLine();
             DateTime departureTime;
             if (!DateTime.TryParse(departureDateTime, out departureTime))
             {
-                return null;
-                //throw new HttpResponseException(System.Net.HttpStatusCode.BadRequest);
+                var message = "Invalid DateTime format";
+                HttpError err = new HttpError(message);
+                return Results.BadRequest(err);
             }
+
+            IRouteFinder router = builder.CreateRouter(Settings.GetDefaultSettings());
 
             var result = router.FindConnection(srcStopName, destStopName, departureTime);
 
-            return result;
+            return Results.Ok(result);
         }
 
-        static SearchResult HandleRequestAdvanced(RouteFinderBuilder builder, string srcStopName, string destStopName, string departureDateTime, int walkingPace, int transferTime, int comfortBalance, int walkingPreference)
+        static IResult HandleRequestAdvanced(RouteFinderBuilder builder, string srcStopName, string destStopName, string departureDateTime, int walkingPace, int transferTime, int comfortBalance, int walkingPreference)
         {
-            IRouteFinder router = builder.CreateAdvancedRouter(new Settings()
+            DateTime departureTime;
+            if (!DateTime.TryParse(departureDateTime, out departureTime))
+            {
+                var message = "Invalid DateTime format";
+                HttpError err = new HttpError(message);
+                return Results.BadRequest(err);
+            }
+
+            Settings settings = new Settings()
             {
                 WalkingPace = walkingPace,
                 TransferTime = (TransferTime)transferTime,
                 ComfortBalance = (ComfortBalance)comfortBalance,
                 WalkingPreference = (WalkingPreference)walkingPreference
-            });
-            DateTime departureTime;
-            if (!DateTime.TryParse(departureDateTime, out departureTime))
+            };
+
+            if (!builder.ValidateSettings(settings))
             {
-                return null; // Or throw an appropriate exception
+                var message = "Invalid settings";
+                HttpError err = new HttpError(message);
+                return Results.BadRequest(err);
+            }
+            if (!builder.ValidateStopName(srcStopName) || !builder.ValidateStopName(destStopName))
+            {
+                var message = "Invalid stop name";
+                HttpError err = new HttpError(message);
+                return Results.BadRequest(err);
             }
 
-            // TODO: Use the additional parameters in your routing logic
-            // Example: router.SetPreferences(walkingPace, transferTime, comfortBalance, walkingPreference);
+            if (DateTime.Now.AddDays(14) < departureTime)
+            {
+                var message = "Departure DateTime is too late";
+                HttpError err = new HttpError(message);
+                return Results.BadRequest(err);
+            }
+
+            IRouteFinder router = builder.CreateAdvancedRouter(settings);
 
             var result = router.FindConnection(srcStopName, destStopName, departureTime);
 
-            return result;
+            return Results.Ok(result);
         }
     }
 }

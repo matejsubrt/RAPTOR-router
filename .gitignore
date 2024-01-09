@@ -30,3 +30,8 @@
 /RAPTOR-Router/GUI/bin/Release/net7.0-windows
 /RAPTOR-Router/GUI/obj/Debug/net7.0-windows
 /RAPTOR-Router/GUI/obj
+/RAPTOR-Router/WebAPI/bin/Release/net7.0
+/RAPTOR-Router/WebAPI-light/bin
+/RAPTOR-Router/WebAPI-light/obj
+/RAPTOR-Router/WebAPI-light/Properties/PublishProfiles
+/RAPTOR-Router/WebAPI-light/publish

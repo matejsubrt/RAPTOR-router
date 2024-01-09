@@ -52,7 +52,7 @@ namespace RAPTOR_Router.Routers
         /// </summary>
         private void InitiateSearch()
         {
-            searchModel.SetSourceStopsEarliestArrival();
+            searchModel.SetSourceStopsEarliestArrivalNew();
             MarkSourceStops();
             ImproveByTransfers();
 
@@ -101,7 +101,8 @@ namespace RAPTOR_Router.Routers
                 Stop getOnStop = pair.Value;
                 DateOnly tripDate;
 
-                DateTime earliestArrivalAtGetOnStopLastRound = searchModel.GetEarliestArrivalInRound(getOnStop, round - 1);
+                //TODO: shouldnt this be just trip arrival?
+                DateTime earliestArrivalAtGetOnStopLastRound = searchModel.GetEarliestArrivalInRoundNew(getOnStop, round - 1);
                 // in round 1, the arrival time is the start time -> no need for buffer
                 if(round > 1)
                 {
@@ -147,7 +148,8 @@ namespace RAPTOR_Router.Routers
 
                         if (DepartureIsLaterThanLastRoundArrival(currStop, departureTime))
                         {
-                            DateTime earliestArrivalLastRound = searchModel.GetEarliestArrivalInRound(currStop, round - 1);
+                            //TODO: same as above
+                            DateTime earliestArrivalLastRound = searchModel.GetEarliestArrivalInRoundNew(currStop, round - 1);
                             // in first round, no buffer needed
                             if(round != 1)
                             {
@@ -186,16 +188,22 @@ namespace RAPTOR_Router.Routers
                 }
                 bool DepartureIsLaterThanLastRoundArrival(Stop stop, DateTime departureTime)
                 {
-                    return searchModel.GetEarliestArrivalInRound(stop, round - 1) <= departureTime;
+                    return searchModel.GetEarliestArrivalInRoundNew(stop, round - 1) <= departureTime;
                 }
                 void ImproveArrivalByTrip(Stop stop, DateTime arrivalTime, Trip trip, Stop getOnStop)
                 {
+                    /*
                     searchModel.SetEarliestArrivalInRound(stop, round, arrivalTime);
                     searchModel.SetEarliestArrival(stop, arrivalTime);
 
                     searchModel.SetTripToReachInRound(stop, round, trip);
                     searchModel.SetGetOnStopToReachInRound(stop, round, getOnStop);
                     searchModel.SetTransferToReachInRound(stop, round, null);
+                    */
+
+                    searchModel.SetTripArrivalInRound(stop, trip, getOnStop, arrivalTime, round);
+                    //TODO: check
+                    searchModel.SetEarliestArrival(stop, arrivalTime);
 
                     if (searchModel.destinationStops.Contains(stop) && arrivalTime < searchModel.GetCurrentBestArrivalTime())
                     {
@@ -217,14 +225,6 @@ namespace RAPTOR_Router.Routers
                 {
                     if ((transfer.Distance <= maxTransferDistance || transfer.From.Name == transfer.To.Name) && TransferImprovesArrivalTime(transfer) && !searchModel.StopIsReachedByTransferInRound(transfer.From, round))
                     {
-                        if(transfer.To.Name == "Palackého náměstí" /*&& transfer.To.Name == "Karlovo náměstí"*/)
-                        {
-                            Console.WriteLine();
-                        }
-                        if (transfer.From.Name == "Palackého náměstí" && transfer.To.Name == "Karlovo náměstí")
-                        {
-                            Console.WriteLine();
-                        }
                         ImproveArrivalByTransfer(transfer);
                         newMarkedStops.Add(transfer.To);
                     }
@@ -237,7 +237,7 @@ namespace RAPTOR_Router.Routers
             {
                 //DateTime currEarliestArrival = searchModel.GetEarliestArrivalInRound(transfer.To, round);
                 DateTime currEarliestArrival = searchModel.GetEarliestArrival(transfer.To);
-                DateTime earliestArrivalWithTransfer = searchModel.GetEarliestArrivalInRound(transfer.From, round);
+                DateTime earliestArrivalWithTransfer = searchModel.GetEarliestArrivalInRoundNew(transfer.From, round);
                 
                 if(transfer.From == transfer.To)
                 {
@@ -252,7 +252,7 @@ namespace RAPTOR_Router.Routers
             }
             void ImproveArrivalByTransfer(Transfer transfer)
             {
-                DateTime earliestArrivalWithTransfer = searchModel.GetEarliestArrivalInRound(transfer.From, round);
+                DateTime earliestArrivalWithTransfer = searchModel.GetEarliestArrivalInRoundNew(transfer.From, round);
 
                 if (transfer.From == transfer.To)
                 {
@@ -263,15 +263,15 @@ namespace RAPTOR_Router.Routers
                     earliestArrivalWithTransfer = earliestArrivalWithTransfer.AddSeconds((int)(transfer.GetTransferTime(settings.WalkingPace) * settings.GetMovingTransferLengthMultiplier()));
                 }
 
-                searchModel.SetEarliestArrivalInRound(transfer.To, round, earliestArrivalWithTransfer);
-                if (searchModel.GetEarliestArrival(transfer.To) > searchModel.GetEarliestArrivalInRound(transfer.To, round))
+                //searchModel.SetEarliestArrivalInRound(transfer.To, round, earliestArrivalWithTransfer);
+                searchModel.SetTransferArrivalInRound(transfer.To, transfer, earliestArrivalWithTransfer, round);
+                if (searchModel.GetEarliestArrival(transfer.To) > searchModel.GetEarliestArrivalInRoundNew(transfer.To, round))
                 {
+                    //searchModel.SetTransferToReachInRound(transfer.To, round, transfer);
+                    //searchModel.SetTripToReachInRound(transfer.To, round, null);
+                    //searchModel.SetGetOnStopToReachInRound(transfer.To, round, null);
 
-                    searchModel.SetTransferToReachInRound(transfer.To, round, transfer);
-                    searchModel.SetTripToReachInRound(transfer.To, round, null);
-                    searchModel.SetGetOnStopToReachInRound(transfer.To, round, null);
-
-                    searchModel.SetEarliestArrival(transfer.To, searchModel.GetEarliestArrivalInRound(transfer.To, round));
+                    searchModel.SetEarliestArrival(transfer.To, searchModel.GetEarliestArrivalInRoundNew(transfer.To, round));
                 }
             }
         }

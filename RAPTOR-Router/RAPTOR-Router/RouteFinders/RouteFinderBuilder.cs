@@ -69,5 +69,25 @@ namespace RAPTOR_Router.Routers
             IRouteFinder router = new AdvancedRouteFinder(settings, raptorModel);
             return router;
         }
+        public bool ValidateStopName(string stopName)
+        {
+            if (raptorModel is null)
+            {
+                return false;
+            }
+            return raptorModel.GetStopsByName(stopName).Count != 0;
+        }
+        public bool ValidateSettings(Settings settings)
+        {
+            bool correct = true;
+
+            correct &= Enum.IsDefined(typeof(ComfortBalance), settings.ComfortBalance);
+            correct &= Enum.IsDefined(typeof(WalkingPreference), settings.WalkingPreference);
+            correct &= Enum.IsDefined(typeof(TransferTime), settings.TransferTime);
+            correct &= settings.WalkingPace >= 2 && settings.WalkingPace <= 60;
+            correct &= settings.CyclingPace >= 0 && settings.CyclingPace <= 60;
+
+            return correct;
+        }
     }
 }

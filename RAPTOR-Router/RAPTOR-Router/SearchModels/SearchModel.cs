@@ -53,51 +53,96 @@ namespace RAPTOR_Router.SearchModels
 			this.settingsUsed = settingsUsed;
 		}
 
-		/// <summary>
-		/// Class representing the routing information about a certain stop
-		/// </summary>
-		internal class StopRoutingInfo
-		{
-			/// <summary>
-			/// The current earliest possible arrival time at the stop
-			/// </summary>
-			internal DateTime earliestArrival;
-			/// <summary>
-			/// The current earliest possible arrival at the stop, separately for each round
-			/// </summary>
-			internal DateTime[] earliestArrivalRounds;
-			/// <summary>
-			/// The trip used to reach the stop for each round.
-			/// </summary>
-			/// <remarks>Null if stop cannot be reached in said round, or is reached sooner by a transfer in said round.</remarks>
-			internal Trip[] tripsToReachRounds;
-			/// <summary>
-			/// The get on stop used to reach the stop for each round - the stop, on which the tripToReach in the same round was boarded to reach the stop.
-			/// </summary>
-			/// <remarks>Null if stop cannot be reached in said round, or is reached sooner by a transfer in said round.</remarks>
-			internal Stop[] getOnStopsToReachRounds;
-			/// <summary>
-			/// The transfer used to reach the stop for each round.
-			/// </summary>
-			/// <remarks>Null if stop cannot be reached in said round, or is reached sooner by a trip in said round.</remarks>
-			internal Transfer[] transfersToReachRounds;
+        /// <summary>
+        /// Class representing the routing information about a certain stop
+        /// </summary>
+        internal class StopRoutingInfo
+        {
+            /// <summary>
+            /// The current earliest possible arrival time at the stop
+            /// </summary>
+            internal DateTime earliestArrival;
+            /// <summary>
+            /// The current earliest possible arrival at the stop, separately for each round
+            /// </summary>
+            internal DateTime[] earliestArrivalRounds;
+            /// <summary>
+            /// The trip used to reach the stop for each round.
+            /// </summary>
+            /// <remarks>Null if stop cannot be reached in said round, or is reached sooner by a transfer in said round.</remarks>
+            internal Trip[] tripsToReachRounds;
+            /// <summary>
+            /// The get on stop used to reach the stop for each round - the stop, on which the tripToReach in the same round was boarded to reach the stop.
+            /// </summary>
+            /// <remarks>Null if stop cannot be reached in said round, or is reached sooner by a transfer in said round.</remarks>
+            internal Stop[] getOnStopsToReachRounds;
+            /// <summary>
+            /// The transfer used to reach the stop for each round.
+            /// </summary>
+            /// <remarks>Null if stop cannot be reached in said round, or is reached sooner by a trip in said round.</remarks>
+            internal Transfer[] transfersToReachRounds;
 
-			/// <summary>
-			/// Creates a new StopRoutingInfo object with all the arrivalTimes set to the maxValue
-			/// </summary>
-			internal StopRoutingInfo()
-			{
-				earliestArrival = DateTime.MaxValue;
-				earliestArrivalRounds = new DateTime[Settings.ROUNDS + 1];
-				Array.Fill(earliestArrivalRounds, DateTime.MaxValue);
+            internal TripArrival[] tripArrivals;
+            internal TransferArrival[] transferArrivals;
+            /// <summary>
+            /// Creates a new StopRoutingInfo object with all the arrivalTimes set to the maxValue
+            /// </summary>
+            internal StopRoutingInfo()
+            {
+                earliestArrival = DateTime.MaxValue;
+                earliestArrivalRounds = new DateTime[Settings.ROUNDS + 1];
+                Array.Fill(earliestArrivalRounds, DateTime.MaxValue);
 
-				tripsToReachRounds = new Trip[Settings.ROUNDS + 1];
-				getOnStopsToReachRounds = new Stop[Settings.ROUNDS + 1];
-				transfersToReachRounds = new Transfer[Settings.ROUNDS + 1];
-			}
-		}
+                tripsToReachRounds = new Trip[Settings.ROUNDS + 1];
+                getOnStopsToReachRounds = new Stop[Settings.ROUNDS + 1];
+                transfersToReachRounds = new Transfer[Settings.ROUNDS + 1];
 
-		public SearchResult ExtractResult()
+                //new
+                tripArrivals = new TripArrival[Settings.ROUNDS + 1];
+				for(int i = 0; i < tripArrivals.Count(); i++)
+				{
+					tripArrivals[i] = new TripArrival(null, null, DateTime.MaxValue);
+				}
+                transferArrivals = new TransferArrival[Settings.ROUNDS + 1];
+                for (int i = 0; i < transferArrivals.Count(); i++)
+                {
+                    transferArrivals[i] = new TransferArrival(null, DateTime.MaxValue);
+                }
+            }
+
+            internal class TripArrival
+            {
+                internal Trip trip { get; set; }
+                internal Stop getOnStop { get; set; }
+                internal DateTime arrivalTime { get; set; }
+				internal TripArrival(Trip trip, Stop getOnStop, DateTime arrivalTime)
+                {
+                    this.trip = trip;
+                    this.getOnStop = getOnStop;
+                    this.arrivalTime = arrivalTime;
+                }
+                public override string ToString()
+                {
+					return arrivalTime.ToShortTimeString() + ": " + trip.Route.ShortName + " from " + getOnStop.Name;
+                }
+            }
+            internal class TransferArrival
+            {
+                internal Transfer transfer { get; set; }
+                internal DateTime arrivalTime { get; set; }
+				internal TransferArrival(Transfer transfer, DateTime arrivalTime)
+				{
+					this.transfer = transfer;
+					this.arrivalTime = arrivalTime;
+				}
+                public override string ToString()
+                {
+                    return arrivalTime.ToShortTimeString() + ": " + transfer.From.Name + " to " + transfer.To.Name;
+                }
+            }
+        }
+
+        public SearchResult ExtractResult()
 		{
             // For each round, get the stop with earliest arrival
             Stop[] earliestDestStopsRounds = new Stop[Settings.ROUNDS];
@@ -142,7 +187,8 @@ namespace RAPTOR_Router.SearchModels
 
                         var stopInfo = routingInfo[earliestDestStops[round]];
 
-                        DateTime adjustedArrivalTime = stopInfo.earliestArrivalRounds[round].AddSeconds(transferCount * penaltySecondsPerTransfer);
+						DateTime adjustedArrivalTime = GetEarliestArrivalInRoundNew(earliestDestStops[round], round);
+                        //DateTime adjustedArrivalTime = stopInfo.earliestArrivalRounds[round].AddSeconds(transferCount * penaltySecondsPerTransfer);
                         //earliestArrivalRounds[round] = adjustedArrivalTime;
 
                         if (adjustedArrivalTime < bestArrivalTime)
@@ -177,10 +223,10 @@ namespace RAPTOR_Router.SearchModels
                 {
                     bool transferUsed = false;
 
-                    Transfer transferToReachStop = currStopInfo.transfersToReachRounds[currRound];
+                    Transfer transferToReachStop = currStopInfo.transferArrivals[currRound].transfer;
                     if (transferToReachStop is not null)
                     {
-                        result.AddUsedTransfer(transferToReachStop);
+                        result.AddUsedTransfer(transferToReachStop, currStopInfo.transferArrivals[currRound].arrivalTime);
                         transferUsed = true;
                     }
 
@@ -197,18 +243,21 @@ namespace RAPTOR_Router.SearchModels
                         // in last round, we do not add a transfer
                         if (currRound != round)
                         {
-                            result.AddUsedTransfer(new Transfer(currStop, currStop, 0));
+                            result.AddUsedTransfer(new Transfer(currStop, currStop, 0), currStopInfo.tripArrivals[currRound].arrivalTime.AddSeconds(settingsUsed.GetStationaryTransferMinimumSeconds()));
                         }
                     }
 
                     currStopInfo = routingInfo[currStop];
-                    Trip tripToReachStop = currStopInfo.tripsToReachRounds[currRound];
-                    Stop getOnStop = currStopInfo.getOnStopsToReachRounds[currRound];
+					//Trip tripToReachStop = currStopInfo.tripsToReachRounds[currRound];
+					//Stop getOnStop = currStopInfo.getOnStopsToReachRounds[currRound];
+					var tripArrival = currStopInfo.tripArrivals[currRound];
+					Trip tripToReachStop = tripArrival.trip;
+					Stop getOnStop = tripArrival.getOnStop;
                     if (tripToReachStop is null || getOnStop is null)
                     {
                         throw new ApplicationException("Trip and getOnStop cannot be null in an used round");
                     }
-                    result.AddUsedTrip(tripToReachStop, getOnStop, currStop);
+                    result.AddUsedTrip(tripToReachStop, getOnStop, currStop, currStopInfo.tripArrivals[currRound].arrivalTime);
 
                     currStop = getOnStop;
                     currStopInfo = routingInfo[currStop];
@@ -216,10 +265,10 @@ namespace RAPTOR_Router.SearchModels
                     currRound--;
                 }
 
-                Transfer transferToReachFirstTripGetOnStop = currStopInfo.transfersToReachRounds[0];
+                Transfer transferToReachFirstTripGetOnStop = currStopInfo.transferArrivals[0].transfer;
                 if (transferToReachFirstTripGetOnStop is not null)
                 {
-                    result.AddUsedTransfer(transferToReachFirstTripGetOnStop);
+                    result.AddUsedTransfer(transferToReachFirstTripGetOnStop, currStopInfo.transferArrivals[0].arrivalTime);
                 }
 
                 return result;
@@ -234,12 +283,12 @@ namespace RAPTOR_Router.SearchModels
                     //arrival is earlier than best we found so far AND it is better than in last round - otherwise we do not process this round
                     if (
                         routingInfo.ContainsKey(stop)
-                        && routingInfo[stop].earliestArrivalRounds[round] < earliestArrival
+                        && GetEarliestArrivalInRoundNew(stop, round) < earliestArrival
                         && (round == 0 || ArrivalAtStopInRoundIsBetterThanAllEarlierRounds(stop, round))
                     )
                     {
                         stopWithMinArrTime = stop;
-                        earliestArrival = routingInfo[stop].earliestArrivalRounds[round];
+                        earliestArrival = GetEarliestArrivalInRoundNew(stop, round);
                     }
                 }
                 return stopWithMinArrTime;
@@ -250,13 +299,13 @@ namespace RAPTOR_Router.SearchModels
                 DateTime bestEarlierArrival = DateTime.MaxValue;
                 for (int i = 0; i < round; i++)
                 {
-                    DateTime arrivalInRoundI = routingInfo[stop].earliestArrivalRounds[i];
+                    DateTime arrivalInRoundI = GetEarliestArrivalInRoundNew(stop, i);
                     if (arrivalInRoundI < bestEarlierArrival)
                     {
                         bestEarlierArrival = arrivalInRoundI;
                     }
                 }
-                return bestEarlierArrival > routingInfo[stop].earliestArrivalRounds[round];
+                return bestEarlierArrival > GetEarliestArrivalInRoundNew(stop, round);
             }
         }
 
@@ -264,6 +313,7 @@ namespace RAPTOR_Router.SearchModels
         /// Generates the result of the search after the search algorithm has been finished
         /// </summary>
         /// <returns>The result of the search - i.e. the representation of the fastest possible connection</returns>
+        /*
         public SearchResult ExtractResultOld()
 		{
 			// For each round, get the stop with earliest arrival
@@ -354,9 +404,12 @@ namespace RAPTOR_Router.SearchModels
                     }
 
 					currStopInfo = routingInfo[currStop];
-					Trip tripToReachStop = currStopInfo.tripsToReachRounds[currRound];
-					Stop getOnStop = currStopInfo.getOnStopsToReachRounds[currRound];
-					if(tripToReachStop is null || getOnStop is null)
+                    //Trip tripToReachStop = currStopInfo.tripsToReachRounds[currRound];
+                    //Stop getOnStop = currStopInfo.getOnStopsToReachRounds[currRound];
+                    var tripArrival = currStopInfo.tripArrivals[currRound];
+                    Trip tripToReachStop = tripArrival.trip;
+                    Stop getOnStop = tripArrival.getOnStop;
+                    if (tripToReachStop is null || getOnStop is null)
 					{
 						throw new ApplicationException("Trip and getOnStop cannot be null in an used round");
 					}
@@ -410,15 +463,16 @@ namespace RAPTOR_Router.SearchModels
                 }
                 return bestEarlierArrival > routingInfo[stop].earliestArrivalRounds[round];
             }
+		
         }		
-
-		/// <summary>
-		/// Finds out if it is possible and fastest to reach the stop by transfer in the specified round, rather by by trip
-		/// </summary>
-		/// <param name="stop">The stop to use</param>
-		/// <param name="round">The round in which the reaching method is to be found</param>
-		/// <returns></returns>
-		public bool StopIsReachedByTransferInRound(Stop stop, int round)
+		*/
+        /// <summary>
+        /// Finds out if it is possible and fastest to reach the stop by transfer in the specified round, rather by by trip
+        /// </summary>
+        /// <param name="stop">The stop to use</param>
+        /// <param name="round">The round in which the reaching method is to be found</param>
+        /// <returns></returns>
+        public bool StopIsReachedByTransferInRound(Stop stop, int round)
 		{
 			return GetRoutingInfo(stop).transfersToReachRounds[round] is not null;
 		}
@@ -457,6 +511,32 @@ namespace RAPTOR_Router.SearchModels
 		{
 			return GetRoutingInfo(stop).earliestArrivalRounds[round];
 		}
+
+
+		public DateTime GetEarliestArrivalInRoundNew(Stop stop, int round)
+		{
+			var tripArrival = GetEarliestTripArrivalInRound(stop, round);
+			var transferArrival = GetEarliestTransferArrivalInRound(stop, round);
+
+			if (tripArrival <= transferArrival)
+			{
+				return tripArrival;
+			}
+			else
+			{
+				return transferArrival;
+			}
+		}
+		public DateTime GetEarliestTripArrivalInRound(Stop stop, int round)
+		{
+			return GetRoutingInfo(stop).tripArrivals[round].arrivalTime;
+		}
+		public DateTime GetEarliestTransferArrivalInRound(Stop stop, int round)
+		{
+			return GetRoutingInfo(stop).transferArrivals[round].arrivalTime;
+		}
+
+
 
 		/// <summary>
 		/// Sets the current overall best arrival time to one of the destination stops
@@ -499,6 +579,23 @@ namespace RAPTOR_Router.SearchModels
 				bestCurrentArrivalTime = arrivalTime;
 			}
 		}
+
+
+		public void SetTripArrivalInRound(Stop stop, Trip trip, Stop getOnStop, DateTime arrivalTime, int round)
+		{
+			StopRoutingInfo.TripArrival tripArrival = GetRoutingInfo(stop).tripArrivals[round];
+			tripArrival.trip = trip;
+            tripArrival.getOnStop = getOnStop;
+            tripArrival.arrivalTime = arrivalTime;			
+		}
+		public void SetTransferArrivalInRound(Stop stop, Transfer transfer, DateTime arrivalTime, int round)
+		{
+			StopRoutingInfo.TransferArrival transferArrival = GetRoutingInfo(stop).transferArrivals[round];
+			transferArrival.transfer = transfer;
+			transferArrival.arrivalTime = arrivalTime;
+		}
+
+
 		/// <summary>
 		/// Sets the trip to be used to reach the specified stop the fastest in the specified round
 		/// </summary>
@@ -531,6 +628,17 @@ namespace RAPTOR_Router.SearchModels
 				stopRoutingInfo.earliestArrivalRounds[0] = departureTime;
 			}
 		}
+
+		public void SetSourceStopsEarliestArrivalNew()
+		{
+            foreach (Stop sourceStop in sourceStops)
+            {
+                StopRoutingInfo stopRoutingInfo = GetRoutingInfo(sourceStop);
+                stopRoutingInfo.earliestArrival = departureTime;
+				stopRoutingInfo.tripArrivals[0].arrivalTime = departureTime;
+				stopRoutingInfo.transferArrivals[0].arrivalTime = departureTime;
+            }
+        }
 		/// <summary>
 		/// Gets the routing info for the specified stop if it exists. If not, creates on, adds it to the routingInfo and returns it
 		/// </summary>
