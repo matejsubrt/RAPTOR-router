@@ -18,3 +18,17 @@
 /RAPTOR-Router/CLIApp/bin/Debug/net7.0
 /RAPTOR-Router/CLIApp/obj
 /RAPTOR-Router/WebAPI/bin/Debug/net7.0
+/RAPTOR-Router/ConnectionSearchTests/bin
+/RAPTOR-Router/CLIApp/bin/Release/net7.0
+/RAPTOR-Router/ConnectionSearchTests/obj/Debug/net7.0
+/RAPTOR-Router/ConnectionSearchTests/obj/Release/net7.0
+/RAPTOR-Router/ConnectionSearchTests/obj
+/RAPTOR-Router/GUI/bin
+/RAPTOR-Router/GUI/obj/Debug/net7.0-windows
+/RAPTOR-Router/GUI/obj
+/RAPTOR-Router/WebAPI/bin/Release/net7.0
+/RAPTOR-Router/WebAPI/obj
+/RAPTOR-Router/WebAPI-light/bin
+/RAPTOR-Router/WebAPI-light/obj
+/RAPTOR-Router/WebAPI-light/Properties/PublishProfiles
+/RAPTOR-Router/WebAPI-light/publish
