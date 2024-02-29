@@ -7,8 +7,12 @@ This document is intended to provide a brief overview of the RAPTOR Router proje
 ### Project overview
 The RAPTOR Router project is an application for searching for public transport connections between two points in a city. It is based on the RAPTOR algorithm, which is a method for finding the earliest arrival times at each stop in a public transport network. The algorithm is described in detail in the [RAPTOR paper](https://www.microsoft.com/en-us/research/wp-content/uploads/2012/01/raptor_alenex.pdf).
 
+![System context diagram](context.png)
+
 ### Codebase overview
-The codebase is divided into four main parts: the RAPTOR algorithm itself (RAPTOR-Router - implementing the functionality of the connection search) and three user-oriented extensions, that use the RAPTOR-Router to provide a command line (CLIApp), web (WebAPI) and a graphic user interface (GUI) for searching for connections. Furthermore there is also a test suite (ConnectionSearchTests) that tests the functionality of the RAPTOR algorithm.
+The codebase is divided into four main parts: the RAPTOR algorithm itself (**RAPTOR-Router** - implementing the functionality of the connection search) and three user-oriented extensions, that use the RAPTOR-Router to provide a command line (**CLIApp**), web (**WebAPI**) and a graphic user interface (**GUI**) for searching for connections. Furthermore there is also a test suite (ConnectionSearchTests) that tests the functionality of the RAPTOR algorithm.
+
+![Container diagram of whole system](container.png)
 
 The RAPTOR-Router component itself is further divided into different parts, each of which is responsible for a different part of the algorithm. The main parts are:
 	- **GTFSParsing** - responsible for parsing the GTFS data and creating simple raw data structures to be used by the algorithm
@@ -17,6 +21,8 @@ The RAPTOR-Router component itself is further divided into different parts, each
 		- BasicRouteFinder, that simply fins the connection with earliest arrival
 		- AdvancedRouteFinder, that finds the connection according to the parameters specified by the user (e.g. earliest arrival, fewest transfers, shortest travel time, etc.)
 	- **SearchModels** - models used by the RouteFinders to store the (intermediate) results of the search
+
+![Component diagram of RAPTOR Router](component.png)
 
 ### Typical usage
 One of the three possible user-oriented extensions is used to search for connections. The CLIApp is a command line application, that can be used to search for connections from the command line. The WebAPI is a web application, that can be used to search for connections from a web API - i.e. is expected to be used typically for mobile applications. The GUI is a desktop application, that can be used to search for connections from a graphical user interface on windows.
