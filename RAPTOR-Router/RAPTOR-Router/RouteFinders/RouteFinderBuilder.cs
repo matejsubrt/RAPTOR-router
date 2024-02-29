@@ -1,5 +1,7 @@
-﻿using RAPTOR_Router.GTFSParsing;
+﻿using RAPTOR_Router.GBFSParsing;
+using RAPTOR_Router.GTFSParsing;
 using RAPTOR_Router.RAPTORStructures;
+using RAPTOR_Router.SearchModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +19,9 @@ namespace RAPTOR_Router.Routers
         /// The RAPTOR model that the routers should use
         /// </summary>
         private RAPTORModel? raptorModel;
+
+
+        private BikeModel? bikeModel;
         /// <summary>
         /// Initializes the builder.
         /// </summary>
@@ -37,6 +42,18 @@ namespace RAPTOR_Router.Routers
             }
             GC.Collect();
             this.raptorModel = raptor;
+        }
+
+        public void LoadGbfsData()
+        {
+            //GBFS gbfs = new GBFS();
+            //gbfs.LoadStations();
+            IBikeDataSource nextbike = new NextbikeDataSource();
+            List<BikeStation> stations;
+            Dictionary<string, BikeStation> stationsById;
+            StationDistanceMatrix distances;
+            nextbike.LoadStations(out stations, out stationsById, out distances);
+            bikeModel = new BikeModel(stations, stationsById, distances);
         }
 
         /// <summary>
@@ -67,6 +84,20 @@ namespace RAPTOR_Router.Routers
                 throw new ApplicationException("Data from a gtfs archive were not loaded yet");
             }
             IRouteFinder router = new AdvancedRouteFinder(settings, raptorModel);
+            return router;
+        }
+
+        public IRouteFinder CreateBikeRouter(Settings settings)
+        {
+            if (raptorModel is null)
+            {
+                throw new ApplicationException("Data from a gtfs archive were not loaded yet");
+            }
+            if (bikeModel is null)
+            {
+                throw new ApplicationException("Data from a gbfs api were not loaded yet");
+            }
+            IRouteFinder router = new BikeRouteFinder(settings, raptorModel, bikeModel);
             return router;
         }
         public bool ValidateStopName(string stopName)

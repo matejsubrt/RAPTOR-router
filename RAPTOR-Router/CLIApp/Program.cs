@@ -19,7 +19,7 @@ namespace CLIApp
             bool ADVANCED_ROUTING = true;
 
             var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory() + "..\\..\\..\\..")
+                .SetBasePath(Directory.GetCurrentDirectory() + "..\\..\\..\\..\\..")
                 .AddJsonFile("config.json", optional: false, reloadOnChange: true)
                 .Build();
             string gtfsZipArchiveLocation = config["gtfsArchiveLocation"];
@@ -33,7 +33,8 @@ namespace CLIApp
 
             if (ADVANCED_ROUTING)
             {
-                RunAdvancedRouting(gtfsZipArchiveLocation);
+                //RunAdvancedRouting(gtfsZipArchiveLocation);
+                RunBikeRouting(gtfsZipArchiveLocation);
             }
             else
             {
@@ -149,6 +150,53 @@ namespace CLIApp
                 router2 = builder.CreateAdvancedRouter(settings2);
                 router3 = builder.CreateAdvancedRouter(settings3);
                 router4 = builder.CreateAdvancedRouter(settings4);
+            }
+        }
+        static void RunBikeRouting(string gtfsZipArchiveLocation)
+        {
+            Settings settings = Settings.GetDefaultSettings();
+
+
+            var builder = new RouteFinderBuilder();
+            builder.LoadDataFromGtfs(gtfsZipArchiveLocation);
+            builder.LoadGbfsData();
+
+            IRouteFinder router1 = builder.CreateBikeRouter(settings);
+
+
+            while (true)
+            {
+                Console.WriteLine("Enter the source stop:");
+                string sourceStop = Console.ReadLine();
+                Console.WriteLine("Enter the destination stop:");
+                string destStop = Console.ReadLine();
+
+
+                DateTime departureTime;
+#if DEBUG
+                DateTime.TryParse("28/02/2024 07:07:07", out departureTime);
+#else
+                Console.WriteLine("Enter the departure time in the DD/MM/YYYY hh:mm:ss format (i.e. \"07/07/2023 07:07:07\" corresponds to 7.7.2023, 7:07:07):");
+                string dateTime = Console.ReadLine();
+                while (!DateTime.TryParse(dateTime, out departureTime))
+                {
+                    Console.WriteLine("Incorrect time, please enter a correct time in the DD/MM/YYYY hh:mm:ss format");
+                    dateTime = Console.ReadLine();
+                }
+#endif
+
+                var result1 = router1.FindConnection(sourceStop, destStop, departureTime);
+                if (result1 is null)
+                {
+                    Console.WriteLine("Connection could not be found, please try again");
+                    continue;
+                }
+
+
+                Console.WriteLine(result1.ToString());
+
+
+                router1 = builder.CreateBikeRouter(settings);
             }
         }
     }
