@@ -61,4 +61,4 @@ This concludes the overview of the codebase.
 
 For more information, please refer to the documentation of the individual classes and methods. The documentation is available inside the codebase itself in the form of documentation comments. It is also available in the form of a a doxygen site that is generated from these comments.
 
-For information about the usage of the GUI, please refer to the [User documentation](.\\user.md).
+For information about the usage of the GUI, please refer to the [User documentation](user.md).
