@@ -1,23 +1,15 @@
-﻿using System;
+﻿using RAPTOR_Router.GBFSParsing.Distances;
+using RAPTOR_Router.GBFSParsing.GBFSStructures;
+using RAPTOR_Router.Structures.Bike;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using RAPTOR_Router.Structures.Bike;
 
-namespace RAPTOR_Router.GBFSParsing
+namespace RAPTOR_Router.GBFSParsing.DataSources
 {
-    public interface IBikeDataSource
-    {
-        public void LoadStations();
-        public void LoadStationDistances();
-        public void UpdateStationStatus();
-
-        public List<BikeStation> Stations { get; }
-        public Dictionary<string, BikeStation> StationsById { get; }
-        public StationDistanceMatrix Distances { get; }
-    }
     public class NextbikeDataSource : IBikeDataSource
     {
         static string stationInfoUrl = "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_tg/cs/station_information.json";
@@ -77,7 +69,7 @@ namespace RAPTOR_Router.GBFSParsing
 
                     foreach (GBFSSingleStationStatus station in root.Data.Stations)
                     {
-                        if(!StationsById.ContainsKey(station.StationId))
+                        if (!StationsById.ContainsKey(station.StationId))
                         {
                             continue;
                         }

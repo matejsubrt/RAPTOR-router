@@ -3,7 +3,7 @@ using Itinero.Algorithms.Networks.Preprocessing;
 using Itinero.IO.Osm;
 using Itinero.Osm.Vehicles;
 using Microsoft.Extensions.Configuration;
-using RAPTOR_Router.RAPTORStructures;
+using RAPTOR_Router.Extensions;
 using RAPTOR_Router.Structures.Bike;
 using System;
 using System.Collections.Generic;
@@ -14,7 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Route = Itinero.Route;
 
-namespace RAPTOR_Router.GBFSParsing
+namespace RAPTOR_Router.GBFSParsing.Distances
 {
     public enum ErrorType
     {
@@ -48,13 +48,13 @@ namespace RAPTOR_Router.GBFSParsing
                 Console.WriteLine("Change the osm file location in the config.json file, so that the path is correct");
                 return;
             }
-            if(routerDbLocation == null)
+            if (routerDbLocation == null)
             {
                 // does not need to be specified in the config file -> default location is used
                 int lastIndexOfBackslash = osmLocation.LastIndexOf("\\");
                 routerDbLocation = osmLocation.Substring(0, lastIndexOfBackslash) + "\\cz.routerdb";
             }
-            if(distanceFileLocation == null)
+            if (distanceFileLocation == null)
             {
                 // needs to be specified in the config file
                 Console.WriteLine("No distance file found at the following location: " + config["bikeStationDistancesFileLocationNextbike"]);
@@ -101,7 +101,7 @@ namespace RAPTOR_Router.GBFSParsing
             for (int i = 0; i < stations.Count; i++)
             {
                 stopwatch.Start();
-                Console.WriteLine("CALCULATING STATION #" + i + "/" + stations.Count);                
+                Console.WriteLine("CALCULATING STATION #" + i + "/" + stations.Count);
 
 
 
@@ -114,7 +114,7 @@ namespace RAPTOR_Router.GBFSParsing
                     if (i > j) continue; // the matrix is symmetric -> skip the already calculated distances
 
                     BikeStation s2 = stations[j];
-                    if(distances.HasDistance(s1, s2))
+                    if (distances.HasDistance(s1, s2))
                     {
                         // The distance is already loaded from file -> skip it
                         alreadyLoadedCount++;
@@ -122,7 +122,7 @@ namespace RAPTOR_Router.GBFSParsing
                     }
 
                     toLoadCount++;
-                    if(IsUnresolvable(s1, unresolvableStations) || IsUnresolvable(s2, unresolvableStations))
+                    if (IsUnresolvable(s1, unresolvableStations) || IsUnresolvable(s2, unresolvableStations))
                     {
                         // One of the stations has been unresolvable too many times
                         AddDistance(s1, s2, -1);
@@ -151,7 +151,7 @@ namespace RAPTOR_Router.GBFSParsing
                         // Actually calculate the distance
                         ErrorType errorType;
                         int result = GetBikingDistance(s1, s2, out errorType);
-                        if(result == 0)
+                        if (result == 0)
                         {
                             result = 1;
                             // for stations that are too near
@@ -187,7 +187,7 @@ namespace RAPTOR_Router.GBFSParsing
                 Console.WriteLine("Total time elapsed: " + totalSeconds + "s");
                 if (i > 0)
                 {
-                    double ratio = ((double)stations.Count - (double)i) / (double)i; // remaining stations / stations processed
+                    double ratio = (stations.Count - (double)i) / i; // remaining stations / stations processed
                     double estimatedRemainingTime = ratio * totalSeconds;
                     Console.WriteLine("ESTIMATED REMAINING TIME: " + (int)(estimatedRemainingTime / 60) + ":" + (int)(estimatedRemainingTime % 60));
                 }
@@ -198,7 +198,7 @@ namespace RAPTOR_Router.GBFSParsing
 
             }
             return distances;
-            
+
 
 
 

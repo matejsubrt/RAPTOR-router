@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RAPTOR_Router.Structures.Bike;
 
-namespace RAPTOR_Router.GBFSParsing
+namespace RAPTOR_Router.GBFSParsing.Distances
 {
     public class StationDistanceMatrix
     {
@@ -13,13 +13,13 @@ namespace RAPTOR_Router.GBFSParsing
 
         public void AddDistance(BikeStation s1, BikeStation s2, int distance)
         {
-            if(!distances.ContainsKey(s1))
+            if (!distances.ContainsKey(s1))
             {
                 distances.Add(s1, new Dictionary<BikeStation, int>());
             }
             distances[s1][s2] = distance;
 
-            if(!distances.ContainsKey(s2))
+            if (!distances.ContainsKey(s2))
             {
                 distances.Add(s2, new Dictionary<BikeStation, int>());
             }
@@ -28,7 +28,7 @@ namespace RAPTOR_Router.GBFSParsing
 
         public int GetDistance(BikeStation s1, BikeStation s2)
         {
-            if(!distances.ContainsKey(s1))
+            if (!distances.ContainsKey(s1))
             {
                 return -1;
             }

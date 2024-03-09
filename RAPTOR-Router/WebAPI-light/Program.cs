@@ -1,10 +1,10 @@
-using RAPTOR_Router.RAPTORStructures;
 using RAPTOR_Router.Routers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using System.Web.Http;
 using Microsoft.AspNetCore.Http;
+using RAPTOR_Router.Structures.Configuration;
 
 namespace WebAPI_light
 {

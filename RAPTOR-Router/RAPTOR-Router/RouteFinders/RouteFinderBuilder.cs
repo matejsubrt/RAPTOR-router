@@ -1,7 +1,5 @@
 ﻿using RAPTOR_Router.GBFSParsing;
 using RAPTOR_Router.GTFSParsing;
-using RAPTOR_Router.RAPTORStructures;
-using RAPTOR_Router.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,13 +10,17 @@ using Microsoft.Extensions.Configuration;
 using RAPTOR_Router.Structures.Generic;
 using System.Globalization;
 using RAPTOR_Router.Structures.Transit;
+using RAPTOR_Router.GBFSParsing.DataSources;
+using RAPTOR_Router.Models.Static;
+using RAPTOR_Router.Extensions;
+using RAPTOR_Router.Structures.Configuration;
 
 namespace RAPTOR_Router.Routers
 {
-	/// <summary>
-	/// A class used for creating separate routers to be used for connection searching.
-	/// </summary>
-	public class RouteFinderBuilder
+    /// <summary>
+    /// A class used for creating separate routers to be used for connection searching.
+    /// </summary>
+    public class RouteFinderBuilder
 	{
 		/// <summary>
 		/// The RAPTOR model that the routers should use

@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using RAPTOR_Router.GTFSParsing;
-using RAPTOR_Router.RAPTORStructures;
 using RAPTOR_Router.Routers;
+using RAPTOR_Router.Structures.Configuration;
 
 
 namespace CLIApp

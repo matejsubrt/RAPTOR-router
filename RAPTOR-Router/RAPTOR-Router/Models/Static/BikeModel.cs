@@ -1,6 +1,4 @@
-﻿using RAPTOR_Router.GBFSParsing;
-using RAPTOR_Router.RAPTORStructures;
-using RAPTOR_Router.Structures.Bike;
+﻿using RAPTOR_Router.Structures.Bike;
 using RAPTOR_Router.Structures.Interfaces;
 using System.Timers;
 
@@ -11,8 +9,11 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using RAPTOR_Router.GBFSParsing.DataSources;
+using RAPTOR_Router.GBFSParsing.Distances;
+using RAPTOR_Router.Extensions;
 
-namespace RAPTOR_Router.Models
+namespace RAPTOR_Router.Models.Static
 {
     public class BikeModel
     {
@@ -33,10 +34,10 @@ namespace RAPTOR_Router.Models
 
         public BikeModel()
         {
-            this.Stations = new();
-            this.StationsById = new();
-            this.Distances = new();
-            this.bikeDataSources = new();
+            Stations = new();
+            StationsById = new();
+            Distances = new();
+            bikeDataSources = new();
 
 
             statusUpdateTimer = new Timer(60000);
@@ -47,7 +48,7 @@ namespace RAPTOR_Router.Models
 
         public void AddDataSource(IBikeDataSource source)
         {
-            if(Stations.Count == 0)
+            if (Stations.Count == 0)
             {
                 Stations = source.Stations;
                 StationsById = source.StationsById;
@@ -65,14 +66,14 @@ namespace RAPTOR_Router.Models
 
         public void StartUpdateTimer()
         {
-            foreach(IBikeDataSource dataSource in bikeDataSources)
+            foreach (IBikeDataSource dataSource in bikeDataSources)
             {
                 dataSource.UpdateStationStatus();
             }
             statusUpdateTimer.Start();
         }
 
-        public void UpdateAllStationStatus(Object source, ElapsedEventArgs e)
+        public void UpdateAllStationStatus(object source, ElapsedEventArgs e)
         {
             foreach (IBikeDataSource dataSource in bikeDataSources)
             {
@@ -91,7 +92,7 @@ namespace RAPTOR_Router.Models
             foreach (BikeStation s in Stations)
             {
                 // Skip stations that are too far away in one direction to speed up the calculation
-                if(DistanceExtensions.TooFarInOneDirection(lat, lon, s.Coords.Lat, s.Coords.Lon, radius))
+                if (DistanceExtensions.TooFarInOneDirection(lat, lon, s.Coords.Lat, s.Coords.Lon, radius))
                 {
                     continue;
                 }

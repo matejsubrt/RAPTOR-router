@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Routing;
-using RAPTOR_Router.RAPTORStructures;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +7,11 @@ using System.Threading.Tasks;
 using RAPTOR_Router.Structures.Bike;
 using RAPTOR_Router.Structures.Transit;
 using RAPTOR_Router.Structures.Interfaces;
+using RAPTOR_Router.Models.Results;
+using RAPTOR_Router.Extensions;
+using RAPTOR_Router.Structures.Configuration;
 
-namespace RAPTOR_Router.Models
+namespace RAPTOR_Router.Models.Dynamic
 {
 
     /// <summary>
@@ -183,7 +185,7 @@ namespace RAPTOR_Router.Models
 
                         int penaltySecondsPerTransfer = settingsUsed.GetTransferPenaltySeconds();
 
-                        int transferCount = (round == 0 ? round : round - 1);
+                        int transferCount = round == 0 ? round : round - 1;
                         if (startsWithTransfer)
                         {
                             transferCount++;
@@ -230,18 +232,18 @@ namespace RAPTOR_Router.Models
                 {
                     bool transferUsed = false;
 
-                    
+
                     IRoutePoint currStop;
 
                     var arrival = currStopInfo.arrivals[currRound];
-                    if(arrival is StopRoutingInfo.TransferArrival)
+                    if (arrival is StopRoutingInfo.TransferArrival)
                     {
                         StopRoutingInfo.TransferArrival transferArrival = arrival as StopRoutingInfo.TransferArrival;
                         result.AddUsedTransfer(transferArrival.transfer, transferArrival.arrivalTime);
                         transferUsed = true;
                         currStop = transferArrival.transfer.From;
                     }
-                    else if(arrival is StopRoutingInfo.BikeTransferArrival)
+                    else if (arrival is StopRoutingInfo.BikeTransferArrival)
                     {
                         StopRoutingInfo.BikeTransferArrival bikeTransferArrival = arrival as StopRoutingInfo.BikeTransferArrival;
                         result.AddUsedBikeTransfer(bikeTransferArrival.transfer, bikeTransferArrival.arrivalTime);
@@ -253,7 +255,7 @@ namespace RAPTOR_Router.Models
                     else
                     {
                         currStop = nextRoundStartStop;
-                        if(currStop is Stop)
+                        if (currStop is Stop)
                         {
                             if (currRound != round)
                             {
@@ -261,15 +263,15 @@ namespace RAPTOR_Router.Models
                                 // in last round, we do not add a transfer
                                 result.AddUsedTransfer(new Transfer(s, s, 0), currStopInfo.arrivals[currRound].arrivalTime.AddSeconds(settingsUsed.GetStationaryTransferMinimumSeconds()));
                             }
-                        }                        
+                        }
                     }
 
                     currStopInfo = routingInfo[currStop];
                     //Trip tripToReachStop = currStopInfo.tripsToReachRounds[currRound];
                     //Stop getOnStop = currStopInfo.getOnStopsToReachRounds[currRound];
                     arrival = currStopInfo.arrivals[currRound];
-                    
-                    if(arrival is StopRoutingInfo.TripArrival)
+
+                    if (arrival is StopRoutingInfo.TripArrival)
                     {
                         StopRoutingInfo.TripArrival tripArrival = arrival as StopRoutingInfo.TripArrival;
                         Trip tripToReachStop = tripArrival.trip;
@@ -281,15 +283,15 @@ namespace RAPTOR_Router.Models
                         result.AddUsedTrip(tripToReachStop, getOnStop, (Stop)currStop, tripArrival.arrivalTime);
                         currStop = getOnStop;
                     }
-                    else if(arrival is StopRoutingInfo.BikeTripArrival)
+                    else if (arrival is StopRoutingInfo.BikeTripArrival)
                     {
                         StopRoutingInfo.BikeTripArrival bikeTripArrival = arrival as StopRoutingInfo.BikeTripArrival;
                         result.AddUsedBikeTrip(bikeTripArrival.from, bikeTripArrival.to, DistanceExtensions.SimplifiedDistanceBetween(bikeTripArrival.from, bikeTripArrival.to));
                         currStop = bikeTripArrival.from;
                     }
-                    
 
-                    
+
+
                     currStopInfo = routingInfo[currStop];
                     nextRoundStartStop = currStop;
                     currRound--;
@@ -303,7 +305,7 @@ namespace RAPTOR_Router.Models
                     StopRoutingInfo.TransferArrival transferArrival = firstArrival as StopRoutingInfo.TransferArrival;
                     result.AddUsedTransfer(transferArrival.transfer, firstArrival.arrivalTime);
                 }
-                else if(firstArrival is StopRoutingInfo.BikeTransferArrival)
+                else if (firstArrival is StopRoutingInfo.BikeTransferArrival)
                 {
                     StopRoutingInfo.BikeTransferArrival bikeTransferArrival = firstArrival as StopRoutingInfo.BikeTransferArrival;
                     result.AddUsedBikeTransfer(bikeTransferArrival.transfer, firstArrival.arrivalTime);
@@ -389,7 +391,7 @@ namespace RAPTOR_Router.Models
         public DateTime GetEarliestArrivalInRound(IRoutePoint rp, int round)
         {
             var arrival = GetRoutingInfo(rp).arrivals[round];
-            if(arrival is null)
+            if (arrival is null)
             {
                 return DateTime.MaxValue;
             }
@@ -412,7 +414,7 @@ namespace RAPTOR_Router.Models
         /// <param name="arrivalTime">The best arrival time to set</param>
         public void SetCurrentBestArrivalTime(DateTime arrivalTime)
         {
-            this.bestCurrentArrivalTime = arrivalTime;
+            bestCurrentArrivalTime = arrivalTime;
         }
         /// <summary>
         /// Sets the overall best arrival time to the specified stop
@@ -436,13 +438,13 @@ namespace RAPTOR_Router.Models
         }
         public void SetTransferArrivalInRound(IRoutePoint rp, ITransfer transfer, DateTime arrivalTime, int round)
         {
-            if(transfer is Transfer)
+            if (transfer is Transfer)
             {
                 Transfer t = transfer as Transfer;
                 StopRoutingInfo.TransferArrival transferArrival = new StopRoutingInfo.TransferArrival(t, arrivalTime);
                 GetRoutingInfo(rp).arrivals[round] = transferArrival;
             }
-            else if(transfer is BikeTransfer)
+            else if (transfer is BikeTransfer)
             {
                 BikeTransfer bt = transfer as BikeTransfer;
                 StopRoutingInfo.BikeTransferArrival bikeTransferArrival = new StopRoutingInfo.BikeTransferArrival(bt, arrivalTime);
@@ -452,7 +454,7 @@ namespace RAPTOR_Router.Models
             {
                 throw new NotImplementedException();
             }
-            
+
         }
         //public void SetBikeTransferArrivalInRound(BikeTransfer transfer, DateTime arrivalTime, int round)
         //{
@@ -478,7 +480,7 @@ namespace RAPTOR_Router.Models
         }
         public void SetSourceBikeStationsEarliestArrival()
         {
-            foreach(BikeStation sourceBikeStation in sourceBikeStations)
+            foreach (BikeStation sourceBikeStation in sourceBikeStations)
             {
                 StopRoutingInfo stopRoutingInfo = GetRoutingInfo(sourceBikeStation);
                 stopRoutingInfo.earliestArrival = departureTime;

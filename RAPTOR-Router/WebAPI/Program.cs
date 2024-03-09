@@ -1,5 +1,6 @@
-using RAPTOR_Router.RAPTORStructures;
+using RAPTOR_Router.Models.Results;
 using RAPTOR_Router.Routers;
+using RAPTOR_Router.Structures.Configuration;
 
 namespace WebAPI
 {

@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace RAPTOR_Router.GBFSParsing
+namespace RAPTOR_Router.GBFSParsing.GBFSStructures
 {
     internal class GBFSStationStatus
     {

@@ -1,6 +1,4 @@
-﻿using RAPTOR_Router.Models;
-using RAPTOR_Router.RAPTORStructures;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +8,11 @@ using RAPTOR_Router.Structures.Bike;
 using RAPTOR_Router.Structures.Transit;
 using RAPTOR_Router.Structures.Interfaces;
 using System.Security.Cryptography.Xml;
+using RAPTOR_Router.Models.Static;
+using RAPTOR_Router.Models.Dynamic;
+using RAPTOR_Router.Models.Results;
+using RAPTOR_Router.Extensions;
+using RAPTOR_Router.Structures.Configuration;
 
 namespace RAPTOR_Router.Routers
 {

@@ -1,54 +1,13 @@
-﻿using RAPTOR_Router.GTFSParsing;
-using RAPTOR_Router.Structures.Generic;
+﻿using RAPTOR_Router.Structures.Generic;
 using RAPTOR_Router.Structures.Interfaces;
-using RAPTOR_Router.Structures.Transit;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace RAPTOR_Router.RAPTORStructures
+namespace RAPTOR_Router.Extensions
 {
-    internal static class ListExtensions
-    {
-        /// <summary>
-        /// Extracts the list of stop ids from the specified list of GTFSStopTimes
-        /// </summary>
-        /// <param name="stopTimes">The list of GTFSStopTimes to be extracted from</param>
-        /// <returns>List of the stop ids of stops present in the stop times list</returns>
-        public static List<string> GetStopIds(this List<GTFSStopTime> stopTimes)
-        {
-            List<string> ids = new List<string>();
-            foreach(var stopTime in stopTimes)
-            {
-                ids.Add(stopTime.StopId);
-            }
-            return ids;
-        }
-    }
-    internal static class DateTimeExtensions
-    {
-        /// <summary>
-        /// Creates a DateTime object by combining a DateOnly object with a TimeOnly object
-        /// </summary>
-        /// <param name="date">The date</param>
-        /// <param name="time">The time</param>
-        /// <returns>The combined DateTime</returns>
-        public static DateTime FromDateAndTime(DateOnly date, TimeOnly time)
-        {
-            return new DateTime(date.Year, date.Month, date.Day, time.Hour, time.Minute, time.Second);
-        }
-    }
-
-    internal static class TimeOnlyExtensions
-    {
-        public static TimeOnly AddSeconds(this TimeOnly time, int seconds)
-        {
-            long newTicks = time.Ticks + ((long)seconds * 10_000_000);
-            if(newTicks < 0)
-            {
-                return new TimeOnly(TimeOnly.MaxValue.Ticks + newTicks);
-            }
-            return new TimeOnly(newTicks);
-        }
-    }
-
     internal static class DistanceExtensions
     {
         const double latConst = 111113.9; //distance between latitudes of 1 degree
@@ -84,7 +43,7 @@ namespace RAPTOR_Router.RAPTORStructures
             var lat2m = lat2 * latConst;
             var lon2m = lon2 * lonConst50N;
 
-            var result = (int)(Math.Sqrt((lat2m - lat1m) * (lat2m - lat1m) + (lon2m - lon1m) * (lon2m - lon1m)));
+            var result = (int)Math.Sqrt((lat2m - lat1m) * (lat2m - lat1m) + (lon2m - lon1m) * (lon2m - lon1m));
             return result;
         }
         public static int SimplifiedDistanceBetween(IRoutePoint rp1, IRoutePoint rp2)
@@ -101,7 +60,7 @@ namespace RAPTOR_Router.RAPTORStructures
             var latDiffMeters = Math.Abs(lat1 - lat2) * latConst;
             var lonDiffMeters = Math.Abs(lon1 - lon2) * lonConst50N;
 
-            return (latDiffMeters > maxMeters || lonDiffMeters > maxMeters);
+            return latDiffMeters > maxMeters || lonDiffMeters > maxMeters;
         }
         public static bool TooFarInOneDirection(IRoutePoint rp1, IRoutePoint rp2, int maxMeters)
         {
@@ -110,20 +69,6 @@ namespace RAPTOR_Router.RAPTORStructures
         public static bool TooFarInOneDirection(Coordinates c1, Coordinates c2, int maxMeters)
         {
             return TooFarInOneDirection(c1.Lat, c1.Lon, c2.Lat, c2.Lon, maxMeters);
-        }
-    }
-    internal static class ForbiddenCrossingExtensions
-    {
-        public static bool ForbidsTransferBetween(this List<ForbiddenCrossingLine> lines, IRoutePoint rp1, IRoutePoint rp2)
-        {
-            foreach (var line in lines)
-            {
-                if (line.IsCrossingForbidden(rp1, rp2))
-                {
-                    return true;
-                }
-            }
-            return false;
         }
     }
 }

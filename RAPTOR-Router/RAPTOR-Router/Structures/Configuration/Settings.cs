@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RAPTOR_Router.RAPTORStructures
+namespace RAPTOR_Router.Structures.Configuration
 {
     /// <summary>
     /// Class representing the settings to use for the connection search

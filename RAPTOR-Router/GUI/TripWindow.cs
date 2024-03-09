@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using RAPTOR_Router.RAPTORStructures;
+using RAPTOR_Router.Models.Results;
 using RAPTOR_Router.Routers;
 
 namespace GUI

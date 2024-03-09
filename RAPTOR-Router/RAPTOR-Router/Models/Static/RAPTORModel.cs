@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
+using RAPTOR_Router.Extensions;
 using RAPTOR_Router.GTFSParsing;
-using RAPTOR_Router.RAPTORStructures;
 using RAPTOR_Router.Structures.Bike;
 using RAPTOR_Router.Structures.Generic;
 using RAPTOR_Router.Structures.Transit;
 using System.Globalization;
 
-namespace RAPTOR_Router.Models
+namespace RAPTOR_Router.Models.Static
 {
     /// <summary>
     /// Class representing the model of the timetable to be used for the connection search
@@ -191,7 +191,7 @@ namespace RAPTOR_Router.Models
             string pointsLocation = config["forbiddenCrossingPointsLocation"];
             string linesLocation = config["forbiddenCrossingLinesLocation"];
 
-            if(pointsLocation == null || linesLocation == null)
+            if (pointsLocation == null || linesLocation == null)
             {
                 throw new Exception("Forbidden crossing points or lines location not found in the config file");
             }
@@ -206,7 +206,7 @@ namespace RAPTOR_Router.Models
                 {
                     string[] parts = line.Split(',');
 
-                                        
+
                     int id = int.Parse(parts[0]);
                     double lon = double.Parse(parts[1], CultureInfo.InvariantCulture);
                     double lat = double.Parse(parts[2], CultureInfo.InvariantCulture);
@@ -274,7 +274,7 @@ namespace RAPTOR_Router.Models
                     cityStopId = stop1.Id;
                     regionalStopId = stop2.Id;
                 }
-                else if(stop2.Id.EndsWith("P"))
+                else if (stop2.Id.EndsWith("P"))
                 {
                     cityStopId = stop2.Id;
                     regionalStopId = stop1.Id;

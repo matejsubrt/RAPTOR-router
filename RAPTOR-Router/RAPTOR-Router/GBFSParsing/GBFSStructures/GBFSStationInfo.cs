@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace RAPTOR_Router.GBFSParsing
+namespace RAPTOR_Router.GBFSParsing.GBFSStructures
 {
     public class GBFSStationInfo
     {

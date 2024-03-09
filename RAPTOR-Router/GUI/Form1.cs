@@ -1,5 +1,5 @@
 using Microsoft.Extensions.Configuration;
-using RAPTOR_Router.RAPTORStructures;
+using RAPTOR_Router.Models.Results;
 using RAPTOR_Router.Routers;
 using System.Windows.Forms;
 

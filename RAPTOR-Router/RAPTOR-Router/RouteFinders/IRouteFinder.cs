@@ -1,5 +1,5 @@
 ﻿using RAPTOR_Router.Models;
-using RAPTOR_Router.RAPTORStructures;
+using RAPTOR_Router.Models.Results;
 using System;
 using System.Collections.Generic;
 using System.Linq;
