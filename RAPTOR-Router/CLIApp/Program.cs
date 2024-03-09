@@ -31,137 +31,141 @@ namespace CLIApp
                 return;
             }
 
-            if (ADVANCED_ROUTING)
-            {
-                //RunAdvancedRouting(gtfsZipArchiveLocation);
-                RunBikeRouting(gtfsZipArchiveLocation);
-            }
-            else
-            {
-                RunBasicRouting(gtfsZipArchiveLocation);
-            }
+
+            RunBikeRouting(gtfsZipArchiveLocation);
+
+            //if (ADVANCED_ROUTING)
+            //{
+            //    //RunAdvancedRouting(gtfsZipArchiveLocation);
+            //    RunBikeRouting(gtfsZipArchiveLocation);
+            //}
+            //else
+            //{
+            //    RunBasicRouting(gtfsZipArchiveLocation);
+            //}
         }
 
-        static void RunBasicRouting(string gtfsZipArchiveLocation)
-        {
-            Settings settings = Settings.GetDefaultSettings();
+//        static void RunBasicRouting(string gtfsZipArchiveLocation)
+//        {
+//            Settings settings = Settings.GetDefaultSettings();
 
-            var builder = new RouteFinderBuilder();
-            builder.LoadDataFromGtfs(gtfsZipArchiveLocation);
+//            var builder = new RouteFinderBuilder();
+//            builder.LoadAllData();
 
-            IRouteFinder router = builder.CreateRouter(settings);
-
-
-            while (true)
-            {
-                Console.WriteLine("Enter the source stop:");
-                string sourceStop = Console.ReadLine();
-                Console.WriteLine("Enter the destination stop:");
-                string destStop = Console.ReadLine();
+//            IRouteFinder router = builder.CreateRouter(settings);
 
 
-                DateTime departureTime;
-                DateTime.TryParse("27/11/2023 07:07:07", out departureTime);
-
-                var result = router.FindConnection(sourceStop, destStop, departureTime);
-                if (result is null)
-                {
-                    Console.WriteLine("Connection could not be found, please try again");
-                    continue;
-                }
+//            while (true)
+//            {
+//                Console.WriteLine("Enter the source stop:");
+//                string sourceStop = Console.ReadLine();
+//                Console.WriteLine("Enter the destination stop:");
+//                string destStop = Console.ReadLine();
 
 
-                Console.WriteLine(result.ToString());
+//                DateTime departureTime;
+//                DateTime.TryParse("27/11/2023 07:07:07", out departureTime);
 
-                router = builder.CreateRouter(settings);
-            }
-        }
-        static void RunAdvancedRouting(string gtfsZipArchiveLocation)
-        {
-            Settings settings1 = Settings.GetDefaultSettings();
-            //settings1.ComfortBalance = ComfortBalance.ShortestTimeAbsolute;
-            settings1.WalkingPreference = WalkingPreference.Low;
-
-            Settings settings2 = Settings.GetDefaultSettings();
-            //settings2.ComfortBalance = ComfortBalance.ShortestTime;
-            settings2.WalkingPreference = WalkingPreference.Normal;
-
-            Settings settings3 = Settings.GetDefaultSettings();
-            //settings3.ComfortBalance = ComfortBalance.Balanced;
-            settings3.WalkingPreference = WalkingPreference.High;
-
-            Settings settings4 = Settings.GetDefaultSettings();
-            //settings4.ComfortBalance = ComfortBalance.LeastTransfers;
+//                var result = router.FindConnection(sourceStop, destStop, departureTime);
+//                if (result is null)
+//                {
+//                    Console.WriteLine("Connection could not be found, please try again");
+//                    continue;
+//                }
 
 
-            var builder = new RouteFinderBuilder();
-            builder.LoadDataFromGtfs(gtfsZipArchiveLocation);
+//                Console.WriteLine(result.ToString());
 
-            IRouteFinder router1 = builder.CreateAdvancedRouter(settings1);
-            IRouteFinder router2 = builder.CreateAdvancedRouter(settings2);
-            IRouteFinder router3 = builder.CreateAdvancedRouter(settings3);
-            IRouteFinder router4 = builder.CreateAdvancedRouter(settings4);
+//                router = builder.CreateRouter(settings);
+//            }
+//        }
+//        static void RunAdvancedRouting(string gtfsZipArchiveLocation)
+//        {
+//            Settings settings1 = Settings.GetDefaultSettings();
+//            //settings1.ComfortBalance = ComfortBalance.ShortestTimeAbsolute;
+//            settings1.WalkingPreference = WalkingPreference.Low;
 
+//            Settings settings2 = Settings.GetDefaultSettings();
+//            //settings2.ComfortBalance = ComfortBalance.ShortestTime;
+//            settings2.WalkingPreference = WalkingPreference.Normal;
 
-            while (true)
-            {
-                Console.WriteLine("Enter the source stop:");
-                string sourceStop = Console.ReadLine();
-                Console.WriteLine("Enter the destination stop:");
-                string destStop = Console.ReadLine();
+//            Settings settings3 = Settings.GetDefaultSettings();
+//            //settings3.ComfortBalance = ComfortBalance.Balanced;
+//            settings3.WalkingPreference = WalkingPreference.High;
 
-
-                DateTime departureTime;
-#if DEBUG
-                DateTime.TryParse("27/11/2023 07:07:07", out departureTime);
-#else
-                Console.WriteLine("Enter the departure time in the DD/MM/YYYY hh:mm:ss format (i.e. \"07/07/2023 07:07:07\" corresponds to 7.7.2023, 7:07:07):");
-                string dateTime = Console.ReadLine();
-                while (!DateTime.TryParse(dateTime, out departureTime))
-                {
-                    Console.WriteLine("Incorrect time, please enter a correct time in the DD/MM/YYYY hh:mm:ss format");
-                    dateTime = Console.ReadLine();
-                }
-#endif
-
-                var result1 = router1.FindConnection(sourceStop, destStop, departureTime);
-                if (result1 is null)
-                {
-                    Console.WriteLine("Connection could not be found, please try again");
-                    continue;
-                }
-
-                var result2 = router2.FindConnection(sourceStop, destStop, departureTime);
-                var result3 = router3.FindConnection(sourceStop, destStop, departureTime);
-                var result4 = router4.FindConnection(sourceStop, destStop, departureTime);
+//            Settings settings4 = Settings.GetDefaultSettings();
+//            //settings4.ComfortBalance = ComfortBalance.LeastTransfers;
 
 
-                Console.WriteLine("Shortest time absolute:");
-                Console.WriteLine(result1.ToString());
-                Console.WriteLine("Shortest time:");
-                Console.WriteLine(result2.ToString());
-                Console.WriteLine("Balanced");
-                Console.WriteLine(result3.ToString());
-                Console.WriteLine("Least transfers");
-                Console.WriteLine(result4.ToString());
+//            var builder = new RouteFinderBuilder();
+//            builder.LoadAllData();
+
+//            IRouteFinder router1 = builder.CreateAdvancedRouter(settings1);
+//            IRouteFinder router2 = builder.CreateAdvancedRouter(settings2);
+//            IRouteFinder router3 = builder.CreateAdvancedRouter(settings3);
+//            IRouteFinder router4 = builder.CreateAdvancedRouter(settings4);
 
 
-                router1 = builder.CreateAdvancedRouter(settings1);
-                router2 = builder.CreateAdvancedRouter(settings2);
-                router3 = builder.CreateAdvancedRouter(settings3);
-                router4 = builder.CreateAdvancedRouter(settings4);
-            }
-        }
+//            while (true)
+//            {
+//                Console.WriteLine("Enter the source stop:");
+//                string sourceStop = Console.ReadLine();
+//                Console.WriteLine("Enter the destination stop:");
+//                string destStop = Console.ReadLine();
+
+
+//                DateTime departureTime;
+//#if DEBUG
+//                DateTime.TryParse("27/11/2023 07:07:07", out departureTime);
+//#else
+//                Console.WriteLine("Enter the departure time in the DD/MM/YYYY hh:mm:ss format (i.e. \"07/07/2023 07:07:07\" corresponds to 7.7.2023, 7:07:07):");
+//                string dateTime = Console.ReadLine();
+//                while (!DateTime.TryParse(dateTime, out departureTime))
+//                {
+//                    Console.WriteLine("Incorrect time, please enter a correct time in the DD/MM/YYYY hh:mm:ss format");
+//                    dateTime = Console.ReadLine();
+//                }
+//#endif
+
+//                var result1 = router1.FindConnection(sourceStop, destStop, departureTime);
+//                if (result1 is null)
+//                {
+//                    Console.WriteLine("Connection could not be found, please try again");
+//                    continue;
+//                }
+
+//                var result2 = router2.FindConnection(sourceStop, destStop, departureTime);
+//                var result3 = router3.FindConnection(sourceStop, destStop, departureTime);
+//                var result4 = router4.FindConnection(sourceStop, destStop, departureTime);
+
+
+//                Console.WriteLine("Shortest time absolute:");
+//                Console.WriteLine(result1.ToString());
+//                Console.WriteLine("Shortest time:");
+//                Console.WriteLine(result2.ToString());
+//                Console.WriteLine("Balanced");
+//                Console.WriteLine(result3.ToString());
+//                Console.WriteLine("Least transfers");
+//                Console.WriteLine(result4.ToString());
+
+
+//                router1 = builder.CreateAdvancedRouter(settings1);
+//                router2 = builder.CreateAdvancedRouter(settings2);
+//                router3 = builder.CreateAdvancedRouter(settings3);
+//                router4 = builder.CreateAdvancedRouter(settings4);
+//            }
+//        }
         static void RunBikeRouting(string gtfsZipArchiveLocation)
         {
             Settings settings = Settings.GetDefaultSettings();
-
+            settings.BikeTripBuffer = BikeTripBuffer.Short;
+            //settings.TransferTime = TransferTime.Short;
+            settings.UseSharedBikes = false;
 
             var builder = new RouteFinderBuilder();
-            builder.LoadDataFromGtfs(gtfsZipArchiveLocation);
-            builder.LoadGbfsData();
+            builder.LoadAllData();
 
-            IRouteFinder router1 = builder.CreateBikeRouter(settings);
+            IBikeRouteFinder router1 = builder.CreateBikeRouter(settings);
 
 
             while (true)

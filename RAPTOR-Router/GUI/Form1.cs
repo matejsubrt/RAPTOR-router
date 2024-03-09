@@ -68,7 +68,7 @@ namespace GUI
                 return;
             }
 
-            builder.LoadDataFromGtfs(gtfsZipArchiveLocation);
+            builder.LoadGtfsData(gtfsZipArchiveLocation);
         }
         public Form1()
         {

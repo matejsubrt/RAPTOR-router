@@ -1,12 +1,10 @@
-﻿using RAPTOR_Router.SearchModels;
-using RAPTOR_Router.Routers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using RAPTOR_Router.Models;
 using System.Text;
 #pragma warning disable 1591
-using System.Threading.Tasks;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
+using RAPTOR_Router.Structures.Bike;
+using RAPTOR_Router.Structures.Transit;
+using RAPTOR_Router.Structures.Generic;
+using RAPTOR_Router.RAPTORStructures;
 
 namespace RAPTOR_Router.RAPTORStructures
 {
@@ -25,9 +23,13 @@ namespace RAPTOR_Router.RAPTORStructures
 		/// </summary>
 		public List<UsedTransfer> UsedTransfers { get; private set; } = new List<UsedTransfer>();
 
-		public List<UsedSegment> UsedSegments { get; private set; } = new List<UsedSegment>();
+		public List<UsedBikeTrip> UsedBikeTrips { get; private set; } = new List<UsedBikeTrip>();
+
+		public List<SegmentType> UsedSegmentTypes { get; private set; } = new List<SegmentType>();
+		//public List<UsedSegment> UsedSegments { get; private set; } = new List<UsedSegment>();
 		public int TransferCount { get; private set; }
 		public int TripCount { get; private set; }
+		public int BikeTripCount { get; private set; }
 
 		//TODO: add time support
 		public DateTime DepartureDateTime { get; set; }
@@ -47,158 +49,263 @@ namespace RAPTOR_Router.RAPTORStructures
 		/// <param name="getOffStop">The get off stop of this segment</param>
 		internal void AddUsedTrip(Trip trip, Stop getOnStop, Stop getOffStop, DateTime destArrivalTime)
 		{
-			if(UsedSegments.Count == 0)
-			{
-                ArrivalDateTime = destArrivalTime;
-            }
+			var routeStops = trip.Route.RouteStops;
 
-			
+			List<StopPass> stopPasses = GetStopPassesList(routeStops, trip.StopTimes, destArrivalTime);
 
-			UsedTrip usedTrip = new UsedTrip();
+			UsedTrip usedTrip = new UsedTrip(
+				stopPasses,
+				routeStops.IndexOf(getOnStop),
+				routeStops.IndexOf(getOffStop),
+				trip.Route.ShortName,
+				trip.Route.Color);
 
-			usedTrip.segmentIndex = 0; // TODO: remove this
-			usedTrip.getOnStopIndex = trip.Route.RouteStops.IndexOf(getOnStop);
-			usedTrip.getOffStopIndex = trip.Route.RouteStops.IndexOf(getOffStop);
-			usedTrip.stops = (from stop in trip.Route.RouteStops select stop.Name).ToList();
-            usedTrip.stopIds = (from stop in trip.Route.RouteStops select stop.Id).ToList();
-            usedTrip.getOnTime = trip.StopTimes[trip.Route.RouteStops.IndexOf(getOnStop)].DepartureTime;
-			usedTrip.getOffTime = trip.StopTimes[trip.Route.RouteStops.IndexOf(getOffStop)].ArrivalTime;
-			usedTrip.routeName = trip.Route.ShortName;
-			usedTrip.Color = trip.Route.Color;
 
-			usedTrip.getOffDateTime = destArrivalTime;
-
-			// trip goes over midnight
-			if(usedTrip.getOnTime > usedTrip.getOffTime)
-			{
-				var modifiedGetOffTime = usedTrip.getOffDateTime.AddDays(-1);
-
-                DateOnly getOnDate = new DateOnly(modifiedGetOffTime.Year, modifiedGetOffTime.Month, modifiedGetOffTime.Day);
-				usedTrip.getOnDateTime = new DateTime(getOnDate.Year, getOnDate.Month, getOnDate.Day, usedTrip.getOnTime.Hour, usedTrip.getOnTime.Minute, usedTrip.getOnTime.Second);
-			}
-			else
-			{
-				usedTrip.getOnDateTime = new DateTime(usedTrip.getOffDateTime.Year, usedTrip.getOffDateTime.Month, usedTrip.getOffDateTime.Day, usedTrip.getOnTime.Hour, usedTrip.getOnTime.Minute, usedTrip.getOnTime.Second);
-			}
-
-            DepartureDateTime = usedTrip.getOnDateTime;
-
-            UsedSegments.Insert(0, usedTrip);
+			//UsedSegments.Insert(0, usedTrip);
 			UsedTrips.Insert(0, usedTrip);
+			UsedSegmentTypes.Insert(0, SegmentType.Trip);
 			TripCount++;
+
+            List<StopPass> GetStopPassesList(List<Stop> routeStops, List<StopTime> stopTimes, DateTime arrivalDateTime)
+            {
+                List<StopPass> stopPasses = new();
+                DateOnly currDate = DateOnly.FromDateTime(arrivalDateTime);
+                TimeOnly arrivalTime = TimeOnly.FromDateTime(arrivalDateTime);
+                bool overMidnight = false;
+                if (stopTimes[0].ArrivalTime > arrivalTime)
+                {
+                    // trip goes over midnight (i.e. the arrival time is before the departure time)
+                    currDate = currDate.AddDays(-1);
+                    overMidnight = true;
+                }
+                for (int i = 0; i < routeStops.Count; i++)
+                {
+                    DateTime stopArrivalDateTime;
+                    DateTime stopDepartureDateTime;
+                    if (overMidnight)
+                    {
+                        // We have reached the first stop after midnight
+                        if (stopTimes[i].ArrivalTime < arrivalTime)
+                        {
+                            // Both the arrival and departure are after midnight
+                            currDate = currDate.AddDays(1);
+                            overMidnight = false;
+                            stopArrivalDateTime = DateTimeExtensions.FromDateAndTime(currDate, stopTimes[i].ArrivalTime);
+                            stopDepartureDateTime = DateTimeExtensions.FromDateAndTime(currDate, stopTimes[i].DepartureTime);
+                        }
+                        else if (stopTimes[i].DepartureTime != stopTimes[i].ArrivalTime && stopTimes[i].DepartureTime < arrivalTime)
+                        {
+                            // Only the departure is after midnight
+                            stopArrivalDateTime = DateTimeExtensions.FromDateAndTime(currDate, stopTimes[i].ArrivalTime);
+                            currDate = currDate.AddDays(1);
+                            overMidnight = false;
+                            stopDepartureDateTime = DateTimeExtensions.FromDateAndTime(currDate, stopTimes[i].DepartureTime);
+                        }
+                        else
+                        {
+                            stopArrivalDateTime = DateTimeExtensions.FromDateAndTime(currDate, stopTimes[i].ArrivalTime);
+                            stopDepartureDateTime = DateTimeExtensions.FromDateAndTime(currDate, stopTimes[i].DepartureTime);
+                        }
+                    }
+                    else
+                    {
+                        stopArrivalDateTime = DateTimeExtensions.FromDateAndTime(currDate, stopTimes[i].ArrivalTime);
+                        stopDepartureDateTime = DateTimeExtensions.FromDateAndTime(currDate, stopTimes[i].DepartureTime);
+                    }
+
+
+                    StopPass stopPass = new();
+                    stopPass.Name = routeStops[i].Name;
+                    stopPass.Id = routeStops[i].Id;
+                    stopPass.ArrivalTime = stopArrivalDateTime;
+                    stopPass.DepartureTime = stopDepartureDateTime;
+                    stopPasses.Add(stopPass);
+                }
+                return stopPasses;
+            }
         }
+		
 		/// <summary>
 		/// Creates an used transfer from the provided transfer, pushes it TO THE START of UsedSegments
 		/// </summary>
 		/// <param name="transfer">The transfer to add</param>
 		internal void AddUsedTransfer(Transfer transfer, DateTime destArrivalTime)
 		{
-            if (UsedSegments.Count == 0)
-            {
-                ArrivalDateTime = destArrivalTime;
-            }
-
-            UsedTransfer usedTransfer = new UsedTransfer();
-
-			usedTransfer.segmentIndex = 0; //TODO: remove
-			usedTransfer.srcStopName = transfer.From.Name;
-			usedTransfer.destStopName = transfer.To.Name;
-			usedTransfer.srcStopId = transfer.From.Id;
-			usedTransfer.destStopId = transfer.To.Id;
-			usedTransfer.distance = transfer.Distance;
-			usedTransfer.time = transfer.GetTransferTime(usedSettings.WalkingPace);
-
-			//UsedSegments.Add(usedTransfer);
-			UsedSegments.Insert(0, usedTransfer);
+			StopInfo srcStopInfo = new(transfer.From.Name, transfer.From.Id, transfer.From.Coords.Lat, transfer.From.Coords.Lon);
+			StopInfo destStopInfo = new(transfer.To.Name, transfer.To.Id, transfer.To.Coords.Lat, transfer.To.Coords.Lon);
+			UsedTransfer usedTransfer = new UsedTransfer(
+				srcStopInfo,
+                destStopInfo,
+                transfer.GetTransferTime(usedSettings.WalkingPace),
+                transfer.Distance
+            );
 			UsedTransfers.Insert(0, usedTransfer);
+			UsedSegmentTypes.Insert(0, SegmentType.Transfer);
 			TransferCount++;
 		}
+		internal void AddUsedBikeTrip(BikeStation from, BikeStation to, int distance)
+		{
+			StopInfo srcStopInfo = new(from.Name, from.Id, from.Coords.Lat, from.Coords.Lon);
+			StopInfo destStopInfo = new(to.Name, to.Id, to.Coords.Lat, to.Coords.Lon);
+			UsedBikeTrip usedBikeTrip = new UsedBikeTrip(
+				srcStopInfo,
+				destStopInfo,
+				distance,
+				usedSettings.GetBikeTripTime(distance)
+			);
+
+			UsedBikeTrips.Insert(0, usedBikeTrip);
+			UsedSegmentTypes.Insert(0, SegmentType.Bike);
+			BikeTripCount++;
+		}
+		internal void AddUsedBikeTransfer(BikeTransfer transfer, DateTime arrivalTime)
+		{
+			var srcRoutePoint = transfer.GetSrcRoutePoint();
+			var destRoutePoint = transfer.GetDestRoutePoint();
+            StopInfo srcStopInfo = new(srcRoutePoint.Name, srcRoutePoint.Id, srcRoutePoint.Coords.Lat, srcRoutePoint.Coords.Lon);
+			StopInfo destStopInfo = new(destRoutePoint.Name, destRoutePoint.Id, destRoutePoint.Coords.Lat, destRoutePoint.Coords.Lon);
+            UsedTransfer usedTransfer = new UsedTransfer(
+                srcStopInfo,
+                destStopInfo,
+                transfer.GetTransferTime(usedSettings.WalkingPace),
+                transfer.Distance
+            );
+            UsedTransfers.Insert(0, usedTransfer);
+            UsedSegmentTypes.Insert(0, SegmentType.Transfer);
+            TransferCount++;
+        }
 
 		public override string ToString()
 		{
 			StringBuilder sb = new();
-			foreach(UsedSegment s in UsedSegments)
-			{
-				switch (s.segmentType)
-				{
-					case SegmentType.Transfer:
-						UsedTransfer t = (UsedTransfer)s;
-						sb.AppendLine(("Transfer from " + t.srcStopName + " to " + t.destStopName + ", length: " + t.time + "s + reserve " + (usedSettings.GetMovingTransferLengthMultiplier() - 1.0) * t.time + "s = " + t.distance + "m"));
-						break;
-					case SegmentType.Trip:
-						UsedTrip tr = (UsedTrip)s;
-						sb.AppendLine(tr.getOnTime.ToLongTimeString() + " - " + tr.getOffTime.ToLongTimeString() + ": Line " + tr.routeName + " from " + tr.stops[tr.getOnStopIndex] + " to " + tr.stops[tr.getOffStopIndex]);
-						break;
-					default:
-						sb.AppendLine("INVALID SEGMENT TYPE");
-						break;
-				}
-			}
-			return sb.ToString();
-		}
 
-		public string ToStringOld()
-		{
-			if(UsedTrips.Count == 1 && UsedTransfers.Count == 0)
-			{
-				return UsedTrips[0].getOnTime.ToLongTimeString() + " - " + UsedTrips[0].getOffTime.ToLongTimeString() + ": Line " + UsedTrips[0].routeName + " from " + UsedTrips[0].stops[UsedTrips[0].getOnStopIndex] + " to " + UsedTrips[0].stops[UsedTrips[0].getOffStopIndex];
-			}
-			else if(UsedTrips.Count == 0 && UsedTransfers.Count == 1)
-			{
-				return "Transfer from " + UsedTransfers[0].srcStopName + " to " + UsedTransfers[0].destStopName + ", length: " + UsedTransfers[0].time + "s + reserve " + (usedSettings.GetMovingTransferLengthMultiplier() - 1.0) * UsedTransfers[0].time + "s = " + UsedTransfers[0].distance + "m";
-			}
-
-
-			StringBuilder sb = new StringBuilder();
-
-			int segmentIndex = 0;
+			sb.Append("DEPARTURE: " + DepartureDateTime.ToLongTimeString() + ", ARRIVAL: " + ArrivalDateTime.ToLongTimeString() + "\n");
 			int tripIndex = 0;
 			int transferIndex = 0;
-			TimeOnly departureTime;
-			TimeOnly arrivalTime;
-			if (UsedTrips[0].segmentIndex == 0)
+			int bikeTripIndex = 0;
+			foreach(SegmentType t in UsedSegmentTypes)
 			{
-				departureTime = UsedTrips[0].getOnTime;
-			}
-			else
-			{
-				departureTime = UsedTrips[0].getOnTime.AddSeconds(-UsedTransfers[0].time);
-			}
-
-			if (UsedTrips[UsedTrips.Count -1].segmentIndex > UsedTransfers[UsedTransfers.Count - 1].segmentIndex)
-			{
-				arrivalTime = UsedTrips[UsedTrips.Count - 1].getOffTime;
-			}
-			else
-			{
-				arrivalTime = UsedTrips[UsedTrips.Count - 1].getOffTime.AddSeconds(UsedTransfers[UsedTransfers.Count - 1].time);
-			}
-
-			while(segmentIndex <= Math.Max(UsedTrips[UsedTrips.Count-1].segmentIndex, UsedTransfers[UsedTransfers.Count - 1].segmentIndex))
-			{
-				if (tripIndex < UsedTrips.Count && UsedTrips[tripIndex].segmentIndex == segmentIndex)
+                switch(t)
 				{
-					sb.AppendLine(UsedTrips[tripIndex].getOnTime.ToLongTimeString() + " - " + UsedTrips[tripIndex].getOffTime.ToLongTimeString() + ": Line " + UsedTrips[tripIndex].routeName + " from " + UsedTrips[tripIndex].stops[UsedTrips[tripIndex].getOnStopIndex] + " to " + UsedTrips[tripIndex].stops[UsedTrips[tripIndex].getOffStopIndex]);
-
-					tripIndex++;
-					segmentIndex++;
+					case SegmentType.Transfer:
+                        UsedTransfer transfer = (UsedTransfer)UsedTransfers[transferIndex];
+                        sb.AppendLine("Transfer from " + transfer.GetStartStopName() + " to " + transfer.GetEndStopName() + ", length: " + transfer.time + "s + reserve " + (usedSettings.GetMovingTransferLengthMultiplier() - 1.0) * transfer.time + "s = " + transfer.distance + "m");
+                        transferIndex++;
+                        break;
+					case SegmentType.Trip:
+                        UsedTrip trip = (UsedTrip)UsedTrips[tripIndex];
+						sb.AppendLine(trip.stopPasses[trip.getOnStopIndex].DepartureTime.ToLongTimeString() + " - " + trip.stopPasses[trip.getOffStopIndex].ArrivalTime.ToLongTimeString() + ": Line " + trip.routeName + " from " + trip.GetStartStopName() + " to " + trip.GetEndStopName());
+                        tripIndex++;
+                        break;
+					case SegmentType.Bike:
+						UsedBikeTrip bikeTrip = (UsedBikeTrip)UsedBikeTrips[bikeTripIndex];
+                        sb.AppendLine("Bike from " + bikeTrip.GetStartStopName() + " to " + bikeTrip.GetEndStopName() + ", length: " + bikeTrip.distance + "m");
+                        bikeTripIndex++;
+                        break;
+					default:
+						sb.AppendLine("INVALID SEGMENT TYPE");
+                        break;
 				}
-				else if (transferIndex <UsedTransfers.Count && UsedTransfers[transferIndex].segmentIndex == segmentIndex)
-				{
-					sb.AppendLine("Transfer from " + UsedTransfers[transferIndex].srcStopName + " to " + UsedTransfers[transferIndex].destStopName + ", length: " + UsedTransfers[transferIndex].time + "s + reserve " + (usedSettings.GetMovingTransferLengthMultiplier() - 1.0) * UsedTransfers[transferIndex].time + "s = " + UsedTransfers[transferIndex].distance + "m");
-					transferIndex++;
-					segmentIndex++;
-				}
-			}
-
-			TimeSpan length = new TimeSpan(arrivalTime.Ticks - departureTime.Ticks);
-			sb.AppendLine("Total time: " + length);
-			sb.AppendLine("Penalty seconds: " + UsedTransfers.Count*usedSettings.GetTransferPenaltySeconds());
-			sb.AppendLine("Total time w penalties: " + length.Add(new TimeSpan((long)UsedTransfers.Count * usedSettings.GetTransferPenaltySeconds() * 10_000_000)));
+            }
 			return sb.ToString();
 		}
+		public void SetDepartureAndArrivalTimes(DateTime originalEarliestDepartureTime)
+		{
+			switch(UsedSegmentTypes[0])
+			{
+                case SegmentType.Transfer:                 
+                    if (UsedSegmentTypes.Count == 1)
+					{
+						// The connection consists of a single transfer
+						DepartureDateTime = originalEarliestDepartureTime;
+						ArrivalDateTime = originalEarliestDepartureTime.AddSeconds(UsedTransfers[0].time);
+					}
+					else if (!UsedSegmentTypes.Contains(SegmentType.Trip))
+					{
+						DepartureDateTime = originalEarliestDepartureTime;
+						ArrivalDateTime = DepartureDateTime.AddSeconds(GetTotalSecondsBeforeFirstTrip());
+					}
+					else
+					{
+                        DepartureDateTime = UsedTrips[0].stopPasses[UsedTrips[0].getOnStopIndex].DepartureTime.AddSeconds(-GetTotalSecondsBeforeFirstTrip());
+                        ArrivalDateTime = UsedTrips[UsedTrips.Count - 1].stopPasses[UsedTrips[UsedTrips.Count - 1].getOffStopIndex].ArrivalTime.AddSeconds(GetTotalSecondsAfterLastTrip());
+                    }
+                    break;
+                case SegmentType.Trip:
+                    DepartureDateTime = UsedTrips[0].stopPasses[UsedTrips[0].getOnStopIndex].ArrivalTime;
+					ArrivalDateTime = UsedTrips[UsedTrips.Count - 1].stopPasses[UsedTrips[UsedTrips.Count - 1].getOffStopIndex].ArrivalTime.AddSeconds(GetTotalSecondsAfterLastTrip());
+                    break;
+                case SegmentType.Bike:
+                    if (UsedSegmentTypes.Count == 1)
+                    {
+                        // The connection consists of a single transfer
+                        DepartureDateTime = originalEarliestDepartureTime;
+                        ArrivalDateTime = originalEarliestDepartureTime.AddSeconds(UsedBikeTrips[0].time);
+                    }
+                    else if (!UsedSegmentTypes.Contains(SegmentType.Trip))
+                    {
+                        DepartureDateTime = originalEarliestDepartureTime;
+                        ArrivalDateTime = DepartureDateTime.AddSeconds(GetTotalSecondsBeforeFirstTrip());
+                    }
+                    else
+                    {
+                        DepartureDateTime = UsedTrips[0].stopPasses[UsedTrips[0].getOnStopIndex].DepartureTime.AddSeconds(-GetTotalSecondsBeforeFirstTrip());
+                        ArrivalDateTime = UsedTrips[UsedTrips.Count - 1].stopPasses[UsedTrips[UsedTrips.Count - 1].getOffStopIndex].ArrivalTime.AddSeconds(GetTotalSecondsAfterLastTrip());
+                    }
+                    break;
+				default:
+					break;
+            }
 
-		public enum SegmentType
+			int GetTotalSecondsBeforeFirstTrip()
+			{
+				int segmentIndex = 0;
+				int transferIndex = 0;
+				int bikeTripIndex = 0;
+				int resultSeconds = 0;
+				while (segmentIndex < UsedSegmentTypes.Count && UsedSegmentTypes[segmentIndex] != SegmentType.Trip)
+				{
+                    var segType = UsedSegmentTypes[segmentIndex];
+                    if (segType == SegmentType.Transfer)
+					{
+                        resultSeconds += UsedTransfers[transferIndex].time;
+                        transferIndex++;
+                    }
+                    else if (segType == SegmentType.Bike)
+					{
+						resultSeconds += UsedBikeTrips[bikeTripIndex].time;
+                        bikeTripIndex++;
+                    }
+					segmentIndex++;
+                }
+				return resultSeconds;
+			}
+            int GetTotalSecondsAfterLastTrip()
+            {
+                int segmentIndex = UsedSegmentTypes.Count - 1;
+                int transferIndex = UsedTransfers.Count - 1;
+                int bikeTripIndex = UsedBikeTrips.Count - 1;
+                int resultSeconds = 0;
+                while (segmentIndex > 0 && UsedSegmentTypes[segmentIndex] != SegmentType.Trip)
+                {
+                    var segType = UsedSegmentTypes[segmentIndex];
+                    if (segType == SegmentType.Transfer)
+                    {
+                        resultSeconds += UsedTransfers[transferIndex].time;
+                        transferIndex--;
+                    }
+                    else if (segType == SegmentType.Bike)
+                    {
+                        resultSeconds += UsedBikeTrips[bikeTripIndex].time;
+                        bikeTripIndex--;
+                    }
+                    segmentIndex--;
+                }
+                return resultSeconds;
+            }
+        }
+
+        public enum SegmentType
 		{
 			Transfer = 0,
 			Trip = 1,
@@ -212,26 +319,35 @@ namespace RAPTOR_Router.RAPTORStructures
 			public string GetStartStopName();
 			public string GetEndStopName();
 		}
+		public class StopPass
+		{
+			public string Name;
+			public string Id;
+			public DateTime ArrivalTime;
+			public DateTime DepartureTime;
+		}
+		public class StopInfo
+		{
+			public string Name;
+			public string Id;
+			public double Lat;
+			public double Lon;
+			public StopInfo(string name, string id, double lat, double lon)
+			{
+                Name = name;
+                Id = id;
+                Lat = lat;
+                Lon = lon;
+            }
+		}
 
 		/// <summary>
 		/// Class representing a trip used in a found connection
 		/// </summary>
 		public class UsedTrip : UsedSegment
 		{
-            public SegmentType segmentType { get; private set; }
-            public UsedTrip()
-            {
-                this.segmentType = SegmentType.Trip;
-            }
-            /// <summary>
-            /// The index of this trip in the list of links on the connection (including the transfers)
-            /// </summary>
-            public int segmentIndex { get; set; }
-			/// <summary>
-			/// The list of stop names the trip passes through
-			/// </summary>
-			public List<string> stops { get; set; } = new List<string>();
-			public List<string> stopIds { get; set; } = new List<string>();
+			public SegmentType segmentType { get; private set; }
+			public List<StopPass> stopPasses = new List<StopPass>();
 			/// <summary>
 			/// The index of the stop where the trip is boarded
 			/// </summary>
@@ -241,29 +357,32 @@ namespace RAPTOR_Router.RAPTORStructures
 			/// </summary>
 			public int getOffStopIndex { get; set; }
 			/// <summary>
-			/// The time when the trip is boarded
-			/// </summary>
-			public TimeOnly getOnTime { get; set; }
-			/// <summary>
-			/// The timr when the trip is gotten out of
-			/// </summary>
-			public TimeOnly getOffTime { get; set; }
-
-			public DateTime getOnDateTime { get; set; }
-			public DateTime getOffDateTime { get; set; }
-			/// <summary>
 			/// The name (i.e. the headsign) of the route of the trip
 			/// </summary>
 			public string routeName { get; set; }
 			public Color Color { get; set; }
 
+			public UsedTrip(
+                List<StopPass> stopPasses,			
+				int getOnStopIndex,
+				int getOffStopIndex,
+				string routeName,
+				Color color
+			){
+				this.segmentType = SegmentType.Trip;
+				this.stopPasses = stopPasses;
+				this.getOnStopIndex = getOnStopIndex;
+				this.getOffStopIndex = getOffStopIndex;
+				this.routeName = routeName;
+				this.Color = color;
+			}
 			public string GetStartStopName()
 			{
-				return stops[getOnStopIndex];
+				return stopPasses[getOnStopIndex].Name;
 			}
 			public string GetEndStopName()
 			{
-				return stops[getOffStopIndex];
+				return stopPasses[getOffStopIndex].Name;
 			}
 		}
 		/// <summary>
@@ -272,24 +391,22 @@ namespace RAPTOR_Router.RAPTORStructures
 		public class UsedTransfer : UsedSegment
 		{
 			public SegmentType segmentType { get; private set; }
-			public UsedTransfer()
-			{
-                this.segmentType = SegmentType.Transfer;
-            }
-			/// <summary>
-			/// The index of this trip in the list of links on the connection (including the transfers)
-			/// </summary>
-			public int segmentIndex { get; set; }
+			public UsedTransfer(
+				StopInfo srcStopInfo,
+				StopInfo destStopInfo,
+				int time,
+				int distance
+			){
+				this.srcStopInfo = srcStopInfo;
+				this.destStopInfo = destStopInfo;
+				this.time = time;
+				this.distance = distance;
+			}
 			/// <summary>
 			/// The name of the stop where the transfer begins
 			/// </summary>
-			public string srcStopName { get; set; }
-			/// <summary>
-			/// The name of the stop where the transfer ends
-			/// </summary>
-			public string destStopName { get; set; }
-			public string srcStopId { get; set; }
-			public string destStopId { get; set; }
+			public StopInfo srcStopInfo { get; set; }
+			public StopInfo destStopInfo { get; set; }
 			/// <summary>
 			/// The approximate number of seconds it takes to walk this transfer
 			/// </summary>
@@ -301,11 +418,39 @@ namespace RAPTOR_Router.RAPTORStructures
 
 			public string GetStartStopName()
 			{
-				return srcStopName;
+				return srcStopInfo.Name;
 			}
 			public string GetEndStopName()
 			{
-				return destStopName;
+				return destStopInfo.Name;
+			}
+		}
+		public class UsedBikeTrip : UsedSegment
+		{
+			public SegmentType segmentType { get; private set; }
+			public UsedBikeTrip(
+				StopInfo srcStopInfo,
+				StopInfo destStopInfo,
+				int distance,
+				int time
+			){
+				this.srcStopInfo = srcStopInfo;
+				this.destStopInfo = destStopInfo;
+				this.distance = distance;
+				this.time = time;
+			}
+			public StopInfo srcStopInfo { get; set; }
+			public StopInfo destStopInfo { get; set; }
+			public int distance { get; set; }
+			public int time { get; set; }
+
+			public string GetStartStopName()
+			{
+				return srcStopInfo.Name;
+			}
+			public string GetEndStopName()
+			{
+				return destStopInfo.Name;
 			}
 		}
 	}

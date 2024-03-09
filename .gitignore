@@ -35,3 +35,7 @@
 /RAPTOR-Router/WebAPI-light/obj
 /RAPTOR-Router/WebAPI-light/Properties/PublishProfiles
 /RAPTOR-Router/WebAPI-light/publish
+/RAPTOR-Router/OSMRouter/bin
+/RAPTOR-Router/OSMRouter/obj
+/RAPTOR-Router/OSMRouter/data
+/RAPTOR-Router/data

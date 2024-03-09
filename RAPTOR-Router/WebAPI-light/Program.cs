@@ -31,7 +31,7 @@ namespace WebAPI_light
             }
 
             routerBuilder = new RouteFinderBuilder();
-            routerBuilder.LoadDataFromGtfs(gtfsZipArchiveLocation);
+            routerBuilder.LoadAllData();
 
 
             var appBuilder = WebApplication.CreateBuilder(args);

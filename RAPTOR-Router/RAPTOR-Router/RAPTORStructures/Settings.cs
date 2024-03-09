@@ -19,6 +19,8 @@ namespace RAPTOR_Router.RAPTORStructures
         /// The maximum number of days between the specified departure time and the arrival
         /// </summary>
         public const int MAX_TRIP_LENGTH_DAYS = 1;
+
+
         /// <summary>
         /// The used walking pace in minutes per kilometer
         /// </summary>
@@ -27,10 +29,17 @@ namespace RAPTOR_Router.RAPTORStructures
         /// The used cycling pace in minutes per kilometer
         /// </summary>
         public int CyclingPace { get; set; } = 5;
+
+
+        public int BikeUnlockTime { get; set; } = 30;
+        public int BikeLockTime { get; set; } = 15;
+
+
         /// <summary>
         /// Specifies if shared bikes should be considered in the connection search
         /// </summary>
         public bool UseSharedBikes { get; set; } = false;
+        public bool BikeMax15Minutes { get; set; } = true;
 
         /// <summary>
         /// Specifies the selected transfer length to use in the connection search - i.e. how aggressive and risky the transfers can be
@@ -44,6 +53,7 @@ namespace RAPTOR_Router.RAPTORStructures
         /// Specifies the walking preference to be used in the connection search - i.e. how much walking there can be in the connection
         /// </summary>
         public WalkingPreference WalkingPreference { get; set; } = WalkingPreference.Normal;
+        public BikeTripBuffer BikeTripBuffer { get; set; } = BikeTripBuffer.Normal;
 
         /// <summary>
         /// The default settings to use if none were provided
@@ -75,6 +85,22 @@ namespace RAPTOR_Router.RAPTORStructures
                     return 1.5;
                 default:
                     throw new InvalidDataException("Invalid value of enum TransferLength");
+            }
+        }
+        public double GetBikeTripLengthMultiplier()
+        {
+            switch (BikeTripBuffer)
+            {
+                case BikeTripBuffer.None:
+                    return 1.0;
+                case BikeTripBuffer.Short:
+                    return 1.1;
+                case BikeTripBuffer.Normal:
+                    return 1.25;
+                case BikeTripBuffer.Long:
+                    return 1.5;
+                default:
+                    throw new InvalidDataException("Invalid value of enum BikeTripBuffer");
             }
         }
         /// <summary>
@@ -140,6 +166,14 @@ namespace RAPTOR_Router.RAPTORStructures
                     throw new InvalidDataException("Invalid value of enum WalkingPreference");
             }
         }
+        public int GetBikeTripTime(int distance)
+        {
+            return (int)(distance / 1000.0 * CyclingPace * 60);
+        }
+        public int GetWalkingTransferTime(int distance)
+        {
+            return (int)(distance / 1000.0 * WalkingPace * 60);
+        }
     }
 
     /// <summary>
@@ -201,5 +235,12 @@ namespace RAPTOR_Router.RAPTORStructures
         /// Limit transfer length to lower limit (250m) or longer if in the same node
         /// </summary>
         Low = 2
+    }
+    public enum BikeTripBuffer
+    {
+        None = 0,
+        Short = 1,
+        Normal = 2,
+        Long = 3
     }
 }

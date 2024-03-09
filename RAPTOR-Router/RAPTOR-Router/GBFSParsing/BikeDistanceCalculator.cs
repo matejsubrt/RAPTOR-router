@@ -4,6 +4,7 @@ using Itinero.IO.Osm;
 using Itinero.Osm.Vehicles;
 using Microsoft.Extensions.Configuration;
 using RAPTOR_Router.RAPTORStructures;
+using RAPTOR_Router.Structures.Bike;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -126,19 +127,19 @@ namespace RAPTOR_Router.GBFSParsing
                         // One of the stations has been unresolvable too many times
                         AddDistance(s1, s2, -1);
                     }
-                    else if (DistanceExtensions.TooFarInOneDirection(s1.Lat, s1.Lon, s2.Lat, s2.Lon, 3000))
+                    else if (DistanceExtensions.TooFarInOneDirection(s1, s2, 3000))
                     {
                         // The stations are too far from each other in a straight line
                         AddDistance(s1, s2, -1);
                     }
-                    else if (!CheckConnectivity((float)s1.Lat, (float)s1.Lon))
+                    else if (!CheckConnectivity(s1))
                     {
                         // The start station is not connected to network
                         addUnresolvableStation(s1.Id, unresolvableStations);
                         AddDistance(s1, s2, -1);
                         Console.WriteLine("Station " + s1.Id + " is not connected");
                     }
-                    else if (!CheckConnectivity((float)s2.Lat, (float)s2.Lon))
+                    else if (!CheckConnectivity(s2))
                     {
                         // The end station is not connected to network
                         addUnresolvableStation(s2.Id, unresolvableStations);
@@ -149,7 +150,7 @@ namespace RAPTOR_Router.GBFSParsing
                     {
                         // Actually calculate the distance
                         ErrorType errorType;
-                        int result = GetBikingDistance((float)s1.Lat, (float)s1.Lon, (float)s2.Lat, (float)s2.Lon, out errorType);
+                        int result = GetBikingDistance(s1, s2, out errorType);
                         if(result == 0)
                         {
                             result = 1;
@@ -269,6 +270,10 @@ namespace RAPTOR_Router.GBFSParsing
                 return router.CheckConnectivity(profile, point.Value);
             }
         }
+        private bool CheckConnectivity(BikeStation station)
+        {
+            return CheckConnectivity((float)station.Coords.Lat, (float)station.Coords.Lon);
+        }
         private int GetBikingDistance(float startLat, float startLon, float endLat, float endLon, out ErrorType errorType)
         {
             var router = new Router(routerDb);
@@ -310,6 +315,10 @@ namespace RAPTOR_Router.GBFSParsing
 
             errorType = ErrorType.NO_ERROR;
             return (int)route.TotalDistance;
+        }
+        private int GetBikingDistance(BikeStation start, BikeStation end, out ErrorType errorType)
+        {
+            return GetBikingDistance((float)start.Coords.Lat, (float)start.Coords.Lon, (float)end.Coords.Lat, (float)end.Coords.Lon, out errorType);
         }
     }
 }

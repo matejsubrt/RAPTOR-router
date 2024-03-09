@@ -12,7 +12,7 @@ namespace RAPTOR_Router.GTFSParsing
     /// Class representing the calendars information from the calendars.txt gtfs file.
     /// The properties correspond to the entries in the file.
     /// </summary>
-    internal class GTFSCalendar : IIdentifiable
+    public class GTFSCalendar : IIdentifiable
     {
         [Name("service_id")]
         public string ServiceId { get; set; }

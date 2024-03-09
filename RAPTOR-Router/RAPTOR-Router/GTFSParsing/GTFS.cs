@@ -12,7 +12,7 @@ namespace RAPTOR_Router.GTFSParsing
     /// <summary>
     /// Class representing all the loaded GTFS data. Typically used for parsing the GTFS files to objects in memory, which later will be used to construct the objects useful for the connection searching.
     /// </summary>
-    internal class GTFS : IDisposable
+    public class GTFS : IDisposable
     {
         public Dictionary<string, GTFSAgency> agencies { get; private set; } = new();
         public Dictionary<string, GTFSCalendar> calendars { get; private set; } = new();

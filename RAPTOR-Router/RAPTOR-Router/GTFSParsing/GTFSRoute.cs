@@ -6,7 +6,7 @@ namespace RAPTOR_Router.GTFSParsing
     /// Class representing the routes information from the routes.txt gtfs file.
     /// The properties correspond to the entries in the file.
     /// </summary>
-    internal class GTFSRoute : IIdentifiable
+    public class GTFSRoute : IIdentifiable
     {
         [Name("route_id")]
         public string Id { get; set; }

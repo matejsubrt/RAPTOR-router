@@ -56,7 +56,7 @@ namespace ConnectionSearchTests
 				throw new InternalTestFailureException("Invalid gtfs zip archive path. Check the testConfig.json file");
 			}
 
-			Builder.LoadDataFromGtfs(gtfsZipArchiveLocation);
+			Builder.LoadAllData();
 		}
 	}
 

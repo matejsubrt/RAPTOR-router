@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Itinero" Version="1.5.1" />
+    <PackageReference Include="Itinero.IO.Osm" Version="1.5.1" />
+  </ItemGroup>
+
+</Project>

@@ -11,7 +11,7 @@ namespace RAPTOR_Router.GTFSParsing
     /// Class representing the stops information from the stops.txt gtfs file.
     /// The properties correspond to the entries in the file.
     /// </summary>
-    internal class GTFSStop : IIdentifiable
+    public class GTFSStop : IIdentifiable
     {
         [Name("stop_id")]
         public string Id { get; set; }

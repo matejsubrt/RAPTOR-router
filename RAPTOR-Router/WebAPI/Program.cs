@@ -28,7 +28,7 @@ namespace WebAPI
             }
 
             routerBuilder = new RouteFinderBuilder();
-            routerBuilder.LoadDataFromGtfs(gtfsZipArchiveLocation);
+            routerBuilder.LoadGtfsData(gtfsZipArchiveLocation);
 
 
             var appBuilder = WebApplication.CreateBuilder(args);

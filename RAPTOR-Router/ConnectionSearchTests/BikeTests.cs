@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RAPTOR_Router.GBFSParsing;
-using RAPTOR_Router.SearchModels;
+using RAPTOR_Router.Models;
+using RAPTOR_Router.Structures.Bike;
 
 namespace ConnectionSearchTests
 {
