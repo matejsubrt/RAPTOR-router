@@ -1,0 +1,10 @@
+{
+  "gtfsArchiveLocation": "D:\\Documents\\RAPTOR-router\\example-gtfs\\PID_GTFS.zip",
+  "testGtfsArchiveLocation": "D:\\Documents\\RAPTOR-router\\example-gtfs\\PID_GTFS.zip",
+  "osmFileLocation": "D:\\Documents\\RAPTOR-router\\RAPTOR-Router\\data\\czech-republic-latest.osm",
+  "routerDbFileLocation": "D:\\Documents\\RAPTOR-router\\RAPTOR-Router\\data\\cz.routerdb",
+  "testDataFileLocation": "C:\\Users\\matej\\Documents\\RAPTOR-router\\RAPTOR-Router\\ConnectionSearchTests\\TestData\\Data.csv",
+  "bikeStationDistancesFileLocationNextbike": "D:\\Documents\\RAPTOR-router\\RAPTOR-Router\\RAPTOR-Router\\data\\distances.csv",
+  "forbiddenCrossingPointsLocation": "D:\\Documents\\RAPTOR-router\\RAPTOR-Router\\RAPTOR-Router\\data\\forbidden_transfer_points.csv",
+  "forbiddenCrossingLinesLocation": "D:\\Documents\\RAPTOR-router\\RAPTOR-Router\\RAPTOR-Router\\data\\forbidden_transfer_lines.csv"
+}

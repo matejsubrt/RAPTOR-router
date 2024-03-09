@@ -1,0 +1,66 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33815.320
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RAPTOR-Router", "RAPTOR-Router\RAPTOR-Router.csproj", "{F00C99DD-15AD-47A1-B4D0-30F4B648D122}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CLIApp", "CLIApp\CLIApp.csproj", "{9D266019-60E1-47A7-BC81-E8148C8A4DD6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAPI", "WebAPI\WebAPI.csproj", "{80F68170-185A-48C3-BB06-2DEEA35DD7FD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConnectionSearchTests", "ConnectionSearchTests\ConnectionSearchTests.csproj", "{74E6CB43-A629-499E-82B5-4C1D0CA82EF0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GUI", "GUI\GUI.csproj", "{A455ADAA-6BE8-4B9B-85F9-E1B0E4C72C09}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Individual Project Documentation", "Individual Project Documentation", "{C8694F36-0E21-48E6-B44A-B1A33BD05049}"
+	ProjectSection(SolutionItems) = preProject
+		developer.md = developer.md
+		user.md = user.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAPI-light", "WebAPI-light\WebAPI-light.csproj", "{6D2D7E05-9A96-4E91-96A6-20AE67294595}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "data", "data", "{CF7F5569-E849-426B-9671-BDBFE4ACDC27}"
+	ProjectSection(SolutionItems) = preProject
+		config.json = config.json
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F00C99DD-15AD-47A1-B4D0-30F4B648D122}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F00C99DD-15AD-47A1-B4D0-30F4B648D122}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F00C99DD-15AD-47A1-B4D0-30F4B648D122}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F00C99DD-15AD-47A1-B4D0-30F4B648D122}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D266019-60E1-47A7-BC81-E8148C8A4DD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D266019-60E1-47A7-BC81-E8148C8A4DD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D266019-60E1-47A7-BC81-E8148C8A4DD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D266019-60E1-47A7-BC81-E8148C8A4DD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80F68170-185A-48C3-BB06-2DEEA35DD7FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80F68170-185A-48C3-BB06-2DEEA35DD7FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80F68170-185A-48C3-BB06-2DEEA35DD7FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80F68170-185A-48C3-BB06-2DEEA35DD7FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74E6CB43-A629-499E-82B5-4C1D0CA82EF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74E6CB43-A629-499E-82B5-4C1D0CA82EF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74E6CB43-A629-499E-82B5-4C1D0CA82EF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74E6CB43-A629-499E-82B5-4C1D0CA82EF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A455ADAA-6BE8-4B9B-85F9-E1B0E4C72C09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A455ADAA-6BE8-4B9B-85F9-E1B0E4C72C09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A455ADAA-6BE8-4B9B-85F9-E1B0E4C72C09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A455ADAA-6BE8-4B9B-85F9-E1B0E4C72C09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D2D7E05-9A96-4E91-96A6-20AE67294595}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D2D7E05-9A96-4E91-96A6-20AE67294595}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D2D7E05-9A96-4E91-96A6-20AE67294595}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D2D7E05-9A96-4E91-96A6-20AE67294595}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C802089A-2DB4-4D94-8889-38E8C9EF027A}
+	EndGlobalSection
+EndGlobal

@@ -1,12 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <TargetFramework>net7.0</TargetFramework>
     <RootNamespace>RAPTOR_Router</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+	<NoWarn>CS1573;CS1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,14 +18,18 @@
 
   <ItemGroup>
     <PackageReference Include="CsvHelper" Version="30.0.1" />
+    <PackageReference Include="Itinero" Version="1.5.1" />
+    <PackageReference Include="Itinero.IO.Osm" Version="1.5.1" />
   </ItemGroup>
 	
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 	
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="doxygen ..\..\docs\doxyfile.doxygen" />
-  </Target>
+  <ItemGroup>
+    <Folder Include="data\" />
+  </ItemGroup>
+	
+  
 
 </Project>

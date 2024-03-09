@@ -104,6 +104,8 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_stop_time.html">StopTime</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Struct representing a stop time of a single trip in a single stop.  <a href="struct_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_stop_time.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_time_only_extensions.html">TimeOnlyExtensions</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_transfer.html">Transfer</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class representing a foot transfer between two stops.  <a href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_transfer.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -113,25 +115,102 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:abc1ee05af62c89b21cc979617daff609"><td class="memItemLeft" align="right" valign="top"><a id="abc1ee05af62c89b21cc979617daff609" name="abc1ee05af62c89b21cc979617daff609"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures.html#abc1ee05af62c89b21cc979617daff609">TransferLength</a> { <b>Short</b> = 0
-, <b>Normal</b> = 1
-, <b>Long</b> = 2
+<tr class="memitem:a263ff9df5791e0db9b30b60386a3fcd7"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures.html#a263ff9df5791e0db9b30b60386a3fcd7">TransferTime</a> { <a class="el" href="namespace_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures.html#a263ff9df5791e0db9b30b60386a3fcd7a6a71ba3ca8a3713f140eeb9ecf0e16e8">UltraShort</a> = 0
+, <a class="el" href="namespace_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures.html#a263ff9df5791e0db9b30b60386a3fcd7a30bb747c98bccdd11b3f89e644c4d0ad">Short</a> = 1
+, <a class="el" href="namespace_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures.html#a263ff9df5791e0db9b30b60386a3fcd7a960b44c579bc2f6818d2daaf9e4c16f0">Normal</a> = 2
+, <a class="el" href="namespace_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures.html#a263ff9df5791e0db9b30b60386a3fcd7a8394f0347c184cf156ac5924dccb773b">Long</a> = 3
  }</td></tr>
-<tr class="memdesc:abc1ee05af62c89b21cc979617daff609"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum representing the transfer risk value of the user. <br /></td></tr>
-<tr class="separator:abc1ee05af62c89b21cc979617daff609"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abb49466717d51af4f24d4d957fdba5e5"><td class="memItemLeft" align="right" valign="top"><a id="abb49466717d51af4f24d4d957fdba5e5" name="abb49466717d51af4f24d4d957fdba5e5"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures.html#abb49466717d51af4f24d4d957fdba5e5">ComfortBalance</a> { <b>ShortestTime</b> = 0
-, <b>Balanced</b> = 1
-, <b>LeastTransfers</b> = 2
+<tr class="memdesc:a263ff9df5791e0db9b30b60386a3fcd7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum representing the transfer risk value of the user.  <a href="namespace_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures.html#a263ff9df5791e0db9b30b60386a3fcd7">More...</a><br /></td></tr>
+<tr class="separator:a263ff9df5791e0db9b30b60386a3fcd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb49466717d51af4f24d4d957fdba5e5"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures.html#abb49466717d51af4f24d4d957fdba5e5">ComfortBalance</a> { <b>ShortestTimeAbsolute</b> = 0
+, <a class="el" href="namespace_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures.html#abb49466717d51af4f24d4d957fdba5e5a4c62ab69feb58531a453ba7c20f3f8b0">ShortestTime</a> = 1
+, <a class="el" href="namespace_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures.html#abb49466717d51af4f24d4d957fdba5e5ac6589f5236c0c434d0c63dc5f9a856f2">Balanced</a> = 2
+, <a class="el" href="namespace_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures.html#abb49466717d51af4f24d4d957fdba5e5aa189f1e9877391f7edffb6e48efa86ce">LeastTransfers</a> = 3
  }</td></tr>
-<tr class="memdesc:abb49466717d51af4f24d4d957fdba5e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">enum representing the comfort balance of the user <br /></td></tr>
+<tr class="memdesc:abb49466717d51af4f24d4d957fdba5e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">enum representing the comfort balance of the user  <a href="namespace_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures.html#abb49466717d51af4f24d4d957fdba5e5">More...</a><br /></td></tr>
 <tr class="separator:abb49466717d51af4f24d4d957fdba5e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6472df18fe35f606eb34d5886f676605"><td class="memItemLeft" align="right" valign="top"><a id="a6472df18fe35f606eb34d5886f676605" name="a6472df18fe35f606eb34d5886f676605"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures.html#a6472df18fe35f606eb34d5886f676605">WalkingPreference</a> { <b>High</b> = 0
-, <b>Normal</b> = 1
-, <b>Low</b> = 2
+<tr class="memitem:a6472df18fe35f606eb34d5886f676605"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures.html#a6472df18fe35f606eb34d5886f676605">WalkingPreference</a> { <a class="el" href="namespace_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures.html#a6472df18fe35f606eb34d5886f676605a655d20c1ca69519ca647684edbb2db35">High</a> = 0
+, <a class="el" href="namespace_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures.html#a6472df18fe35f606eb34d5886f676605a960b44c579bc2f6818d2daaf9e4c16f0">Normal</a> = 1
+, <a class="el" href="namespace_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures.html#a6472df18fe35f606eb34d5886f676605a28d0edd045e05cf5af64e35ae0c4c6ef">Low</a> = 2
  }</td></tr>
-<tr class="memdesc:a6472df18fe35f606eb34d5886f676605"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum representing the walking preference of the user. <br /></td></tr>
+<tr class="memdesc:a6472df18fe35f606eb34d5886f676605"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum representing the walking preference of the user.  <a href="namespace_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures.html#a6472df18fe35f606eb34d5886f676605">More...</a><br /></td></tr>
 <tr class="separator:a6472df18fe35f606eb34d5886f676605"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="abb49466717d51af4f24d4d957fdba5e5" name="abb49466717d51af4f24d4d957fdba5e5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb49466717d51af4f24d4d957fdba5e5">&#9670;&#160;</a></span>ComfortBalance</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespace_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures.html#abb49466717d51af4f24d4d957fdba5e5">RAPTOR_Router.RAPTORStructures.ComfortBalance</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>enum representing the comfort balance of the user </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="abb49466717d51af4f24d4d957fdba5e5a4c62ab69feb58531a453ba7c20f3f8b0" name="abb49466717d51af4f24d4d957fdba5e5a4c62ab69feb58531a453ba7c20f3f8b0"></a>ShortestTime&#160;</td><td class="fielddoc"><p>Prefer shortest travel time only. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="abb49466717d51af4f24d4d957fdba5e5ac6589f5236c0c434d0c63dc5f9a856f2" name="abb49466717d51af4f24d4d957fdba5e5ac6589f5236c0c434d0c63dc5f9a856f2"></a>Balanced&#160;</td><td class="fielddoc"><p>Normal mode -&gt; each transfer adds a 2 min penalty to the connection during comparison. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="abb49466717d51af4f24d4d957fdba5e5aa189f1e9877391f7edffb6e48efa86ce" name="abb49466717d51af4f24d4d957fdba5e5aa189f1e9877391f7edffb6e48efa86ce"></a>LeastTransfers&#160;</td><td class="fielddoc"><p>Prefer less transfers -&gt; each transfer adds a 10 min penalty to the connection used during comparison. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a id="a263ff9df5791e0db9b30b60386a3fcd7" name="a263ff9df5791e0db9b30b60386a3fcd7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a263ff9df5791e0db9b30b60386a3fcd7">&#9670;&#160;</a></span>TransferTime</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespace_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures.html#a263ff9df5791e0db9b30b60386a3fcd7">RAPTOR_Router.RAPTORStructures.TransferTime</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enum representing the transfer risk value of the user. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a263ff9df5791e0db9b30b60386a3fcd7a6a71ba3ca8a3713f140eeb9ecf0e16e8" name="a263ff9df5791e0db9b30b60386a3fcd7a6a71ba3ca8a3713f140eeb9ecf0e16e8"></a>UltraShort&#160;</td><td class="fielddoc"><p>Moving transfer: calculated time, stationary transfer: 0 minutes allowed. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a263ff9df5791e0db9b30b60386a3fcd7a30bb747c98bccdd11b3f89e644c4d0ad" name="a263ff9df5791e0db9b30b60386a3fcd7a30bb747c98bccdd11b3f89e644c4d0ad"></a>Short&#160;</td><td class="fielddoc"><p>Moving transfer: calculated time, stationary transfer: minimum 30 seconds. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a263ff9df5791e0db9b30b60386a3fcd7a960b44c579bc2f6818d2daaf9e4c16f0" name="a263ff9df5791e0db9b30b60386a3fcd7a960b44c579bc2f6818d2daaf9e4c16f0"></a>Normal&#160;</td><td class="fielddoc"><p>Moving transfer: calculated time + 25%, stationary transfer: minimum 1 minute. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a263ff9df5791e0db9b30b60386a3fcd7a8394f0347c184cf156ac5924dccb773b" name="a263ff9df5791e0db9b30b60386a3fcd7a8394f0347c184cf156ac5924dccb773b"></a>Long&#160;</td><td class="fielddoc"><p>Moving transfer: calculated time + 50%, stationary transfer: minimum 1 minute. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a id="a6472df18fe35f606eb34d5886f676605" name="a6472df18fe35f606eb34d5886f676605"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6472df18fe35f606eb34d5886f676605">&#9670;&#160;</a></span>WalkingPreference</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespace_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures.html#a6472df18fe35f606eb34d5886f676605">RAPTOR_Router.RAPTORStructures.WalkingPreference</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enum representing the walking preference of the user. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a6472df18fe35f606eb34d5886f676605a655d20c1ca69519ca647684edbb2db35" name="a6472df18fe35f606eb34d5886f676605a655d20c1ca69519ca647684edbb2db35"></a>High&#160;</td><td class="fielddoc"><p>Any transfer can be up to the upper limit in length (750m) </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a6472df18fe35f606eb34d5886f676605a960b44c579bc2f6818d2daaf9e4c16f0" name="a6472df18fe35f606eb34d5886f676605a960b44c579bc2f6818d2daaf9e4c16f0"></a>Normal&#160;</td><td class="fielddoc"><p>Limit transfer length to normal limit (400m) or longer if in the same node. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a6472df18fe35f606eb34d5886f676605a28d0edd045e05cf5af64e35ae0c4c6ef" name="a6472df18fe35f606eb34d5886f676605a28d0edd045e05cf5af64e35ae0c4c6ef"></a>Low&#160;</td><td class="fielddoc"><p>Limit transfer length to lower limit (250m) or longer if in the same node. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

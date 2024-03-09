@@ -11,7 +11,7 @@ namespace RAPTOR_Router.GTFSParsing
     /// Class representing the trips information from the trips.txt gtfs file.
     /// The properties correspond to the entries in the file.
     /// </summary>
-    internal class GTFSTrip : IIdentifiable
+    public class GTFSTrip : IIdentifiable
     {
         [Name("route_id")]
         public string RouteId { get; set; }

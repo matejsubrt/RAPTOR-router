@@ -3,16 +3,14 @@
 #define DEFAULT_DEPARTURE_TIME
 
 using RAPTOR_Router.GTFSParsing;
-using RAPTOR_Router.SearchModels;
-using RAPTOR_Router.RAPTORStructures;
+using RAPTOR_Router.Models;
 using RAPTOR_Router.Routers;
-using RAPTOR_Router.Web;
 using System;
 
 
 namespace RAPTOR_Router
 {
-	internal class Program
+    internal class Program
 	{
 		static void Main(string[] args)
 		{
@@ -47,43 +45,6 @@ namespace RAPTOR_Router
 			BuildConsoleApp(raptor);
 			
 #endif
-			*/
-        }
-        static void BuildConsoleApp(RAPTORModel raptor)
-		{
-			/*
-			Settings settings = Settings.Default;
-			IRouter router = new BasicRouter(settings, raptor);
-
-			while (true)
-			{
-				Console.WriteLine("Enter the source stop:");
-				string sourceStop = Console.ReadLine();
-				Console.WriteLine("Enter the destination stop:");
-				string destStop = Console.ReadLine();
-
-				List<Stop> sourceStops = raptor.GetStopsByName(sourceStop);
-				List<Stop> destStops = raptor.GetStopsByName(destStop);
-
-				if(sourceStops.Count == 0 || destStops.Count == 0)
-				{
-                    Console.WriteLine("Incorrect stop name/s");
-					continue;
-                }
-				DateTime departureTime;
-#if DEFAULT_DEPARTURE_TIME
-				departureTime = new DateTime(2023, 07, 07, 07, 07, 07); //The default departureTime
-#else
-                Console.WriteLine("Enter the departure time in the YYYYMMDDhhmmss format (i.e. 20230707070707 corresponds to 7.7.2023, 7:07:07):");
-                string dateTime = Console.ReadLine();
-				departureTime = new DateTime(int.Parse(dateTime.Substring(0, 4)), int.Parse(dateTime.Substring(4, 2)), int.Parse(dateTime.Substring(6, 2)), int.Parse(dateTime.Substring(8, 2)), int.Parse(dateTime.Substring(10, 2)), int.Parse(dateTime.Substring(12, 2)));
-#endif
-
-                SearchModel searchModel = new SearchModel(sourceStops, destStops, DateTime.Now.AddDays(-10));
-                var result = router.FindConnection(searchModel);
-                Console.WriteLine(result.ToString());
-                router = new BasicRouter(settings);
-            }
 			*/
         }
 	}

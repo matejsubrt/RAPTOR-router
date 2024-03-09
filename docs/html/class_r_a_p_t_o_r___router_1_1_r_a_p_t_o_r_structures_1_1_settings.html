@@ -74,6 +74,8 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="#properties">Properties</a> &#124;
 <a href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_settings-members.html">List of all members</a>  </div>
@@ -84,6 +86,28 @@ $(function() {
 <p>Class representing the settings to use for the connection search.  
  <a href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_settings.html#details">More...</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a599b639720ea3b16ad2a95f28a7d64eb"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_settings.html#a599b639720ea3b16ad2a95f28a7d64eb">GetMovingTransferLengthMultiplier</a> ()</td></tr>
+<tr class="memdesc:a599b639720ea3b16ad2a95f28a7d64eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the multiplier that should be used to calculate minimum transfer time according to the set TransferLength preference.  <br /></td></tr>
+<tr class="separator:a599b639720ea3b16ad2a95f28a7d64eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68ec3b22843c06016cc3cfa89caddb9e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_settings.html#a68ec3b22843c06016cc3cfa89caddb9e">GetStationaryTransferMinimumSeconds</a> ()</td></tr>
+<tr class="memdesc:a68ec3b22843c06016cc3cfa89caddb9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the minimum allowed time between an arrival and departure in the transfer stop (i.e. when arrival and departure are at the same exact stop)  <br /></td></tr>
+<tr class="separator:a68ec3b22843c06016cc3cfa89caddb9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab34eab4586bd792f431b1efa0db13701"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_settings.html#ab34eab4586bd792f431b1efa0db13701">GetTransferPenaltySeconds</a> ()</td></tr>
+<tr class="memdesc:ab34eab4586bd792f431b1efa0db13701"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the penalty that should be applied to a connection for each its transfer when comparing different connections between each other;.  <br /></td></tr>
+<tr class="separator:ab34eab4586bd792f431b1efa0db13701"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af223cba0ec21abb4ee117f9e67f59066"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_settings.html#af223cba0ec21abb4ee117f9e67f59066">GetMaxTransferDistance</a> ()</td></tr>
+<tr class="memdesc:af223cba0ec21abb4ee117f9e67f59066"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the maximum transfer distance according to the WalkingPreference property. The maximum distance does NOT apply to transfers within same node (i.e. stops with the same name)  <br /></td></tr>
+<tr class="separator:af223cba0ec21abb4ee117f9e67f59066"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:adf7403c25982942055ef643a22fa58e9"><td class="memItemLeft" align="right" valign="top"><a id="adf7403c25982942055ef643a22fa58e9" name="adf7403c25982942055ef643a22fa58e9"></a>
+static <a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_settings.html">Settings</a>&#160;</td><td class="memItemRight" valign="bottom"><b>GetDefaultSettings</b> ()</td></tr>
+<tr class="memdesc:adf7403c25982942055ef643a22fa58e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">The default settings to use if none were provided. <br /></td></tr>
+<tr class="separator:adf7403c25982942055ef643a22fa58e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
 <tr class="memitem:ad326bb8835e5bff0197bff6dad87331e"><td class="memItemLeft" align="right" valign="top"><a id="ad326bb8835e5bff0197bff6dad87331e" name="ad326bb8835e5bff0197bff6dad87331e"></a>
@@ -97,38 +121,139 @@ const int&#160;</td><td class="memItemRight" valign="bottom"><b>MAX_TRIP_LENGTH_
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
-<tr class="memitem:a9c76fefd1d5b3531e04baba9bda567e2"><td class="memItemLeft" align="right" valign="top"><a id="a9c76fefd1d5b3531e04baba9bda567e2" name="a9c76fefd1d5b3531e04baba9bda567e2"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>WalkingSpeed</b> = 12<code> [get, set]</code></td></tr>
-<tr class="memdesc:a9c76fefd1d5b3531e04baba9bda567e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">The used walking speed in minutes per kilometer. <br /></td></tr>
-<tr class="separator:a9c76fefd1d5b3531e04baba9bda567e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5e3d23a1fdc7060d927fd88a9addff65"><td class="memItemLeft" align="right" valign="top"><a id="a5e3d23a1fdc7060d927fd88a9addff65" name="a5e3d23a1fdc7060d927fd88a9addff65"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>CyclingSpeed</b> = 5<code> [get, set]</code></td></tr>
-<tr class="memdesc:a5e3d23a1fdc7060d927fd88a9addff65"><td class="mdescLeft">&#160;</td><td class="mdescRight">The used cycling speed in minutes per kilometer. <br /></td></tr>
-<tr class="separator:a5e3d23a1fdc7060d927fd88a9addff65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23b5cfbbc82c35314c44022ad1fe374a"><td class="memItemLeft" align="right" valign="top"><a id="a23b5cfbbc82c35314c44022ad1fe374a" name="a23b5cfbbc82c35314c44022ad1fe374a"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>WalkingPace</b> = 12<code> [get, set]</code></td></tr>
+<tr class="memdesc:a23b5cfbbc82c35314c44022ad1fe374a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The used walking pace in minutes per kilometer. <br /></td></tr>
+<tr class="separator:a23b5cfbbc82c35314c44022ad1fe374a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5dd3907926c95decd7cf7f401463cc29"><td class="memItemLeft" align="right" valign="top"><a id="a5dd3907926c95decd7cf7f401463cc29" name="a5dd3907926c95decd7cf7f401463cc29"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>CyclingPace</b> = 5<code> [get, set]</code></td></tr>
+<tr class="memdesc:a5dd3907926c95decd7cf7f401463cc29"><td class="mdescLeft">&#160;</td><td class="mdescRight">The used cycling pace in minutes per kilometer. <br /></td></tr>
+<tr class="separator:a5dd3907926c95decd7cf7f401463cc29"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7f8a89915ea42c3c11ff66d77a5e6492"><td class="memItemLeft" align="right" valign="top"><a id="a7f8a89915ea42c3c11ff66d77a5e6492" name="a7f8a89915ea42c3c11ff66d77a5e6492"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>UseSharedBikes</b> = false<code> [get, set]</code></td></tr>
 <tr class="memdesc:a7f8a89915ea42c3c11ff66d77a5e6492"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies if shared bikes should be considered in the connection search. <br /></td></tr>
 <tr class="separator:a7f8a89915ea42c3c11ff66d77a5e6492"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a32ea822ee1212c29dddf8069926543d9"><td class="memItemLeft" align="right" valign="top"><a id="a32ea822ee1212c29dddf8069926543d9" name="a32ea822ee1212c29dddf8069926543d9"></a>
-<a class="el" href="namespace_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures.html#abc1ee05af62c89b21cc979617daff609">TransferLength</a>&#160;</td><td class="memItemRight" valign="bottom"><b>TransferLength</b> = TransferLength.Normal<code> [get, set]</code></td></tr>
-<tr class="memdesc:a32ea822ee1212c29dddf8069926543d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies the selected transfer length to use in the connection search - i.e. how aggressive and risky the transfers can be. <br /></td></tr>
-<tr class="separator:a32ea822ee1212c29dddf8069926543d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc8abd5c2cae6dd21c6c11004c8b4562"><td class="memItemLeft" align="right" valign="top"><a id="afc8abd5c2cae6dd21c6c11004c8b4562" name="afc8abd5c2cae6dd21c6c11004c8b4562"></a>
+<a class="el" href="namespace_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures.html#a263ff9df5791e0db9b30b60386a3fcd7">TransferTime</a>&#160;</td><td class="memItemRight" valign="bottom"><b>TransferTime</b> = <a class="el" href="namespace_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures.html#a263ff9df5791e0db9b30b60386a3fcd7a960b44c579bc2f6818d2daaf9e4c16f0">TransferTime.Normal</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:afc8abd5c2cae6dd21c6c11004c8b4562"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies the selected transfer length to use in the connection search - i.e. how aggressive and risky the transfers can be. <br /></td></tr>
+<tr class="separator:afc8abd5c2cae6dd21c6c11004c8b4562"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7bfc2971c76f3834ff3c02a017269efa"><td class="memItemLeft" align="right" valign="top"><a id="a7bfc2971c76f3834ff3c02a017269efa" name="a7bfc2971c76f3834ff3c02a017269efa"></a>
-<a class="el" href="namespace_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures.html#abb49466717d51af4f24d4d957fdba5e5">ComfortBalance</a>&#160;</td><td class="memItemRight" valign="bottom"><b>ComfortBalance</b> = ComfortBalance.Balanced<code> [get, set]</code></td></tr>
+<a class="el" href="namespace_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures.html#abb49466717d51af4f24d4d957fdba5e5">ComfortBalance</a>&#160;</td><td class="memItemRight" valign="bottom"><b>ComfortBalance</b> = <a class="el" href="namespace_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures.html#abb49466717d51af4f24d4d957fdba5e5ac6589f5236c0c434d0c63dc5f9a856f2">ComfortBalance.Balanced</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:a7bfc2971c76f3834ff3c02a017269efa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies the comfort balance to be used in the connection search - i.e. how strongly less transfers should be preferred over shortest time. <br /></td></tr>
 <tr class="separator:a7bfc2971c76f3834ff3c02a017269efa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae8a9f18024b52f58ea812c32b34bdf33"><td class="memItemLeft" align="right" valign="top"><a id="ae8a9f18024b52f58ea812c32b34bdf33" name="ae8a9f18024b52f58ea812c32b34bdf33"></a>
-<a class="el" href="namespace_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures.html#a6472df18fe35f606eb34d5886f676605">WalkingPreference</a>&#160;</td><td class="memItemRight" valign="bottom"><b>WalkingPreference</b> = WalkingPreference.Normal<code> [get, set]</code></td></tr>
+<a class="el" href="namespace_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures.html#a6472df18fe35f606eb34d5886f676605">WalkingPreference</a>&#160;</td><td class="memItemRight" valign="bottom"><b>WalkingPreference</b> = <a class="el" href="namespace_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures.html#a6472df18fe35f606eb34d5886f676605a960b44c579bc2f6818d2daaf9e4c16f0">WalkingPreference.Normal</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:ae8a9f18024b52f58ea812c32b34bdf33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies the walking preference to be used in the connection search - i.e. how much walking there can be in the connection. <br /></td></tr>
 <tr class="separator:ae8a9f18024b52f58ea812c32b34bdf33"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7102cce6148e90b17224dbabd00ae5bf"><td class="memItemLeft" align="right" valign="top"><a id="a7102cce6148e90b17224dbabd00ae5bf" name="a7102cce6148e90b17224dbabd00ae5bf"></a>
-static <a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_settings.html">Settings</a>&#160;</td><td class="memItemRight" valign="bottom"><b>Default</b> = new <a class="el" href="class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_settings.html">Settings</a>()<code> [get]</code></td></tr>
-<tr class="memdesc:a7102cce6148e90b17224dbabd00ae5bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">The default settings to use if none were provided. <br /></td></tr>
-<tr class="separator:a7102cce6148e90b17224dbabd00ae5bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class representing the settings to use for the connection search. </p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="af223cba0ec21abb4ee117f9e67f59066" name="af223cba0ec21abb4ee117f9e67f59066"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af223cba0ec21abb4ee117f9e67f59066">&#9670;&#160;</a></span>GetMaxTransferDistance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int RAPTOR_Router.RAPTORStructures.Settings.GetMaxTransferDistance </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets the maximum transfer distance according to the WalkingPreference property. The maximum distance does NOT apply to transfers within same node (i.e. stops with the same name) </p>
+<dl class="section return"><dt>Returns</dt><dd>The maximum transfer distance in meters</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">InvalidDataException</td><td>Thrown when the WalkingPreference property is set to an invalid value</td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a599b639720ea3b16ad2a95f28a7d64eb" name="a599b639720ea3b16ad2a95f28a7d64eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a599b639720ea3b16ad2a95f28a7d64eb">&#9670;&#160;</a></span>GetMovingTransferLengthMultiplier()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double RAPTOR_Router.RAPTORStructures.Settings.GetMovingTransferLengthMultiplier </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets the multiplier that should be used to calculate minimum transfer time according to the set TransferLength preference. </p>
+<dl class="section return"><dt>Returns</dt><dd>The multiplier to be used on the preclculated transfer time</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">InvalidDataException</td><td>Thrown when the TransferLength property is set to an invalid value</td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a68ec3b22843c06016cc3cfa89caddb9e" name="a68ec3b22843c06016cc3cfa89caddb9e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a68ec3b22843c06016cc3cfa89caddb9e">&#9670;&#160;</a></span>GetStationaryTransferMinimumSeconds()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int RAPTOR_Router.RAPTORStructures.Settings.GetStationaryTransferMinimumSeconds </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets the minimum allowed time between an arrival and departure in the transfer stop (i.e. when arrival and departure are at the same exact stop) </p>
+<dl class="section return"><dt>Returns</dt><dd>The minimum allowed stationary transfer time in seconds</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">InvalidDataException</td><td>Thrown when the TransferLength property is set to an invalid value</td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ab34eab4586bd792f431b1efa0db13701" name="ab34eab4586bd792f431b1efa0db13701"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab34eab4586bd792f431b1efa0db13701">&#9670;&#160;</a></span>GetTransferPenaltySeconds()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int RAPTOR_Router.RAPTORStructures.Settings.GetTransferPenaltySeconds </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets the penalty that should be applied to a connection for each its transfer when comparing different connections between each other;. </p>
+<dl class="section return"><dt>Returns</dt><dd>The penalty to be applied in seconds</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">InvalidDataException</td><td>Thrown when the ComfortBalance property is set to an invalid value</td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>RAPTORStructures/Settings.cs</li>
 </ul>
 </div><!-- contents -->

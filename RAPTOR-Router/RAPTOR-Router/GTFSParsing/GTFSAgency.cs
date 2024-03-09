@@ -11,7 +11,7 @@ namespace RAPTOR_Router.GTFSParsing
     /// Class representing the agencies information from the agencies.txt gtfs file.
     /// The properties correspond to the entries in the file.
     /// </summary>
-    internal class GTFSAgency : IIdentifiable
+    public class GTFSAgency : IIdentifiable
     {
         [Name("agency_id")]
         public string Id { get; set; }
