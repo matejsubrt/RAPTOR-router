@@ -1,7 +1,6 @@
 ﻿using RAPTOR_Router.GTFSParsing;
 using RAPTOR_Router.Structures.Generic;
 using RAPTOR_Router.Structures.Interfaces;
-using RAPTOR_Router.Structures.Transit;
 
 namespace RAPTOR_Router.Extensions
 {

@@ -1,5 +1,5 @@
 using RAPTOR_Router.Models.Results;
-using RAPTOR_Router.Routers;
+using RAPTOR_Router.RouteFinders;
 using RAPTOR_Router.Structures.Configuration;
 
 namespace WebAPI
@@ -69,7 +69,7 @@ namespace WebAPI
         /// <param name="destStopName">The exact name of the destination stop</param>
         /// <param name="departureDateTime">The DateTime of the departure</param>
         /// <returns>The found earliest possible connection, null if none could be found.</returns>
-        static SearchResult HandleRequest(RAPTOR_Router.Routers.IRouteFinder router, string srcStopName, string destStopName, string departureDateTime)
+        static SearchResult HandleRequest(RAPTOR_Router.RouteFinders.IRouteFinder router, string srcStopName, string destStopName, string departureDateTime)
         {
             Console.WriteLine();
             DateTime departureTime;

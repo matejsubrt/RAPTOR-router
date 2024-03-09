@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RAPTOR_Router.Structures.Interfaces;
+﻿using RAPTOR_Router.Structures.Interfaces;
 
 namespace RAPTOR_Router.Structures.Transit
 {

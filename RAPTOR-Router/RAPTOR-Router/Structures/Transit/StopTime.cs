@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RAPTOR_Router.Structures.Transit
+﻿namespace RAPTOR_Router.Structures.Transit
 {
     /// <summary>
     /// Struct representing a stop time of a single trip in a single stop

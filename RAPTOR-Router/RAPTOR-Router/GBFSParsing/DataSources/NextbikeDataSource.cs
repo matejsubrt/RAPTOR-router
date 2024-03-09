@@ -1,12 +1,7 @@
 ﻿using RAPTOR_Router.GBFSParsing.Distances;
 using RAPTOR_Router.GBFSParsing.GBFSStructures;
 using RAPTOR_Router.Structures.Bike;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace RAPTOR_Router.GBFSParsing.DataSources
 {

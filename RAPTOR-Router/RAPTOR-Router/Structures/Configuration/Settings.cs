@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RAPTOR_Router.Structures.Configuration
+﻿namespace RAPTOR_Router.Structures.Configuration
 {
     /// <summary>
     /// Class representing the settings to use for the connection search

@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RAPTOR_Router.GTFSParsing;
-using RAPTOR_Router.Structures.Bike;
+﻿using RAPTOR_Router.Structures.Bike;
 using RAPTOR_Router.Structures.Transit;
 using RAPTOR_Router.Structures.Interfaces;
-using System.Security.Cryptography.Xml;
+using RAPTOR_Router.Structures.Configuration;
 using RAPTOR_Router.Models.Static;
 using RAPTOR_Router.Models.Dynamic;
 using RAPTOR_Router.Models.Results;
 using RAPTOR_Router.Extensions;
-using RAPTOR_Router.Structures.Configuration;
 
-namespace RAPTOR_Router.Routers
+namespace RAPTOR_Router.RouteFinders
 {
     /// <summary>
     /// Basic router used for finding the best connection from a source stop to a destination stop using only public transit. It only takes the arrival time into account, i.e. is to be used in situations, where the arrival time is the only important factor (doesn't take into account comfort/transfers/...)

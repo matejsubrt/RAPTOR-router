@@ -1,10 +1,5 @@
 ﻿using RAPTOR_Router.GTFSParsing;
 using RAPTOR_Router.Structures.Generic;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RAPTOR_Router.Structures.Transit
 {

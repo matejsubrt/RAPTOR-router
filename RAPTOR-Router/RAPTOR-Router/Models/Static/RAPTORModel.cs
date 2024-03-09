@@ -1,9 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
-using RAPTOR_Router.Extensions;
+﻿using RAPTOR_Router.Extensions;
 using RAPTOR_Router.GTFSParsing;
-using RAPTOR_Router.Structures.Bike;
 using RAPTOR_Router.Structures.Generic;
 using RAPTOR_Router.Structures.Transit;
+using Microsoft.Extensions.Configuration;
 using System.Globalization;
 
 namespace RAPTOR_Router.Models.Static

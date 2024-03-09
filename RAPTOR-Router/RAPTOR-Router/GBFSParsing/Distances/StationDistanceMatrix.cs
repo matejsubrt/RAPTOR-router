@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RAPTOR_Router.Structures.Bike;
+﻿using RAPTOR_Router.Structures.Bike;
 
 namespace RAPTOR_Router.GBFSParsing.Distances
 {

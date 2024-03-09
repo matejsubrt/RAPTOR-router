@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using RAPTOR_Router.Models.Results;
-using RAPTOR_Router.Routers;
+using RAPTOR_Router.RouteFinders;
 using System.Windows.Forms;
 
 namespace GUI

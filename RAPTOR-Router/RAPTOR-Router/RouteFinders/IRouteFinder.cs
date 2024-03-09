@@ -1,12 +1,6 @@
-﻿using RAPTOR_Router.Models;
-using RAPTOR_Router.Models.Results;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using RAPTOR_Router.Models.Results;
 
-namespace RAPTOR_Router.Routers
+namespace RAPTOR_Router.RouteFinders
 {
     /// <summary>
     /// An interface to use for any router class - any class that is supposed to find a connection in a SearchModel

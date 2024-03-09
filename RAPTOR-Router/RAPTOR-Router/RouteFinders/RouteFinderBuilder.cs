@@ -1,21 +1,16 @@
-﻿using RAPTOR_Router.GBFSParsing;
-using RAPTOR_Router.GTFSParsing;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RAPTOR_Router.Structures.Bike;
-using Microsoft.Extensions.Configuration;
-using RAPTOR_Router.Structures.Generic;
-using System.Globalization;
-using RAPTOR_Router.Structures.Transit;
+﻿using RAPTOR_Router.GTFSParsing;
 using RAPTOR_Router.GBFSParsing.DataSources;
+using RAPTOR_Router.Structures.Bike;
+using RAPTOR_Router.Structures.Generic;
+using RAPTOR_Router.Structures.Transit;
+using RAPTOR_Router.Structures.Configuration;
 using RAPTOR_Router.Models.Static;
 using RAPTOR_Router.Extensions;
-using RAPTOR_Router.Structures.Configuration;
+using Microsoft.Extensions.Configuration;
+using System.Globalization;
 
-namespace RAPTOR_Router.Routers
+
+namespace RAPTOR_Router.RouteFinders
 {
     /// <summary>
     /// A class used for creating separate routers to be used for connection searching.
@@ -156,36 +151,6 @@ namespace RAPTOR_Router.Routers
                 }
             }
         }
-        /// <summary>
-        /// Creates a new BasicRouteFinder instance using the provided settings and the parsed RAPTOR model
-        /// </summary>
-        /// <param name="settings"></param>
-        /// <returns></returns>
-  //      public IRouteFinder CreateRouter(Settings settings)
-		//{
-		//	if(raptorModel is null)
-		//	{
-		//		throw new ApplicationException("Data from a gtfs archive were not loaded yet");
-		//	}
-		//	IRouteFinder router = new BasicRouteFinder(settings, raptorModel);
-		//	return router;
-		//}
-
-		/// <summary>
-		/// Creates a new AdvancedRouteFinder instance using the provided settings and the parsed RAPTOR model
-		/// </summary>
-		/// <param name="settings">The settings to use</param>
-		/// <returns>The constructed RouteFinder</returns>
-		/// <exception cref="ApplicationException">Thrown if LoadDataFromGtfs wasn't called yet</exception>
-		//public IRouteFinder CreateAdvancedRouter(Settings settings)
-		//{
-		//	if (raptorModel is null)
-		//	{
-		//		throw new ApplicationException("Data from a gtfs archive were not loaded yet");
-		//	}
-		//	IRouteFinder router = new AdvancedRouteFinder(settings, raptorModel);
-		//	return router;
-		//}
 
 		public IBikeRouteFinder CreateBikeRouter(Settings settings)
 		{

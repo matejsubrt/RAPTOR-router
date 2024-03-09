@@ -1,17 +1,12 @@
 ﻿using RAPTOR_Router.Structures.Bike;
 using RAPTOR_Router.Structures.Interfaces;
-using System.Timers;
-
-using Timer = System.Timers.Timer;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
 using RAPTOR_Router.GBFSParsing.DataSources;
 using RAPTOR_Router.GBFSParsing.Distances;
 using RAPTOR_Router.Extensions;
+using System.Timers;
+
+using Timer = System.Timers.Timer;
+
 
 namespace RAPTOR_Router.Models.Static
 {
@@ -24,13 +19,6 @@ namespace RAPTOR_Router.Models.Static
         private List<IBikeDataSource> bikeDataSources;
 
         private Timer statusUpdateTimer;
-
-        //public BikeModel(List<BikeStation> stations, Dictionary<string, BikeStation> stationsById, StationDistanceMatrix distances)
-        //{
-        //    this.Stations = stations;
-        //    this.StationsById = stationsById;
-        //    this.Distances = distances;
-        //}
 
         public BikeModel()
         {

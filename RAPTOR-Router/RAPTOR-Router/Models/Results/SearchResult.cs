@@ -1,5 +1,4 @@
-﻿using RAPTOR_Router.Models;
-using System.Text;
+﻿using System.Text;
 #pragma warning disable 1591
 using RAPTOR_Router.Structures.Bike;
 using RAPTOR_Router.Structures.Transit;
