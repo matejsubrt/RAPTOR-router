@@ -373,34 +373,26 @@ namespace RAPTOR_Router.RouteFinders
             HashSet<BikeStation> newMarkedBikeStations = new();
             foreach (Stop markedStop in markedStops)
             {
-                if(markedStop.Name == "Muzeum")
-                {
-                    Console.WriteLine();
-                }
                 foreach (Transfer transfer in markedStop.Transfers)
                 {
-                    // SWITCH -> the transfer was extracted from the destination stop as we are searching backwards. We switch to make from and to the real start and end of the transfer
-                    var realSrc = transfer.To;
-                    var realDest = transfer.From; // should be the same as markedStop
-                    if ((transfer.Distance <= maxTransferDistance || realSrc.Name == realDest.Name) && TransferImprovesDepartureTime(transfer) && !searchModel.RoutePointIsReachedByTransferInRound(realDest, round))
+                    // SWITCH -> the transfer was extracted from the destination stop as we are searching backwards. We switch to the opposite transfer, which has the same semantics as the real-life connection direction
+                    Transfer realTransfer = transfer.OppositeTransfer;
+                    if ((transfer.Distance <= maxTransferDistance || realTransfer.From.Name == realTransfer.To.Name) && TransferImprovesDepartureTime(realTransfer) && !searchModel.RoutePointIsReachedByTransferInRound(realTransfer.To, round))
                     {
-                        ImproveArrivalByTransfer(transfer, false);
-                        newMarkedStops.Add(realSrc);
+                        ImproveArrivalByTransfer(realTransfer, false);
+                        newMarkedStops.Add(realTransfer.From);
                     }
                 }
                 if (useSharedBikes)
                 {
                     foreach (BikeTransfer bikeTransfer in markedStop.BikeTransfers)
                     {
-                        BikeStation realSrc = (BikeStation)bikeTransfer.GetDestRoutePoint();
-                        Stop realDest = (Stop)bikeTransfer.GetSrcRoutePoint(); // should be the same as markedStop
-                        if (bikeTransfer.Distance <= maxTransferDistance && TransferImprovesDepartureTime(bikeTransfer) && !searchModel.RoutePointIsReachedByTransferInRound(realDest, round))
+                        BikeTransfer realTransfer = bikeTransfer.OppositeTransfer;
+                        BikeStation realSrc = (BikeStation)realTransfer.GetSrcRoutePoint();
+                        Stop realDest = (Stop)realTransfer.GetDestRoutePoint();
+                        if (realTransfer.Distance <= maxTransferDistance && TransferImprovesDepartureTime(realTransfer) && !searchModel.RoutePointIsReachedByTransferInRound(realDest, round))
                         {
-                            if(realSrc.Name == "P1-Quadrio - Purkynova")
-                            {
-                                Console.WriteLine();
-                            }
-                            ImproveArrivalByTransfer(bikeTransfer, false);
+                            ImproveArrivalByTransfer(realTransfer, false);
                             newMarkedBikeStations.Add(realSrc);
                         }
                     }
@@ -412,11 +404,12 @@ namespace RAPTOR_Router.RouteFinders
                 {
                     foreach (BikeTransfer bikeTransfer in markedBikeStation.Transfers)
                     {
-                        Stop realSrc = (Stop)bikeTransfer.GetDestRoutePoint();
-                        BikeStation realDest = (BikeStation)bikeTransfer.GetSrcRoutePoint(); // should be the same as markedBikeStation
-                        if (bikeTransfer.Distance <= maxTransferDistance && TransferImprovesDepartureTime(bikeTransfer) && !searchModel.RoutePointIsReachedByTransferInRound(realDest, round))
+                        BikeTransfer realTransfer = bikeTransfer.OppositeTransfer;
+                        Stop realSrc = (Stop)realTransfer.GetSrcRoutePoint();
+                        BikeStation realDest = (BikeStation)realTransfer.GetDestRoutePoint();
+                        if (realTransfer.Distance <= maxTransferDistance && TransferImprovesDepartureTime(realTransfer) && !searchModel.RoutePointIsReachedByTransferInRound(realDest, round))
                         {
-                            ImproveArrivalByTransfer(bikeTransfer, true, settings.BikeUnlockTime);
+                            ImproveArrivalByTransfer(realTransfer, true, settings.BikeUnlockTime);
                             newMarkedStops.Add(realSrc);
                         }
                     }
@@ -432,10 +425,9 @@ namespace RAPTOR_Router.RouteFinders
 
             bool TransferImprovesDepartureTime(ITransfer transfer)
             {
-                // SWITCH -> the transfer was extracted from the destination stop as we are searching backwards. We switch to make from and to the real start and end of the transfer
-                IRoutePoint from = transfer.GetDestRoutePoint();
-                IRoutePoint to = transfer.GetSrcRoutePoint();
-                //DateTime currEarliestArrival = searchModel.GetEarliestArrivalInRound(transfer.To, round);
+                IRoutePoint from = transfer.GetSrcRoutePoint();
+                IRoutePoint to = transfer.GetDestRoutePoint();
+
                 DateTime currLatestDeparture = searchModel.GetLatestDeparture(from);
                 DateTime latestDepartureWithTransfer = searchModel.GetLatestDepartureInRound(to, round);
 
@@ -455,9 +447,8 @@ namespace RAPTOR_Router.RouteFinders
             }
             void ImproveArrivalByTransfer(ITransfer transfer, bool toBikeStation, int extraSeconds = 0)
             {
-                // SWITCH -> the transfer was extracted from the destination stop as we are searching backwards. We switch to make from and to the real start and end of the transfer
-                IRoutePoint from = transfer.GetDestRoutePoint();
-                IRoutePoint to = transfer.GetSrcRoutePoint();
+                IRoutePoint from = transfer.GetSrcRoutePoint();
+                IRoutePoint to = transfer.GetDestRoutePoint();
                 DateTime latestDepartureWithTransfer = searchModel.GetLatestDepartureInRound(to, round);
 
                 int stationaryTransferSeconds = settings.GetStationaryTransferMinimumSeconds();

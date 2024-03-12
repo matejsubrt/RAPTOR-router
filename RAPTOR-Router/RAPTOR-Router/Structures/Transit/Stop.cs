@@ -27,7 +27,8 @@ namespace RAPTOR_Router.Structures.Transit
         /// <summary>
         /// A list of all possible transfers that can be made from the stop
         /// </summary>
-        public List<Transfer> Transfers { get; private set; } = new List<Transfer>();
+        //public List<Transfer> Transfers { get; private set; } = new List<Transfer>();
+        public HashSet<Transfer> Transfers { get; private set; } = new HashSet<Transfer>();
 
         public List<ToBikeTransfer> BikeTransfers { get; private set; } = new List<ToBikeTransfer>();
 

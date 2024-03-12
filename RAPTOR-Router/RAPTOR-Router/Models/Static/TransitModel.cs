@@ -242,10 +242,15 @@ namespace RAPTOR_Router.Models.Static
         /// </summary>
         private void LoadStopTransfers(List<ForbiddenCrossingLine> forbiddenCrossings)
         {
+            HashSet<Stop> stopsWithAllTransfersComputed = new HashSet<Stop>();
             foreach (Stop sourceStop in stops.Values)
             {
                 foreach (Stop destStop in stops.Values)
                 {
+                    if (stopsWithAllTransfersComputed.Contains(destStop))
+                    {
+                        continue;
+                    }
                     // Speeds up the calculation by pruning off stops that are already too far from each other in just one coordinate
                     if (DistanceExtensions.TooFarInOneDirection(sourceStop, destStop, MAX_TRANSFER_DISTANCE))
                     {
@@ -255,13 +260,22 @@ namespace RAPTOR_Router.Models.Static
                     {
                         var distance = DistanceExtensions.SimplifiedDistanceBetween(sourceStop, destStop);
 
-                        // Only add transfer, if the stops are at different locations OR if the stops are at the same location, but have different ids (xxxxxx and xxxxxxP) -> some stops are split into multiple stops in the GTFS data (one for city and other for regional traffic)
+                        // Only add transfer, if the stops are at different locations OR if the stops are at the same location, but have different ids (xxxxxx and xxxxxxP) -> some stops are split into multiple stops in the GTFS
                         if ((distance > 0 || IsCityRegionalSameStopTransfer(sourceStop, destStop)) && distance < MAX_TRANSFER_DISTANCE && !forbiddenCrossings.ForbidsTransferBetween(sourceStop, destStop))
                         {
                             Transfer transferToDest = new Transfer(sourceStop, destStop, distance);
+                            Transfer transferToSrc = new Transfer(destStop, sourceStop, distance);
+
+                            transferToDest.OppositeTransfer = transferToSrc;
+                            transferToSrc.OppositeTransfer = transferToDest;
+
                             sourceStop.Transfers.Add(transferToDest);
+                            destStop.Transfers.Add(transferToSrc);
+
                         }
                     }
+                    //sourceStop.AllTransfersComputed = true;
+                    stopsWithAllTransfersComputed.Add(sourceStop);
                 }
             }
             bool IsCityRegionalSameStopTransfer(Stop stop1, Stop stop2)

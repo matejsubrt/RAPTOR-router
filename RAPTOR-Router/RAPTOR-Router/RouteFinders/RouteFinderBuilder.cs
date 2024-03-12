@@ -145,8 +145,14 @@ namespace RAPTOR_Router.RouteFinders
                     int distance = (int)DistanceExtensions.SimplifiedDistanceBetween(stop, bikeStation);
                     if (distance <= TransitModel.MAX_TRANSFER_DISTANCE && !forbiddenCrossings.ForbidsTransferBetween(stop, bikeStation))
                     {
-                        stop.AddBikeTransfer(new ToBikeTransfer(stop, bikeStation, distance));
-                        bikeStation.AddTransfer(new FromBikeTransfer(bikeStation, stop, distance));
+                        var stopToBikeTransfer = new ToBikeTransfer(stop, bikeStation, distance);
+                        var bikeToStopTransfer = new FromBikeTransfer(bikeStation, stop, distance);
+                        
+                        stopToBikeTransfer.OppositeTransfer = bikeToStopTransfer;
+                        bikeToStopTransfer.OppositeTransfer = stopToBikeTransfer;
+
+                        stop.AddBikeTransfer(stopToBikeTransfer);
+                        bikeStation.AddTransfer(bikeToStopTransfer);
                     }
                 }
             }

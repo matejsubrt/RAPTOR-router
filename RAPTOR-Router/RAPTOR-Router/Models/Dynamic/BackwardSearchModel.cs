@@ -148,14 +148,14 @@ namespace RAPTOR_Router.Models.Dynamic
                         StopRoutingInfoBase.TransferDeparture transferDeparture = departure as StopRoutingInfoBase.TransferDeparture;
                         result.AddUsedTransfer(transferDeparture.Transfer, transferDeparture.Time, true);
                         transferUsed = true;
-                        currStop = transferDeparture.Transfer.From; // TODO: SWITCH had to be used here, it is weird
+                        currStop = transferDeparture.Transfer.To;
                     }
                     else if (departure is StopRoutingInfoBase.BikeTransferDeparture)
                     {
                         StopRoutingInfoBase.BikeTransferDeparture bikeTransferDeparture = departure as StopRoutingInfoBase.BikeTransferDeparture;
                         result.AddUsedBikeTransfer(bikeTransferDeparture.Transfer, bikeTransferDeparture.Time, true);
                         transferUsed = true;
-                        currStop = bikeTransferDeparture.Transfer.GetSrcRoutePoint();  // TODO: SWITCH had to be used here, it is weird
+                        currStop = bikeTransferDeparture.Transfer.GetDestRoutePoint();
                     }
 
 

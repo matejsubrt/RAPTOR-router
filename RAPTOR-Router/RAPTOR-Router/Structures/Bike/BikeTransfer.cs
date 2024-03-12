@@ -9,6 +9,7 @@ namespace RAPTOR_Router.Structures.Bike
         public abstract int GetTransferTime(int walkingPace);
         public abstract IRoutePoint GetSrcRoutePoint();
         public abstract IRoutePoint GetDestRoutePoint();
+        public BikeTransfer OppositeTransfer { get; set; }
     }
     public class FromBikeTransfer : BikeTransfer
     {

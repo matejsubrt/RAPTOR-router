@@ -19,6 +19,7 @@ namespace RAPTOR_Router.Structures.Transit
         /// The straight-line distance between the start and end of the transfer
         /// </summary>
         public int Distance { get; }
+        public Transfer OppositeTransfer { get; set; }
 
         /// <summary>
         /// Creates a new Transfer object

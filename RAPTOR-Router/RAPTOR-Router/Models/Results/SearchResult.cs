@@ -48,11 +48,38 @@ namespace RAPTOR_Router.Models.Results
         /// <param name="trip">The trip to add</param>
         /// <param name="getOnStop">The get on stop of this segment</param>
         /// <param name="getOffStop">The get off stop of this segment</param>
-        internal void AddUsedTrip(Trip trip, Stop getOnStop, Stop getOffStop, DateTime destArrivalTime, bool toEnd)
+        internal void AddUsedTrip(Trip trip, Stop getOnStop, Stop getOffStop, DateTime time, bool toEnd)
         {
             var routeStops = trip.Route.RouteStops;
 
-            List<StopPass> stopPasses = GetStopPassesList(routeStops, trip.StopTimes, destArrivalTime);
+            DateTime destStopArrivalDateTime;
+            if (toEnd)
+            {
+                // The connection is being constructed from the front (we append to the end), meaning the search was run backwards, meaning time is the SOURCE DEPARTURE time -> we need to find the destination arrival time
+                DateOnly departureDate = DateOnly.FromDateTime(time);
+                TimeOnly departureTime = TimeOnly.FromDateTime(time);
+                var getOffStopIndex = routeStops.IndexOf(getOffStop);
+                TimeOnly arrivalTime = trip.StopTimes[getOffStopIndex].ArrivalTime;
+
+                if(arrivalTime >= departureTime)
+                {
+                    // The trip does not go over midnight
+                    destStopArrivalDateTime = DateTimeExtensions.FromDateAndTime(departureDate, arrivalTime);
+                }
+                else
+                {
+                    // The trip does go over midnight between source and dest
+                    DateOnly arrivalDate = departureDate.AddDays(1);
+                    destStopArrivalDateTime = DateTimeExtensions.FromDateAndTime(arrivalDate, arrivalTime);
+                }
+            }
+            else
+            {
+                // The connection is being constructed from the back (we append to the start), meaning the search was run forwards, meaning time is the DESTINATION ARRIVAL time
+                destStopArrivalDateTime = time;
+            }
+
+            List<StopPass> stopPasses = GetStopPassesList(routeStops, trip.StopTimes, destStopArrivalDateTime);
 
             UsedTrip usedTrip = new UsedTrip(
                 stopPasses,
@@ -140,8 +167,8 @@ namespace RAPTOR_Router.Models.Results
         /// <param name="transfer">The transfer to add</param>
         internal void AddUsedTransfer(Transfer transfer, DateTime destArrivalTime, bool toEnd)
         {
-            var realSrc = transfer.To;
-            var realDest = transfer.From;
+            var realSrc = transfer.From;
+            var realDest = transfer.To;
             StopInfo srcStopInfo = new(realSrc.Name, realSrc.Id, realSrc.Coords.Lat, realSrc.Coords.Lon);
             StopInfo destStopInfo = new(realDest.Name, realDest.Id, realDest.Coords.Lat, realDest.Coords.Lon);
             UsedTransfer usedTransfer = new UsedTransfer(
@@ -186,8 +213,8 @@ namespace RAPTOR_Router.Models.Results
         }
         internal void AddUsedBikeTransfer(BikeTransfer transfer, DateTime arrivalTime, bool toEnd)
         {
-            var realSrc = transfer.GetDestRoutePoint();
-            var realDest = transfer.GetSrcRoutePoint();
+            var realSrc = transfer.GetSrcRoutePoint();
+            var realDest = transfer.GetDestRoutePoint();
             StopInfo srcStopInfo = new(realSrc.Name, realSrc.Id, realSrc.Coords.Lat, realSrc.Coords.Lon);
             StopInfo destStopInfo = new(realDest.Name, realDest.Id, realDest.Coords.Lat, realDest.Coords.Lon);
             UsedTransfer usedTransfer = new UsedTransfer(
