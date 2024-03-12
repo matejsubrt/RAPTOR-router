@@ -20,7 +20,7 @@ namespace RAPTOR_Router.RouteFinders
 		/// <summary>
 		/// The RAPTOR model that the routers should use
 		/// </summary>
-		private RAPTORModel? raptorModel;
+		private TransitModel? raptorModel;
 
 
 		private BikeModel? bikeModel;
@@ -65,10 +65,10 @@ namespace RAPTOR_Router.RouteFinders
 		/// <param name="gtfsZipArchiveLocation">The location of the zip gtfs archive</param>
 		public void LoadGtfsData(string gtfsZipArchiveLocation, List<ForbiddenCrossingLine> forbiddenCrossings)
 		{
-			RAPTORModel raptor;
+			TransitModel raptor;
 			using (GTFS gtfs = GTFS.ParseZipFile(gtfsZipArchiveLocation))
 			{
-				raptor = new RAPTORModel(gtfs, forbiddenCrossings);
+				raptor = new TransitModel(gtfs, forbiddenCrossings);
 			}
 			GC.Collect();
 			this.raptorModel = raptor;
@@ -138,12 +138,12 @@ namespace RAPTOR_Router.RouteFinders
             {
                 foreach (BikeStation bikeStation in bikeModel.Stations)
                 {
-                    if (DistanceExtensions.TooFarInOneDirection(stop, bikeStation, RAPTORModel.MAX_TRANSFER_DISTANCE))
+                    if (DistanceExtensions.TooFarInOneDirection(stop, bikeStation, TransitModel.MAX_TRANSFER_DISTANCE))
                     {
                         continue;
                     }
                     int distance = (int)DistanceExtensions.SimplifiedDistanceBetween(stop, bikeStation);
-                    if (distance <= RAPTORModel.MAX_TRANSFER_DISTANCE && !forbiddenCrossings.ForbidsTransferBetween(stop, bikeStation))
+                    if (distance <= TransitModel.MAX_TRANSFER_DISTANCE && !forbiddenCrossings.ForbidsTransferBetween(stop, bikeStation))
                     {
                         stop.AddBikeTransfer(new ToBikeTransfer(stop, bikeStation, distance));
                         bikeStation.AddTransfer(new FromBikeTransfer(bikeStation, stop, distance));
@@ -162,8 +162,9 @@ namespace RAPTOR_Router.RouteFinders
 			{
 				throw new ApplicationException("Data from a gbfs api were not loaded yet");
 			}
-			IBikeRouteFinder router = new ForwardRouteFinder(settings, raptorModel, bikeModel);
-			return router;
+            //IBikeRouteFinder router = new ForwardRouteFinder(settings, raptorModel, bikeModel);
+            IBikeRouteFinder router = new BackwardRouteFinder(settings, raptorModel, bikeModel);
+            return router;
 		}
 		public bool ValidateStopName(string stopName)
 		{

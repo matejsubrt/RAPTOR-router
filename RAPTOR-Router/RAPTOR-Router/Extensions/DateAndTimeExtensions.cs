@@ -23,7 +23,8 @@
             {
                 return new TimeOnly(TimeOnly.MaxValue.Ticks + newTicks);
             }
-            return new TimeOnly(newTicks);
+            long ticksPerDay = TimeSpan.TicksPerDay;
+            return new TimeOnly(newTicks % ticksPerDay);
         }
     }
 }

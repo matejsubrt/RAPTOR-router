@@ -18,8 +18,6 @@ namespace RAPTOR_Router.Structures.Bike
         {
             Id = id;
             Name = name;
-            //Lat = lat;
-            //Lon = lon;
             Coords = new Coordinates(lat, lon);
             Capacity = capacity;
             LocalId = localId;

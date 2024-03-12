@@ -76,9 +76,18 @@ namespace RAPTOR_Router.Structures.Transit
         /// <param name="stop">The stop to find the index of</param>
         /// <returns>The index of the stop in the stops list</returns>
         /// <exception cref="InvalidOperationException">Thrown if stop is not found in the stops list</exception>
-        public int GetStopIndex(Stop stop)
+        public int GetFirstStopIndex(Stop stop)
         {
             int res = RouteStops.IndexOf(stop);
+            if (res == -1)
+            {
+                throw new InvalidOperationException("Stop not found");
+            }
+            return res;
+        }
+        public int GetLastStopIndex(Stop stop)
+        {
+            int res = RouteStops.LastIndexOf(stop);
             if (res == -1)
             {
                 throw new InvalidOperationException("Stop not found");
@@ -94,9 +103,9 @@ namespace RAPTOR_Router.Structures.Transit
         /// <param name="maxDaysAfter">The maximum number of days between the specified earliest time and the trip departure time</param>
         /// <param name="tripDate">The date on which the trip actually leaves -> if the first found trip is after midnight, this date is different than the date input parameter</param>
         /// <returns>The earliest trip, that leaves the stop after the specified time on the route, null if no trip is found</returns>
-        public Trip GetEarliestTripAtStop(Stop stop, DateOnly date, TimeOnly time, int maxDaysAfter, out DateOnly tripDate)
+        public Trip GetEarliestTripDepartingAfterTimeAtStop(Stop stop, DateOnly date, TimeOnly time, int maxDaysAfter, out DateOnly tripDate)
         {
-            int stopIndex = GetStopIndex(stop);
+            int stopIndex = GetFirstStopIndex(stop);
             DateOnly currDate = date;
             DateOnly maxDate = date.AddDays(maxDaysAfter);
 
@@ -135,6 +144,76 @@ namespace RAPTOR_Router.Structures.Transit
                 {
                     tripDate = currDate;
                     return RouteTrips[currDate][0];
+                }
+            }
+            //No trip found in the specified timeframe
+            tripDate = new DateOnly();
+            return null;
+        }
+        public Trip GetLatestTripArrivingBeforeTimeAtStop(Stop stop, DateOnly date, TimeOnly time, int maxDaysBefore, out DateOnly tripDate)
+        {
+            int stopIndex = GetLastStopIndex(stop);
+            DateOnly currDate = date;
+            DateOnly minDate = date.AddDays(-maxDaysBefore);
+
+            List<Trip> tripsOnDate;
+            if (RouteTrips.ContainsKey(currDate))
+            {
+                tripsOnDate = RouteTrips[currDate];
+
+                TimeOnly arrivalTime;
+                //Scan the first day for trips arriving before specified time
+
+
+                // We start with the last trip of the day and go backwards
+                //TODO: check, if there could not be a trip that arrives at the stop after midnight, but is still the last trip of the day
+                int lastTripArrivingAtStopBeforeMidnightIndex = tripsOnDate.Count - 1;
+                var stopTimes1 = tripsOnDate[lastTripArrivingAtStopBeforeMidnightIndex].StopTimes;
+                var firstStopArrivalTime = stopTimes1[0].ArrivalTime;
+                var lastStopArrivalTime = stopTimes1[stopTimes1.Count - 1].ArrivalTime;
+                while(firstStopArrivalTime > lastStopArrivalTime)
+                {
+                    lastTripArrivingAtStopBeforeMidnightIndex--;
+                    if(lastTripArrivingAtStopBeforeMidnightIndex < 0)
+                    {
+                        break;
+                    }
+                    stopTimes1 = tripsOnDate[lastTripArrivingAtStopBeforeMidnightIndex].StopTimes;
+                    firstStopArrivalTime = stopTimes1[0].ArrivalTime;
+                    lastStopArrivalTime = stopTimes1[stopTimes1.Count - 1].ArrivalTime;
+                }
+
+
+                for (int i = lastTripArrivingAtStopBeforeMidnightIndex; i >= 0; i--)
+                {
+                    var stopTimes = tripsOnDate[i].StopTimes;
+                    arrivalTime = stopTimes[stopIndex].ArrivalTime;
+
+                    if (arrivalTime > stopTimes[stopTimes.Count - 1].ArrivalTime)
+                    {
+                        tripDate = currDate.AddDays(-1);
+                        return tripsOnDate[i];
+                    }
+
+                    if (arrivalTime <= time)
+                    {
+                        tripDate = currDate;
+                        return tripsOnDate[i];
+                    }
+                }
+            }
+
+
+            //scan the preceding days till minDay and select first available trip
+            while (currDate > minDate)
+            {
+                currDate = currDate.AddDays(-1);
+
+                if (RouteTrips.ContainsKey(currDate) && RouteTrips[currDate].Count > 0)
+                {
+                    tripDate = currDate;
+                    // last trip of the preceding day
+                    return RouteTrips[currDate][RouteTrips[currDate].Count - 1];
                 }
             }
             //No trip found in the specified timeframe

@@ -78,6 +78,11 @@ namespace RAPTOR_Router.GBFSParsing.DataSources
                     Console.WriteLine("\nException Caught!");
                     Console.WriteLine("Message :{0} ", e.Message);
                 }
+                catch(AggregateException e)
+                {
+                    Console.WriteLine("\nException Caught!");
+                    Console.WriteLine("Message :{0} ", e.Message);
+                }
             }
         }
     }

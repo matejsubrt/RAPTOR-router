@@ -37,12 +37,24 @@ namespace CLIApp
 			Settings settings = Settings.GetDefaultSettings();
 			settings.BikeTripBuffer = BikeTripBuffer.Short;
 			//settings.TransferTime = TransferTime.Short;
-			settings.UseSharedBikes = false;
+			settings.UseSharedBikes = true;
 
 			var builder = new RouteFinderBuilder();
 			builder.LoadAllData();
 
 			IBikeRouteFinder router1 = builder.CreateBikeRouter(settings);
+
+
+
+
+
+            DateTime departureTime1;
+            DateTime.TryParse("28/02/2024 07:07:07", out departureTime1);
+			var result = router1.FindConnection(50.1162, 14.4492, 50.0899, 14.3522, departureTime1);
+			Console.WriteLine(result.ToString());
+
+			router1 = builder.CreateBikeRouter(settings);
+
 
 
 			while (true)
@@ -70,14 +82,13 @@ namespace CLIApp
 				if (result1 is null)
 				{
 					Console.WriteLine("Connection could not be found, please try again");
-					continue;
 				}
+                else
+                {
+                    Console.WriteLine(result1.ToString());
+                }
 
-
-				Console.WriteLine(result1.ToString());
-
-
-				router1 = builder.CreateBikeRouter(settings);
+                router1 = builder.CreateBikeRouter(settings);
 			}
 		}
 	}

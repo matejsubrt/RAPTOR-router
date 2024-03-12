@@ -26,5 +26,6 @@ namespace RAPTOR_Router.RouteFinders
         /// <param name="departureTime">The departure date and time</param>
         /// <returns>The resulting best connection, null if one id found</returns>
         SearchResult FindConnection(string sourceStop, string destStop, DateTime departureTime);
+        SearchResult FindConnection(double srcLat, double srcLon, double destLat, double destLon, DateTime departureTime);
     }
 }
