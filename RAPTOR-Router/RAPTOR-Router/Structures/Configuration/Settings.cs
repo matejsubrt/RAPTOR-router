@@ -24,8 +24,13 @@
         /// </summary>
         public int CyclingPace { get; set; } = 5;
 
-
+        /// <summary>
+        /// The time it takes to unlock a bike
+        /// </summary>
         public int BikeUnlockTime { get; set; } = 30;
+        /// <summary>
+        /// The time it takes to lock a bike
+        /// </summary>
         public int BikeLockTime { get; set; } = 15;
 
 
@@ -33,6 +38,9 @@
         /// Specifies if shared bikes should be considered in the connection search
         /// </summary>
         public bool UseSharedBikes { get; set; } = false;
+        /// <summary>
+        /// Specifies if the bike trip length should be limited to 15 minutes
+        /// </summary>
         public bool BikeMax15Minutes { get; set; } = true;
 
         /// <summary>
@@ -47,7 +55,10 @@
         /// Specifies the walking preference to be used in the connection search - i.e. how much walking there can be in the connection
         /// </summary>
         public WalkingPreference WalkingPreference { get; set; } = WalkingPreference.Normal;
-        public BikeTripBuffer BikeTripBuffer { get; set; } = BikeTripBuffer.Normal;
+        /// <summary>
+        /// Specifies how large the time buffer for bike trips should be
+        /// </summary>
+        public BikeTripBuffer BikeTripBuffer { get; set; } = BikeTripBuffer.Medium;
 
         /// <summary>
         /// The default settings to use if none were provided
@@ -81,6 +92,11 @@
                     throw new InvalidDataException("Invalid value of enum TransferLength");
             }
         }
+        /// <summary>
+        /// Gets the multiplier that should be used to calculate the length of a bike trip according to the set BikeTripBuffer preference
+        /// </summary>
+        /// <returns>The multiplier to be used on the precalculated transfer time</returns>
+        /// <exception cref="InvalidDataException">Thrown when the BikeTripBuffer property has an invalid value</exception>
         public double GetBikeTripLengthMultiplier()
         {
             switch (BikeTripBuffer)
@@ -89,7 +105,7 @@
                     return 1.0;
                 case BikeTripBuffer.Short:
                     return 1.1;
-                case BikeTripBuffer.Normal:
+                case BikeTripBuffer.Medium:
                     return 1.25;
                 case BikeTripBuffer.Long:
                     return 1.5;
@@ -160,10 +176,21 @@
                     throw new InvalidDataException("Invalid value of enum WalkingPreference");
             }
         }
+
+        /// <summary>
+        /// Gets the time it takes to perform a bike trip of the given distance
+        /// </summary>
+        /// <param name="distance">The distance of the bike trip in meters</param>
+        /// <returns>The time it takes to perform the trip in seconds</returns>
         public int GetBikeTripTime(int distance)
         {
             return (int)(distance / 1000.0 * CyclingPace * 60);
         }
+        /// <summary>
+        /// Gets the time it takes to perform a transfer of the given distance
+        /// </summary>
+        /// <param name="distance">The distance of the transfer in meters</param>
+        /// <returns>The time it takes to perform the transfer in seconds</returns>
         public int GetWalkingTransferTime(int distance)
         {
             return (int)(distance / 1000.0 * WalkingPace * 60);
@@ -230,11 +257,26 @@
         /// </summary>
         Low = 2
     }
+    /// <summary>
+    /// Enum representing the time buffer used for bike trips
+    /// </summary>
     public enum BikeTripBuffer
     {
+        /// <summary>
+        /// The exact calculated time by distance * pace will be used
+        /// </summary>
         None = 0,
+        /// <summary>
+        /// A short buffer will be added to the calculated time
+        /// </summary>
         Short = 1,
-        Normal = 2,
+        /// <summary>
+        /// A medium buffer will be added to the calculated time
+        /// </summary>
+        Medium = 2,
+        /// <summary>
+        /// A long buffer will be added to the calculated time
+        /// </summary>
         Long = 3
     }
 }

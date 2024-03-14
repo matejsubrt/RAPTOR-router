@@ -4,8 +4,9 @@ using RAPTOR_Router.Structures.Generic;
 namespace RAPTOR_Router.Structures.Transit
 {
     /// <summary>
-    /// Class representing an unique public transit route, there is a different instance for each variation of one "normal" route - i.e. tram trips returning to depot, ...
+    /// Class representing an unique public transit route
     /// </summary>
+    /// <remarks>There is a different instance for each variation of one "normal" route - i.e. tram trips returning to depot, ...</remarks>
     public class Route
     {
         /// <summary>
@@ -71,10 +72,10 @@ namespace RAPTOR_Router.Structures.Transit
             Color = new Color(gtfsRoute.Color);
         }
         /// <summary>
-        /// Finds the index of a specified stop in the route's list of stops
+        /// Finds the first index of a specified stop in the route's list of stops
         /// </summary>
         /// <param name="stop">The stop to find the index of</param>
-        /// <returns>The index of the stop in the stops list</returns>
+        /// <returns>The first index of the stop in the stops list</returns>
         /// <exception cref="InvalidOperationException">Thrown if stop is not found in the stops list</exception>
         public int GetFirstStopIndex(Stop stop)
         {
@@ -85,6 +86,12 @@ namespace RAPTOR_Router.Structures.Transit
             }
             return res;
         }
+        /// <summary>
+        /// Finds the last index of a specified stop in the route's list of stops
+        /// </summary>
+        /// <param name="stop">The stop to find the index of</param>
+        /// <returns>The last index of the stop in the stops list</returns>
+        /// <exception cref="InvalidOperationException">Thrown if stop is not found in the stops list</exception>
         public int GetLastStopIndex(Stop stop)
         {
             int res = RouteStops.LastIndexOf(stop);
@@ -150,6 +157,16 @@ namespace RAPTOR_Router.Structures.Transit
             tripDate = new DateOnly();
             return null;
         }
+
+        /// <summary>
+        /// Finds the latest trip serving the route at the specified stop arriving before the specified time
+        /// </summary>
+        /// <param name="stop">The stop to find the latest trip to</param>
+        /// <param name="date">The latest possible date of the trip</param>
+        /// <param name="time">The latest possible time of the trip</param>
+        /// <param name="maxDaysBefore">The maximum number of days between the specified latest time and the trip arrival time</param>
+        /// <param name="tripDate">The date on which the trip actually arrives -> if the first found trip is before midnight, this date is different than the date input parameter</param>
+        /// <returns>The latest trip, that arrives at the stop before the specified time on the route, null if no trip is found</returns>
         public Trip GetLatestTripArrivingBeforeTimeAtStop(Stop stop, DateOnly date, TimeOnly time, int maxDaysBefore, out DateOnly tripDate)
         {
             int stopIndex = GetLastStopIndex(stop);
@@ -227,7 +244,9 @@ namespace RAPTOR_Router.Structures.Transit
         }
 
 
-
+        /// <summary>
+        /// Enum representing the type of the vehicle that serves the route
+        /// </summary>
         public enum VehicleType
         {
             TRAM = 0,                       // Tram, Streetcar, Light rail

@@ -1,14 +1,11 @@
 var searchData=
 [
-  ['gtfs_0',['GTFS',['../class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s.html',1,'RAPTOR_Router::GTFSParsing']]],
-  ['gtfsagency_1',['GTFSAgency',['../class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_agency.html',1,'RAPTOR_Router::GTFSParsing']]],
-  ['gtfscalendar_2',['GTFSCalendar',['../class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_calendar.html',1,'RAPTOR_Router::GTFSParsing']]],
-  ['gtfscalendardate_3',['GTFSCalendarDate',['../class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_calendar_date.html',1,'RAPTOR_Router::GTFSParsing']]],
-  ['gtfsdateonlyconverter_4',['GTFSDateOnlyConverter',['../class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_date_only_converter.html',1,'RAPTOR_Router::GTFSParsing']]],
-  ['gtfsdatetimeconverter_5',['GTFSDateTimeConverter',['../class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_date_time_converter.html',1,'RAPTOR_Router::GTFSParsing']]],
-  ['gtfsroute_6',['GTFSRoute',['../class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_route.html',1,'RAPTOR_Router::GTFSParsing']]],
-  ['gtfsstop_7',['GTFSStop',['../class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_stop.html',1,'RAPTOR_Router::GTFSParsing']]],
-  ['gtfsstoptime_8',['GTFSStopTime',['../class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_stop_time.html',1,'RAPTOR_Router::GTFSParsing']]],
-  ['gtfstimeonlyconverter_9',['GTFSTimeOnlyConverter',['../class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_time_only_converter.html',1,'RAPTOR_Router::GTFSParsing']]],
-  ['gtfstrip_10',['GTFSTrip',['../class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_trip.html',1,'RAPTOR_Router::GTFSParsing']]]
+  ['forbiddencrossingextensions_0',['ForbiddenCrossingExtensions',['../class_r_a_p_t_o_r___router_1_1_extensions_1_1_forbidden_crossing_extensions.html',1,'RAPTOR_Router::Extensions']]],
+  ['forbiddencrossingline_1',['ForbiddenCrossingLine',['../class_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_forbidden_crossing_line.html',1,'RAPTOR_Router::Structures::Generic']]],
+  ['forbiddencrossingpoint_2',['ForbiddenCrossingPoint',['../class_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_forbidden_crossing_point.html',1,'RAPTOR_Router::Structures::Generic']]],
+  ['forwardroutefinder_3',['ForwardRouteFinder',['../class_r_a_p_t_o_r___router_1_1_route_finders_1_1_forward_route_finder.html',1,'RAPTOR_Router::RouteFinders']]],
+  ['forwardsearchmodel_4',['ForwardSearchModel',['../class_r_a_p_t_o_r___router_1_1_models_1_1_dynamic_1_1_forward_search_model.html',1,'RAPTOR_Router::Models::Dynamic']]],
+  ['forwardstoproutinginfo_5',['ForwardStopRoutingInfo',['../class_r_a_p_t_o_r___router_1_1_models_1_1_dynamic_1_1_forward_stop_routing_info.html',1,'RAPTOR_Router::Models::Dynamic']]],
+  ['frombiketransfer_6',['FromBikeTransfer',['../class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_from_bike_transfer.html',1,'RAPTOR_Router::Structures::Bike']]],
+  ['fromcustomtransfer_7',['FromCustomTransfer',['../class_r_a_p_t_o_r___router_1_1_structures_1_1_custom_1_1_from_custom_transfer.html',1,'RAPTOR_Router::Structures::Custom']]]
 ];

@@ -1,9 +1,22 @@
 var searchData=
 [
-  ['gtfsparsing_0',['GTFSParsing',['../namespace_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing.html',1,'RAPTOR_Router']]],
-  ['raptor_5frouter_1',['RAPTOR_Router',['../namespace_r_a_p_t_o_r___router.html',1,'']]],
-  ['raptorstructures_2',['RAPTORStructures',['../namespace_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures.html',1,'RAPTOR_Router']]],
-  ['routers_3',['Routers',['../namespace_r_a_p_t_o_r___router_1_1_routers.html',1,'RAPTOR_Router']]],
-  ['searchmodels_4',['SearchModels',['../namespace_r_a_p_t_o_r___router_1_1_search_models.html',1,'RAPTOR_Router']]],
-  ['web_5',['Web',['../namespace_r_a_p_t_o_r___router_1_1_web.html',1,'RAPTOR_Router']]]
+  ['raptor_5frouter_0',['RAPTOR_Router',['../namespace_r_a_p_t_o_r___router.html',1,'']]],
+  ['raptor_5frouter_3a_3aextensions_1',['Extensions',['../namespace_r_a_p_t_o_r___router_1_1_extensions.html',1,'RAPTOR_Router']]],
+  ['raptor_5frouter_3a_3agbfsparsing_2',['GBFSParsing',['../namespace_r_a_p_t_o_r___router_1_1_g_b_f_s_parsing.html',1,'RAPTOR_Router']]],
+  ['raptor_5frouter_3a_3agbfsparsing_3a_3adatasources_3',['DataSources',['../namespace_r_a_p_t_o_r___router_1_1_g_b_f_s_parsing_1_1_data_sources.html',1,'RAPTOR_Router::GBFSParsing']]],
+  ['raptor_5frouter_3a_3agbfsparsing_3a_3adistances_4',['Distances',['../namespace_r_a_p_t_o_r___router_1_1_g_b_f_s_parsing_1_1_distances.html',1,'RAPTOR_Router::GBFSParsing']]],
+  ['raptor_5frouter_3a_3agbfsparsing_3a_3agbfsstructures_5',['GBFSStructures',['../namespace_r_a_p_t_o_r___router_1_1_g_b_f_s_parsing_1_1_g_b_f_s_structures.html',1,'RAPTOR_Router::GBFSParsing']]],
+  ['raptor_5frouter_3a_3agtfsparsing_6',['GTFSParsing',['../namespace_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing.html',1,'RAPTOR_Router']]],
+  ['raptor_5frouter_3a_3amodels_7',['Models',['../namespace_r_a_p_t_o_r___router_1_1_models.html',1,'RAPTOR_Router']]],
+  ['raptor_5frouter_3a_3amodels_3a_3adynamic_8',['Dynamic',['../namespace_r_a_p_t_o_r___router_1_1_models_1_1_dynamic.html',1,'RAPTOR_Router::Models']]],
+  ['raptor_5frouter_3a_3amodels_3a_3aresults_9',['Results',['../namespace_r_a_p_t_o_r___router_1_1_models_1_1_results.html',1,'RAPTOR_Router::Models']]],
+  ['raptor_5frouter_3a_3amodels_3a_3astatic_10',['Static',['../namespace_r_a_p_t_o_r___router_1_1_models_1_1_static.html',1,'RAPTOR_Router::Models']]],
+  ['raptor_5frouter_3a_3aroutefinders_11',['RouteFinders',['../namespace_r_a_p_t_o_r___router_1_1_route_finders.html',1,'RAPTOR_Router']]],
+  ['raptor_5frouter_3a_3astructures_12',['Structures',['../namespace_r_a_p_t_o_r___router_1_1_structures.html',1,'RAPTOR_Router']]],
+  ['raptor_5frouter_3a_3astructures_3a_3abike_13',['Bike',['../namespace_r_a_p_t_o_r___router_1_1_structures_1_1_bike.html',1,'RAPTOR_Router::Structures']]],
+  ['raptor_5frouter_3a_3astructures_3a_3aconfiguration_14',['Configuration',['../namespace_r_a_p_t_o_r___router_1_1_structures_1_1_configuration.html',1,'RAPTOR_Router::Structures']]],
+  ['raptor_5frouter_3a_3astructures_3a_3acustom_15',['Custom',['../namespace_r_a_p_t_o_r___router_1_1_structures_1_1_custom.html',1,'RAPTOR_Router::Structures']]],
+  ['raptor_5frouter_3a_3astructures_3a_3ageneric_16',['Generic',['../namespace_r_a_p_t_o_r___router_1_1_structures_1_1_generic.html',1,'RAPTOR_Router::Structures']]],
+  ['raptor_5frouter_3a_3astructures_3a_3ainterfaces_17',['Interfaces',['../namespace_r_a_p_t_o_r___router_1_1_structures_1_1_interfaces.html',1,'RAPTOR_Router::Structures']]],
+  ['raptor_5frouter_3a_3astructures_3a_3atransit_18',['Transit',['../namespace_r_a_p_t_o_r___router_1_1_structures_1_1_transit.html',1,'RAPTOR_Router::Structures']]]
 ];

@@ -12,22 +12,31 @@ using RAPTOR_Router.Structures.Generic;
 namespace RAPTOR_Router.RouteFinders
 {
     /// <summary>
-    /// Basic router used for finding the best connection from a source stop to a destination stop using only public transit. It only takes the arrival time into account, i.e. is to be used in situations, where the arrival time is the only important factor (doesn't take into account comfort/transfers/...)
+    /// Class used for finding the quickest connection from source to destination by latest possible arrival time
     /// </summary>
-    public class BackwardRouteFinder : IBikeRouteFinder
+    public class BackwardRouteFinder : IRouteFinder
     {
-        private TransitModel raptorModel;
+        /// <summary>
+        /// The transit model holding all the static information about the transit network
+        /// </summary>
+        private TransitModel transitModel;
+        /// <summary>
+        /// The bike model holding all the information about the shared bike systems and their stations
+        /// </summary>
+        private BikeModel bikeModel;
         /// <summary>
         /// The search model, that the router will use for the connection searching algorithm
         /// </summary>
         private BackwardSearchModel searchModel;
+        
 
-        private BikeModel bikeModel;
         /// <summary>
         /// A set of currently marked stops
         /// </summary>
         private HashSet<Stop> markedStops = new();
-
+        /// <summary>
+        /// A set of all currently marked bike stations
+        /// </summary>
         private HashSet<BikeStation> markedBikeStations = new();
         /// <summary>
         /// A dictionary storing for every currently marked route the stop at which it will be exited - i.e. the last marked stop it passes through
@@ -47,17 +56,19 @@ namespace RAPTOR_Router.RouteFinders
         /// Creates a new BasicRouter object
         /// </summary>
         /// <param name="settings">The settings to be used for the connection search</param>
-        internal BackwardRouteFinder(Settings settings, TransitModel raptorModel, BikeModel bikeModel)
+        /// <param name="transitModel">The transit model holding all the static information about the transit network</param>
+        /// <param name="bikeModel">The bike model holding all the information about the shared bike systems and their stations</param>
+        internal BackwardRouteFinder(Settings settings, TransitModel transitModel, BikeModel bikeModel)
         {
             this.settings = settings;
-            this.raptorModel = raptorModel;
+            this.transitModel = transitModel;
             this.bikeModel = bikeModel;
         }
 
 
 
         /// <summary>
-        /// Initiates the search by setting earliest arrival for source stops, marks them and improves arrival times for their neighbors in round 0
+        /// Initiates the search by setting latest arrival for destination stops, marks them and improves departure times for their neighbors in round 0
         /// </summary>
         /// <remarks>To be used for searches by stop name</remarks>
         private void InitiateSearchFromStops(bool useSharedBikes)
@@ -95,7 +106,7 @@ namespace RAPTOR_Router.RouteFinders
         }
 
         /// <summary>
-        /// Initiates the search by setting earliest arrival for all stops that can be reached from the custom source route point, marks them and improves arrival times in round 0
+        /// Initiates the search by setting latest departure for all stops from which the custom destination route point can be reached, marks them and improves departure times in round 0
         /// </summary>
         /// <remarks>To be used for searches by coordinates</remarks>
         private void InitiateSearchFromCustomRoutePoint(CustomRoutePoint customDestRP, bool useSharedBikes)
@@ -126,7 +137,7 @@ namespace RAPTOR_Router.RouteFinders
 
 
         /// <summary>
-        /// Accumulates all routes passing through the marked stops and finds the earliest marked stop for them
+        /// Accumulates all routes passing through the marked stops and finds the latest marked stop for them
         /// </summary>
         private void AccumulateRoutes()
         {
@@ -157,8 +168,9 @@ namespace RAPTOR_Router.RouteFinders
                 markedStops.Remove(markedStop);
             }
         }
+
         /// <summary>
-        /// Traverses all the marked routes, improving the arrival times and info for all stops where it is possible
+        /// Traverses all the marked routes, improving the departure times and info for all stops where it is possible
         /// </summary>
         private void TraverseMarkedRoutes()
         {
@@ -168,17 +180,10 @@ namespace RAPTOR_Router.RouteFinders
                 Stop getOffStop = pair.Value;
                 DateOnly tripDate;
 
-                //TODO: shouldnt this be just trip arrival?
                 DateTime latestDepartureAtGetOffStopLastRound = searchModel.GetLatestDepartureInRound(getOffStop, round - 1);
-                // in round 1, the arrival time is the start time -> no need for buffer
-                if (/*round > 1 && */searchModel.RoutePointIsReachedByTripInRound(getOffStop, round - 1))
+                if (searchModel.RoutePointIsReachedByTripInRound(getOffStop, round - 1))
                 {
                     latestDepartureAtGetOffStopLastRound = latestDepartureAtGetOffStopLastRound.AddSeconds(-settings.GetStationaryTransferMinimumSeconds());
-                }
-
-                if(/*getOffStop.Id == "U52Z101P" || */getOffStop.Id == "U52Z102P")
-                {
-                    Console.WriteLine();
                 }
 
                 Trip trip = route.GetLatestTripArrivingBeforeTimeAtStop(
@@ -191,10 +196,6 @@ namespace RAPTOR_Router.RouteFinders
                 //TODO: TRIP CAN BE NULL?
                 if(trip != null)
                 {
-                    if(route.ShortName == "C")
-                    {
-                        Console.WriteLine();
-                    }
                     TraverseRoute(route, getOffStop, trip, tripDate);
                 }
                 //TraverseRoute(route, getOffStop, trip, tripDate);
@@ -203,10 +204,6 @@ namespace RAPTOR_Router.RouteFinders
             void TraverseRoute(Route route, Stop getOffStop, in Trip trip, DateOnly tripDate)
             {
                 Trip currTrip = trip;
-                if(trip.Route.ShortName == "A")
-                {
-                    Console.WriteLine();
-                }
 
                 for (int i = route.GetLastStopIndex(getOffStop); i >= 0; i--)
                 {
@@ -298,6 +295,10 @@ namespace RAPTOR_Router.RouteFinders
                 }
             }
         }
+        
+        /// <summary>
+        /// For all marked bike stations, traverses all the possible bike trips to them and improves the departure times for all stops where it is possible
+        /// </summary>
         void TraverseBikeRoutes()
         {
             HashSet<BikeStation> newMarkedBikeStations = new();
@@ -332,10 +333,6 @@ namespace RAPTOR_Router.RouteFinders
                     DateTime departureUsingBicycle = destStationLatestDepartureTime.AddSeconds(-(cyclingTimeSeconds + settings.BikeUnlockTime));
                     if (DepartureTimeImprovesCurrBest(departureUsingBicycle, srcBikeStation))
                     {
-                        if (srcBikeStation.Name == "P1-Quadrio - Purkynova")
-                        {
-                            Console.WriteLine();
-                        }
                         ImproveDepartureByBikeTrip(markedBikeStation, srcBikeStation, departureUsingBicycle);
                         newMarkedBikeStations.Add(srcBikeStation);
                     }
@@ -363,10 +360,14 @@ namespace RAPTOR_Router.RouteFinders
                 }
             }
         }
+
         /// <summary>
         /// Takes all the stops that have been improved in current round and tries to improve all their neighbors by transfers
         /// </summary>
-        private void ImproveByTransfers(bool useSharedBikes, bool onlyFromStops = false)
+        /// <param name="useSharedBikes">Whether to use shared bikes in the search</param>
+        /// <param name="onlyFromStops">Whether to improve only from stops, not from bike stations</param>
+        /// <param name="DoNotImproveToRoutePoint">A functor that returns true if the route point should not be improved to - used in coords to coords searches where we shouldn't transfer to RoutePoints from which we can transfer to the destination</param>
+        private void ImproveByTransfers(bool useSharedBikes, bool onlyFromStops = false, Func<IRoutePoint, bool> DoNotImproveToRoutePoint = null)
         {
             int maxTransferDistance = settings.GetMaxTransferDistance();
             HashSet<Stop> newMarkedStops = new();
@@ -379,8 +380,12 @@ namespace RAPTOR_Router.RouteFinders
                     Transfer realTransfer = transfer.OppositeTransfer;
                     if ((transfer.Distance <= maxTransferDistance || realTransfer.From.Name == realTransfer.To.Name) && TransferImprovesDepartureTime(realTransfer) && !searchModel.RoutePointIsReachedByTransferInRound(realTransfer.To, round))
                     {
-                        ImproveArrivalByTransfer(realTransfer, false);
-                        newMarkedStops.Add(realTransfer.From);
+                        // the functor is used to not improve to certain stops/stations. This is typically used in coords to coords searches, where we do not want to improve by transfer to the stops from which we can transfer to the coord point.
+                        if(DoNotImproveToRoutePoint is null || !DoNotImproveToRoutePoint(realTransfer.From))
+                        {
+                            ImproveArrivalByTransfer(realTransfer, false);
+                            newMarkedStops.Add(realTransfer.From);
+                        }                        
                     }
                 }
                 if (useSharedBikes)
@@ -392,8 +397,11 @@ namespace RAPTOR_Router.RouteFinders
                         Stop realDest = (Stop)realTransfer.GetDestRoutePoint();
                         if (realTransfer.Distance <= maxTransferDistance && TransferImprovesDepartureTime(realTransfer) && !searchModel.RoutePointIsReachedByTransferInRound(realDest, round))
                         {
-                            ImproveArrivalByTransfer(realTransfer, false);
-                            newMarkedBikeStations.Add(realSrc);
+                            if (DoNotImproveToRoutePoint is null || !DoNotImproveToRoutePoint(realSrc))
+                            {
+                                ImproveArrivalByTransfer(realTransfer, false);
+                                newMarkedBikeStations.Add(realSrc);
+                            }
                         }
                     }
                 }
@@ -409,8 +417,11 @@ namespace RAPTOR_Router.RouteFinders
                         BikeStation realDest = (BikeStation)realTransfer.GetDestRoutePoint();
                         if (realTransfer.Distance <= maxTransferDistance && TransferImprovesDepartureTime(realTransfer) && !searchModel.RoutePointIsReachedByTransferInRound(realDest, round))
                         {
-                            ImproveArrivalByTransfer(realTransfer, true, settings.BikeUnlockTime);
-                            newMarkedStops.Add(realSrc);
+                            if (DoNotImproveToRoutePoint is null || !DoNotImproveToRoutePoint(realSrc))
+                            {
+                                ImproveArrivalByTransfer(realTransfer, true, settings.BikeUnlockTime);
+                                newMarkedStops.Add(realSrc);
+                            }
                         }
                     }
                 }
@@ -479,11 +490,12 @@ namespace RAPTOR_Router.RouteFinders
                 }
             }
         }
+
         /// <summary>
-        /// Finds the connection with the earliest arrival to one of the destinationStations in the searchModel
+        /// Finds the connection with the latest departure from one of the source RoutePoints in the searchModel
         /// </summary>
         /// <param name="searchModel">The search model to be used for finding the connection</param>
-        /// <returns>The quickest connection from one of the sourceStops to one of the destinationStops in the searchModel</returns>
+        /// <returns>The quickest connection from one of the sourceStops to one of the destinationStops in the searchModel arriving before latest arrival time</returns>
         internal SearchResult FindConnection(BackwardSearchModel searchModel)
         {
             this.searchModel = searchModel;
@@ -501,22 +513,23 @@ namespace RAPTOR_Router.RouteFinders
             markedBikeStations.Clear();
             return searchModel.ExtractResult();
         }
+
         /// <summary>
-        /// Finds the connection with the earliest arrival to a destination stop with the provided name, that departs from the source stop after the specified time.
+        /// Finds the connection with the latest departure from a source stop with the provided name, that arrives at the destination stop before the specified time.
         /// </summary>
         /// <param name="sourceStop">The exact name of the source stop</param>
         /// <param name="destStop">The exact name of the destination stop</param>
-        /// <param name="departureTime">The departure date and time</param>
+        /// <param name="arrivalTime">The arrival date and time</param>
         /// <returns>The result of the search, null if no conection could be found.</returns>
-        public SearchResult FindConnection(string sourceStop, string destStop, DateTime departureTime)
+        public SearchResult FindConnection(string sourceStop, string destStop, DateTime arrivalTime)
         {
             //bikeModel.UpdateStationStatus();
             if (sourceStop == destStop)
             {
                 return null;
             }
-            List<Stop> sourceStops = raptorModel.GetStopsByName(sourceStop);
-            List<Stop> destStops = raptorModel.GetStopsByName(destStop);
+            List<Stop> sourceStops = transitModel.GetStopsByName(sourceStop);
+            List<Stop> destStops = transitModel.GetStopsByName(destStop);
 
             // If bikes cannot be used and either the source or the destination stop is not found, return null
             if (sourceStops.Count == 0 || destStops.Count == 0)
@@ -535,7 +548,7 @@ namespace RAPTOR_Router.RouteFinders
             }
 
 
-            this.searchModel = new BackwardSearchModel(sourceStops, destStops, sourceBikeStations, destBikeStations, departureTime, settings);
+            this.searchModel = new BackwardSearchModel(sourceStops, destStops, sourceBikeStations, destBikeStations, arrivalTime, settings);
 
 
             InitiateSearchFromStops(settings.UseSharedBikes);
@@ -555,15 +568,25 @@ namespace RAPTOR_Router.RouteFinders
             return searchModel.ExtractResult();
         }
 
-        public SearchResult FindConnection(double srcLat, double srcLon, double destLat, double destLon, DateTime departureTime)
+        /// <summary>
+        /// Finds the connection with the latest departure from the source custom route point, that arrives at the destination custom route point before the specified time.
+        /// </summary>
+        /// <remarks>Used for searches by coordinates</remarks>
+        /// <param name="srcLat">The latitude of the source point</param>
+        /// <param name="srcLon">The longitude of the source point</param>
+        /// <param name="destLat">The latitude of the destination point</param>
+        /// <param name="destLon">The longitude of the destination point</param>
+        /// <param name="arrivalTime">The arrival date and time</param>
+        /// <returns>The result of the search, null if no conection could be found.</returns>
+        public SearchResult FindConnection(double srcLat, double srcLon, double destLat, double destLon, DateTime arrivalTime)
         {
             CustomRoutePoint source = new CustomRoutePoint("srcId", "Source", new Coordinates(srcLat, srcLon));
             CustomRoutePoint dest = new CustomRoutePoint("destId", "Destination", new Coordinates(destLat, destLon));
 
 
 
-            List<Stop> sourceStops = raptorModel.GetStopsByLocation(srcLat, srcLon, settings.GetMaxTransferDistance());
-            List<Stop> destStops = raptorModel.GetStopsByLocation(destLat, destLon, settings.GetMaxTransferDistance());
+            List<Stop> sourceStops = transitModel.GetStopsByLocation(srcLat, srcLon, settings.GetMaxTransferDistance());
+            List<Stop> destStops = transitModel.GetStopsByLocation(destLat, destLon, settings.GetMaxTransferDistance());
 
             List<BikeStation> sourceBikeStations = bikeModel.GetNearStations(srcLat, srcLon, settings.GetMaxTransferDistance());
             List<BikeStation> destBikeStations = bikeModel.GetNearStations(destLat, destLon, settings.GetMaxTransferDistance());
@@ -594,12 +617,14 @@ namespace RAPTOR_Router.RouteFinders
             }
 
 
+            HashSet<IRoutePoint> sourceRoutePoints = new HashSet<IRoutePoint>();
+            sourceRoutePoints.UnionWith(sourceStops);
+            sourceRoutePoints.UnionWith(sourceBikeStations);
 
 
 
 
-
-            this.searchModel = new BackwardSearchModel(sourceStops, destStops, sourceBikeStations, destBikeStations, departureTime, settings);
+            this.searchModel = new BackwardSearchModel(sourceStops, destStops, sourceBikeStations, destBikeStations, arrivalTime, settings);
             this.searchModel.sourceCustomRoutePoint = source;
             this.searchModel.destinationCustomRoutePoint = dest;
 
@@ -610,7 +635,7 @@ namespace RAPTOR_Router.RouteFinders
                 AccumulateRoutes();
                 TraverseMarkedRoutes();
                 TraverseBikeRoutes();
-                ImproveByTransfers(settings.UseSharedBikes);
+                ImproveByTransfers(settings.UseSharedBikes, false, (x) => sourceRoutePoints.Contains(x));
             }
             markedStops.Clear();
             markedRoutesWithGetOffStops.Clear();

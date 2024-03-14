@@ -5,12 +5,11 @@ using RAPTOR_Router.Structures.Interfaces;
 namespace RAPTOR_Router.Structures.Transit
 {
     /// <summary>
-    /// Class representing a unique stop - i.e. for one stop name there can be multiple stops for different vehicle types/directions
+    /// Class representing a unique stop
     /// </summary>
+    /// <remarks>For one stop name there can be multiple stops for different vehicle types/directions</remarks>
     public class Stop : IRoutePoint
     {
-        const double latConst = 111113.9; //distance between latitudes of 1 degree
-        const double lonConst50N = 71583; //distance between 2 longitude lines at 50 degrees north
         /// <summary>
         /// The unique Id of the stop (different even for each stop in a Node sharing the same name)
         /// </summary>
@@ -19,17 +18,21 @@ namespace RAPTOR_Router.Structures.Transit
         /// The human-friendly name of the stop
         /// </summary>
         public string Name { get; private set; }
+        /// <summary>
+        /// The coordinates of the stop
+        /// </summary>
         public Coordinates Coords { get; private set; }
         /// <summary>
         /// A list of all routes that contain the stop
         /// </summary>
         public List<Route> StopRoutes { get; private set; } = new List<Route>();
         /// <summary>
-        /// A list of all possible transfers that can be made from the stop
+        /// A set of all possible transfers that can be made from the stop
         /// </summary>
-        //public List<Transfer> Transfers { get; private set; } = new List<Transfer>();
         public HashSet<Transfer> Transfers { get; private set; } = new HashSet<Transfer>();
-
+        /// <summary>
+        /// List of all bike transfers that can be made from the stop
+        /// </summary>
         public List<ToBikeTransfer> BikeTransfers { get; private set; } = new List<ToBikeTransfer>();
 
         /// <summary>
@@ -51,6 +54,11 @@ namespace RAPTOR_Router.Structures.Transit
         {
             return Name + "  " + Id;
         }
+
+        /// <summary>
+        /// Adds a new possible bike transfer from the stop
+        /// </summary>
+        /// <param name="transfer">The transfer to add</param>
         public void AddBikeTransfer(ToBikeTransfer transfer)
         {
             BikeTransfers.Add(transfer);

@@ -5,22 +5,39 @@ using System.Text.Json;
 
 namespace RAPTOR_Router.GBFSParsing.DataSources
 {
+    /// <summary>
+    /// Data source for Nextbike bike sharing system
+    /// </summary>
     public class NextbikeDataSource : IBikeDataSource
     {
         static string stationInfoUrl = "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_tg/cs/station_information.json";
         static string stationStatusUrl = "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_tg/cs/station_status.json";
 
+        /// <summary>
+        /// The list of all bike stations in the system
+        /// </summary>
         public List<BikeStation> Stations { get; private set; } = new();
+        /// <summary>
+        /// A dictionary of bike stations indexed by their station id
+        /// </summary>
         public Dictionary<string, BikeStation> StationsById { get; private set; } = new();
+        /// <summary>
+        /// The distance matrix between all bike stations
+        /// </summary>
         public StationDistanceMatrix Distances { get; private set; } = new();
 
-
+        /// <summary>
+        /// Calculates all the distances between the bike stations and loads them into the distance matrix
+        /// </summary>
         public void LoadStationDistances()
         {
             BikeDistanceCalculator distanceCalculator = new BikeDistanceCalculator();
             Distances = distanceCalculator.CalculateMatrix(Stations, StationsById);
         }
 
+        /// <summary>
+        /// Loads all the static station data from the nextbike API
+        /// </summary>
         public void LoadStations()
         {
 
@@ -51,6 +68,9 @@ namespace RAPTOR_Router.GBFSParsing.DataSources
             }
         }
 
+        /// <summary>
+        /// Loads the current bike counts for all stations from the nextbike API
+        /// </summary>
         public void UpdateStationStatus()
         {
             using (HttpClient client = new HttpClient())

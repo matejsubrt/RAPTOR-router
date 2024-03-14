@@ -6,48 +6,79 @@ using RAPTOR_Router.Structures.Generic;
 using RAPTOR_Router.Extensions;
 using RAPTOR_Router.Structures.Configuration;
 using RAPTOR_Router.Structures.Custom;
+using System.Text.Json.Serialization;
 
 namespace RAPTOR_Router.Models.Results
 {
     /// <summary>
-    /// Class representing a result of a connection search
+    /// Class representing the result of a connection search
     /// </summary>
+    /// <remarks>If running the program as an API, this class is serialized and returned as json in the response body</remarks>
     public class SearchResult
     {
         private Settings usedSettings;
         /// <summary>
-        /// The trips used during the best found connection
+        /// The public transit trips used during the best found connection
         /// </summary>
         public List<UsedTrip> UsedTrips { get; private set; } = new List<UsedTrip>();
         /// <summary>
         /// The transfers used during the best found connection
         /// </summary>
         public List<UsedTransfer> UsedTransfers { get; private set; } = new List<UsedTransfer>();
-
+        /// <summary>
+        /// The bike trips used during the best found connection
+        /// </summary>
         public List<UsedBikeTrip> UsedBikeTrips { get; private set; } = new List<UsedBikeTrip>();
 
+        /// <summary>
+        /// The list of segment types used in the connection -> used to determine the order of the segments and make deserialization easier
+        /// </summary>
         public List<SegmentType> UsedSegmentTypes { get; private set; } = new List<SegmentType>();
-        //public List<UsedSegment> UsedSegments { get; private set; } = new List<UsedSegment>();
+        /// <summary>
+        /// The number of used transfers in the connection
+        /// </summary>
         public int TransferCount { get; private set; }
+        /// <summary>
+        /// The number of used public transit trips in the connection
+        /// </summary>
         public int TripCount { get; private set; }
+        /// <summary>
+        /// The number of used bike trips in the connection
+        /// </summary>
         public int BikeTripCount { get; private set; }
 
-        //TODO: add time support
+
+        /// <summary>
+        /// The source departure time of the connection
+        /// </summary>
         public DateTime DepartureDateTime { get; set; }
+        /// <summary>
+        /// The destination arrival time of the connection
+        /// </summary>
         public DateTime ArrivalDateTime { get; set; }
 
 
+        /// <summary>
+        /// Creates a new SearchResult object
+        /// </summary>
+        /// <param name="settings">The settings that were used for the search</param>
         internal SearchResult(Settings settings)
         {
             usedSettings = settings;
         }
 
         /// <summary>
-        /// Creates an used trip from the provided arguments, pushes it TO THE START of UsedSegments
+        /// Creates an used trip from the provided arguments, adds it to UsedTrips
         /// </summary>
         /// <param name="trip">The trip to add</param>
         /// <param name="getOnStop">The get on stop of this segment</param>
         /// <param name="getOffStop">The get off stop of this segment</param>
+        /// <param name="time">The arrival or departure time of the segment (semantics based on toEnd)</param>
+        /// <param name="toEnd">Specifies if the used trip should be appended to the end or beginning of UsedTrips</param>
+        /// <remarks>
+        ///     toEnd = true means the connection is being reconstructed from start to end -> backward search was used
+        ///     toEnd = false means the connection is being reconstructed from end to start -> forward search was used
+        /// </remarks>
         internal void AddUsedTrip(Trip trip, Stop getOnStop, Stop getOffStop, DateTime time, bool toEnd)
         {
             var routeStops = trip.Route.RouteStops;
@@ -150,11 +181,11 @@ namespace RAPTOR_Router.Models.Results
                     }
 
 
-                    StopPass stopPass = new();
-                    stopPass.Name = routeStops[i].Name;
-                    stopPass.Id = routeStops[i].Id;
-                    stopPass.ArrivalTime = stopArrivalDateTime;
-                    stopPass.DepartureTime = stopDepartureDateTime;
+                    StopPass stopPass = new(routeStops[i].Name, routeStops[i].Id, stopArrivalDateTime, stopDepartureDateTime);
+                    //stopPass.Name = routeStops[i].Name;
+                    //stopPass.Id = routeStops[i].Id;
+                    //stopPass.ArrivalTime = stopArrivalDateTime;
+                    //stopPass.DepartureTime = stopDepartureDateTime;
                     stopPasses.Add(stopPass);
                 }
                 return stopPasses;
@@ -162,15 +193,20 @@ namespace RAPTOR_Router.Models.Results
         }
 
         /// <summary>
-        /// Creates an used transfer from the provided transfer, pushes it TO THE START of UsedSegments
+        /// Creates an used transfer from the provided arguments, adds it to UsedTransfers
         /// </summary>
+        /// <param name="toEnd">Specifies if the used transfer should be appended to the end or beginning of UsedTransfers</param>
+        /// <remarks>
+        ///     toEnd = true means the connection is being reconstructed from start to end -> backward search was used
+        ///     toEnd = false means the connection is being reconstructed from end to start -> forward search was used
+        /// </remarks>
         /// <param name="transfer">The transfer to add</param>
         internal void AddUsedTransfer(Transfer transfer, DateTime destArrivalTime, bool toEnd)
         {
             var realSrc = transfer.From;
             var realDest = transfer.To;
-            StopInfo srcStopInfo = new(realSrc.Name, realSrc.Id, realSrc.Coords.Lat, realSrc.Coords.Lon);
-            StopInfo destStopInfo = new(realDest.Name, realDest.Id, realDest.Coords.Lat, realDest.Coords.Lon);
+            RoutePointInfo srcStopInfo = new(realSrc.Name, realSrc.Id, realSrc.Coords.Lat, realSrc.Coords.Lon);
+            RoutePointInfo destStopInfo = new(realDest.Name, realDest.Id, realDest.Coords.Lat, realDest.Coords.Lon);
             UsedTransfer usedTransfer = new UsedTransfer(
                 srcStopInfo,
                 destStopInfo,
@@ -189,10 +225,23 @@ namespace RAPTOR_Router.Models.Results
             }
             TransferCount++;
         }
+
+
+        /// <summary>
+        /// Creates an used bike trip from the provided arguments, adds it to UsedBikeTrips
+        /// </summary>
+        /// <param name="from">The source station of the bike trip</param>
+        /// <param name="to">The destination station of the bike trip</param>
+        /// <param name="distance">The distance of the bike trip in meters</param>
+        /// <param name="toEnd">Specifies if the used trip should be appended to the end or beginning of UsedTrips</param>
+        /// <remarks>
+        ///     toEnd = true means the connection is being reconstructed from start to end -> backward search was used
+        ///     toEnd = false means the connection is being reconstructed from end to start -> forward search was used
+        /// </remarks>
         internal void AddUsedBikeTrip(BikeStation from, BikeStation to, int distance, bool toEnd)
         {
-            StopInfo srcStopInfo = new(from.Name, from.Id, from.Coords.Lat, from.Coords.Lon);
-            StopInfo destStopInfo = new(to.Name, to.Id, to.Coords.Lat, to.Coords.Lon);
+            RoutePointInfo srcStopInfo = new(from.Name, from.Id, from.Coords.Lat, from.Coords.Lon);
+            RoutePointInfo destStopInfo = new(to.Name, to.Id, to.Coords.Lat, to.Coords.Lon);
             UsedBikeTrip usedBikeTrip = new UsedBikeTrip(
                 srcStopInfo,
                 destStopInfo,
@@ -211,34 +260,22 @@ namespace RAPTOR_Router.Models.Results
             }
             BikeTripCount++;
         }
-        internal void AddUsedBikeTransfer(BikeTransfer transfer, DateTime arrivalTime, bool toEnd)
+
+        /// <summary>
+        /// Creates an used transfer from the provided arguments, adds it to UsedTransfers
+        /// </summary>
+        /// <param name="toEnd">Specifies if the used transfer should be appended to the end or beginning of UsedTransfers</param>
+        /// <remarks>
+        ///     toEnd = true means the connection is being reconstructed from start to end -> backward search was used
+        ///     toEnd = false means the connection is being reconstructed from end to start -> forward search was used
+        /// </remarks>
+        /// <param name="transfer">The transfer to add</param>
+        internal void AddUsedTransfer(BikeTransfer transfer, DateTime arrivalTime, bool toEnd)
         {
             var realSrc = transfer.GetSrcRoutePoint();
             var realDest = transfer.GetDestRoutePoint();
-            StopInfo srcStopInfo = new(realSrc.Name, realSrc.Id, realSrc.Coords.Lat, realSrc.Coords.Lon);
-            StopInfo destStopInfo = new(realDest.Name, realDest.Id, realDest.Coords.Lat, realDest.Coords.Lon);
-            UsedTransfer usedTransfer = new UsedTransfer(
-                srcStopInfo,
-                destStopInfo,
-                transfer.GetTransferTime(usedSettings.WalkingPace),
-                transfer.Distance
-            );
-            if (toEnd)
-            {
-                UsedTransfers.Add(usedTransfer);
-                UsedSegmentTypes.Add(SegmentType.Transfer);
-            }
-            else
-            {
-                UsedTransfers.Insert(0, usedTransfer);
-                UsedSegmentTypes.Insert(0, SegmentType.Transfer);
-            }
-            TransferCount++;
-        }
-        internal void AddUsedCustomTransfer(CustomTransfer transfer, DateTime arrivalTime, bool toEnd)
-        {
-            StopInfo srcStopInfo = new(transfer.GetSrcRoutePoint().Name, transfer.GetSrcRoutePoint().Id, transfer.GetSrcRoutePoint().Coords.Lat, transfer.GetSrcRoutePoint().Coords.Lon);
-            StopInfo destStopInfo = new(transfer.GetDestRoutePoint().Name, transfer.GetDestRoutePoint().Id, transfer.GetDestRoutePoint().Coords.Lat, transfer.GetDestRoutePoint().Coords.Lon);
+            RoutePointInfo srcStopInfo = new(realSrc.Name, realSrc.Id, realSrc.Coords.Lat, realSrc.Coords.Lon);
+            RoutePointInfo destStopInfo = new(realDest.Name, realDest.Id, realDest.Coords.Lat, realDest.Coords.Lon);
             UsedTransfer usedTransfer = new UsedTransfer(
                 srcStopInfo,
                 destStopInfo,
@@ -258,6 +295,43 @@ namespace RAPTOR_Router.Models.Results
             TransferCount++;
         }
 
+        /// <summary>
+        /// Creates an used transfer from the provided arguments, adds it to UsedTransfers
+        /// </summary>
+        /// <param name="toEnd">Specifies if the used transfer should be appended to the end or beginning of UsedTransfers</param>
+        /// <remarks>
+        ///     toEnd = true means the connection is being reconstructed from start to end -> backward search was used
+        ///     toEnd = false means the connection is being reconstructed from end to start -> forward search was used
+        /// </remarks>
+        /// <param name="transfer">The transfer to add</param>
+        internal void AddUsedTransfer(CustomTransfer transfer, DateTime arrivalTime, bool toEnd)
+        {
+            RoutePointInfo srcStopInfo = new(transfer.GetSrcRoutePoint().Name, transfer.GetSrcRoutePoint().Id, transfer.GetSrcRoutePoint().Coords.Lat, transfer.GetSrcRoutePoint().Coords.Lon);
+            RoutePointInfo destStopInfo = new(transfer.GetDestRoutePoint().Name, transfer.GetDestRoutePoint().Id, transfer.GetDestRoutePoint().Coords.Lat, transfer.GetDestRoutePoint().Coords.Lon);
+            UsedTransfer usedTransfer = new UsedTransfer(
+                srcStopInfo,
+                destStopInfo,
+                transfer.GetTransferTime(usedSettings.WalkingPace),
+                transfer.Distance
+            );
+            if (toEnd)
+            {
+                UsedTransfers.Add(usedTransfer);
+                UsedSegmentTypes.Add(SegmentType.Transfer);
+            }
+            else
+            {
+                UsedTransfers.Insert(0, usedTransfer);
+                UsedSegmentTypes.Insert(0, SegmentType.Transfer);
+            }
+            TransferCount++;
+        }
+
+
+        /// <summary>
+        /// Creates a string representation of the result
+        /// </summary>
+        /// <returns>The string representation of the object</returns>
         public override string ToString()
         {
             StringBuilder sb = new();
@@ -483,6 +557,9 @@ namespace RAPTOR_Router.Models.Results
             }
         }
 
+        /// <summary>
+        /// Enum representing the segment type
+        /// </summary>
         public enum SegmentType
         {
             Transfer = 0,
@@ -490,27 +567,96 @@ namespace RAPTOR_Router.Models.Results
             Bike = 2
         }
 
+        /// <summary>
+        /// Interface representing a segment used in a found connection
+        /// </summary>
         public interface UsedSegment
         {
             public string? ToString();
-            public SegmentType segmentType { get; }
             public string GetStartStopName();
             public string GetEndStopName();
         }
+
+
+
+        /// <summary>
+        /// Class repressenting a stop of a trip used in a found connection, containing the stop name, id, arrival and departure time
+        /// </summary>
+        /// <remarks>Intended for easy serialization</remarks>
         public class StopPass
         {
-            public string Name;
-            public string Id;
-            public DateTime ArrivalTime;
-            public DateTime DepartureTime;
+            /// <summary>
+            /// The name of the stop
+            /// </summary>
+            [JsonInclude]
+            public string Name { get; }
+            /// <summary>
+            /// The id of the stop
+            /// </summary>
+            [JsonInclude]
+            public string Id { get; }
+            /// <summary>
+            /// The arrival time at the stop
+            /// </summary>
+            [JsonInclude]
+            public DateTime ArrivalTime { get; }
+            /// <summary>
+            /// The departure time from the stop
+            /// </summary>
+            [JsonInclude]
+            public DateTime DepartureTime { get; }
+
+            /// <summary>
+            /// Creates a new StopPass object
+            /// </summary>
+            /// <param name="name">The name of the stop</param>
+            /// <param name="id">The id of the stop</param>
+            /// <param name="arrivalTime">The arrival time at the stop</param>
+            /// <param name="departureTime">The departure time from the stop</param>
+            public StopPass(string name, string id, DateTime arrivalTime, DateTime departureTime)
+            {
+                Name = name;
+                Id = id;
+                ArrivalTime = arrivalTime;
+                DepartureTime = departureTime;
+            }
         }
-        public class StopInfo
+
+
+        /// <summary>
+        /// Class representing information about a route point
+        /// </summary>
+        /// <remarks>Intended for easy serialization</remarks>
+        public class RoutePointInfo
         {
-            public string Name;
-            public string Id;
-            public double Lat;
-            public double Lon;
-            public StopInfo(string name, string id, double lat, double lon)
+            /// <summary>
+            /// The name of the route point
+            /// </summary>
+            [JsonInclude]
+            public string Name { get; }
+            /// <summary>
+            /// The Id of the route point
+            /// </summary>
+            [JsonInclude]
+            public string Id { get; }
+            /// <summary>
+            /// The latitude of the route point
+            /// </summary>
+            [JsonInclude]
+            public double Lat { get; }
+            /// <summary>
+            /// The longitude of the route point
+            /// </summary>
+            [JsonInclude]
+            public double Lon { get; }
+            /// <summary>
+            /// Creates a new RoutePointInfo object
+            /// </summary>
+            /// <param name="name">The name of te RoutePoint</param>
+            /// <param name="id">The id of the RoutePoint></param>
+            /// <param name="lat">The latitude of the RoutePoint</param>
+            /// <param name="lon">The longitude of the RoutePoint</param>
+            public RoutePointInfo(string name, string id, double lat, double lon)
             {
                 Name = name;
                 Id = id;
@@ -522,24 +668,43 @@ namespace RAPTOR_Router.Models.Results
         /// <summary>
         /// Class representing a trip used in a found connection
         /// </summary>
+        /// <remarks>Intended for easy serialization</remarks>
         public class UsedTrip : UsedSegment
         {
-            public SegmentType segmentType { get; private set; }
+            /// <summary>
+            /// The list of the stop passes of the trip
+            /// </summary>
+            [JsonInclude]
             public List<StopPass> stopPasses = new List<StopPass>();
             /// <summary>
             /// The index of the stop where the trip is boarded
             /// </summary>
+            [JsonInclude]
             public int getOnStopIndex { get; set; }
             /// <summary>
             /// The index of the stop where the trip is gotten out of
             /// </summary>
+            [JsonInclude]
             public int getOffStopIndex { get; set; }
             /// <summary>
             /// The name (i.e. the headsign) of the route of the trip
             /// </summary>
+            [JsonInclude]
             public string routeName { get; set; }
+            /// <summary>
+            /// The color of the trip's route
+            /// </summary>
+            [JsonInclude]
             public Color Color { get; set; }
 
+            /// <summary>
+            /// Creates a new UsedTrip object
+            /// </summary>
+            /// <param name="stopPasses">The list of stop passes of the trip</param>
+            /// <param name="getOnStopIndex">The index of the stop where the trip is boarded</param>
+            /// <param name="getOffStopIndex">The index of the stop where the trip is exited</param>
+            /// <param name="routeName">The name of the trip's route</param>
+            /// <param name="color">The color of the trip's route</param>
             public UsedTrip(
                 List<StopPass> stopPasses,
                 int getOnStopIndex,
@@ -548,17 +713,24 @@ namespace RAPTOR_Router.Models.Results
                 Color color
             )
             {
-                segmentType = SegmentType.Trip;
                 this.stopPasses = stopPasses;
                 this.getOnStopIndex = getOnStopIndex;
                 this.getOffStopIndex = getOffStopIndex;
                 this.routeName = routeName;
                 Color = color;
             }
+            /// <summary>
+            /// Gets the name of the stop where the trip is boarded
+            /// </summary>
+            /// <returns>The name of the stop</returns>
             public string GetStartStopName()
             {
                 return stopPasses[getOnStopIndex].Name;
             }
+            /// <summary>
+            /// Gets the name of the stop where the trip is exited
+            /// </summary>
+            /// <returns>The name of the stop</returns>
             public string GetEndStopName()
             {
                 return stopPasses[getOffStopIndex].Name;
@@ -569,66 +741,124 @@ namespace RAPTOR_Router.Models.Results
         /// </summary>
         public class UsedTransfer : UsedSegment
         {
-            public SegmentType segmentType { get; private set; }
+            /// <summary>
+            /// Theinformation about the stop where the transfer begins
+            /// </summary>
+            [JsonInclude]
+            public RoutePointInfo srcStopInfo { get; set; }
+            /// <summary>
+            /// The information about the stop where the transfer ends
+            /// </summary>
+            [JsonInclude]
+            public RoutePointInfo destStopInfo { get; set; }
+            /// <summary>
+            /// The approximate number of seconds it takes to walk this transfer
+            /// </summary>
+            [JsonInclude]
+            public int time { get; set; }
+            /// <summary>
+            /// The straight line distance between the 2 stops in the transfer in meters
+            /// </summary>
+            [JsonInclude]
+            public int distance { get; set; }
+
+            /// <summary>
+            /// Creates a new UsedTransfer object
+            /// </summary>
+            /// <param name="srcStopInfo">The info about the transfer source stop</param>
+            /// <param name="destStopInfo">The information about the transfer destination stop</param>
+            /// <param name="time">The time it takes to trasfer</param>
+            /// <param name="distance">The distance of the transfer</param>
             public UsedTransfer(
-                StopInfo srcStopInfo,
-                StopInfo destStopInfo,
+                RoutePointInfo srcStopInfo,
+                RoutePointInfo destStopInfo,
                 int time,
                 int distance
-            )
-            {
+            ){
                 this.srcStopInfo = srcStopInfo;
                 this.destStopInfo = destStopInfo;
                 this.time = time;
                 this.distance = distance;
             }
-            /// <summary>
-            /// The name of the stop where the transfer begins
-            /// </summary>
-            public StopInfo srcStopInfo { get; set; }
-            public StopInfo destStopInfo { get; set; }
-            /// <summary>
-            /// The approximate number of seconds it takes to walk this transfer
-            /// </summary>
-            public int time { get; set; }
-            /// <summary>
-            /// The straight line distance between the 2 stops in the transfer in meters
-            /// </summary>
-            public int distance { get; set; }
 
+            /// <summary>
+            /// Gets the name of the stop where the transfer begins
+            /// </summary>
+            /// <returns></returns>
             public string GetStartStopName()
             {
                 return srcStopInfo.Name;
             }
+
+            /// <summary>
+            /// Gets the name of the stop where the transfer ends
+            /// </summary>
+            /// <returns></returns>
             public string GetEndStopName()
             {
                 return destStopInfo.Name;
             }
         }
+
+
+        /// <summary>
+        /// Class representing a used bike trip in a found connection
+        /// </summary>
         public class UsedBikeTrip : UsedSegment
         {
-            public SegmentType segmentType { get; private set; }
+            /// <summary>
+            /// The information about the source station of the bike trip
+            /// </summary>
+            [JsonInclude]
+            public RoutePointInfo srcStopInfo { get; set; }
+            /// <summary>
+            /// The information about the destination station of the bike trip
+            /// </summary>
+            [JsonInclude]
+            public RoutePointInfo destStopInfo { get; set; }
+            /// <summary>
+            /// The distance of the bike trip in meters
+            /// </summary>
+            [JsonInclude]
+            public int distance { get; set; }
+            /// <summary>
+            /// The time it takes to complete the bike trip in seconds
+            /// </summary>
+            [JsonInclude]
+            public int time { get; set; }
+
+            /// <summary>
+            /// Creates a new UsedBikeTrip object
+            /// </summary>
+            /// <param name="srcStopInfo">The info about the trip source station</param>
+            /// <param name="destStopInfo">The info about the trip destination station</param>
+            /// <param name="distance">The length of the trip in meters</param>
+            /// <param name="time">The length of the trip in seconds</param>
             public UsedBikeTrip(
-                StopInfo srcStopInfo,
-                StopInfo destStopInfo,
+                RoutePointInfo srcStopInfo,
+                RoutePointInfo destStopInfo,
                 int distance,
                 int time
-            )
-            {
+            ){
                 this.srcStopInfo = srcStopInfo;
                 this.destStopInfo = destStopInfo;
                 this.distance = distance;
                 this.time = time;
             }
-            public StopInfo srcStopInfo { get; set; }
-            public StopInfo destStopInfo { get; set; }
-            public int distance { get; set; }
-            public int time { get; set; }
 
+            /// <summary>
+            /// Gets the name of the stop where the bike trip begins
+            /// </summary>
+            /// <returns></returns>
             public string GetStartStopName()
             {
                 return srcStopInfo.Name;
             }
+
+            /// <summary>
+            /// Gets the name of the stop where the bike trip ends
+            /// </summary>
+            /// <returns></returns>
             public string GetEndStopName()
             {
                 return destStopInfo.Name;

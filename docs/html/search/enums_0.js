@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['comfortbalance_0',['ComfortBalance',['../namespace_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures.html#abb49466717d51af4f24d4d957fdba5e5',1,'RAPTOR_Router::RAPTORStructures']]]
+  ['biketripbuffer_0',['BikeTripBuffer',['../namespace_r_a_p_t_o_r___router_1_1_structures_1_1_configuration.html#aaf2d30d7e26f5c1648d7b2af2b998b56',1,'RAPTOR_Router::Structures::Configuration']]]
 ];

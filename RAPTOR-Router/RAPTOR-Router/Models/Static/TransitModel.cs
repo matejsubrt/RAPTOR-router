@@ -8,7 +8,7 @@ using System.Globalization;
 namespace RAPTOR_Router.Models.Static
 {
     /// <summary>
-    /// Class representing the model of the timetable to be used for the connection search
+    /// Class holding all the information about the public transit system and its stops, routes, trips, transfers and timetables
     /// </summary>
     internal class TransitModel
     {
@@ -16,7 +16,13 @@ namespace RAPTOR_Router.Models.Static
         /// The maximum number of meters between stops for them to be considered a transfer
         /// </summary>
         public const int MAX_TRANSFER_DISTANCE = 750;
+        /// <summary>
+        /// Dictionary of all the routes indexed by their unique identifier
+        /// </summary>
         public Dictionary<string, Route> routes { get; private set; } = new Dictionary<string, Route>();
+        /// <summary>
+        /// Dictionary of all the stops indexed by their unique identifier
+        /// </summary>
         public Dictionary<string, Stop> stops { get; private set; } = new Dictionary<string, Stop>();
 
         /// <summary>
@@ -165,7 +171,7 @@ namespace RAPTOR_Router.Models.Static
         }
 
         /// <summary>
-        /// Loads all the routes serving all the stops
+        /// For every stop loads all the routes that serve it
         /// </summary>
         private void LoadStopRoutes()
         {
@@ -181,65 +187,66 @@ namespace RAPTOR_Router.Models.Static
             }
         }
 
-        private List<ForbiddenCrossingLine> LoadForbiddenCrossings()
-        {
-            var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory() + "..\\..\\..\\..\\..")
-                .AddJsonFile("config.json", optional: false, reloadOnChange: true)
-                .Build();
-            string pointsLocation = config["forbiddenCrossingPointsLocation"];
-            string linesLocation = config["forbiddenCrossingLinesLocation"];
+        //private List<ForbiddenCrossingLine> LoadForbiddenCrossings()
+        //{
+        //    var config = new ConfigurationBuilder()
+        //        .SetBasePath(Directory.GetCurrentDirectory() + "..\\..\\..\\..\\..")
+        //        .AddJsonFile("config.json", optional: false, reloadOnChange: true)
+        //        .Build();
+        //    string pointsLocation = config["forbiddenCrossingPointsLocation"];
+        //    string linesLocation = config["forbiddenCrossingLinesLocation"];
 
-            if (pointsLocation == null || linesLocation == null)
-            {
-                throw new Exception("Forbidden crossing points or lines location not found in the config file");
-            }
+        //    if (pointsLocation == null || linesLocation == null)
+        //    {
+        //        throw new Exception("Forbidden crossing points or lines location not found in the config file");
+        //    }
 
-            List<ForbiddenCrossingPoint> points = new();
-            Dictionary<int, ForbiddenCrossingPoint> pointsById = new();
-            using (StreamReader reader = new StreamReader(pointsLocation))
-            {
-                string line;
-                reader.ReadLine(); // Skip the header
-                while ((line = reader.ReadLine()) != null)
-                {
-                    string[] parts = line.Split(',');
-
-
-                    int id = int.Parse(parts[0]);
-                    double lon = double.Parse(parts[1], CultureInfo.InvariantCulture);
-                    double lat = double.Parse(parts[2], CultureInfo.InvariantCulture);
-                    ForbiddenCrossingPoint newPoint = new ForbiddenCrossingPoint(new Coordinates(lat, lon), id);
-                    points.Add(newPoint);
-                    pointsById.Add(id, newPoint);
-                }
-            }
-
-            List<ForbiddenCrossingLine> lines = new();
-            using (StreamReader reader = new StreamReader(linesLocation))
-            {
-                string line;
-                reader.ReadLine(); // Skip the header
-                while ((line = reader.ReadLine()) != null)
-                {
-                    string[] parts = line.Split(',');
+        //    List<ForbiddenCrossingPoint> points = new();
+        //    Dictionary<int, ForbiddenCrossingPoint> pointsById = new();
+        //    using (StreamReader reader = new StreamReader(pointsLocation))
+        //    {
+        //        string line;
+        //        reader.ReadLine(); // Skip the header
+        //        while ((line = reader.ReadLine()) != null)
+        //        {
+        //            string[] parts = line.Split(',');
 
 
-                    int id = int.Parse(parts[0]);
-                    int p1Id = int.Parse(parts[1]);
-                    int p2Id = int.Parse(parts[2]);
-                    string comment = parts[3];
-                    ForbiddenCrossingLine newLine = new ForbiddenCrossingLine(pointsById[p1Id], pointsById[p2Id], id, comment);
-                    lines.Add(newLine);
-                }
-            }
+        //            int id = int.Parse(parts[0]);
+        //            double lon = double.Parse(parts[1], CultureInfo.InvariantCulture);
+        //            double lat = double.Parse(parts[2], CultureInfo.InvariantCulture);
+        //            ForbiddenCrossingPoint newPoint = new ForbiddenCrossingPoint(new Coordinates(lat, lon), id);
+        //            points.Add(newPoint);
+        //            pointsById.Add(id, newPoint);
+        //        }
+        //    }
 
-            return lines;
-        }
+        //    List<ForbiddenCrossingLine> lines = new();
+        //    using (StreamReader reader = new StreamReader(linesLocation))
+        //    {
+        //        string line;
+        //        reader.ReadLine(); // Skip the header
+        //        while ((line = reader.ReadLine()) != null)
+        //        {
+        //            string[] parts = line.Split(',');
+
+
+        //            int id = int.Parse(parts[0]);
+        //            int p1Id = int.Parse(parts[1]);
+        //            int p2Id = int.Parse(parts[2]);
+        //            string comment = parts[3];
+        //            ForbiddenCrossingLine newLine = new ForbiddenCrossingLine(pointsById[p1Id], pointsById[p2Id], id, comment);
+        //            lines.Add(newLine);
+        //        }
+        //    }
+
+        //    return lines;
+        //}
 
         /// <summary>
         /// Loads all the possible transfers at each stop
         /// </summary>
+        /// <param name="forbiddenCrossings">The list of lines forbidden to cross by a transfer</param>
         private void LoadStopTransfers(List<ForbiddenCrossingLine> forbiddenCrossings)
         {
             HashSet<Stop> stopsWithAllTransfersComputed = new HashSet<Stop>();
@@ -319,6 +326,13 @@ namespace RAPTOR_Router.Models.Static
             return result;
         }
 
+        /// <summary>
+        /// Gets all the stops within the given radius of the given coordinates
+        /// </summary>
+        /// <param name="lat">The latitude of the point</param>
+        /// <param name="lon">The longitude of the point</param>
+        /// <param name="radius">The maximum distance of a near stop from the coordinates</param>
+        /// <returns>List of all the stops within the given radius from the coordinates</returns>
         public List<Stop> GetStopsByLocation(double lat, double lon, int radius)
         {
             List<Stop> result = new();
@@ -330,6 +344,25 @@ namespace RAPTOR_Router.Models.Static
                 }
             }
             return result;
+        }
+
+        /// <summary>
+        /// Finds out whether a stop exists within the given radius of the given coordinates
+        /// </summary>
+        /// <param name="lat">The latitude of the point</param>
+        /// <param name="lon">The longitude of the point</param>
+        /// <param name="radius">The maximum distance of a near stop from the coordinates</param>
+        /// <returns>Bool specifying whether a near stop exists</returns>
+        public bool NearStopExists(double lat, double lon, int radius)
+        {
+            foreach (Stop stop in stops.Values)
+            {
+                if (DistanceExtensions.SimplifiedDistanceBetween(stop.Coords.Lat, stop.Coords.Lon, lat, lon) < radius)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

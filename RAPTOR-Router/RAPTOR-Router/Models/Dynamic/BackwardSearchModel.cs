@@ -1,57 +1,48 @@
 ﻿using RAPTOR_Router.Structures.Bike;
 using RAPTOR_Router.Structures.Transit;
 using RAPTOR_Router.Structures.Interfaces;
-using RAPTOR_Router.Models.Results;
-using RAPTOR_Router.Extensions;
 using RAPTOR_Router.Structures.Configuration;
 using RAPTOR_Router.Structures.Custom;
+using RAPTOR_Router.Models.Results;
+using RAPTOR_Router.Extensions;
 
 namespace RAPTOR_Router.Models.Dynamic
 {
 
     /// <summary>
-    /// Class representing a single connection search. One exists for every connection search problem being solved.
-    /// Typically is first initiated by adding sourceStops, destinationStops and the departure time, and then is provided to a router, which uses the object as the data holding object for its connection search algorithm.
+    /// A class holding all the dynamic data of a single backward connection search. The BackwardRouteFinder uses this class to store the data of the search.
     /// </summary>
-    internal class BackwardSearchModel
+    /// <remarks>Is used for searches, where the latest possible arrival time is known and we need to calculate the latest possible departure time to arrive on time.</remarks>
+    public class BackwardSearchModel : SearchModelBase
     {
-        internal List<Stop> sourceStops { get; set; }
-        internal List<Stop> destinationStops { get; set; }
-        internal List<BikeStation> sourceBikeStations { get; set; }
-        internal List<BikeStation> destinationBikeStations { get; set; }
-        internal CustomRoutePoint? sourceCustomRoutePoint { get; set; }
-        internal CustomRoutePoint? destinationCustomRoutePoint { get; set; }
-
-
+        /// <summary>
+        /// Dictionary indexed by the RoutePoints, holding the current routing information about each RoutePoint
+        /// </summary>
         private Dictionary<IRoutePoint, BackwardStopRoutingInfo> routingInfo = new();
-
 
         private DateTime arrivalTime;
         private DateTime bestCurrentDepartureTime = DateTime.MinValue;
 
-
-        private Settings settingsUsed;
-
         /// <summary>
-        /// Creates a new SearchModel object
+        /// Creates a new BackwardSearchModel object
         /// </summary>
         /// <param name="sourceStops">The list of stops considered as the source stops - typically stops from one node sharing the same name</param>
         /// <param name="destinationStops">The list of stops considered as the destination stops - typically stops from one node sharing the same name</param>
-        /// <param name="departureTime">The earliest possible departure time of the found connection</param>
+        /// <param name="sourceBikeStations">The list of bikeStations considered as the source stations</param>
+        /// <param name="destinationBikeStations">The list of bikeStations considered as the destination stations</param>
+        /// <param name="arrivalTime">The latest possible arrival time at the destination</param>
+        /// <param name="settingsUsed">The settings used for the search</param>
         public BackwardSearchModel(List<Stop> sourceStops, List<Stop> destinationStops, List<BikeStation> sourceBikeStations, List<BikeStation> destinationBikeStations, DateTime arrivalTime, Settings settingsUsed)
+            : base(sourceStops, destinationStops, sourceBikeStations, destinationBikeStations, settingsUsed)
         {
-            this.sourceStops = sourceStops;
-            this.destinationStops = destinationStops;
-            this.sourceBikeStations = sourceBikeStations;
-            this.destinationBikeStations = destinationBikeStations;
-
             this.arrivalTime = arrivalTime;
-            this.settingsUsed = settingsUsed;
         }
 
         /// <summary>
-        /// Class representing the routing information about a certain stop
+        /// Extracts the result of the search from the current state of the search model and returns it
         /// </summary>
+        /// <returns>The best result found in the search</returns>
+        /// <exception cref="ApplicationException">Thrown if the extraction fails, meaning the search model was in an invalid state.</exception>
         public SearchResult ExtractResult()
         {
             // For each round, get the stop with earliest arrival
@@ -130,7 +121,7 @@ namespace RAPTOR_Router.Models.Dynamic
                 {
                     CustomTransfer transfer = sourceCustomRoutePoint.GetTransferWithNormalRP(stop);
                     DateTime departureTimeAtSrcCustomRP = currStopInfo.Departures[round].Time.AddSeconds(-transfer.GetTransferTime(settingsUsed.WalkingPace));
-                    result.AddUsedCustomTransfer(transfer, departureTimeAtSrcCustomRP, true);
+                    result.AddUsedTransfer(transfer, departureTimeAtSrcCustomRP, true);
                 }
 
                 IRoutePoint nextRoundDestStop = stop;
@@ -153,7 +144,7 @@ namespace RAPTOR_Router.Models.Dynamic
                     else if (departure is StopRoutingInfoBase.BikeTransferDeparture)
                     {
                         StopRoutingInfoBase.BikeTransferDeparture bikeTransferDeparture = departure as StopRoutingInfoBase.BikeTransferDeparture;
-                        result.AddUsedBikeTransfer(bikeTransferDeparture.Transfer, bikeTransferDeparture.Time, true);
+                        result.AddUsedTransfer(bikeTransferDeparture.Transfer, bikeTransferDeparture.Time, true);
                         transferUsed = true;
                         currStop = bikeTransferDeparture.Transfer.GetDestRoutePoint();
                     }
@@ -216,12 +207,12 @@ namespace RAPTOR_Router.Models.Dynamic
                 else if (lastDeparture is StopRoutingInfoBase.BikeTransferDeparture)
                 {
                     StopRoutingInfoBase.BikeTransferDeparture bikeTransferDeparture = lastDeparture as StopRoutingInfoBase.BikeTransferDeparture;
-                    result.AddUsedBikeTransfer(bikeTransferDeparture.Transfer, lastDeparture.Time, true);
+                    result.AddUsedTransfer(bikeTransferDeparture.Transfer, lastDeparture.Time, true);
                 }
                 else if (lastDeparture is StopRoutingInfoBase.CustomTransferArrival)
                 {
                     StopRoutingInfoBase.CustomTransferDeparture customTransferDeparture = lastDeparture as StopRoutingInfoBase.CustomTransferDeparture;
-                    result.AddUsedCustomTransfer(customTransferDeparture.Transfer, customTransferDeparture.Time, true);
+                    result.AddUsedTransfer(customTransferDeparture.Transfer, customTransferDeparture.Time, true);
                 }
 
                 result.SetDepartureAndArrivalTimesByLatestArrival(arrivalTime);
@@ -265,25 +256,15 @@ namespace RAPTOR_Router.Models.Dynamic
         }
 
         /// <summary>
-        /// Finds out if it is possible and fastest to reach the stop by transfer in the specified round, rather by by trip
+        /// Gets the latest possible arrival time of the search
         /// </summary>
-        /// <param name="stop">The stop to use</param>
-        /// <param name="round">The round in which the reaching method is to be found</param>
-        /// <returns></returns>
-        //public bool StopIsReachedByTransferInRound(Stop stop, int round)
-        //{
-        //    return GetRoutingInfo(stop).transfersToReachRounds[round] is not null;
-        //}
-        /// <summary>
-        /// Gets the latest arrival time of the search
-        /// </summary>
-        /// <returns>The arrival time</returns>
+        /// <returns>The latest possible arrival time</returns>
         public DateTime GetArrivalTime()
         {
             return arrivalTime;
         }
         /// <summary>
-        /// Gets the current best/latest departure time
+        /// Gets the current best/latest found departure time
         /// </summary>
         /// <returns>The best current departure time</returns>
         public DateTime GetCurrentBestDepartureTime()
@@ -291,16 +272,21 @@ namespace RAPTOR_Router.Models.Dynamic
             return bestCurrentDepartureTime;
         }
         /// <summary>
-        /// Gets the latest currently possible departure time from the specified stop to the destination stop
+        /// Gets the latest currently possible departure time from the specified RoutePoint to the destination RoutePoint
         /// </summary>
-        /// <param name="rp">The stop to get latest departure from</param>
-        /// <returns>The latest possible departure time from the stop</returns>
+        /// <param name="rp">The RoutePoint to get latest departure from</param>
+        /// <returns>The latest possible departure time from the RoutePoint</returns>
         public DateTime GetLatestDeparture(IRoutePoint rp)
         {
             return GetRoutingInfo(rp).LatestDeparture;
         }
 
-
+        /// <summary>
+        /// Gets the latest currently possible departure time from the specified RoutePoint to the destination RoutePoint in the specified round (i.e. with exactly so many trips)
+        /// </summary>
+        /// <param name="rp">The RoutePoint to get latest departure from</param>
+        /// <param name="round">The round to get the information in</param>
+        /// <returns>The latest possible departure time from the RoutePoint in the specified round</returns>
         public DateTime GetLatestDepartureInRound(IRoutePoint rp, int round)
         {
             var arrival = GetRoutingInfo(rp).Departures[round];
@@ -319,7 +305,7 @@ namespace RAPTOR_Router.Models.Dynamic
 
 
         /// <summary>
-        /// Sets the current overall best departure time from one of the source stops
+        /// Sets the current overall best departure time found from any of the source RoutePoints
         /// </summary>
         /// <param name="departureTime">The best departure time to set</param>
         public void SetCurrentBestDepartureTime(DateTime departureTime)
@@ -327,10 +313,10 @@ namespace RAPTOR_Router.Models.Dynamic
             bestCurrentDepartureTime = departureTime;
         }
         /// <summary>
-        /// Sets the overall best departure time from the specified stop to the destination stop
+        /// Sets the current overall best departure time from the specified RoutePoint to the destination stop
         /// </summary>
-        /// <param name="rp">The stop to set the earliest arrival for</param>
-        /// <param name="departureTime">The earliest arrival time to set</param>
+        /// <param name="rp">The RoutePoint to set the latest departure for</param>
+        /// <param name="departureTime">The latest departure time to set</param>
         public void SetLatestDeparture(IRoutePoint rp, DateTime departureTime)
         {
             GetRoutingInfo(rp).LatestDeparture = departureTime;
@@ -340,12 +326,27 @@ namespace RAPTOR_Router.Models.Dynamic
             }
         }
 
-
+        /// <summary>
+        /// Sets a departure by trip from the specified stop in the specified round.
+        /// </summary>
+        /// <param name="stop">The stop from which the departure is being set</param>
+        /// <param name="trip">The trip to be taken from the stop to get nearer to the destination</param>
+        /// <param name="getOffStop">The stop at which the boarded trip should be exited.</param>
+        /// <param name="departureTime">The time at which the trip departs from the stop</param>
+        /// <param name="round">The round in which to set the departure</param>
         public void SetTripDepartureInRound(Stop stop, Trip trip, Stop getOffStop, DateTime departureTime, int round)
         {
             StopRoutingInfoBase.TripDeparture tripArrival = new StopRoutingInfoBase.TripDeparture(trip, getOffStop, departureTime);
             GetRoutingInfo(stop).Departures[round] = tripArrival;
         }
+        /// <summary>
+        /// Sets a departure by transfer from the specified RoutePoint in the specified round
+        /// </summary>
+        /// <param name="rp">The RoutePoint from which the departure is being set</param>
+        /// <param name="transfer">The transfer to use</param>
+        /// <param name="departureTime">The time at which the RoutePoint should be left to make the next connecting segment at the transfer destination</param>
+        /// <param name="round">The round in which to set the departure</param>
+        /// <exception cref="NotImplementedException">Thrown if the departure transfer is not between 2 stops, stop and bike station or custom route point and normal route point</exception>
         public void SetTransferDepartureInRound(IRoutePoint rp, ITransfer transfer, DateTime departureTime, int round)
         {
             if (transfer is Transfer t)
@@ -369,6 +370,13 @@ namespace RAPTOR_Router.Models.Dynamic
             }
 
         }
+        /// <summary>
+        /// Sets a departure by bike trip from the specified station to the other station in the specified round.
+        /// </summary>
+        /// <param name="from">The station from which the departure is being made</param>
+        /// <param name="to">The destination station</param>
+        /// <param name="departureTime">The time at which the source station should be left, to make the next connecting segment at the destination station</param>
+        /// <param name="round">The round in which to set the departure</param>
         public void SetBikeTripDepartureInRound(BikeStation from, BikeStation to, DateTime departureTime, int round)
         {
             StopRoutingInfoBase.BikeTripDeparture bikeTripDeparture = new StopRoutingInfoBase.BikeTripDeparture(from, to, departureTime);
@@ -386,6 +394,9 @@ namespace RAPTOR_Router.Models.Dynamic
                 stopRoutingInfo.Departures[0] = new StopRoutingInfoBase.ImplicitEndArrival(arrivalTime);
             }
         }
+        /// <summary>
+        /// Initiates the search by setting the latest arrival times to all the destination bike stations as the arrival time
+        /// </summary>
         public void SetDestBikeStationsLatestArrival()
         {
             foreach (BikeStation destBikeStation in destinationBikeStations)
@@ -395,25 +406,46 @@ namespace RAPTOR_Router.Models.Dynamic
                 stopRoutingInfo.Departures[0] = new StopRoutingInfoBase.ImplicitStartDeparture(arrivalTime);
             }
         }
+        /// <summary>
+        /// Finds out whether the specified RoutePoint was reached by a transfer in the specified round
+        /// </summary>
+        /// <remarks>Typically used to ensure two transfers are not performed after one another</remarks>
+        /// <param name="rp">The RoutePoint</param>
+        /// <param name="round">The round</param>
+        /// <returns>Bool, specifying whether the RoutePoint was reached by a transfer in the round</returns>
         public bool RoutePointIsReachedByTransferInRound(IRoutePoint rp, int round)
         {
             StopRoutingInfoBase.IEntry departure = GetRoutingInfo(rp).Departures[round];
-            return departure is StopRoutingInfoBase.TransferDeparture || departure is StopRoutingInfoBase.BikeTransferDeparture || departure is StopRoutingInfoBase.CustomTransferDeparture; // TODO: check
+            bool reachedByTransferInThisRound = departure is StopRoutingInfoBase.TransferDeparture || departure is StopRoutingInfoBase.BikeTransferDeparture || departure is StopRoutingInfoBase.CustomTransferDeparture;
+            return reachedByTransferInThisRound; // TODO: check
         }
+        /// <summary>
+        /// Finds out whether the specified RoutePoint was reached by a bike trip in the specified round
+        /// </summary>
+        /// <remarks>Typically used to ensure two bike trips are not performed after one another</remarks>
+        /// <param name="rp">The RoutePoint</param>
+        /// <param name="round">The round</param>
+        /// <returns>Bool, specifying whether the RoutePoint was reached by a bike trip in the round</returns>
         public bool RoutePointIsReachedByBikeInRound(IRoutePoint rp, int round)
         {
             StopRoutingInfoBase.IEntry departure = GetRoutingInfo(rp).Departures[round];
             return departure is StopRoutingInfoBase.BikeTripDeparture;
         }
+        /// <summary>
+        /// Finds out whether the specified RoutePoint was reached by a public transit trip in the specified round
+        /// </summary>
+        /// <param name="rp">The RoutePoint</param>
+        /// <param name="round">The round</param>
+        /// <returns>Bool, specifying whether the RoutePoint was reached by a public transit trip in the round</returns>
         public bool RoutePointIsReachedByTripInRound(IRoutePoint rp, int round)
         {
             return GetRoutingInfo(rp).Departures[round] is StopRoutingInfoBase.TripDeparture;
         }
         /// <summary>
-        /// Gets the routing info for the specified stop if it exists. If not, creates on, adds it to the routingInfo and returns it
+        /// Gets the routing info entry for the specified stop if it exists. If not, creates a new one, adds it to the routingInfo and returns it
         /// </summary>
-        /// <param name="rp"></param>
-        /// <returns></returns>
+        /// <param name="rp">The RoutePoint for which to get the routing info</param>
+        /// <returns>The routing info of the specified RoutePoint</returns>
         private BackwardStopRoutingInfo GetRoutingInfo(IRoutePoint rp)
         {
             if (routingInfo.ContainsKey(rp))

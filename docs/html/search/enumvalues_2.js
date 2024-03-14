@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['leasttransfers_0',['LeastTransfers',['../namespace_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures.html#abb49466717d51af4f24d4d957fdba5e5aa189f1e9877391f7edffb6e48efa86ce',1,'RAPTOR_Router::RAPTORStructures']]],
-  ['long_1',['Long',['../namespace_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures.html#a263ff9df5791e0db9b30b60386a3fcd7a8394f0347c184cf156ac5924dccb773b',1,'RAPTOR_Router::RAPTORStructures']]],
-  ['low_2',['Low',['../namespace_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures.html#a6472df18fe35f606eb34d5886f676605a28d0edd045e05cf5af64e35ae0c4c6ef',1,'RAPTOR_Router::RAPTORStructures']]]
+  ['leasttransfers_0',['LeastTransfers',['../namespace_r_a_p_t_o_r___router_1_1_structures_1_1_configuration.html#a82520fc90f52c1e9df79a97efed6ad8eaa189f1e9877391f7edffb6e48efa86ce',1,'RAPTOR_Router::Structures::Configuration']]],
+  ['long_1',['Long',['../namespace_r_a_p_t_o_r___router_1_1_structures_1_1_configuration.html#aea38283bf67b447b5e5488558e026ccda8394f0347c184cf156ac5924dccb773b',1,'RAPTOR_Router.Structures.Configuration.Long'],['../namespace_r_a_p_t_o_r___router_1_1_structures_1_1_configuration.html#aaf2d30d7e26f5c1648d7b2af2b998b56a8394f0347c184cf156ac5924dccb773b',1,'RAPTOR_Router.Structures.Configuration.Long']]],
+  ['low_2',['Low',['../namespace_r_a_p_t_o_r___router_1_1_structures_1_1_configuration.html#a2667cf4a25b741f44bbb432f46a5fe99a28d0edd045e05cf5af64e35ae0c4c6ef',1,'RAPTOR_Router::Structures::Configuration']]]
 ];

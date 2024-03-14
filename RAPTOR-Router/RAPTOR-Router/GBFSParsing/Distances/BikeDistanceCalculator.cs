@@ -10,6 +10,9 @@ using Route = Itinero.Route;
 
 namespace RAPTOR_Router.GBFSParsing.Distances
 {
+    /// <summary>
+    /// Represents the error, due to which a route between two bike stations could not be calculated
+    /// </summary>
     public enum ErrorType
     {
         NO_ERROR,
@@ -17,6 +20,10 @@ namespace RAPTOR_Router.GBFSParsing.Distances
         END_RESOLVE_ERROR,
         ROUTE_CALCULATION_ERROR
     }
+
+    /// <summary>
+    /// Class used for calculating the distances between bike stations
+    /// </summary>
     public class BikeDistanceCalculator
     {
         private RouterDb routerDb;
@@ -24,6 +31,10 @@ namespace RAPTOR_Router.GBFSParsing.Distances
         string routerDbLocation;
         string distanceFileLocation;
         StationDistanceMatrix distances = new StationDistanceMatrix();
+
+        /// <summary>
+        /// Loads the configuration info and creates a routerDb instance - either by creating a new one from the osm file, or by loading it from disk
+        /// </summary>
         public BikeDistanceCalculator()
         {
             var config = new ConfigurationBuilder()
@@ -76,6 +87,12 @@ namespace RAPTOR_Router.GBFSParsing.Distances
                 }
             }
         }
+        /// <summary>
+        /// Calculates the distances between all the bike stations and loads them into the distance matrix
+        /// </summary>
+        /// <param name="stations">The list of all bike stations in the system</param>
+        /// <param name="stationsById">The dictionary to access the bikestations by their Ids</param>
+        /// <returns>The distance matrix</returns>
         public StationDistanceMatrix CalculateMatrix(List<BikeStation> stations, Dictionary<string, BikeStation> stationsById)
         {
             //var router = new Router(routerDb);
@@ -195,7 +212,7 @@ namespace RAPTOR_Router.GBFSParsing.Distances
 
 
 
-
+            
             bool IsUnresolvable(BikeStation s1, Dictionary<string, int> unresolvableStations)
             {
                 return unresolvableStations.ContainsKey(s1.Id) && unresolvableStations[s1.Id] > 2;
@@ -217,6 +234,10 @@ namespace RAPTOR_Router.GBFSParsing.Distances
                 }
             }
         }
+        /// <summary>
+        /// Loads the distances between bike stations from the configured file - if the file exists
+        /// </summary>
+        /// <param name="stationsById">The dictionary of bike stations indexed by their Ids</param>
         private void LoadDistancesFromFile(Dictionary<string, BikeStation> stationsById)
         {
             using (StreamReader reader = new StreamReader(distanceFileLocation))
@@ -240,6 +261,12 @@ namespace RAPTOR_Router.GBFSParsing.Distances
                 }
             }
         }
+        /// <summary>
+        /// Appends a new line to the distance file, containing the distance between two bike stations
+        /// </summary>
+        /// <param name="from">The source bikeStation</param>
+        /// <param name="to">The destination bikeStation</param>
+        /// <param name="distance">The distance in meters</param>
         private void AppendDistanceToFile(BikeStation from, BikeStation to, int distance)
         {
             using (StreamWriter writer = new StreamWriter(distanceFileLocation, true))
@@ -248,6 +275,12 @@ namespace RAPTOR_Router.GBFSParsing.Distances
                 writer.Flush();
             }
         }
+        /// <summary>
+        /// Checks, whether the given coordinates are connected to the network - i.e. they do not lie on a "routing island"
+        /// </summary>
+        /// <param name="lat">Latitude</param>
+        /// <param name="lon">Longitude</param>
+        /// <returns>Bool specifying whether the point is connected to the rest of the network</returns>
         private bool CheckConnectivity(float lat, float lon)
         {
             var profile = Vehicle.Bicycle.Shortest();
@@ -264,10 +297,24 @@ namespace RAPTOR_Router.GBFSParsing.Distances
                 return router.CheckConnectivity(profile, point.Value);
             }
         }
+        /// <summary>
+        /// Checks, whether the given bikeStation is connected to the rest of the network
+        /// </summary>
+        /// <param name="station">The bike station to check</param>
+        /// <returns>Bool specifying whether the station is connected to the rest of the network</returns>
         private bool CheckConnectivity(BikeStation station)
         {
             return CheckConnectivity((float)station.Coords.Lat, (float)station.Coords.Lon);
         }
+        /// <summary>
+        /// Calculates the real-world biking distance between two points using the OSM router
+        /// </summary>
+        /// <param name="startLat">Starting point latitude</param>
+        /// <param name="startLon">Starting point longitude</param>
+        /// <param name="endLat">Destination point latitude</param>
+        /// <param name="endLon">Destination point longitude</param>
+        /// <param name="errorType">The error, due to which the distance could not be calculated</param>
+        /// <returns>The biking distance between the points in meters</returns>
         private int GetBikingDistance(float startLat, float startLon, float endLat, float endLon, out ErrorType errorType)
         {
             var router = new Router(routerDb);
@@ -310,6 +357,13 @@ namespace RAPTOR_Router.GBFSParsing.Distances
             errorType = ErrorType.NO_ERROR;
             return (int)route.TotalDistance;
         }
+        /// <summary>
+        /// Calculates the real-world biking distance between two stations using the OSM router
+        /// </summary>
+        /// <param name="start">The starting bike station</param>
+        /// <param name="end">The destination bike station</param>
+        /// <param name="errorType">The error, due to which the distance could not be calculated</param>
+        /// <returns>The biking distance between the stations in meters</returns>
         private int GetBikingDistance(BikeStation start, BikeStation end, out ErrorType errorType)
         {
             return GetBikingDistance((float)start.Coords.Lat, (float)start.Coords.Lon, (float)end.Coords.Lat, (float)end.Coords.Lon, out errorType);

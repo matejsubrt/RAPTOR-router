@@ -60,7 +60,7 @@ namespace RAPTOR_Router.GTFSParsing
             }
         }
         /// <summary>
-        /// Loads the calůendar dates info from the calendar_dates.txt GTFS file
+        /// Loads the calendar dates info from the calendar_dates.txt GTFS file
         /// </summary>
         /// <param name="archive">The zip archive the file is located in</param>
         public void LoadCalendarDates(ZipArchive archive)

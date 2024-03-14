@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['raptormodel_0',['RAPTORModel',['../class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_r_a_p_t_o_r_model.html#a6e5edb668606be19e4b3755d2cfb3072',1,'RAPTOR_Router::RAPTORStructures::RAPTORModel']]],
-  ['route_1',['Route',['../class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_route.html#a2c0e85fc339f4b2265c1c83e78c9c8ba',1,'RAPTOR_Router::RAPTORStructures::Route']]],
-  ['routefinderbuilder_2',['RouteFinderBuilder',['../class_r_a_p_t_o_r___router_1_1_routers_1_1_route_finder_builder.html#a21795965fb9837bd579fe202f46e86f4',1,'RAPTOR_Router::Routers::RouteFinderBuilder']]]
+  ['nearstationexists_0',['NearStationExists',['../class_r_a_p_t_o_r___router_1_1_models_1_1_static_1_1_bike_model.html#ad1b88a6fb7f6f9bf149c6105d4543003',1,'RAPTOR_Router::Models::Static::BikeModel']]],
+  ['nearstopexists_1',['NearStopExists',['../class_r_a_p_t_o_r___router_1_1_models_1_1_static_1_1_transit_model.html#a3b7da8ac9504858c5a5fd22f1023a542',1,'RAPTOR_Router::Models::Static::TransitModel']]]
 ];

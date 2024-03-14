@@ -2,6 +2,9 @@
 
 namespace RAPTOR_Router.GBFSParsing.GBFSStructures
 {
+    /// <summary>
+    /// Class representing the GBFS stations information
+    /// </summary>
     public class GBFSStationInfo
     {
         [JsonPropertyName("last_updated")]
@@ -17,12 +20,18 @@ namespace RAPTOR_Router.GBFSParsing.GBFSStructures
         public string Version { get; set; }
     }
 
+    /// <summary>
+    /// Class representing the GBFS list of station information
+    /// </summary>
     public class GBFSData
     {
         [JsonPropertyName("stations")]
         public List<GBFSStation> Stations { get; set; }
     }
 
+    /// <summary>
+    /// Class representing a single GBFS station
+    /// </summary>
     public class GBFSStation
     {
         [JsonPropertyName("station_id")]

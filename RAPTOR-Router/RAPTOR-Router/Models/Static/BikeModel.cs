@@ -10,9 +10,14 @@ using Timer = System.Timers.Timer;
 
 namespace RAPTOR_Router.Models.Static
 {
+    /// <summary>
+    /// Class holding all the information about all used shared bike systems and their stations.
+    /// </summary>
     public class BikeModel
     {
-
+        /// <summary>
+        /// List of all the bike stations in all systems.
+        /// </summary>
         public List<BikeStation> Stations { get; private set; }
         private Dictionary<string, BikeStation> StationsById;
         private StationDistanceMatrix Distances;
@@ -20,6 +25,9 @@ namespace RAPTOR_Router.Models.Static
 
         private Timer statusUpdateTimer;
 
+        /// <summary>
+        /// Creates a new BikeModel, initiates its status update timer and sets up the data structures.
+        /// </summary>
         public BikeModel()
         {
             Stations = new();
@@ -34,6 +42,11 @@ namespace RAPTOR_Router.Models.Static
             statusUpdateTimer.Enabled = true;
         }
 
+        /// <summary>
+        /// Adds a new data source to the model, and merges its data with the existing data.
+        /// </summary>
+        /// <remarks>The data source has to already be initialized</remarks>
+        /// <param name="source"></param>
         public void AddDataSource(IBikeDataSource source)
         {
             if (Stations.Count == 0)
@@ -52,6 +65,9 @@ namespace RAPTOR_Router.Models.Static
             bikeDataSources.Add(source);
         }
 
+        /// <summary>
+        /// Sets the bike count for all stations and starts the timer to update the status of the stations periodically.
+        /// </summary>
         public void StartUpdateTimer()
         {
             foreach (IBikeDataSource dataSource in bikeDataSources)
@@ -61,6 +77,10 @@ namespace RAPTOR_Router.Models.Static
             statusUpdateTimer.Start();
         }
 
+        /// <summary>
+        /// Updates the status (bike count) of all stations in all data sources.
+        /// </summary>
+        /// <remarks>Called by the status update timer</remarks>
         public void UpdateAllStationStatus(object source, ElapsedEventArgs e)
         {
             foreach (IBikeDataSource dataSource in bikeDataSources)
@@ -69,11 +89,23 @@ namespace RAPTOR_Router.Models.Static
             }
         }
 
+        /// <summary>
+        /// Gets the dictionary of distances from a given station to all other stations.
+        /// </summary>
+        /// <param name="station">The station from which to get the distances</param>
+        /// <returns>The dictionary containing the distances</returns>
         public Dictionary<BikeStation, int> GetDistancesFromStation(BikeStation station)
         {
             return Distances.GetDistancesFromStation(station);
         }
 
+        /// <summary>
+        /// Gets all the bike stations within the given radius of the given coordinates.
+        /// </summary>
+        /// <param name="lat">The latitude of the point</param>
+        /// <param name="lon">The longitude of the point</param>
+        /// <param name="radius">The maximum distance of the found bike station from the coordinates</param>
+        /// <returns>The list of all near stations</returns>
         public List<BikeStation> GetNearStations(double lat, double lon, int radius)
         {
             List<BikeStation> nearStations = new List<BikeStation>();
@@ -91,11 +123,24 @@ namespace RAPTOR_Router.Models.Static
             }
             return nearStations;
         }
+        /// <summary>
+        /// Gets all the bike stations within the given radius of the given RoutePoint.
+        /// </summary>
+        /// <param name="rp">The RoutePoint to get near stations for</param>
+        /// <param name="radius">The maximum distance of the found bike station from the RoutePoint</param>
+        /// <returns>The list of all near stations</returns>
         public List<BikeStation> GetNearStations(IRoutePoint rp, int radius)
         {
             return GetNearStations(rp.Coords.Lat, rp.Coords.Lon, radius);
         }
 
+        /// <summary>
+        /// Gets the nearest bike station to the given coordinates.
+        /// </summary>
+        /// <param name="lat">The latitude of the point</param>
+        /// <param name="lon">The longitude of the point</param>
+        /// <param name="radius">The maximum distance of the found bike station from the coordinates</param>
+        /// <returns>The nearest bike station to the coordinates, null if none was found</returns>
         public BikeStation ResolveCoordinates(double lat, double lon, int radius)
         {
             int minDistance = int.MaxValue;
@@ -110,6 +155,25 @@ namespace RAPTOR_Router.Models.Static
                 }
             }
             return nearestStation;
+        }
+
+        /// <summary>
+        /// Finds out whether a bike station exists within the given radius of the given coordinates.
+        /// </summary>
+        /// <param name="lat">The latitude of the point</param>
+        /// <param name="lon">The longitude of the point</param>
+        /// <param name="radius">The maximum distance of the found bike station from the coordinates</param>
+        /// <returns>Bool specifying whether there is a station within the radius</returns>
+        public bool NearStationExists(double lat, double lon, int radius)
+        {
+            foreach (BikeStation s in Stations)
+            {
+                if (DistanceExtensions.SimplifiedDistanceBetween(s.Coords.Lat, s.Coords.Lon, lat, lon) < radius)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
