@@ -38,7 +38,7 @@ namespace RAPTOR_Router.GBFSParsing.Distances
         public BikeDistanceCalculator()
         {
             var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory() + "..\\..\\..\\..\\..")
+                .SetBasePath(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "..")))
                 .AddJsonFile("config.json", optional: false, reloadOnChange: true)
                 .Build();
             osmLocation = config["osmFileLocation"];
@@ -112,7 +112,7 @@ namespace RAPTOR_Router.GBFSParsing.Distances
             for (int i = 0; i < stations.Count; i++)
             {
                 stopwatch.Start();
-                Console.WriteLine("CALCULATING STATION #" + i + "/" + stations.Count);
+                //Console.WriteLine("CALCULATING STATION #" + i + "/" + stations.Count);
 
 
 
@@ -193,17 +193,17 @@ namespace RAPTOR_Router.GBFSParsing.Distances
                 }
                 stopwatch.Stop();
                 totalSeconds += stopwatch.Elapsed.TotalSeconds;
-                Console.WriteLine("Time elapsed: " + stopwatch.Elapsed + "s");
+                //Console.WriteLine("Time elapsed: " + stopwatch.Elapsed + "s");
 
-                Console.WriteLine("Total time elapsed: " + totalSeconds + "s");
+                //Console.WriteLine("Total time elapsed: " + totalSeconds + "s");
                 if (i > 0)
                 {
                     double ratio = (stations.Count - (double)i) / i; // remaining stations / stations processed
                     double estimatedRemainingTime = ratio * totalSeconds;
-                    Console.WriteLine("ESTIMATED REMAINING TIME: " + (int)(estimatedRemainingTime / 60) + ":" + (int)(estimatedRemainingTime % 60));
+                    //Console.WriteLine("ESTIMATED REMAINING TIME: " + (int)(estimatedRemainingTime / 60) + ":" + (int)(estimatedRemainingTime % 60));
                 }
-                Console.WriteLine("From File: " + alreadyLoadedCount + "/" + toLoadCount);
-                Console.WriteLine("---------------------------------------------------");
+                //Console.WriteLine("From File: " + alreadyLoadedCount + "/" + toLoadCount);
+                //Console.WriteLine("---------------------------------------------------");
 
                 stopwatch.Reset();
 
