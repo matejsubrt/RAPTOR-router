@@ -37,15 +37,23 @@ namespace RAPTOR_Router.RouteFinders
         /// Loads all the GTFS, GBFS and forbidden crossing data from the locations provided in the config file and bike data sources
         /// </summary>
         /// <exception cref="Exception">The configuration is wrong</exception>
-		public void LoadAllData()
+		public void LoadAllData(string alternativeGtfsArchiveLocation = null)
 		{
             var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory() + "..\\..\\..\\..\\..")
+                .SetBasePath(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "..")))
+
                 .AddJsonFile("config.json", optional: false, reloadOnChange: true)
                 .Build();
             string gtfsZipArchiveLocation = config["gtfsArchiveLocation"];
             string forbiddenPointsLocation = config["forbiddenCrossingPointsLocation"];
             string forbiddenLinesLocation = config["forbiddenCrossingLinesLocation"];
+
+            if(alternativeGtfsArchiveLocation != null)
+            {
+                Console.WriteLine(alternativeGtfsArchiveLocation);
+                gtfsZipArchiveLocation = alternativeGtfsArchiveLocation;
+            }
+
             if (gtfsZipArchiveLocation is null)
             {
                 throw new Exception("No gtfs archive location found in the config file");

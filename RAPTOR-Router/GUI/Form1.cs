@@ -56,7 +56,8 @@ namespace GUI
         void ParseGtfs()
         {
             var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory() + "..\\..\\..\\..\\..")
+                .SetBasePath(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "..")))
+
                 .AddJsonFile("config.json", optional: false, reloadOnChange: true)
                 .Build();
             string gtfsZipArchiveLocation = config["gtfsArchiveLocation"];
@@ -68,7 +69,7 @@ namespace GUI
                 return;
             }
 
-            builder.LoadGtfsData(gtfsZipArchiveLocation);
+            builder.LoadAllData();
         }
         public Form1()
         {

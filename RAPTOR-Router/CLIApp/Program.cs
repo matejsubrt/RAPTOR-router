@@ -16,7 +16,7 @@ namespace CLIApp
 			bool ADVANCED_ROUTING = true;
 
 			var config = new ConfigurationBuilder()
-				.SetBasePath(Directory.GetCurrentDirectory() + "..\\..\\..\\..\\..")
+				.SetBasePath(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "..")))
 				.AddJsonFile("config.json", optional: false, reloadOnChange: true)
 				.Build();
 			string gtfsZipArchiveLocation = config["gtfsArchiveLocation"];
