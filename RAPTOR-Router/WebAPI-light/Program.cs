@@ -8,6 +8,26 @@ using RAPTOR_Router.Structures.Configuration;
 
 namespace WebAPI_light
 {
+    public class StopToStopRequest
+    {
+        public string srcStopName { get; set; }
+        public string destStopName { get; set; }
+        public string dateTime { get; set; }
+        public bool byEarliestDeparture { get; set; }
+        public Settings settings { get; set; }
+    }
+
+    public class CoordToCoordRequest
+    {
+        public double srcLon { get; set; }
+        public double srcLat { get; set; }
+        public double destLon { get; set; }
+        public double destLat { get; set; }
+        public string dateTime { get; set; }
+        public bool byEarliestDeparture { get; set; }
+        public Settings settings { get; set; }
+    }
+
     public class Program
     {
         private static RouteFinderBuilder routerBuilder;
@@ -67,12 +87,13 @@ namespace WebAPI_light
             //    HandleRequestStops(routerBuilder, srcStopName, destStopName, dateTime, walkingPace, cyclingPace, bikeUnlockTime, bikeLockTime, useSharedBikes, bikeMax15Minutes, transferTime, comfortBalance, walkingPreference, bikeTripBuffer))
             //    .WithName("GetConnection")
             //    .WithOpenApi();
-            app.MapPost("/connection/stop-to-stop", (string srcStopName, string destStopName, string dateTime, bool byEarliestDeparture, Settings settings) =>
-                HandleRequestStopToStop(routerBuilder, srcStopName, destStopName, dateTime, byEarliestDeparture, settings))
+            app.MapPost("/connection/stop-to-stop", (StopToStopRequest request) =>
+                    HandleRequestStopToStop(routerBuilder, request.srcStopName, request.destStopName, request.dateTime, request.byEarliestDeparture, request.settings))
                 .WithName("GetConnectionByStopNames")
                 .WithOpenApi();
-            app.MapPost("/connection/coord-to-coord", (double srcLat, double srcLon, double destLat, double destLon, string dateTime, bool byEarliestDeparture, Settings settings) =>
-                HandleRequestCoordToCoord(routerBuilder, srcLat, srcLon, destLat, destLon, dateTime, byEarliestDeparture, settings))
+
+            app.MapPost("/connection/coord-to-coord", (CoordToCoordRequest request) =>
+                HandleRequestCoordToCoord(routerBuilder, request.srcLat, request.srcLon, request.destLat, request.destLon, request.dateTime, request.byEarliestDeparture, request.settings))
                 .WithName("GetConnectionByCoords")
                 .WithOpenApi();
             app.Run();
