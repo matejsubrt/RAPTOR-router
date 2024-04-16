@@ -117,7 +117,8 @@ namespace RAPTOR_Router.Models.Results
                 routeStops.IndexOf(getOnStop),
                 routeStops.IndexOf(getOffStop),
                 trip.Route.ShortName,
-                trip.Route.Color);
+                trip.Route.Color,
+                trip.Route.Type);
 
 
             //UsedSegments.Insert(0, usedTrip);
@@ -246,7 +247,8 @@ namespace RAPTOR_Router.Models.Results
                 srcStopInfo,
                 destStopInfo,
                 distance,
-                usedSettings.GetBikeTripTime(distance)
+                usedSettings.GetBikeTripTime(distance),
+                from.BikeCount
             );
             if (toEnd)
             {
@@ -695,7 +697,10 @@ namespace RAPTOR_Router.Models.Results
             /// The color of the trip's route
             /// </summary>
             [JsonInclude]
-            public Color Color { get; set; }
+            public Color color { get; set; }
+
+            [JsonInclude]
+            public Route.VehicleType vehicleType { get; set; }
 
             /// <summary>
             /// Creates a new UsedTrip object
@@ -710,14 +715,16 @@ namespace RAPTOR_Router.Models.Results
                 int getOnStopIndex,
                 int getOffStopIndex,
                 string routeName,
-                Color color
+                Color color,
+                Route.VehicleType vehicleType
             )
             {
                 this.stopPasses = stopPasses;
                 this.getOnStopIndex = getOnStopIndex;
                 this.getOffStopIndex = getOffStopIndex;
                 this.routeName = routeName;
-                Color = color;
+                this.color = color;
+                this.vehicleType = vehicleType;
             }
             /// <summary>
             /// Gets the name of the stop where the trip is boarded
@@ -827,6 +834,9 @@ namespace RAPTOR_Router.Models.Results
             [JsonInclude]
             public int time { get; set; }
 
+            [JsonInclude]
+            public int remainingBikes { get; set; }
+
             /// <summary>
             /// Creates a new UsedBikeTrip object
             /// </summary>
@@ -838,12 +848,14 @@ namespace RAPTOR_Router.Models.Results
                 RoutePointInfo srcStopInfo,
                 RoutePointInfo destStopInfo,
                 int distance,
-                int time
+                int time,
+                int remainingBikes
             ){
                 this.srcStopInfo = srcStopInfo;
                 this.destStopInfo = destStopInfo;
                 this.distance = distance;
                 this.time = time;
+                this.remainingBikes = remainingBikes;
             }
 
             /// <summary>
