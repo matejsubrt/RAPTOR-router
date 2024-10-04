@@ -5,6 +5,7 @@ using RAPTOR_Router.Structures.Configuration;
 using RAPTOR_Router.Structures.Custom;
 using RAPTOR_Router.Models.Results;
 using RAPTOR_Router.Extensions;
+using RAPTOR_Router.Models.Static;
 
 namespace RAPTOR_Router.Models.Dynamic
 {
@@ -43,7 +44,7 @@ namespace RAPTOR_Router.Models.Dynamic
         /// </summary>
         /// <returns>The best result found in the search</returns>
         /// <exception cref="ApplicationException">Thrown if the extraction fails, meaning the search model was in an invalid state.</exception>
-        public SearchResult ExtractResult()
+        public SearchResult ExtractResult(BikeModel bikeModel)
         {
             // For each round, get the stop with earliest arrival
             Stop[] latestSrcStopsRounds = new Stop[Settings.ROUNDS];
@@ -185,7 +186,7 @@ namespace RAPTOR_Router.Models.Dynamic
                     else if (departure is StopRoutingInfoBase.BikeTripDeparture)
                     {
                         StopRoutingInfoBase.BikeTripDeparture bikeTripDeparture = departure as StopRoutingInfoBase.BikeTripDeparture;
-                        result.AddUsedBikeTrip(bikeTripDeparture.From, bikeTripDeparture.To, DistanceExtensions.SimplifiedDistanceBetween(bikeTripDeparture.From, bikeTripDeparture.To), true);
+                        result.AddUsedBikeTrip(bikeTripDeparture.From, bikeTripDeparture.To, bikeModel.GetDistanceBetweenStations(bikeTripDeparture.From, bikeTripDeparture.To), true);
                         currStop = bikeTripDeparture.To;
                     }
 

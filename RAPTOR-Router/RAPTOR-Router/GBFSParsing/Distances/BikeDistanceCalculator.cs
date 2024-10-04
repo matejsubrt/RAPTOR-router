@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using RAPTOR_Router.Extensions;
 using RAPTOR_Router.Structures.Bike;
 using System.Diagnostics;
-
+using System.Security.Cryptography;
 using Route = Itinero.Route;
 
 namespace RAPTOR_Router.GBFSParsing.Distances
@@ -125,6 +125,8 @@ namespace RAPTOR_Router.GBFSParsing.Distances
                     if (i > j) continue; // the matrix is symmetric -> skip the already calculated distances
 
                     BikeStation s2 = stations[j];
+
+
                     if (distances.HasDistance(s1, s2))
                     {
                         // The distance is already loaded from file -> skip it

@@ -99,6 +99,11 @@ namespace RAPTOR_Router.Models.Static
             return Distances.GetDistancesFromStation(station);
         }
 
+        public int GetDistanceBetweenStations(BikeStation s1, BikeStation s2)
+        {
+            return Distances.GetDistance(s1, s2);
+        }
+
         /// <summary>
         /// Gets all the bike stations within the given radius of the given coordinates.
         /// </summary>

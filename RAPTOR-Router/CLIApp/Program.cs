@@ -49,18 +49,18 @@ namespace CLIApp
 			var builder = new RouteFinderBuilder();
 			builder.LoadAllData();
 
-			IRouteFinder router1 = builder.CreateBackwardRouteFinder(settings);
+			IRouteFinder router1 = builder.CreateForwardRouteFinder(settings);
 
 
 
 
 
-            DateTime departureTime1;
-            DateTime.TryParse("28/02/2024 13:45:30", out departureTime1);
-			var result = router1.FindConnection(50.1158, 14.4476, 50.0683, 14.3030, departureTime1);
-			Console.WriteLine(result.ToString());
+   //         DateTime departureTime1;
+   //         DateTime.TryParse("28/02/2024 13:45:30", out departureTime1);
+			//var result = router1.FindConnection(50.1158, 14.4476, 50.0683, 14.3030, departureTime1);
+			//Console.WriteLine(result.ToString());
 
-			router1 = builder.CreateBackwardRouteFinder(settings);
+			//router1 = builder.CreateBackwardRouteFinder(settings);
 
 
 
@@ -74,7 +74,7 @@ namespace CLIApp
 
 				DateTime departureTime;
 #if DEBUG
-				DateTime.TryParse("28/02/2024 07:07:07", out departureTime);
+				DateTime.TryParse("04/10/2024 07:07:07", out departureTime);
 #else
 				Console.WriteLine("Enter the departure time in the DD/MM/YYYY hh:mm:ss format (i.e. \"07/07/2023 07:07:07\" corresponds to 7.7.2023, 7:07:07):");
 				string dateTime = Console.ReadLine();

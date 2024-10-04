@@ -20,19 +20,21 @@ namespace GUI
         {
             int currY = 100;
             int currX = 50;
-            foreach (var seg in result.UsedSegments)
+            int tripsCount = 0;
+            int transfersCount = 0;
+            foreach (var segType in result.UsedSegmentTypes)
             {
-                switch (seg.segmentType)
+                switch (segType)
                 {
                     case SearchResult.SegmentType.Trip:
-                        SearchResult.UsedTrip trip = (SearchResult.UsedTrip)seg;
+                        SearchResult.UsedTrip trip = result.UsedTrips[tripsCount++];
                         TripWindow tripWindow = new(trip);
                         tripWindow.Location = new Point(currX, currY);
                         this.Controls.Add(tripWindow);
                         currY += tripWindow.Height + 2;
                         break;
                     case SearchResult.SegmentType.Transfer:
-                        SearchResult.UsedTransfer transfer = (SearchResult.UsedTransfer)seg;
+                        SearchResult.UsedTransfer transfer = result.UsedTransfers[transfersCount++];
                         TransferWindow transferWindow = new(transfer);
                         transferWindow.Location = new Point(currX, currY);
                         this.Controls.Add(transferWindow);

@@ -18,12 +18,12 @@ namespace GUI
         {
             InitializeComponent();
             lineName.Text = trip.routeName;
-            lineName.ForeColor = System.Drawing.Color.FromArgb(trip.Color.R, trip.Color.G, trip.Color.B);
-            fromStop.Text = trip.stops[trip.getOnStopIndex];
-            toStop.Text = trip.stops[trip.getOffStopIndex];
+            lineName.ForeColor = System.Drawing.Color.FromArgb(trip.color.R, trip.color.G, trip.color.B);
+            fromStop.Text = trip.stopPasses[trip.getOnStopIndex].Name;
+            toStop.Text = trip.stopPasses[trip.getOffStopIndex].Name;
             stopsNo.Text = (trip.getOffStopIndex - trip.getOnStopIndex).ToString();
-            departureTime.Text = trip.getOnTime.ToLongTimeString();
-            arrivalTime.Text = trip.getOffTime.ToLongTimeString();
+            departureTime.Text = trip.stopPasses[trip.getOnStopIndex].DepartureTime.ToLongTimeString();
+            arrivalTime.Text = trip.stopPasses[trip.getOffStopIndex].DepartureTime.ToLongTimeString();
         }
     }
 }

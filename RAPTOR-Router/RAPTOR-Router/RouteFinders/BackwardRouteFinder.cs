@@ -511,7 +511,7 @@ namespace RAPTOR_Router.RouteFinders
             markedStops.Clear();
             markedRoutesWithGetOffStops.Clear();
             markedBikeStations.Clear();
-            return searchModel.ExtractResult();
+            return searchModel.ExtractResult(bikeModel);
         }
 
         /// <summary>
@@ -565,7 +565,7 @@ namespace RAPTOR_Router.RouteFinders
             }
             markedStops.Clear();
             markedRoutesWithGetOffStops.Clear();
-            return searchModel.ExtractResult();
+            return searchModel.ExtractResult(bikeModel);
         }
 
         /// <summary>
@@ -639,7 +639,7 @@ namespace RAPTOR_Router.RouteFinders
             }
             markedStops.Clear();
             markedRoutesWithGetOffStops.Clear();
-            return searchModel.ExtractResult();
+            return searchModel.ExtractResult(bikeModel);
         }
     }
 }

@@ -314,7 +314,9 @@ namespace RAPTOR_Router.RouteFinders
                     BikeStation destBikeStation = pair.Key;
                     int distance = pair.Value;
 
-                    if(distance == -1)
+
+
+                    if (distance == -1)
                     {
                         continue;
                     }
@@ -498,7 +500,7 @@ namespace RAPTOR_Router.RouteFinders
             markedStops.Clear();
             markedRoutesWithGetOnStops.Clear();
             markedBikeStations.Clear();
-            return searchModel.ExtractResult();
+            return searchModel.ExtractResult(bikeModel);
         }
         /// <summary>
         /// Finds the connection with the earliest arrival to a destination stop with the provided name, that departs from the source stop after the specified time.
@@ -551,7 +553,7 @@ namespace RAPTOR_Router.RouteFinders
             }
             markedStops.Clear();
             markedRoutesWithGetOnStops.Clear();
-            return searchModel.ExtractResult();
+            return searchModel.ExtractResult(bikeModel);
         }
 
         /// <summary>
@@ -625,7 +627,7 @@ namespace RAPTOR_Router.RouteFinders
             }
             markedStops.Clear();
             markedRoutesWithGetOnStops.Clear();
-            return searchModel.ExtractResult();
+            return searchModel.ExtractResult(bikeModel);
         }
     }
 }

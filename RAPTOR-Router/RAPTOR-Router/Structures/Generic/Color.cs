@@ -20,7 +20,7 @@
         public byte B { get; private set; }
 
         /// <summary>
-        /// Creates a new Color object from a RGB values string (#RRGGBB)
+        /// Creates a new color object from a RGB values string (#RRGGBB)
         /// </summary>
         /// <param name="hexColor">The string to parse from</param>
         /// <exception cref="ArgumentException">Thrown on invalid format of the color string</exception>

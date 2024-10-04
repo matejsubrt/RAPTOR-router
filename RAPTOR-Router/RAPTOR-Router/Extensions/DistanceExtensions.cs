@@ -40,7 +40,7 @@ namespace RAPTOR_Router.Extensions
         /// <summary>
         /// Calculates the approximate distance between two GPS coordinates - works specifically for the 50th parallel (i.e. south of Prague)
         /// </summary>
-        /// <remarks>Does NOT take the curvature of the earth into account. ONLY works well for coordinates near the 50th parallel. Simpler and faster to compute than the real earth-surface distance.</remarks>
+        /// <remarks>Does NOT take the curvature of the earth into account. ONLY works well for coordinates near the 50th parallel. Simpler and faster to compute than the real earth-surface distance. For exact distances, see {@link DistanceBetween}</remarks>
         /// <returns>The approximate distance between the two points in meters.</returns>
         public static int SimplifiedDistanceBetween(double lat1, double lon1, double lat2, double lon2)
         {

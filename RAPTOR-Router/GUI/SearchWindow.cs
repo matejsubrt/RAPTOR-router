@@ -59,11 +59,12 @@ namespace GUI
             settings.ComfortBalance = (ComfortBalance)comfortBalance;
             settings.TransferTime = (TransferTime)transferTime;
             settings.WalkingPace = walkingPace;
+            settings.UseSharedBikes = false;
 
-            IRouteFinder router = builder.CreateAdvancedRouter(settings);
+            IRouteFinder router = builder.CreateForwardRouteFinder(settings);
 
             var result = router.FindConnection(srcStop, destStop, departureDateTime);
-            router = builder.CreateAdvancedRouter(settings);
+            router = builder.CreateForwardRouteFinder(settings);
             if (result is null)
             {
                 MessageBox.Show("Connection could not be found, please try again");

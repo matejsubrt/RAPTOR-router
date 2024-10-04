@@ -16,7 +16,7 @@ namespace ConnectionSearchTests
     {
         public IEnumerable<object[]> GetData(MethodInfo methodInfo)
         {
-			string dataLocation = "C:\\Users\\matej\\Documents\\RAPTOR-router\\RAPTOR-Router\\ConnectionSearchTests\\TestData\\Data.csv";
+			string dataLocation = "D:\\Documents\\RAPTOR-router\\RAPTOR-Router\\ConnectionSearchTests\\TestData\\Data.csv";
             IEnumerable<string> lines = File.ReadLines(dataLocation);
 
 			Console.WriteLine(dataLocation);
@@ -57,7 +57,7 @@ namespace ConnectionSearchTests
 				throw new InternalTestFailureException("Invalid gtfs zip archive path. Check the testConfig.json file");
 			}
 
-			Builder.LoadAllData();
+			Builder.LoadAllData(gtfsZipArchiveLocation);
 		}
 	}
 
@@ -67,20 +67,60 @@ namespace ConnectionSearchTests
 	{
 		static RouteFinderBuilder builder = TestInitClass.Builder;
         
+		public void GetSrcAndDestStopNames(SearchResult result, out string resultStartStopName, out string resultEndStopName)
+		{
+            switch (result.UsedSegmentTypes[0])
+            {
+                case SearchResult.SegmentType.Transfer:
+                    resultStartStopName = result.UsedTransfers[0].GetStartStopName();
+                    break;
+                case SearchResult.SegmentType.Trip:
+                    resultStartStopName = result.UsedTrips[0].GetStartStopName();
+                    break;
+                case SearchResult.SegmentType.Bike:
+                    resultStartStopName = result.UsedBikeTrips[0].GetStartStopName();
+                    break;
+                default:
+                    Assert.Fail();
+                    resultStartStopName = "";
+                    break;
+            }
+
+            switch (result.UsedSegmentTypes[result.UsedSegmentTypes.Count - 1])
+            {
+                case SearchResult.SegmentType.Transfer:
+                    resultEndStopName = result.UsedTransfers[result.UsedTransfers.Count - 1].GetEndStopName();
+                    break;
+                case SearchResult.SegmentType.Trip:
+                    resultEndStopName = result.UsedTrips[result.UsedTrips.Count - 1].GetEndStopName();
+                    break;
+                case SearchResult.SegmentType.Bike:
+                    resultEndStopName = result.UsedBikeTrips[result.UsedBikeTrips.Count - 1].GetEndStopName();
+                    break;
+                default:
+                    Assert.Fail();
+                    resultEndStopName = "";
+                    break;
+            }
+        }
 
         [DataTestMethod]
 		[StopsDataSource]
         public void ConnectionFoundDayTest(string srcStopName, string destStopName)
 		{
 			Settings settings = Settings.GetDefaultSettings();
-			IRouteFinder router = builder.CreateAdvancedRouter(settings);
+			IRouteFinder router = builder.CreateForwardRouteFinder(settings);
 			DateTime departureTime;
 			DateTime.TryParse("27/11/2023 07:07:07", out departureTime);
 
 
 			var result = router.FindConnection(srcStopName, destStopName, departureTime);
-			string resultStartStopName = result.UsedSegments[0].GetStartStopName();
-			string resultEndStopName = result.UsedSegments[result.UsedSegments.Count - 1].GetEndStopName();
+			string resultStartStopName;
+			string resultEndStopName;
+
+			Assert.IsNotNull(result);
+
+			GetSrcAndDestStopNames(result, out resultStartStopName, out resultEndStopName);
 
 
 			Assert.IsNotNull(result);
@@ -94,14 +134,14 @@ namespace ConnectionSearchTests
 		public void ConnectionFoundBeforeMidnightTest(string srcStopName, string destStopName)
 		{
 			Settings settings = Settings.GetDefaultSettings();
-			IRouteFinder router = builder.CreateAdvancedRouter(settings);
+			IRouteFinder router = builder.CreateForwardRouteFinder(settings);
 			DateTime departureTime;
 			DateTime.TryParse("27/11/2023 23:47:07", out departureTime);
 
 
 			var result = router.FindConnection(srcStopName, destStopName, departureTime);
-			string resultStartStopName = result.UsedSegments[0].GetStartStopName();
-			string resultEndStopName = result.UsedSegments[result.UsedSegments.Count - 1].GetEndStopName();
+			
+			GetSrcAndDestStopNames(result, out string resultStartStopName, out string resultEndStopName);
 
 			Assert.IsNotNull(result);
 			Assert.AreEqual(srcStopName, resultStartStopName);
@@ -118,7 +158,7 @@ namespace ConnectionSearchTests
 		public void ImpossibleConnectionNotFoundTest(string srcStopName, string destStopName)
 		{
 			Settings settings = Settings.GetDefaultSettings();
-			IRouteFinder router = builder.CreateAdvancedRouter(settings);
+			IRouteFinder router = builder.CreateForwardRouteFinder(settings);
 			DateTime departureTime;
 			DateTime.TryParse("27/11/2023 07:07:07", out departureTime);
 
@@ -151,10 +191,10 @@ namespace ConnectionSearchTests
 			Settings settings4 = Settings.GetDefaultSettings();
 			settings4.ComfortBalance = ComfortBalance.ShortestTimeAbsolute;
 
-			IRouteFinder router1 = builder.CreateAdvancedRouter(settings1);
-			IRouteFinder router2 = builder.CreateAdvancedRouter(settings2);
-			IRouteFinder router3 = builder.CreateAdvancedRouter(settings3);
-			IRouteFinder router4 = builder.CreateAdvancedRouter(settings4);
+			IRouteFinder router1 = builder.CreateForwardRouteFinder(settings1);
+			IRouteFinder router2 = builder.CreateForwardRouteFinder(settings2);
+			IRouteFinder router3 = builder.CreateForwardRouteFinder(settings3);
+			IRouteFinder router4 = builder.CreateForwardRouteFinder(settings4);
 
 			DateTime departureTime;
 			DateTime.TryParse("27/11/2023 07:07:07", out departureTime);
@@ -201,9 +241,9 @@ namespace ConnectionSearchTests
             DateTime departureTime;
             DateTime.TryParse("27/11/2023 07:07:07", out departureTime);
 
-            IRouteFinder router1 = builder.CreateAdvancedRouter(settings1);
-            IRouteFinder router2 = builder.CreateAdvancedRouter(settings2);
-            IRouteFinder router3 = builder.CreateAdvancedRouter(settings3);
+            IRouteFinder router1 = builder.CreateForwardRouteFinder(settings1);
+            IRouteFinder router2 = builder.CreateForwardRouteFinder(settings2);
+            IRouteFinder router3 = builder.CreateForwardRouteFinder(settings3);
 
 
             var result1 = router1.FindConnection(srcStopName, destStopName, departureTime);
@@ -219,15 +259,10 @@ namespace ConnectionSearchTests
 		{
             if (result is not null)
             {
-                foreach (var seg in result.UsedSegments)
-                {
-                    if (seg.segmentType == SearchResult.SegmentType.Transfer)
-                    {
-                        SearchResult.UsedTransfer tr = (SearchResult.UsedTransfer)seg;
-
-                        Assert.IsTrue(tr.distance < maxTransferDistance || tr.srcStopName == tr.destStopName);
-                    }
-                }
+				foreach(var transfer in result.UsedTransfers)
+				{
+					Assert.IsTrue(transfer.distance < maxTransferDistance || transfer.srcStopInfo.Name == transfer.destStopInfo.Name);
+				}
             }
         }
 
@@ -244,31 +279,35 @@ namespace ConnectionSearchTests
 		{
             Settings settings1 = Settings.GetDefaultSettings();
 			settings1.TransferTime = TransferTime.UltraShort;
+			settings1.UseSharedBikes = false;
 			double mpl1 = settings1.GetMovingTransferLengthMultiplier();
 			int minStTime1 = settings1.GetStationaryTransferMinimumSeconds();
 
             Settings settings2 = Settings.GetDefaultSettings();
 			settings2.TransferTime = TransferTime.Short;
+            settings2.UseSharedBikes = false;
             double mpl2 = settings2.GetMovingTransferLengthMultiplier();
             int minStTime2 = settings2.GetStationaryTransferMinimumSeconds();
 
             Settings settings3 = Settings.GetDefaultSettings();
 			settings3.TransferTime = TransferTime.Normal;
+            settings3.UseSharedBikes = false;
             double mpl3 = settings3.GetMovingTransferLengthMultiplier();
             int minStTime3 = settings3.GetStationaryTransferMinimumSeconds();
 
             Settings settings4 = Settings.GetDefaultSettings();
-            settings3.TransferTime = TransferTime.Long;
+            settings4.TransferTime = TransferTime.Long;
+            settings4.UseSharedBikes = false;
             double mpl4 = settings4.GetMovingTransferLengthMultiplier();
             int minStTime4 = settings4.GetStationaryTransferMinimumSeconds();
 
             DateTime departureTime;
             DateTime.TryParse("27/11/2023 07:07:07", out departureTime);
 
-            IRouteFinder router1 = builder.CreateAdvancedRouter(settings1);
-            IRouteFinder router2 = builder.CreateAdvancedRouter(settings2);
-            IRouteFinder router3 = builder.CreateAdvancedRouter(settings3);
-            IRouteFinder router4 = builder.CreateAdvancedRouter(settings4);
+            IRouteFinder router1 = builder.CreateForwardRouteFinder(settings1);
+            IRouteFinder router2 = builder.CreateForwardRouteFinder(settings2);
+            IRouteFinder router3 = builder.CreateForwardRouteFinder(settings3);
+            IRouteFinder router4 = builder.CreateForwardRouteFinder(settings4);
 
 
             var result1 = router1.FindConnection(srcStopName, destStopName, departureTime);
@@ -287,29 +326,34 @@ namespace ConnectionSearchTests
 		{
             if (result is not null)
             {
-                for (int i = 0; i < result.UsedSegments.Count - 2; i++)
-                {
-                    var segment = result.UsedSegments[i];
-                    if (segment.segmentType == SearchResult.SegmentType.Trip)
-                    {
-                        SearchResult.UsedTrip trip1 = (SearchResult.UsedTrip)result.UsedSegments[i];
-                        SearchResult.UsedTrip trip2 = (SearchResult.UsedTrip)result.UsedSegments[i + 2];
-                        SearchResult.UsedTransfer transfer = (SearchResult.UsedTransfer)result.UsedSegments[i + 1];
-                        int timeGap = (int)(trip2.getOnTime - trip1.getOffTime).TotalSeconds;
+				int prevTripsCount = 0;
+				int prevTransfersCount = 0;
+				// We want to test all transfers between trips
+				for(int i = 0; i < result.UsedSegmentTypes.Count - 3; i++)
+				{
+					var prevSegType = result.UsedSegmentTypes[i];
+					var thisSegType = result.UsedSegmentTypes[i + 1];
+					var nextSegType = result.UsedSegmentTypes[i + 2];
+					if(prevSegType == SearchResult.SegmentType.Trip && thisSegType == SearchResult.SegmentType.Transfer && nextSegType == SearchResult.SegmentType.Trip)
+					{
+						var trip1 = result.UsedTrips[prevTripsCount];
+						var trip2 = result.UsedTrips[prevTripsCount + 1];
+						var transfer = result.UsedTransfers[prevTransfersCount];
+                        int timeGap = (int)(trip2.stopPasses[trip2.getOnStopIndex].DepartureTime - trip1.stopPasses[trip1.getOffStopIndex].ArrivalTime).TotalSeconds;
                         int transferTime;
-                        if (transfer.srcStopId == transfer.destStopId)
-                        {
+                        if (transfer.srcStopInfo.Id == transfer.destStopInfo.Id)
+						{
                             transferTime = minStationaryTransferTime;
                         }
                         else
-                        {
+						{
                             transferTime = (int)(transfer.time * movingTransferMultiplier);
                         }
 
                         Console.WriteLine($"{transferTime} < {timeGap}?");
                         Assert.IsTrue(transferTime <= timeGap);
                     }
-                }
+				}
             }
         }
     }
@@ -327,8 +371,8 @@ namespace ConnectionSearchTests
 			Settings settings2 = Settings.GetDefaultSettings();
 			settings1.WalkingPace = 15;
 			settings2.WalkingPace = 5;
-            IRouteFinder router1 = builder.CreateAdvancedRouter(settings1);
-            IRouteFinder router2 = builder.CreateAdvancedRouter(settings2);
+            IRouteFinder router1 = builder.CreateForwardRouteFinder(settings1);
+            IRouteFinder router2 = builder.CreateForwardRouteFinder(settings2);
             DateTime departureTime;
             DateTime.TryParse("27/11/2023 07:07:07", out departureTime);
 
