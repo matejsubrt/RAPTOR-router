@@ -12,7 +12,7 @@
 
 ### Developer documentation
 
-For generated developer documentation, see [Dev docs](https://matejsubrt.github.io/RAPTOR-router/html/index.html) -> this documentation is related to an older version of the project, it will be updated soon
+For generated developer documentation, see [Dev docs](https://matejsubrt.github.io/RAPTOR-router/html/index.html). This documentation is related to an older version of the project and will be updated soon.
 
 ### RAPTOR Algorithm documentation
 
