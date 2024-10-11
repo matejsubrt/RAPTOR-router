@@ -31,6 +31,8 @@ namespace RAPTOR_Router.Structures.Custom
         /// </summary>
         public List<CustomTransfer> possibleTransfers { get; private set; } = new();
 
+        public Dictionary<IRoutePoint, int> transferDistances { get; private set; } = new();
+
         /// <summary>
         /// Creates a new CustomRoutePoint object
         /// </summary>
@@ -52,6 +54,11 @@ namespace RAPTOR_Router.Structures.Custom
         {
             int distance = DistanceExtensions.DistanceBetween(this, rp);
             possibleTransfers.Add(new FromCustomTransfer(this, rp, distance));
+
+            if (!transferDistances.ContainsKey(rp))
+            {
+                transferDistances.Add(rp, distance);
+            }
         }
         /// <summary>
         /// Ads a transfer that leads FROM this route point
@@ -61,6 +68,11 @@ namespace RAPTOR_Router.Structures.Custom
         {
             int distance = DistanceExtensions.DistanceBetween(rp, this);
             possibleTransfers.Add(new ToCustomTransfer(rp, this, distance));
+
+            if (!transferDistances.ContainsKey(rp))
+            {
+                transferDistances.Add(rp, distance);
+            }
         }
 
         /// <summary>

@@ -118,7 +118,7 @@ namespace RAPTOR_Router.Models.Dynamic
 				SearchResult result = new(settingsUsed);
 				ForwardStopRoutingInfo currStopInfo = routingInfo[stop];
 
-
+				// TODO: This should be done when finding the best dest stop, not after!!!
 				if(destinationCustomRoutePoint is not null)
 				{
 					CustomTransfer transfer = destinationCustomRoutePoint.GetTransferWithNormalRP(stop);
@@ -278,6 +278,11 @@ namespace RAPTOR_Router.Models.Dynamic
 		}
 
 
+
+
+
+
+
 		/// <summary>
 		/// Gets the earliest currently possible arrival time from the source RoutePoint to the specified RoutePoint in the specified round (i.e. with exactly so many trips)
 		/// </summary>
@@ -296,6 +301,175 @@ namespace RAPTOR_Router.Models.Dynamic
 				return arrival.Time;
 			}
 		}
+
+		private bool ArrivalTimeImprovesCurrBest(DateTime arrivalTime, IRoutePoint rp)
+        {
+            return arrivalTime < GetEarliestArrival(rp)
+                   && arrivalTime < GetCurrentBestArrivalTime()
+                   && arrivalTime <= GetDepartureTime().AddDays(Settings.MAX_TRIP_LENGTH_DAYS);
+        }
+
+        public bool TryImproveArrivalByTrip(Stop stop, DateTime arrivalTime, Trip trip, Stop getOnStop, int round)
+        {
+            bool improves = ArrivalTimeImprovesCurrBest(arrivalTime, stop);
+
+            if (improves)
+            {
+                SetTripArrivalInRound(stop, trip, getOnStop, arrivalTime, round);
+                SetEarliestArrival(stop, arrivalTime);
+
+                // Check if it is best arrival so far. Only check if the destination is NOT a custom route point
+                if (destinationCustomRoutePoint is null)
+                {
+                    if (destinationStops.Contains(stop) && arrivalTime < GetCurrentBestArrivalTime())
+                    {
+                        SetCurrentBestArrivalTime(arrivalTime);
+                    }
+                }
+                else
+                {
+                    if (destinationCustomRoutePoint.transferDistances.TryGetValue(stop, out var distance))
+                    {
+                        int transferDuration = (int)(distance * settingsUsed.WalkingPace * settingsUsed.GetMovingTransferLengthMultiplier());
+                        DateTime arrivalAtCustomRP = arrivalTime.AddSeconds(transferDuration);
+                        if (arrivalAtCustomRP < GetCurrentBestArrivalTime())
+                        {
+                            SetCurrentBestArrivalTime(arrivalAtCustomRP);
+                        }
+                    }
+                }
+            }
+
+			return improves;
+        }
+
+        public bool TryImproveArrivalByBikeTrip(BikeStation fromBikeStation, BikeStation toBikeStation,
+            DateTime arrivalTime, int round)
+        {
+			bool improves = ArrivalTimeImprovesCurrBest(arrivalTime, toBikeStation);
+
+            if (improves)
+            {
+                SetBikeTripArrivalInRound(fromBikeStation, toBikeStation, arrivalTime, round);
+                SetEarliestArrival(toBikeStation, arrivalTime);
+                //TODO: CHECK!!!
+
+				// Check if it is best arrival so far. Only check if the destination is NOT a custom route point
+                if (destinationCustomRoutePoint is null)
+                {
+                    if (destinationBikeStations.Contains(toBikeStation) && arrivalTime < GetCurrentBestArrivalTime())
+                    {
+                        SetCurrentBestArrivalTime(arrivalTime);
+                    }
+                }
+                else
+                {
+                    if (destinationCustomRoutePoint.transferDistances.TryGetValue(toBikeStation, out var distance))
+                    {
+                        int transferDuration = (int)(distance * settingsUsed.WalkingPace * settingsUsed.GetMovingTransferLengthMultiplier()) + settingsUsed.BikeLockTime;
+						DateTime arrivalAtCustomRP = arrivalTime.AddSeconds(transferDuration);
+                        if (arrivalAtCustomRP < GetCurrentBestArrivalTime())
+                        {
+                            SetCurrentBestArrivalTime(arrivalAtCustomRP);
+                        }
+                    }
+                }
+                
+            }
+
+            return improves;
+        }
+
+		private DateTime GetArrivalTimeUsingTransfer(ITransfer transfer, int round, bool toBikeStation)
+        {
+            IRoutePoint src = transfer.GetSrcRoutePoint();
+            DateTime earliestArrivalToSource = GetEarliestArrivalInRound(src, round);
+
+            int transferTimeBase = transfer.GetTransferTime(settingsUsed.WalkingPace);
+            double movingTransferMultiplier = settingsUsed.GetMovingTransferLengthMultiplier();
+            int transferTimeAdjusted = (int)(transferTimeBase * movingTransferMultiplier);
+            int bikeUnlockTime = settingsUsed.BikeUnlockTime;
+
+            int stationaryTransferSeconds = settingsUsed.GetStationaryTransferMinimumSeconds();
+
+            DateTime earliestArrivalUsingTransfer;
+            if (transfer.Distance == 0)
+            {
+                // if transfer length is 0, the transfer is stationary -> it takes the time of the stationary transfer minimum
+                earliestArrivalUsingTransfer = earliestArrivalToSource.AddSeconds(stationaryTransferSeconds);
+            }
+            else
+            {
+                // if transfer length is not 0, the transfer is moving -> it takes the time of the moving transfer length
+                if (toBikeStation)
+                {
+                    // The bike unlock time NEEDS to be added, the transfer time does NOT need to respect the stationary transfer minimum -> the bike is always there
+                    earliestArrivalUsingTransfer = earliestArrivalToSource.AddSeconds(transferTimeAdjusted + bikeUnlockTime);
+                }
+                else
+                {
+                    // The bike unlock time does NOT need to be added, the transfer time DOES NEED to respect the stationary transfer minimum
+                    earliestArrivalUsingTransfer = earliestArrivalToSource.AddSeconds(Math.Max(transferTimeAdjusted, stationaryTransferSeconds));
+                }
+            }
+
+            return earliestArrivalUsingTransfer;
+        }
+
+
+        public bool TryImproveArrivalByTransfer(ITransfer transfer, bool toBikeStation, int round, Func<IRoutePoint, bool> DoNotImproveToRoutePoint = null)
+        {
+			IRoutePoint src = transfer.GetSrcRoutePoint();
+			IRoutePoint dest = transfer.GetDestRoutePoint();
+            int maxTransferDistance = settingsUsed.GetMaxTransferDistance();
+
+            bool canBeUsed = transfer.Distance <= maxTransferDistance || src.Name == dest.Name;
+            bool transferForbiddenToDest = DoNotImproveToRoutePoint is not null && DoNotImproveToRoutePoint(dest);
+            bool srcReachedByTransferInRound = RoutePointIsReachedByTransferInRound(src, round);
+            if (!canBeUsed || transferForbiddenToDest || srcReachedByTransferInRound) return false;
+
+
+
+            DateTime arrivalWithTransfer = GetArrivalTimeUsingTransfer(transfer, round, toBikeStation);
+			DateTime currEarliestArrival = GetEarliestArrival(dest);
+
+            //bool wouldImprove = TransferImprovesArrivalTime(transfer);
+            bool wouldImprove = arrivalWithTransfer < currEarliestArrival;
+
+			bool improves = wouldImprove; // and implicitly canBeUsed && !transferForbiddenToDest && !srcReachedByTransferInRound
+
+            if (improves)
+            {
+                SetTransferArrivalInRound(dest, transfer, arrivalWithTransfer, round);
+                SetEarliestArrival(dest, arrivalWithTransfer);
+
+				// TODO: CHECK FOR GLOBAL BEST TIME
+                if (destinationCustomRoutePoint is null)
+                {
+                    if (toBikeStation)
+                    {
+                        if (destinationBikeStations.Contains(dest) && arrivalWithTransfer < GetCurrentBestArrivalTime())
+                        {
+                            SetCurrentBestArrivalTime(arrivalWithTransfer);
+                        }
+                    }
+                    else
+                    {
+                        if (destinationStops.Contains(dest) && arrivalWithTransfer < GetCurrentBestArrivalTime())
+                        {
+                            SetCurrentBestArrivalTime(arrivalWithTransfer);
+                        }
+                    }
+                }
+                else
+                {
+					// Improvement to one of the destRoutePoints cannot happen -> Custom RP is not a part of the search algorithm, and the stops before it need to be reached by a trip or bike trip
+                }
+            }
+
+            return improves;
+        }
+
 
 		/// <summary>
 		/// Sets the current overall best arrival time to any of the destination stops

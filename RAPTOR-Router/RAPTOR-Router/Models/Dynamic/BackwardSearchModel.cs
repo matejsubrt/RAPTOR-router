@@ -39,6 +39,7 @@ namespace RAPTOR_Router.Models.Dynamic
             this.arrivalTime = arrivalTime;
         }
 
+
         /// <summary>
         /// Extracts the result of the search from the current state of the search model and returns it
         /// </summary>
@@ -210,7 +211,7 @@ namespace RAPTOR_Router.Models.Dynamic
                     StopRoutingInfoBase.BikeTransferDeparture bikeTransferDeparture = lastDeparture as StopRoutingInfoBase.BikeTransferDeparture;
                     result.AddUsedTransfer(bikeTransferDeparture.Transfer, lastDeparture.Time, true);
                 }
-                else if (lastDeparture is StopRoutingInfoBase.CustomTransferArrival)
+                else if (lastDeparture is StopRoutingInfoBase.CustomTransferDeparture)
                 {
                     StopRoutingInfoBase.CustomTransferDeparture customTransferDeparture = lastDeparture as StopRoutingInfoBase.CustomTransferDeparture;
                     result.AddUsedTransfer(customTransferDeparture.Transfer, customTransferDeparture.Time, true);
@@ -301,7 +302,175 @@ namespace RAPTOR_Router.Models.Dynamic
             }
         }
 
-        
+        private bool DepartureTimeImprovesCurrBest(DateTime departureTime, IRoutePoint rp)
+        {
+            return departureTime > GetLatestDeparture(rp)
+                   && departureTime > GetCurrentBestDepartureTime()
+                   && departureTime >= GetArrivalTime().AddDays(-Settings.MAX_TRIP_LENGTH_DAYS);
+        }
+
+        public bool TryImproveDepartureByTrip(Stop stop, DateTime departureTime, Trip trip, Stop getOffStop, int round)
+        {
+            bool improves = DepartureTimeImprovesCurrBest(departureTime, stop);
+
+            if (improves)
+            {
+                SetTripDepartureInRound(stop, trip, getOffStop, departureTime, round);
+                SetLatestDeparture(stop, departureTime);
+
+                // Check if it is best departure so far. Only check if the source is NOT a custom route point
+                if (sourceCustomRoutePoint is null)
+                {
+                    if (sourceStops.Contains(stop) && departureTime > GetCurrentBestDepartureTime())
+                    {
+                        SetCurrentBestDepartureTime(departureTime);
+                    }
+                }
+                else
+                {
+                    if (sourceCustomRoutePoint.transferDistances.TryGetValue(stop, out var distance))
+                    {
+                        int transferDuration = (int)(distance * settingsUsed.WalkingPace * settingsUsed.GetMovingTransferLengthMultiplier());
+                        DateTime departureFromCustomRP = departureTime.AddSeconds(-transferDuration);
+                        if (departureFromCustomRP > GetCurrentBestDepartureTime())
+                        {
+                            SetCurrentBestDepartureTime(departureFromCustomRP);
+                        }
+                    }
+                }
+            }
+
+            return improves;
+        }
+
+        public bool TryImproveDepartureByBikeTrip(BikeStation fromBikeStation, BikeStation toBikeStation,
+            DateTime departureTime, int round)
+        {
+            bool improves = DepartureTimeImprovesCurrBest(departureTime, fromBikeStation);
+
+            if (improves)
+            {
+                SetBikeTripDepartureInRound(fromBikeStation, toBikeStation, departureTime, round);
+                SetLatestDeparture(fromBikeStation, departureTime);
+
+
+
+                if (sourceCustomRoutePoint is null)
+                {
+                    if (sourceBikeStations.Contains(fromBikeStation) && departureTime > GetCurrentBestDepartureTime())
+                    {
+                        SetCurrentBestDepartureTime(departureTime);
+                    }
+                }
+                else
+                {
+                    if (sourceCustomRoutePoint.transferDistances.TryGetValue(fromBikeStation, out var distance))
+                    {
+                        int transferDuration = (int)(distance * settingsUsed.WalkingPace * settingsUsed.GetMovingTransferLengthMultiplier()) + settingsUsed.BikeLockTime;
+                        DateTime departureFromCustomRP = departureTime.AddSeconds(-transferDuration);
+                        if (departureFromCustomRP > GetCurrentBestDepartureTime())
+                        {
+                            SetCurrentBestDepartureTime(departureFromCustomRP);
+                        }
+                    }
+                }
+            }
+
+            return improves;
+        }
+
+
+        private DateTime GetDepartureTimeUsingTransfer(ITransfer transfer, int round, bool fromBikeStation)
+        {
+            IRoutePoint dest = transfer.GetDestRoutePoint();
+            DateTime latestDepartureFromDest = GetLatestDepartureInRound(dest, round);
+
+            int transferTimeBase = transfer.GetTransferTime(settingsUsed.WalkingPace);
+            double movingTransferMultiplier = settingsUsed.GetMovingTransferLengthMultiplier();
+            int transferTimeAdjusted = (int)(transferTimeBase * movingTransferMultiplier);
+            int bikeUnlockTime = settingsUsed.BikeUnlockTime;
+
+            int stationaryTransferSeconds = settingsUsed.GetStationaryTransferMinimumSeconds();
+
+            DateTime latestDepartureUsingTransfer;
+            if (transfer.Distance == 0)
+            {
+                //
+                latestDepartureUsingTransfer = latestDepartureFromDest.AddSeconds(-stationaryTransferSeconds);
+            }
+            else
+            {
+                //
+                if (fromBikeStation)
+                {
+                    //
+                    latestDepartureUsingTransfer = latestDepartureFromDest.AddSeconds(-transferTimeAdjusted - bikeUnlockTime);
+                }
+                else
+                {
+                    //
+                    latestDepartureUsingTransfer = latestDepartureFromDest.AddSeconds(-Math.Max(transferTimeAdjusted, stationaryTransferSeconds));
+                }
+            }
+
+            return latestDepartureUsingTransfer;
+        }
+
+
+        public bool TryImproveDepartureByTransfer(ITransfer transfer, bool fromBikeStation, int round,
+            Func<IRoutePoint, bool> DoNotImproveFromRoutePoint = null)
+        {
+            IRoutePoint src = transfer.GetSrcRoutePoint();
+            IRoutePoint dest = transfer.GetDestRoutePoint();
+            int maxTransferDistance = settingsUsed.GetMaxTransferDistance();
+
+            bool canBeUsed = transfer.Distance <= maxTransferDistance || src.Name == dest.Name;
+            bool transferForbiddenFromSrc = DoNotImproveFromRoutePoint is not null && DoNotImproveFromRoutePoint(src);
+            bool destReachedByTransferInRound = RoutePointIsReachedByTransferInRound(dest, round);
+            if (!canBeUsed || transferForbiddenFromSrc || destReachedByTransferInRound) return false;
+
+
+            DateTime departureWithTransfer = GetDepartureTimeUsingTransfer(transfer, round, fromBikeStation);
+            DateTime currLatestDeparture = GetLatestDeparture(src);
+
+
+            bool wouldImprove = departureWithTransfer > currLatestDeparture;
+
+            bool improves = wouldImprove; // and implicitly canBeUsed && !transferForbiddenToDest && !destReachedByTransferInRound
+
+            if (improves)
+            {
+                SetTransferDepartureInRound(src, transfer, departureWithTransfer, round);
+                SetLatestDeparture(src, departureWithTransfer);
+
+
+                if (sourceCustomRoutePoint is null)
+                {
+                    if (fromBikeStation)
+                    {
+                        if (sourceBikeStations.Contains(src) && departureWithTransfer > GetCurrentBestDepartureTime())
+                        {
+                            SetCurrentBestDepartureTime(departureWithTransfer);
+                        }
+                    }
+                    else
+                    {
+                        if (sourceStops.Contains(src) && departureWithTransfer > GetCurrentBestDepartureTime())
+                        {
+                            SetCurrentBestDepartureTime(departureWithTransfer);
+                        }
+                    }
+                }
+                else
+                {
+                    // Cannot improve the best departureTime
+                }
+            }
+
+            return improves;
+        }
+
+
 
 
 
@@ -364,6 +533,7 @@ namespace RAPTOR_Router.Models.Dynamic
             {
                 StopRoutingInfoBase.CustomTransferDeparture customTransferDeparture = new StopRoutingInfoBase.CustomTransferDeparture(ct, departureTime);
                 GetRoutingInfo(rp).Departures[round] = customTransferDeparture;
+                var ri = GetRoutingInfo(rp);
             }
             else
             {

@@ -85,8 +85,10 @@ namespace CLIApp
 				}
 #endif
 
-				var result1 = router1.FindConnection(sourceStop, destStop, departureTime);
-				if (result1 is null)
+				//var result1 = router1.FindConnection(sourceStop, destStop, departureTime);
+				var result1 = router1.FindConnection(50.1158, 14.4476, 50.1051, 14.4743, departureTime);
+                //var result1 = router1.FindConnection(50.1158, 14.4476, 50.0683, 14.3030, departureTime);
+                if (result1 is null)
 				{
 					Console.WriteLine("Connection could not be found, please try again");
 				}
@@ -95,7 +97,7 @@ namespace CLIApp
                     Console.WriteLine(result1.ToString());
                 }
 
-                router1 = builder.CreateBackwardRouteFinder(settings);
+                router1 = builder.CreateForwardRouteFinder(settings);
 			}
 		}
 	}
