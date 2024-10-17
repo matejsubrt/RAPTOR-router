@@ -6,14 +6,18 @@ using RAPTOR_Router.Structures.Configuration;
 namespace CLIApp
 {
 	internal class Program
-	{
+    {
+        private const bool forward = false;
+
+
+
 		/// <summary>
 		/// Parses the data from the gtfsArchive (the location s specified in the config file), builds a model, runs the CLI application.
 		/// </summary>
 		/// <param name="args"></param>
 		static void Main(string[] args)
 		{
-			bool ADVANCED_ROUTING = true;
+			bool ADVANCED_ROUTING = false;
 
 			var config = new ConfigurationBuilder()
 				.SetBasePath(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "..")))
@@ -49,7 +53,8 @@ namespace CLIApp
 			var builder = new RouteFinderBuilder();
 			builder.LoadAllData();
 
-			IRouteFinder router1 = builder.CreateForwardRouteFinder(settings);
+			//IRouteFinder router1 = builder.CreateBackwardRouteFinder(settings);
+            IRouteFinder router1 = builder.CreateUniversalRouteFinder(forward, settings);
 
 
 
@@ -85,8 +90,8 @@ namespace CLIApp
 				}
 #endif
 
-				//var result1 = router1.FindConnection(sourceStop, destStop, departureTime);
-				var result1 = router1.FindConnection(50.1158, 14.4476, 50.1051, 14.4743, departureTime);
+				var result1 = router1.FindConnection(sourceStop, destStop, departureTime);
+				//var result1 = router1.FindConnection(50.1158, 14.4476, 50.1051, 14.4743, departureTime);
                 //var result1 = router1.FindConnection(50.1158, 14.4476, 50.0683, 14.3030, departureTime);
                 if (result1 is null)
 				{
@@ -97,7 +102,8 @@ namespace CLIApp
                     Console.WriteLine(result1.ToString());
                 }
 
-                router1 = builder.CreateForwardRouteFinder(settings);
+                //router1 = builder.CreateBackwardRouteFinder(settings);
+				router1 = builder.CreateUniversalRouteFinder(forward, settings);
 			}
 		}
 	}

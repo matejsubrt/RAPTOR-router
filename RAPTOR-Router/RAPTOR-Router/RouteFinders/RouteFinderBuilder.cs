@@ -227,6 +227,22 @@ namespace RAPTOR_Router.RouteFinders
             return router;
 		}
 
+        public IRouteFinder CreateUniversalRouteFinder(bool forward, Settings settings)
+        {
+            if (raptorModel is null)
+            {
+                throw new ApplicationException("Data from a gtfs archive were not loaded yet");
+            }
+
+            if (bikeModel is null)
+            {
+                throw new ApplicationException("Data from a gbfs api were not loaded yet");
+            }
+
+            IRouteFinder router = new UniversalRouteFinder(forward, settings, raptorModel, bikeModel);
+            return router;
+        }
+
 
 
         /// <summary>

@@ -186,6 +186,11 @@ namespace RAPTOR_Router.RouteFinders
                     latestDepartureAtGetOffStopLastRound = latestDepartureAtGetOffStopLastRound.AddSeconds(-settings.GetStationaryTransferMinimumSeconds());
                 }
 
+                if (route.ShortName == "B")
+                {
+                    Console.WriteLine();
+                }
+
                 Trip trip = route.GetLatestTripArrivingBeforeTimeAtStop(
                     getOffStop,
                     DateOnly.FromDateTime(latestDepartureAtGetOffStopLastRound),
@@ -237,6 +242,7 @@ namespace RAPTOR_Router.RouteFinders
                             markedStops.Add(currStop);
                         }
 
+                        //TODO: shouldnt there be arrivalTime?
                         if (ArrivalIsEarlierThanLastRoundDeparture(currStop, departureTime))
                         {
                             //TODO: same as above
@@ -266,6 +272,10 @@ namespace RAPTOR_Router.RouteFinders
                                 out tripDate);
                             if (newTrip != currTrip || searchModel.GetLatestDeparture(currStop) > searchModel.GetLatestDeparture(getOffStop))
                             {
+                                if (currStop.Name == "Muzeum")
+                                {
+                                    Console.WriteLine();
+                                }
                                 currTrip = newTrip;
                                 getOffStop = currStop;
                             }

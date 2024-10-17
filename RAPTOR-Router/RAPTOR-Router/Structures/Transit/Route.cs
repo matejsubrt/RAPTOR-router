@@ -1,4 +1,5 @@
-﻿using RAPTOR_Router.GTFSParsing;
+﻿using System.Security.Cryptography.X509Certificates;
+using RAPTOR_Router.GTFSParsing;
 using RAPTOR_Router.Structures.Generic;
 
 namespace RAPTOR_Router.Structures.Transit
@@ -101,6 +102,18 @@ namespace RAPTOR_Router.Structures.Transit
             }
             return res;
         }
+        
+
+        public Trip GetFirstTransferableTripAtStopByReachTime(bool forward, Stop stop, DateOnly date, TimeOnly time,
+            int maxDaysAfter, out DateOnly tripDate)
+        {
+            return forward ?
+                GetEarliestTripDepartingAfterTimeAtStop(stop, date, time, maxDaysAfter, out tripDate) :
+                GetLatestTripArrivingBeforeTimeAtStop(stop, date, time, maxDaysAfter, out tripDate);
+        }
+
+
+        //TODO: make private
         /// <summary>
         /// Finds the earliest trip serving the route at the specified stop leaving after the specified time
         /// </summary>
@@ -140,6 +153,8 @@ namespace RAPTOR_Router.Structures.Transit
                     }
                 }
             }
+
+
 
 
             //scan the following days till maxDay and select first available trip

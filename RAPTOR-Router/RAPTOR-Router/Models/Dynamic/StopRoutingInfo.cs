@@ -123,6 +123,26 @@ namespace RAPTOR_Router.Models.Dynamic
             }
         }
 
+        public class TripReach : TripEntry
+        {
+            public Stop OtherEndStop
+            {
+                get => ReachedFromStop;
+            }
+
+            internal TripReach(Trip trip, Stop otherEndStop, DateTime reachTime)
+            {
+                this.Trip = trip;
+                this.ReachedFromStop = otherEndStop;
+                this.Time = reachTime;
+            }
+
+            public override string ToString()
+            {
+                return "TripReach at " + Time.ToShortTimeString() + ": " + Trip.Route.ShortName + " to/from " + OtherEndStop.Name;
+            }
+        }
+
         /// <summary>
         /// Base class for a transfer entry
         /// </summary>
@@ -178,6 +198,20 @@ namespace RAPTOR_Router.Models.Dynamic
             public override string ToString()
             {
                 return "TransferDeparture at " + Time.ToShortTimeString() + ": >" + Transfer.From.Name + "< to " + Transfer.To.Name;
+            }
+        }
+
+        public class TransferReach : TransferEntry
+        {
+            internal TransferReach(Transfer transfer, DateTime reachTime)
+            {
+                this.Transfer = transfer;
+                this.Time = reachTime;
+            }
+
+            public override string ToString()
+            {
+                return "TransferReach at " + Time.ToShortTimeString() + ": " + Transfer.From.Name + " to " + Transfer.To.Name;
             }
         }
 
@@ -238,6 +272,20 @@ namespace RAPTOR_Router.Models.Dynamic
             }
         }
 
+        public class BikeTransferReach : BikeTransferEntry
+        {
+            internal BikeTransferReach(BikeTransfer transfer, DateTime reachTime)
+            {
+                this.Transfer = transfer;
+                this.Time = reachTime;
+            }
+
+            public override string ToString()
+            {
+                return "BikeTransferReach at " + Time.ToShortTimeString() + ": " + Transfer.GetSrcRoutePoint().Name + " to " + Transfer.GetDestRoutePoint().Name;
+            }
+        }
+
         /// <summary>
         /// Base class representing a custom transfer entry
         /// </summary>
@@ -292,6 +340,20 @@ namespace RAPTOR_Router.Models.Dynamic
             public override string ToString()
             {
                 return "CustomTransferDeparture at " + Time.ToShortTimeString() + ": >" + Transfer.GetSrcRoutePoint().Name + "< to " + Transfer.GetDestRoutePoint().Name;
+            }
+        }
+
+        public class CustomTransferReach : CustomTransferEntry
+        {
+            internal CustomTransferReach(CustomTransfer transfer, DateTime reachTime)
+            {
+                this.Transfer = transfer;
+                this.Time = reachTime;
+            }
+
+            public override string ToString()
+            {
+                return "CustomTransferReach at " + Time.ToShortTimeString() + ": " + Transfer.GetSrcRoutePoint().Name + " to " + Transfer.GetDestRoutePoint().Name;
             }
         }
 
@@ -360,6 +422,21 @@ namespace RAPTOR_Router.Models.Dynamic
             }
         }
 
+        public class BikeTripReach : BikeTripEntry
+        {
+            internal BikeTripReach(BikeStation from, BikeStation to, DateTime reachTime)
+            {
+                this.From = from;
+                this.To = to;
+                this.Time = reachTime;
+            }
+
+            public override string ToString()
+            {
+                return "BikeTripReach at " + Time.ToShortTimeString() + ": " + From.Name + " to " + To.Name;
+            }
+        }
+
         /// <summary>
         /// Base class for an implicit entry (used for the source/destination stations)
         /// </summary>
@@ -405,9 +482,22 @@ namespace RAPTOR_Router.Models.Dynamic
             {
                 this.Time = departureTime;
             }
+
             public override string ToString()
             {
                 return "ImplicitEndArrival at " + Time.ToShortTimeString();
+            }
+        }
+        public class ImplicitSearchStartReach : ImplicitEntry
+        {
+            public ImplicitSearchStartReach(DateTime reachTime)
+            {
+                this.Time = reachTime;
+            }
+
+            public override string ToString()
+            {
+                return "ImplicitSearchStartReach at " + Time.ToShortTimeString();
             }
         }
     }
@@ -482,5 +572,32 @@ namespace RAPTOR_Router.Models.Dynamic
             get => Entries;
             set => Entries = value;
         }
+    }
+
+    public class UniversalStopRoutingInfo : StopRoutingInfoBase
+    {
+        public UniversalStopRoutingInfo(bool forward)
+        {
+            BestTime = forward ? DateTime.MaxValue : DateTime.MinValue;
+
+            Entries = new IEntry[Settings.ROUNDS + 1];
+            for (int i = 0; i < Entries.Count(); i++)
+            {
+                Entries[i] = null;
+            }
+        }
+
+        public DateTime BestReachTime
+        {
+            get => BestTime;
+            set => BestTime = value;
+        }
+
+        public IEntry[] Reaches
+        {
+            get => Entries;
+            set => Entries = value;
+        }
+
     }
 }
