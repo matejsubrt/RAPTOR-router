@@ -186,6 +186,21 @@
         {
             return (int)(distance / 1000.0 * CyclingPace * 60);
         }
+
+        public int GetBilledBikeTripTime(int distance)
+        {
+            return (int)((distance / 1000.0) * CyclingPace * 60 * GetBikeTripLengthMultiplier()) + BikeLockTime;
+        }
+
+        public int GetAdjustedBikeTripTime(int distance)
+        {
+            return (int)((distance / 1000.0) * CyclingPace * 60 * GetBikeTripLengthMultiplier()) + BikeUnlockTime + BikeLockTime;
+        }
+
+        public int GetAdjustedWalkingTransferTime(int distance)
+        {
+            return (int)((distance / 1000.0) * WalkingPace * 60 * GetMovingTransferLengthMultiplier());
+        }
         /// <summary>
         /// Gets the time it takes to perform a transfer of the given distance
         /// </summary>

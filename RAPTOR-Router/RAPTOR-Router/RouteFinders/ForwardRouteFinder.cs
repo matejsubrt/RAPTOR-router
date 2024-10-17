@@ -184,15 +184,15 @@ namespace RAPTOR_Router.RouteFinders
                     earliestArrivalAtGetOnStopLastRound = earliestArrivalAtGetOnStopLastRound.AddSeconds(settings.GetStationaryTransferMinimumSeconds());
                 }
 
-                Trip trip = route.GetEarliestTripDepartingAfterTimeAtStop(
-                    getOnStop,
-                    DateOnly.FromDateTime(earliestArrivalAtGetOnStopLastRound),
-                    TimeOnly.FromDateTime(earliestArrivalAtGetOnStopLastRound),
-                    Settings.MAX_TRIP_LENGTH_DAYS,
-                    out tripDate
-                );
+                //Trip trip = route.GetEarliestTripDepartingAfterTimeAtStop(
+                //    getOnStop,
+                //    DateOnly.FromDateTime(earliestArrivalAtGetOnStopLastRound),
+                //    TimeOnly.FromDateTime(earliestArrivalAtGetOnStopLastRound),
+                //    Settings.MAX_TRIP_LENGTH_DAYS,
+                //    out tripDate
+                //);
 
-                TraverseRoute(route, getOnStop, trip, tripDate);
+                //TraverseRoute(route, getOnStop, trip, tripDate);
             }
 
             void TraverseRoute(Route route, Stop getOnStop, in Trip trip, DateOnly tripDate)
@@ -248,17 +248,17 @@ namespace RAPTOR_Router.RouteFinders
 
 
 
-                            Trip newTrip = route.GetEarliestTripDepartingAfterTimeAtStop(
-                                currStop,
-                                earliestArrivalLastRoundDate,
-                                earliestArrivalLastRoundTime,
-                                Settings.MAX_TRIP_LENGTH_DAYS,
-                                out tripDate);
-                            if (newTrip != currTrip || searchModel.GetEarliestArrival(currStop) < searchModel.GetEarliestArrival(getOnStop))
-                            {
-                                currTrip = newTrip;
-                                getOnStop = currStop;
-                            }
+                            //Trip newTrip = route.GetEarliestTripDepartingAfterTimeAtStop(
+                            //    currStop,
+                            //    earliestArrivalLastRoundDate,
+                            //    earliestArrivalLastRoundTime,
+                            //    Settings.MAX_TRIP_LENGTH_DAYS,
+                            //    out tripDate);
+                            //if (newTrip != currTrip || searchModel.GetEarliestArrival(currStop) < searchModel.GetEarliestArrival(getOnStop))
+                            //{
+                            //    currTrip = newTrip;
+                            //    getOnStop = currStop;
+                            //}
                         }
                     }
                 }

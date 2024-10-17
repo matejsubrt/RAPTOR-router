@@ -191,18 +191,18 @@ namespace RAPTOR_Router.RouteFinders
                     Console.WriteLine();
                 }
 
-                Trip trip = route.GetLatestTripArrivingBeforeTimeAtStop(
-                    getOffStop,
-                    DateOnly.FromDateTime(latestDepartureAtGetOffStopLastRound),
-                    TimeOnly.FromDateTime(latestDepartureAtGetOffStopLastRound),
-                    Settings.MAX_TRIP_LENGTH_DAYS,
-                    out tripDate
-                );
-                //TODO: TRIP CAN BE NULL?
-                if(trip != null)
-                {
-                    TraverseRoute(route, getOffStop, trip, tripDate);
-                }
+                //Trip trip = route.GetLatestTripArrivingBeforeTimeAtStop(
+                //    getOffStop,
+                //    DateOnly.FromDateTime(latestDepartureAtGetOffStopLastRound),
+                //    TimeOnly.FromDateTime(latestDepartureAtGetOffStopLastRound),
+                //    Settings.MAX_TRIP_LENGTH_DAYS,
+                //    out tripDate
+                //);
+                ////TODO: TRIP CAN BE NULL?
+                //if(trip != null)
+                //{
+                //    TraverseRoute(route, getOffStop, trip, tripDate);
+                //}
                 //TraverseRoute(route, getOffStop, trip, tripDate);
             }
 
@@ -264,21 +264,21 @@ namespace RAPTOR_Router.RouteFinders
 
 
 
-                            Trip newTrip = route.GetLatestTripArrivingBeforeTimeAtStop(
-                                currStop,
-                                latestDepartureLastRoundDate,
-                                latestDepartureLastRoundTime,
-                                Settings.MAX_TRIP_LENGTH_DAYS,
-                                out tripDate);
-                            if (newTrip != currTrip || searchModel.GetLatestDeparture(currStop) > searchModel.GetLatestDeparture(getOffStop))
-                            {
-                                if (currStop.Name == "Muzeum")
-                                {
-                                    Console.WriteLine();
-                                }
-                                currTrip = newTrip;
-                                getOffStop = currStop;
-                            }
+                            //Trip newTrip = route.GetLatestTripArrivingBeforeTimeAtStop(
+                            //    currStop,
+                            //    latestDepartureLastRoundDate,
+                            //    latestDepartureLastRoundTime,
+                            //    Settings.MAX_TRIP_LENGTH_DAYS,
+                            //    out tripDate);
+                            //if (newTrip != currTrip || searchModel.GetLatestDeparture(currStop) > searchModel.GetLatestDeparture(getOffStop))
+                            //{
+                            //    if (currStop.Name == "Muzeum")
+                            //    {
+                            //        Console.WriteLine();
+                            //    }
+                            //    currTrip = newTrip;
+                            //    getOffStop = currStop;
+                            //}
                         }
                     }
                 }

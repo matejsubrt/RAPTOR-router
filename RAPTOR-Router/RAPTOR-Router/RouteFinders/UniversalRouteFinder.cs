@@ -75,7 +75,8 @@ namespace RAPTOR_Router.RouteFinders
         /// </summary>
         private int round = 0;
 
-        private TimeComparator comp;
+        private TimeComparator timeComp;
+        private IndexComparator indexComp;
         private bool forward;
         private int timeMpl;
 
@@ -105,7 +106,8 @@ namespace RAPTOR_Router.RouteFinders
             this.transitModel = transitModel;
             this.bikeModel = bikeModel;
             this.forward = forward;
-            this.comp = new TimeComparator(forward);
+            this.timeComp = new TimeComparator(forward);
+            this.indexComp = new IndexComparator(forward);
             this.timeMpl = forward ? 1 : -1;
         }
 
@@ -175,7 +177,7 @@ namespace RAPTOR_Router.RouteFinders
                 }
                 else if (useSharedBikes && imprToPoint is BikeStation)
                 {
-                    int transferDuration = timeMpl * (transfer.GetTransferTime(settings.WalkingPace) + settings.BikeUnlockTime);
+                    int transferDuration = timeMpl * (transfer.GetTransferTime(settings.WalkingPace));// + settings.BikeUnlockTime);
                     DateTime arrivalTime = searchModel.GetSearchBeginTime().AddSeconds(transferDuration);
                     searchModel.SetBestReachTime(imprToPoint, arrivalTime);
                     searchModel.SetTransferReachInRound(imprToPoint, transfer, arrivalTime, round);
@@ -190,30 +192,30 @@ namespace RAPTOR_Router.RouteFinders
         /// </summary>
         private void AccumulateRoutes()
         {
-            //markedRoutesWithReachedStops.Clear();
             markedRoutesWithReachedTrips.Clear();
+
             foreach (Stop markedStop in markedStops)
             {
                 foreach (Route route in markedStop.StopRoutes)
                 {
-                    if (forward)
+                    int markedStopIndex = forward ? route.GetFirstStopIndex(markedStop) : route.GetLastStopIndex(markedStop);
+
+                    if (markedRoutesWithReachedTrips.TryGetValue(route, out ReachedTrip existingReachedTrip))
+                    {
+                        int existingGetOnStopIndex = existingReachedTrip.stopIndex;
+
+                        if (indexComp.PrecedesInSearchDirection(markedStopIndex, existingGetOnStopIndex))
+                        {
+                            TryFindTransferableTrip(route, markedStop, markedStopIndex, true);
+                        }
+                    }
+                    else
+                    {
+                        TryFindTransferableTrip(route, markedStop, markedStopIndex, false);
+                    }
+                    /*if (forward)
                     {
                         int markedStopIndex = route.GetFirstStopIndex(markedStop);
-
-                        //if (markedRoutesWithReachedStops.ContainsKey(route))
-                        //{
-                        //    if (route.GetFirstStopIndex(markedRoutesWithReachedStops[route]) > route.GetFirstStopIndex(markedStop))
-                        //    {
-                        //        markedRoutesWithReachedStops[route] = markedStop;
-                        //    }
-                        //}
-                        //else
-                        //{
-                        //    markedRoutesWithReachedStops.Add(route, markedStop);
-                        //}
-
-
-                        
 
                         if (markedRoutesWithReachedTrips.TryGetValue(route, out ReachedTrip existingReachedTrip))
                         {
@@ -235,24 +237,6 @@ namespace RAPTOR_Router.RouteFinders
                         int markedStopIndex = route.GetLastStopIndex(markedStop);
 
 
-                        //if (currStopIndex != 0) // if the route is already marked and the marked stop is not the last one
-                        //{
-                        //    if (markedRoutesWithReachedStops.ContainsKey(route))
-                        //    {
-                        //        int prevGetOffStopIndex = route.GetLastStopIndex(markedRoutesWithReachedStops[route]);
-
-                        //        if (prevGetOffStopIndex < currStopIndex)
-                        //        {
-                        //            markedRoutesWithReachedStops[route] = markedStop;
-                        //        }
-                        //    }
-                        //    else
-                        //    {
-                        //        markedRoutesWithReachedStops.Add(route, markedStop);
-                        //    }
-                        //}
-
-
                         if (markedRoutesWithReachedTrips.TryGetValue(route, out ReachedTrip existingReachedTrip))
                         {
                             int existingGetOffStopIndex = existingReachedTrip.stopIndex;
@@ -266,7 +250,7 @@ namespace RAPTOR_Router.RouteFinders
                         {
                             TryFindTransferableTrip(route, markedStop, markedStopIndex, false);
                         }
-                    }
+                    }*/
                     
                 }
                 //TODO: Is this neccessary?
@@ -291,7 +275,7 @@ namespace RAPTOR_Router.RouteFinders
                     markedStop,
                     DateOnly.FromDateTime(bestReachTimeAtTraverseFromStopLastRound),
                     TimeOnly.FromDateTime(bestReachTimeAtTraverseFromStopLastRound),
-                    Settings.MAX_TRIP_LENGTH_DAYS,
+                    searchModel.GetSearchBeginTime().AddDays(timeMpl * Settings.MAX_TRIP_LENGTH_DAYS), //Settings.MAX_TRIP_LENGTH_DAYS,
                     out tripDate
                 );
 
@@ -315,8 +299,6 @@ namespace RAPTOR_Router.RouteFinders
         /// </summary>
         private void TraverseMarkedRoutes()
         {
-            //foreach (KeyValuePair<Route, Stop> pair in markedRoutesWithReachedStops)
-            //{
             foreach(KeyValuePair<Route, ReachedTrip> pair in markedRoutesWithReachedTrips)
             {
                 Route route = pair.Key;
@@ -326,47 +308,13 @@ namespace RAPTOR_Router.RouteFinders
                 Trip trip = reachedTrip.trip;
                 DateOnly tripDate = reachedTrip.tripDate;
 
-                //Stop traverseFromStop = pair.Value;
-                //DateOnly tripDate;
-
-                ////TODO: shouldnt this be just trip arrival?
-                //DateTime bestReachTimeAtTraverseFromStopLastRound = searchModel.GetBestReachTimeInRound(traverseFromStop, round - 1);
-                //// in round 1, the arrival time is the start time -> no need for buffer
-                //if (round > 1 && searchModel.RoutePointIsReachedByTripInRound(traverseFromStop, round - 1))
-                //{
-                //    int stationaryTransferTime = timeMpl * settings.GetStationaryTransferMinimumSeconds();
-                //    bestReachTimeAtTraverseFromStopLastRound = bestReachTimeAtTraverseFromStopLastRound.AddSeconds(stationaryTransferTime);
-                //}
-                //if (route.ShortName == "B")
-                //{
-                //    Console.WriteLine();
-                //}
-                //if (route.LongName == "Letňany - Ládví - Háje")
-                //{
-                //    Console.WriteLine();
-                //}
-                //Trip trip = route.GetFirstTransferableTripAtStopByReachTime(
-                //    forward,
-                //    traverseFromStop,
-                //    DateOnly.FromDateTime(bestReachTimeAtTraverseFromStopLastRound),
-                //    TimeOnly.FromDateTime(bestReachTimeAtTraverseFromStopLastRound),
-                //    Settings.MAX_TRIP_LENGTH_DAYS,
-                //    out tripDate
-                //);
-
-                if (forward)
+                if (trip is not null)
                 {
-                    TraverseRouteForward(route, traverseFromStop, trip, tripDate);
+                    TraverseRoute(route, traverseFromStop, trip, tripDate);
                 }
-                else
-                {
-                    TraverseRouteBackward(route, traverseFromStop, trip, tripDate);
-                }
-
-                //TraverseRoute(route, traverseFromStop, trip, tripDate);
             }
 
-            void TraverseRouteBackward(Route route, Stop getOffStop, in Trip trip, DateOnly tripDate)
+            /*void TraverseRouteBackward(Route route, Stop getOffStop, in Trip trip, DateOnly tripDate)
             {
                 Trip currTrip = trip;
 
@@ -379,11 +327,6 @@ namespace RAPTOR_Router.RouteFinders
                     if (currTrip is not null)
                     {
                         StopTime stopTime = currTrip.StopTimes[i];
-
-                        if (currStop.Name == "Muzeum" && stopTime.DepartureTime.Hour == 6 && stopTime.DepartureTime.Minute == 38)
-                        {
-                            Console.WriteLine();
-                        }
                             
                         DateOnly realDate;
                         if (TripGoesOverMidnight(currTrip, route.GetLastStopIndex(getOffStop), i))
@@ -414,7 +357,7 @@ namespace RAPTOR_Router.RouteFinders
                             DateTime latestDepartureLastRound = searchModel.GetBestReachTimeInRound(currStop, round - 1);
                             // in first round, no buffer needed
                             //TODO: check the round condition when brain functions
-                            if (/*round != 1 && */searchModel.RoutePointIsReachedByTripInRound(currStop, round - 1))
+                            if (searchModel.RoutePointIsReachedByTripInRound(currStop, round - 1))
                             {
                                 latestDepartureLastRound = latestDepartureLastRound.AddSeconds(-settings.GetStationaryTransferMinimumSeconds());
                             }
@@ -433,7 +376,7 @@ namespace RAPTOR_Router.RouteFinders
                                 currStop,
                                 latestDepartureLastRoundDate,
                                 latestDepartureLastRoundTime,
-                                Settings.MAX_TRIP_LENGTH_DAYS,
+                                searchModel.GetSearchBeginTime().AddDays(timeMpl * Settings.MAX_TRIP_LENGTH_DAYS), //Settings.MAX_TRIP_LENGTH_DAYS,
                                 out tripDate);
                             if (newTrip != currTrip || searchModel.GetBestReachTime(currStop) > searchModel.GetBestReachTime(getOffStop))
                             {
@@ -453,7 +396,7 @@ namespace RAPTOR_Router.RouteFinders
                 {
                     return searchModel.GetBestReachTimeInRound(stop, round - 1) > arrivalTime;
                 }
-                /*bool DepartureTimeImprovesCurrBest(DateTime departureTime, Stop stop)
+                bool DepartureTimeImprovesCurrBest(DateTime departureTime, Stop stop)
                 {
                     return departureTime > searchModel.GetLatestDeparture(stop)
                            && departureTime > searchModel.GetCurrentBestDepartureTime()
@@ -469,7 +412,7 @@ namespace RAPTOR_Router.RouteFinders
                     {
                         searchModel.SetCurrentBestDepartureTime(departureTime);
                     }
-                }*/
+                }
             }
 
             void TraverseRouteForward(Route route, Stop getOnStop, in Trip trip, DateOnly tripDate)
@@ -529,7 +472,7 @@ namespace RAPTOR_Router.RouteFinders
                                 currStop,
                                 earliestArrivalLastRoundDate,
                                 earliestArrivalLastRoundTime,
-                                Settings.MAX_TRIP_LENGTH_DAYS,
+                                searchModel.GetSearchBeginTime().AddDays(timeMpl * Settings.MAX_TRIP_LENGTH_DAYS), //Settings.MAX_TRIP_LENGTH_DAYS,
                                 out tripDate);
                             if (newTrip != currTrip || searchModel.GetBestReachTime(currStop) < searchModel.GetBestReachTime(getOnStop))
                             {
@@ -549,7 +492,7 @@ namespace RAPTOR_Router.RouteFinders
                 {
                     return searchModel.GetBestReachTimeInRound(stop, round - 1) < departureTime;
                 }
-                /*bool ArrivalTimeImprovesCurrBest(DateTime arrivalTime, Stop stop)
+                bool ArrivalTimeImprovesCurrBest(DateTime arrivalTime, Stop stop)
                 {
                     return arrivalTime < searchModel.GetEarliestArrival(stop)
                             && arrivalTime < searchModel.GetCurrentBestArrivalTime()
@@ -565,16 +508,13 @@ namespace RAPTOR_Router.RouteFinders
                     {
                         searchModel.SetCurrentBestArrivalTime(arrivalTime);
                     }
-                }*/
-            }
-
-            void TraverseRoute(Route route, Stop traverseFromStop, in Trip trip, DateOnly tripDate)
-            {
-                if (route.ShortName == "A")
-                {
-                    Console.WriteLine();
                 }
+            }
+            */
 
+            void TraverseRoute(Route route, Stop traverseFromStop, Trip trip, DateOnly tripDate)
+            {
+                DateOnly currTripDate = tripDate;
                 Trip currTrip = trip;
 
                 if (forward)
@@ -597,72 +537,77 @@ namespace RAPTOR_Router.RouteFinders
                     Stop currStop = route.RouteStops[i];
 
 
+                    int daysToAddWhenOverMidnight = forward ? 1 : -1;
+                    int firstStopIndexInDirOfSearch = forward ? route.GetFirstStopIndex(traverseFromStop) : route.GetLastStopIndex(traverseFromStop);
 
-                    if (currTrip is not null)
+                    StopTime stopTime = currTrip.StopTimes[i];
+
+
+                    DateOnly realDate;
+                    if (TripGoesOverMidnight(currTrip, firstStopIndexInDirOfSearch, i))
+                        realDate = currTripDate.AddDays(daysToAddWhenOverMidnight);
+                    else
+                        realDate = currTripDate;
+
+
+                    DateTime arrivalTime = DateTimeExtensions.FromDateAndTime(realDate, stopTime.ArrivalTime);
+                    DateTime departureTime = DateTimeExtensions.FromDateAndTime(realDate, stopTime.DepartureTime);
+
+                    DateTime searchReachTime = forward ? arrivalTime : departureTime;
+                    DateTime searchLeaveTime = forward ? departureTime : arrivalTime;
+
+                    bool improved = searchModel.TryImproveReachTimeByTrip(currStop, searchReachTime, currTrip, traverseFromStop, round);
+                    if (improved)
                     {
-                        int daysToAddWhenOverMidnight = forward ? 1 : -1;
-                        int firstStopIndexInDirOfSearch = forward ? route.GetFirstStopIndex(traverseFromStop) : route.GetLastStopIndex(traverseFromStop);
+                        markedStops.Add(currStop);
+                    }
 
-                        StopTime stopTime = currTrip.StopTimes[i];
-
-
-                        DateOnly realDate;
-                        if (TripGoesOverMidnight(currTrip, firstStopIndexInDirOfSearch, i))
-                            realDate = tripDate.AddDays(daysToAddWhenOverMidnight);
-                        else
-                            realDate = tripDate;
-
-
-                        DateTime arrivalTime = DateTimeExtensions.FromDateAndTime(realDate, stopTime.ArrivalTime);
-                        DateTime departureTime = DateTimeExtensions.FromDateAndTime(realDate, stopTime.DepartureTime);
-
-                        DateTime searchReachTime = forward ? arrivalTime : departureTime;
-                        DateTime searchLeaveTime = forward ? departureTime : arrivalTime;
-
-                        bool improved = searchModel.TryImproveReachTimeByTrip(currStop, searchReachTime, currTrip, traverseFromStop, round);
-                        if (improved)
+                    if (SearchLeaveTimeIsTransferableFromLastRoundReach(currStop, departureTime))
+                    {
+                        //TODO: same as above
+                        DateTime bestReachTimeLastRound = searchModel.GetBestReachTimeInRound(currStop, round - 1);
+                        // in first round, no buffer needed
+                        //TODO: check if round is necessary
+                        if (round != 1)
                         {
-                            markedStops.Add(currStop);
+                            if (searchModel.RoutePointIsReachedByTripInRound(currStop, round - 1))
+                            {
+                                int stationaryTransferTime = timeMpl * settings.GetStationaryTransferMinimumSeconds();
+                                bestReachTimeLastRound = bestReachTimeLastRound.AddSeconds(stationaryTransferTime);
+                            }
                         }
 
-                        if (SearchLeaveTimeIsTransferableFromLastRoundArrival(currStop, departureTime))
+                        if (!timeComp.ImprovesTime(bestReachTimeLastRound, searchLeaveTime))
                         {
-                            //TODO: same as above
-                            DateTime bestReachTimeLastRound = searchModel.GetBestReachTimeInRound(currStop, round - 1);
-                            // in first round, no buffer needed
-                            //TODO: check if round is necessary
-                            if (round != 1)
-                            {
-                                if (searchModel.RoutePointIsReachedByTripInRound(currStop, round - 1))
-                                {
-                                    int stationaryTransferTime = timeMpl * settings.GetStationaryTransferMinimumSeconds();
-                                    bestReachTimeLastRound = bestReachTimeLastRound.AddSeconds(stationaryTransferTime);
-                                }
-                            }
+                            //continue;
+                            return;
+                        }
 
-                            if (!comp.ImprovesTime(bestReachTimeLastRound, searchLeaveTime))//bestReachTimeLastRound > departureTime)
-                            {
-                                //continue;
-                                return;
-                            }
-
-                            DateOnly bestReachLastRoundDate = DateOnly.FromDateTime(bestReachTimeLastRound);
-                            TimeOnly bestReachLastRoundTime = TimeOnly.FromDateTime(bestReachTimeLastRound);
+                        DateOnly bestReachLastRoundDate = DateOnly.FromDateTime(bestReachTimeLastRound);
+                        TimeOnly bestReachLastRoundTime = TimeOnly.FromDateTime(bestReachTimeLastRound);
 
 
-
-                            Trip newTrip = route.GetFirstTransferableTripAtStopByReachTime(
-                                forward,
-                                currStop,
-                                bestReachLastRoundDate,
-                                bestReachLastRoundTime,
-                                Settings.MAX_TRIP_LENGTH_DAYS,
-                                out tripDate);
-                            if (newTrip != currTrip || comp.ImprovesTime(searchModel.GetBestReachTime(currStop), searchModel.GetBestReachTime(traverseFromStop)))
+                        DateOnly newTripDate;
+                        Trip newTrip = route.GetFirstTransferableTripAtStopByReachTime(
+                            forward,
+                            currStop,
+                            bestReachLastRoundDate,
+                            bestReachLastRoundTime,
+                            searchModel.GetSearchBeginTime().AddDays(timeMpl * Settings.MAX_TRIP_LENGTH_DAYS),
+                            out newTripDate);
+                        if (newTrip != currTrip || timeComp.ImprovesTime(searchModel.GetBestReachTime(currStop), searchModel.GetBestReachTime(traverseFromStop)))
+                        {
+                            // newTrip should only be null when the route contains the same stop twice, reaches it the second time, 
+                            // sees that at the second stop time, it can be reached from previous round reach, but then it cannot find a 
+                            // trip that would depart from the stop after the last round reach, as this looks for the first departure and not the second one
+                            // TODO: check if this is true, check if it should be changed
+                            if (newTrip is not null)
                             {
                                 currTrip = newTrip;
                                 traverseFromStop = currStop;
+                                currTripDate = newTripDate;
                             }
+                            
                         }
                     }
                 }
@@ -674,90 +619,40 @@ namespace RAPTOR_Router.RouteFinders
                         trip.StopTimes[traverseFromStopIndex].ArrivalTime < trip.StopTimes[currStopIndex].DepartureTime;
                 }
 
-                bool DepartureIsLaterThanLastRoundArrival(Stop stop, DateTime departureTime)
+                bool SearchLeaveTimeIsTransferableFromLastRoundReach(Stop stop, DateTime searchLeaveTime)
                 {
-                    return searchModel.GetBestReachTimeInRound(stop, round - 1) < departureTime;
+                    return timeComp.ImprovesTime(searchModel.GetBestReachTimeInRound(stop, round - 1), searchLeaveTime);
                 }
-
-                bool SearchLeaveTimeIsTransferableFromLastRoundArrival(Stop stop, DateTime searchLeaveTime)
-                {
-                    return comp.ImprovesTime(searchModel.GetBestReachTimeInRound(stop, round - 1), searchLeaveTime);
-                    //return searchModel.GetBestReachTimeInRound(stop, round - 1) < searchLeaveTime;
-                }
-                /*bool ArrivalTimeImprovesCurrBest(DateTime arrivalTime, Stop stop)
-                {
-                    return arrivalTime < searchModel.GetEarliestArrival(stop)
-                            && arrivalTime < searchModel.GetCurrentBestArrivalTime()
-                            && arrivalTime <= searchModel.GetDepartureTime().AddDays(Settings.MAX_TRIP_LENGTH_DAYS);
-                }
-                void ImproveArrivalByTrip(Stop stop, DateTime arrivalTime, Trip trip, Stop getOnStop)
-                {
-                    searchModel.SetTripArrivalInRound(stop, trip, getOnStop, arrivalTime, round);
-                    //TODO: check
-                    searchModel.SetEarliestArrival(stop, arrivalTime);
-
-                    if (searchModel.destinationStops.Contains(stop) && arrivalTime < searchModel.GetCurrentBestArrivalTime())
-                    {
-                        searchModel.SetCurrentBestArrivalTime(arrivalTime);
-                    }
-                }*/
             }
         }
 
         /// <summary>
         /// For all marked bike stations, traverses all the possible bike trips from them and improves the arrival times for all stops where it is possible
         /// </summary>
-        void TraverseBikeRoutes()
+        private void TraverseBikeRoutes()
         {
             HashSet<BikeStation> newMarkedBikeStations = new();
             foreach (BikeStation markedBikeStation in markedBikeStations)
             {
-                if (forward && markedBikeStation.BikeCount == 0)
+                if (CannotImproveFromBikeStation(markedBikeStation))
                 {
                     continue;
                 }
-                if (searchModel.RoutePointIsReachedByBikeInRound(markedBikeStation, round - 1))
-                {
-                    continue;
-                }
+
                 Dictionary<BikeStation, int> distances = bikeModel.GetDistancesFromStation(markedBikeStation);
                 foreach (KeyValuePair<BikeStation, int> pair in distances)
                 {
                     BikeStation reachingToBikeStation = pair.Key;
                     int distance = pair.Value;
 
-
-
-                    if (distance == -1)
-                    {
-                        continue;
-                    }
-                    if (settings.BikeMax15Minutes && GetCyclingTime(distance) > 15 * 60)
-                    {
-                        continue;
-                    }
-                    if (!forward && reachingToBikeStation.BikeCount == 0)
+                    if (CannotImproveToBikeStation(reachingToBikeStation, distance))
                     {
                         continue;
                     }
 
-                    BikeStation realSrcBikeStation, realDestBikeStation;
-                    if (forward)
-                    {
-                        realSrcBikeStation = markedBikeStation;
-                        realDestBikeStation = reachingToBikeStation;
-                    }
-                    else
-                    {
-                        realSrcBikeStation = reachingToBikeStation;
-                        realDestBikeStation = markedBikeStation;
-                    }
-
-
-                    int cyclingTimeSeconds = GetCyclingTime(distance);
-                    int fullCyclingTimeSeconds = timeMpl * (cyclingTimeSeconds + settings.BikeUnlockTime + settings.BikeLockTime);
-                    DateTime improvingFromStopReachTime = searchModel.GetBestReachTimeInRound(markedBikeStation, round - 1);
-                    DateTime reachTimeUsingBicycle = improvingFromStopReachTime.AddSeconds(fullCyclingTimeSeconds);
+                    AssignBikeStationsByDirection(markedBikeStation, reachingToBikeStation, out BikeStation realSrcBikeStation, out BikeStation realDestBikeStation);
+                    
+                    DateTime reachTimeUsingBicycle = GetReachTimeUsingBicycle(markedBikeStation, distance);
 
                     bool improved = searchModel.TryImproveReachTimeByBikeTrip(realSrcBikeStation, realDestBikeStation, reachTimeUsingBicycle, round);
                     if (improved)
@@ -767,26 +662,65 @@ namespace RAPTOR_Router.RouteFinders
                 }
             }
             markedBikeStations = newMarkedBikeStations;
-            int GetCyclingTime(int distance)
+
+            bool CannotImproveFromBikeStation(BikeStation bikeStation)
             {
-                return (int)((distance / 1000.0 * settings.CyclingPace * 60) * settings.GetBikeTripLengthMultiplier());
-            }
-            /*bool ArrivalTimeImprovesCurrBest(DateTime arrivalTime, BikeStation bikeStation)
-            {
-                return arrivalTime < searchModel.GetEarliestArrival(bikeStation)
-                        && arrivalTime < searchModel.GetCurrentBestArrivalTime()
-                        && arrivalTime <= searchModel.GetDepartureTime().AddDays(Settings.MAX_TRIP_LENGTH_DAYS);
-            }
-            void ImproveArrivalByBikeTrip(BikeStation fromBikeStation, BikeStation toBikeStation, DateTime arrivalTime)
-            {
-                searchModel.SetBikeTripArrivalInRound(fromBikeStation, toBikeStation, arrivalTime, round);
-                //TODO: check
-                searchModel.SetEarliestArrival(toBikeStation, arrivalTime);
-                if (searchModel.destinationBikeStations.Contains(toBikeStation) && arrivalTime < searchModel.GetCurrentBestArrivalTime())
+                // No bikes available (and search is forward)
+                if (forward && bikeStation.BikeCount == 0)
                 {
-                    searchModel.SetCurrentBestArrivalTime(arrivalTime);
+                    return true;
                 }
-            }*/
+                // The bike station was best reached by bike last time and thus we cannot continue improving by bike from it
+                if (searchModel.RoutePointIsReachedByBikeInRound(bikeStation, round - 1))
+                {
+                    return true;
+                }
+
+                return false;
+            }
+
+            bool CannotImproveToBikeStation(BikeStation bikeStation, int distance)
+            {
+                // The bike station is not connected to the bike station we are improving from, or they are too far apart to be considered
+                if (distance == -1)
+                {
+                    return true;
+                }
+                // The bike stations are close enough to be considered, but using the cyclingPace, the trip would take too long
+                if (settings.BikeMax15Minutes && settings.GetBilledBikeTripTime(distance) > 15 * 60)
+                {
+                    return true;
+                }
+                // The bike station has no bikes available (and search is backward)
+                if (!forward && bikeStation.BikeCount == 0)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+
+            void AssignBikeStationsByDirection(BikeStation markedBikeStation, BikeStation reachingToBikeStation, out BikeStation realSrcBikeStation, out BikeStation realDestBikeStation)
+            {
+                if (forward)
+                {
+                    realSrcBikeStation = markedBikeStation;
+                    realDestBikeStation = reachingToBikeStation;
+                }
+                else
+                {
+                    realSrcBikeStation = reachingToBikeStation;
+                    realDestBikeStation = markedBikeStation;
+                }
+            }
+
+            DateTime GetReachTimeUsingBicycle(BikeStation markedBikeStation, int distance)
+            {
+                int cyclingTimeSeconds = timeMpl * settings.GetAdjustedBikeTripTime(distance);
+                DateTime improvingFromStopReachTime = searchModel.GetBestReachTimeInRound(markedBikeStation, round - 1);
+                DateTime reachTime = improvingFromStopReachTime.AddSeconds(cyclingTimeSeconds);
+                return reachTime;
+            }
         }
 
         /// <summary>
@@ -797,16 +731,37 @@ namespace RAPTOR_Router.RouteFinders
         {
             HashSet<Stop> newMarkedStops = new();
             HashSet<BikeStation> newMarkedBikeStations = new();
+
+            // Improve from all marked stops
             foreach (Stop markedStop in markedStops)
             {
-                foreach (Transfer transfer in markedStop.Transfers)
+                TryImproveAllTransfersFromStop(markedStop);
+            }
+
+            // Improve from all marked bike stations (if permitted)
+            if (useSharedBikes && !onlyFromStops)
+            {
+                foreach (BikeStation markedBikeStation in markedBikeStations)
+                {
+                    TryImproveAllTransfersFromBikeStation(markedBikeStation);
+                }
+            }
+
+            // Add newly marked stops and bike stations to the marked sets
+            markedStops.UnionWith(newMarkedStops);
+            if (useSharedBikes)
+            {
+                markedBikeStations.UnionWith(newMarkedBikeStations);
+            }
+
+
+
+            void TryImproveAllTransfersFromStop(Stop stop)
+            {
+                foreach (Transfer transfer in stop.Transfers)
                 {
                     Transfer realTransfer = forward ? transfer : transfer.OppositeTransfer;
 
-                    if (realTransfer.To.Name == "Muzeum" && realTransfer.From.Name == "Muzeum")
-                    {
-                        Console.WriteLine();
-                    }
                     // Improve by Stop-to-Stop transfers
                     bool improved = searchModel.TryImproveReachTimeByTransfer(realTransfer, false, round, DoNotImproveToRoutePoint);
                     if (improved)
@@ -817,7 +772,7 @@ namespace RAPTOR_Router.RouteFinders
                 }
                 if (useSharedBikes)
                 {
-                    foreach (BikeTransfer bikeTransfer in markedStop.BikeTransfers)
+                    foreach (BikeTransfer bikeTransfer in stop.BikeTransfers)
                     {
                         BikeTransfer realBikeTransfer = forward ? bikeTransfer : bikeTransfer.OppositeTransfer;
                         // Improve by Stop-to-BikeStation transfers
@@ -829,107 +784,22 @@ namespace RAPTOR_Router.RouteFinders
                     }
                 }
             }
-            if (useSharedBikes && !onlyFromStops)
+
+            void TryImproveAllTransfersFromBikeStation(BikeStation bikeStation)
             {
-                foreach (BikeStation markedBikeStation in markedBikeStations)
+                foreach (BikeTransfer bikeTransfer in bikeStation.Transfers)
                 {
-                    foreach (BikeTransfer bikeTransfer in markedBikeStation.Transfers)
+                    BikeTransfer realBikeTransfer = forward ? bikeTransfer : bikeTransfer.OppositeTransfer;
+                    // Improve by BikeStation-to-Stop transfers
+                    bool improved = searchModel.TryImproveReachTimeByTransfer(realBikeTransfer, false, round, DoNotImproveToRoutePoint);
+                    if (improved)
                     {
-                        BikeTransfer realBikeTransfer = forward ? bikeTransfer : bikeTransfer.OppositeTransfer;
-                        // Improve by BikeStation-to-Stop transfers
-                        bool improved = searchModel.TryImproveReachTimeByTransfer(realBikeTransfer, false, round, DoNotImproveToRoutePoint);
-                        if (improved)
-                        {
-                            newMarkedStops.Add((Stop)bikeTransfer.GetDestRoutePoint());
-                        }
+                        newMarkedStops.Add((Stop)bikeTransfer.GetDestRoutePoint());
                     }
                 }
             }
-
-            markedStops.UnionWith(newMarkedStops);
-            if (useSharedBikes)
-            {
-                markedBikeStations.UnionWith(newMarkedBikeStations);
-            }
-            /*bool TransferImprovesArrivalTime(ITransfer transfer)
-            {
-                IRoutePoint from = transfer.GetSrcRoutePoint();
-                IRoutePoint to = transfer.GetDestRoutePoint();
-                //DateTime currEarliestArrival = searchModel.GetEarliestArrivalInRound(transfer.To, round);
-                DateTime currEarliestArrival = searchModel.GetEarliestArrival(to);
-                DateTime earliestArrivalWithTransfer = searchModel.GetEarliestArrivalInRound(from, round);
-
-                int stationaryTransferSeconds = settings.GetStationaryTransferMinimumSeconds();
-                if (transfer.Distance == 0)
-                {
-                    // if transfer length is 0, the transfer is stationary -> it takes the time of the stationary transfer minimum
-                    earliestArrivalWithTransfer = earliestArrivalWithTransfer.AddSeconds(stationaryTransferSeconds);
-                }
-                else
-                {
-                    // if transfer length is not 0, the transfer is moving -> it takes the time of the moving transfer length, but if this is lower than the stationary transfer minimum, the stationary transfer minimum is used
-                    earliestArrivalWithTransfer = earliestArrivalWithTransfer.AddSeconds(Math.Max((int)(transfer.GetTransferTime(settings.WalkingPace) * settings.GetMovingTransferLengthMultiplier()), stationaryTransferSeconds));
-                }
-
-                return currEarliestArrival > earliestArrivalWithTransfer;
-            }
-            void ImproveArrivalByTransfer(ITransfer transfer, bool toBikeStation, int extraSeconds = 0)
-            {
-                IRoutePoint from = transfer.GetSrcRoutePoint();
-                IRoutePoint to = transfer.GetDestRoutePoint();
-                DateTime earliestArrivalWithTransfer = searchModel.GetEarliestArrivalInRound(from, round);
-
-                int stationaryTransferSeconds = settings.GetStationaryTransferMinimumSeconds();
-                if (transfer.Distance == 0)
-                {
-                    // if transfer length is 0, the transfer is stationary -> it takes the time of the stationary transfer minimum
-                    earliestArrivalWithTransfer = earliestArrivalWithTransfer.AddSeconds(stationaryTransferSeconds + extraSeconds);
-                }
-                else
-                {
-                    // If the transfer is to a bike station, we do not need the safety buffer for transfers -> the bike is always there
-                    if(toBikeStation)
-                    {
-                        earliestArrivalWithTransfer = earliestArrivalWithTransfer.AddSeconds((int)(transfer.GetTransferTime(settings.WalkingPace) * settings.GetMovingTransferLengthMultiplier()) + extraSeconds);
-                    }
-                    else
-                    {
-                        // if transfer length is not 0, the transfer is moving -> it takes the time of the moving transfer length, but if this is lower than the stationary transfer minimum, the stationary transfer minimum is used
-                        earliestArrivalWithTransfer = earliestArrivalWithTransfer.AddSeconds(Math.Max((int)(transfer.GetTransferTime(settings.WalkingPace) * settings.GetMovingTransferLengthMultiplier()), stationaryTransferSeconds) + extraSeconds);
-                    }
-                }
-
-                //searchModel.SetEarliestArrivalInRound(transfer.To, round, earliestArrivalWithTransfer);
-                searchModel.SetTransferArrivalInRound(to, transfer, earliestArrivalWithTransfer, round);
-                if (searchModel.GetEarliestArrival(to) > searchModel.GetEarliestArrivalInRound(to, round))
-                {
-                    searchModel.SetEarliestArrival(to, searchModel.GetEarliestArrivalInRound(to, round));
-                }
-            }*/
         }
 
-        /// <summary>
-        /// Finds the connection with the earliest arrival to one of the destinationStations in the searchModel
-        /// </summary>
-        /// <param name="searchModel">The search model to be used for finding the connection</param>
-        /// <returns>The quickest connection from one of the sourceStops to one of the destinationStops in the searchModel</returns>
-        /*internal SearchResult FindConnection(ForwardSearchModel searchModel)
-        {
-            this.searchModel = searchModel;
-
-            InitiateSearchFromStops(settings.UseSharedBikes);
-            while (round <= Settings.ROUNDS - 1)
-            {
-                round++;
-                AccumulateRoutes();
-                TraverseMarkedRoutes();
-                ImproveByTransfers(settings.UseSharedBikes);
-            }
-            markedStops.Clear();
-            markedRoutesWithGetOnStops.Clear();
-            markedBikeStations.Clear();
-            return searchModel.ExtractResult(bikeModel);
-        }*/
 
         public Tuple<List<Stop>, List<BikeStation>> GetNearRoutePoints(double lat, double lon)
         {
@@ -949,48 +819,28 @@ namespace RAPTOR_Router.RouteFinders
 
         private SearchResult FindConnection(List<Stop> srcStops, List<BikeStation> srcBikeStations, List<Stop> destStops, List<BikeStation> destBikeStations, DateTime searchBeginTime, bool srcByCoord, bool destByCoord, Coordinates srcCoords = default, Coordinates destCoords = default)
         {
-            if (settings.UseSharedBikes)
+            // Sanity check
+
+            if (StopListsAreIncorrect())
             {
-                if ((srcStops.Count == 0 && srcBikeStations.Count == 0) || (destStops.Count == 0 && destBikeStations.Count == 0))
-                {
-                    return null;
-                }
-            }
-            else
-            {
-                if (srcStops.Count == 0 || destStops.Count == 0)
-                {
-                    return null;
-                }
+                return null;
             }
 
+
+
+
+            // Search variables setup
 
             List<Stop> searchBeginStops, searchEndStops;
             List<BikeStation> searchBeginBikeStations, searchEndBikeStations;
 
-            if (forward)
-            {
-                searchBeginStops = srcStops;
-                searchEndStops = destStops;
-                searchBeginBikeStations = srcBikeStations;
-                searchEndBikeStations = destBikeStations;
-            }
-            else
-            {
-                searchBeginStops = destStops;
-                searchEndStops = srcStops;
-                searchBeginBikeStations = destBikeStations;
-                searchEndBikeStations = srcBikeStations;
-            }
+
+            AssignStopsAndStationsByDirection();
 
 
-            //this.searchModel = new ForwardSearchModel(srcStops, destStops, srcBikeStations, destBikeStations, departureTime, settings);
             this.searchModel = new UniversalSearchModel(forward, searchBeginStops, searchEndStops, searchBeginBikeStations, searchEndBikeStations,
                 searchBeginTime, settings);
 
-            //HashSet<IRoutePoint> destRoutePoints = new HashSet<IRoutePoint>();
-            //destRoutePoints.UnionWith(destStops);
-            //destRoutePoints.UnionWith(destBikeStations);
 
             HashSet<IRoutePoint> searchEndRoutePoints = new HashSet<IRoutePoint>();
             searchEndRoutePoints.UnionWith(searchEndStops);
@@ -1002,8 +852,85 @@ namespace RAPTOR_Router.RouteFinders
 
             if (srcByCoord)
             {
-                // set the starting custom route point
+                SetupCustomSrcRP();
+            }
 
+            if (destByCoord)
+            {
+                SetupCustomDestRP();
+            }
+
+
+
+
+            // Run connection search algorithm
+
+            InitiateSearch();
+
+            while (round <= Settings.ROUNDS - 1)
+            {
+                round++;
+                AccumulateRoutes();
+                TraverseMarkedRoutes();
+                if (settings.UseSharedBikes)
+                {
+                    TraverseBikeRoutes();
+                }
+                ImproveByTransfersComplete();
+            }
+
+
+
+
+
+            // Return the result
+
+            markedStops.Clear();
+            markedRoutesWithReachedTrips.Clear();
+            return searchModel.ExtractResult(bikeModel);
+
+
+            bool StopListsAreIncorrect()
+            {
+                if (settings.UseSharedBikes)
+                {
+                    if ((srcStops.Count == 0 && srcBikeStations.Count == 0) || (destStops.Count == 0 && destBikeStations.Count == 0))
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    if (srcStops.Count == 0 || destStops.Count == 0)
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            void AssignStopsAndStationsByDirection()
+            {
+                if (forward)
+                {
+                    searchBeginStops = srcStops;
+                    searchEndStops = destStops;
+                    searchBeginBikeStations = srcBikeStations;
+                    searchEndBikeStations = destBikeStations;
+                }
+                else
+                {
+                    searchBeginStops = destStops;
+                    searchEndStops = srcStops;
+                    searchBeginBikeStations = destBikeStations;
+                    searchEndBikeStations = srcBikeStations;
+                }
+            }
+
+            void SetupCustomSrcRP()
+            {
+                // set the starting custom route point
                 foreach (Stop srcStop in srcStops)
                 {
                     realSrcRoutePoint.AddTransferToRoutePoint(srcStop);
@@ -1023,11 +950,9 @@ namespace RAPTOR_Router.RouteFinders
                 }
             }
 
-
-            if (destByCoord)
+            void SetupCustomDestRP()
             {
                 // set the ending custom route point
-
                 foreach (Stop destStop in destStops)
                 {
                     realDestRoutePoint.AddTransferFromRoutePoint(destStop);
@@ -1047,34 +972,25 @@ namespace RAPTOR_Router.RouteFinders
                 }
             }
 
-            if (forward && srcByCoord)
+            void InitiateSearch()
             {
-                InitiateSearchFromCustomRoutePoint(realSrcRoutePoint, settings.UseSharedBikes);
-            }
-            else if (!forward && destByCoord)
-            {
-                InitiateSearchFromCustomRoutePoint(realDestRoutePoint, settings.UseSharedBikes);
-            }
-            else
-            {
-                InitiateSearchFromStops(settings.UseSharedBikes);
+                if (forward && srcByCoord)
+                {
+                    InitiateSearchFromCustomRoutePoint(realSrcRoutePoint, settings.UseSharedBikes);
+                }
+                else if (!forward && destByCoord)
+                {
+                    InitiateSearchFromCustomRoutePoint(realDestRoutePoint, settings.UseSharedBikes);
+                }
+                else
+                {
+                    InitiateSearchFromStops(settings.UseSharedBikes);
+                }
             }
 
-            while (round <= Settings.ROUNDS - 1)
+            void ImproveByTransfersComplete()
             {
-                round++;
-                AccumulateRoutes();
-                TraverseMarkedRoutes();
-                if (settings.UseSharedBikes)
-                {
-                    TraverseBikeRoutes();
-                }
-
-                if (forward && destByCoord)
-                {
-                    ImproveByTransfers(settings.UseSharedBikes, false, (x) => searchEndRoutePoints.Contains(x));
-                }
-                else if (!forward && srcByCoord)
+                if (SearchEndsByCustomRP())
                 {
                     ImproveByTransfers(settings.UseSharedBikes, false, (x) => searchEndRoutePoints.Contains(x));
                 }
@@ -1082,21 +998,12 @@ namespace RAPTOR_Router.RouteFinders
                 {
                     ImproveByTransfers(settings.UseSharedBikes);
                 }
-                //if (destByCoord)
-                //{
-                //    ImproveByTransfers(settings.UseSharedBikes, false, (x) => destRoutePoints.Contains(x));
-                //}
-                //else
-                //{
-                //    ImproveByTransfers(settings.UseSharedBikes);
-                //}
             }
 
-
-            markedStops.Clear();
-            //markedRoutesWithReachedStops.Clear();
-            markedRoutesWithReachedTrips.Clear();
-            return searchModel.ExtractResult(bikeModel);
+            bool SearchEndsByCustomRP()
+            {
+                return (forward && destByCoord) || (!forward && srcByCoord);
+            }
         }
 
         /// <summary>
@@ -1108,50 +1015,6 @@ namespace RAPTOR_Router.RouteFinders
         /// <returns>The result of the search, null if no conection could be found.</returns>
         public SearchResult FindConnection(string sourceStop, string destStop, DateTime departureTime)
         {
-            /*//bikeModel.UpdateStationStatus();
-            if (sourceStop == destStop)
-            {
-                return null;
-            }
-            List<Stop> sourceStops = raptorModel.GetStopsByName(sourceStop);
-            List<Stop> destStops = raptorModel.GetStopsByName(destStop);
-
-            // If bikes cannot be used and either the source or the destination stop is not found, return null
-            if (sourceStops.Count == 0 || destStops.Count == 0)
-            {
-                //Console.WriteLine("Incorrect stop name/s");
-                return null;
-            }
-            //TODO: THIS NEEDS TO BE MODIFIED!!!!
-            List<BikeStation> sourceBikeStations = bikeModel.GetNearStations(sourceStops[0], 100);
-            List<BikeStation> destBikeStations = bikeModel.GetNearStations(destStops[0], 100);
-
-            // If bikes can be used, but either the source or the destination stop or bike station is not found, return null
-            if (settings.UseSharedBikes && (sourceStops.Count + sourceBikeStations.Count == 0 || destStops.Count + destBikeStations.Count == 0))
-            {
-                return null;
-            }
-
-
-            this.searchModel = new ForwardSearchModel(sourceStops, destStops, sourceBikeStations, destBikeStations, departureTime, settings);
-
-
-            InitiateSearchFromStops(settings.UseSharedBikes);
-            while (round <= Settings.ROUNDS - 1)
-            {
-                round++;
-                AccumulateRoutes();
-                TraverseMarkedRoutes();
-                if (settings.UseSharedBikes)
-                {
-                    TraverseBikeRoutes();
-                }
-                ImproveByTransfers(settings.UseSharedBikes);
-            }
-            markedStops.Clear();
-            markedRoutesWithGetOnStops.Clear();
-            return searchModel.ExtractResult(bikeModel);*/
-
             List<Stop> srcStops = transitModel.GetStopsByName(sourceStop);
             List<Stop> destStops = transitModel.GetStopsByName(destStop);
             List<BikeStation> srcBikeStations = new List<BikeStation>();
@@ -1171,67 +1034,6 @@ namespace RAPTOR_Router.RouteFinders
         /// <returns>The result of the search, null if no conection could be found.</returns>
         public SearchResult FindConnection(double srcLat, double srcLon, double destLat, double destLon, DateTime departureTime)
         {
-            /*CustomRoutePoint source = new CustomRoutePoint("srcId", "Source", new Coordinates(srcLat, srcLon));
-            CustomRoutePoint dest = new CustomRoutePoint("destId", "Destination", new Coordinates(destLat, destLon));
-
-
-
-            List<Stop> sourceStops = raptorModel.GetStopsByLocation(srcLat, srcLon, settings.GetMaxTransferDistance());
-            List<Stop> destStops = raptorModel.GetStopsByLocation(destLat, destLon, settings.GetMaxTransferDistance());
-
-            List<BikeStation> sourceBikeStations = bikeModel.GetNearStations(srcLat, srcLon, settings.GetMaxTransferDistance());
-            List<BikeStation> destBikeStations = bikeModel.GetNearStations(destLat, destLon, settings.GetMaxTransferDistance());
-
-            if ((sourceStops.Count == 0 && sourceBikeStations.Count == 0) || (destStops.Count == 0 && destBikeStations.Count == 0))
-            {
-                //Console.WriteLine("Incorrect stop name/s");
-                return null;
-            }
-
-
-            foreach (Stop srcStop in sourceStops)
-            {
-                source.AddTransferToRoutePoint(srcStop);
-            }
-            foreach (BikeStation srcStation in sourceBikeStations)
-            {
-                source.AddTransferToRoutePoint(srcStation);
-            }
-
-            foreach (Stop destStop in destStops)
-            {
-                dest.AddTransferFromRoutePoint(destStop);
-            }
-            foreach (BikeStation destStation in destBikeStations)
-            {
-                dest.AddTransferFromRoutePoint(destStation);
-            }
-
-
-            HashSet<IRoutePoint> destRoutePoints = new HashSet<IRoutePoint>();
-            destRoutePoints.UnionWith(destStops);
-            destRoutePoints.UnionWith(destBikeStations);
-
-
-
-
-            this.searchModel = new ForwardSearchModel(sourceStops, destStops, sourceBikeStations, destBikeStations, departureTime, settings);
-            this.searchModel.sourceCustomRoutePoint = source;
-            this.searchModel.destinationCustomRoutePoint = dest;
-
-            InitiateSearchFromCustomRoutePoint(source, settings.UseSharedBikes);
-            while (round <= Settings.ROUNDS - 1)
-            {
-                round++;
-                AccumulateRoutes();
-                TraverseMarkedRoutes();
-                TraverseBikeRoutes();
-                ImproveByTransfers(settings.UseSharedBikes, false, (x) => destRoutePoints.Contains(x));
-            }
-            markedStops.Clear();
-            markedRoutesWithGetOnStops.Clear();
-            return searchModel.ExtractResult(bikeModel);*/
-
             var (srcStops, srcBikeStations) = GetNearRoutePoints(srcLat, srcLon);
             var (destStops, destBikeStations) = GetNearRoutePoints(destLat, destLon);
             return FindConnection(srcStops, srcBikeStations, destStops, destBikeStations, departureTime, true, true, new Coordinates(srcLat, srcLon), new Coordinates(destLat, destLon));

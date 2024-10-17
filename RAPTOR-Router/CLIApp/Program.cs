@@ -7,7 +7,7 @@ namespace CLIApp
 {
 	internal class Program
     {
-        private const bool forward = false;
+        private const bool forward = true;
 
 
 

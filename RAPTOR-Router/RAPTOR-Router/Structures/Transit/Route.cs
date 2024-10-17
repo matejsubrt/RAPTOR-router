@@ -105,11 +105,11 @@ namespace RAPTOR_Router.Structures.Transit
         
 
         public Trip GetFirstTransferableTripAtStopByReachTime(bool forward, Stop stop, DateOnly date, TimeOnly time,
-            int maxDaysAfter, out DateOnly tripDate)
+            DateTime worstAllowedReachTime, out DateOnly tripDate)
         {
             return forward ?
-                GetEarliestTripDepartingAfterTimeAtStop(stop, date, time, maxDaysAfter, out tripDate) :
-                GetLatestTripArrivingBeforeTimeAtStop(stop, date, time, maxDaysAfter, out tripDate);
+                GetEarliestTripDepartingAfterTimeAtStop(stop, date, time, worstAllowedReachTime, out tripDate) :
+                GetLatestTripArrivingBeforeTimeAtStop(stop, date, time, worstAllowedReachTime, out tripDate);
         }
 
 
@@ -123,11 +123,12 @@ namespace RAPTOR_Router.Structures.Transit
         /// <param name="maxDaysAfter">The maximum number of days between the specified earliest time and the trip departure time</param>
         /// <param name="tripDate">The date on which the trip actually leaves -> if the first found trip is after midnight, this date is different than the date input parameter</param>
         /// <returns>The earliest trip, that leaves the stop after the specified time on the route, null if no trip is found</returns>
-        public Trip GetEarliestTripDepartingAfterTimeAtStop(Stop stop, DateOnly date, TimeOnly time, int maxDaysAfter, out DateOnly tripDate)
+        public Trip GetEarliestTripDepartingAfterTimeAtStop(Stop stop, DateOnly date, TimeOnly time, DateTime worstAllowedReachTime, out DateOnly tripDate)
         {
             int stopIndex = GetFirstStopIndex(stop);
             DateOnly currDate = date;
-            DateOnly maxDate = date.AddDays(maxDaysAfter);
+            DateOnly maxDate = DateOnly.FromDateTime(worstAllowedReachTime);
+            //DateOnly maxDate = date.AddDays(maxDaysAfter);
 
             List<Trip> tripsOnDate;
             if (RouteTrips.ContainsKey(currDate))
@@ -182,11 +183,12 @@ namespace RAPTOR_Router.Structures.Transit
         /// <param name="maxDaysBefore">The maximum number of days between the specified latest time and the trip arrival time</param>
         /// <param name="tripDate">The date on which the trip actually arrives -> if the first found trip is before midnight, this date is different than the date input parameter</param>
         /// <returns>The latest trip, that arrives at the stop before the specified time on the route, null if no trip is found</returns>
-        public Trip GetLatestTripArrivingBeforeTimeAtStop(Stop stop, DateOnly date, TimeOnly time, int maxDaysBefore, out DateOnly tripDate)
+        public Trip GetLatestTripArrivingBeforeTimeAtStop(Stop stop, DateOnly date, TimeOnly time, DateTime worstAllowedReachTime, out DateOnly tripDate)
         {
             int stopIndex = GetLastStopIndex(stop);
             DateOnly currDate = date;
-            DateOnly minDate = date.AddDays(-maxDaysBefore);
+            DateOnly minDate = DateOnly.FromDateTime(worstAllowedReachTime);
+            //DateOnly minDate = date.AddDays(-maxDaysBefore);
 
             List<Trip> tripsOnDate;
             if (RouteTrips.ContainsKey(currDate))
