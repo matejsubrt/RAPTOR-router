@@ -1,5 +1,5 @@
 {
-  "gtfsArchiveLocation": "D:\\Documents\\RAPTOR-router\\example-gtfs\\PID_GTFS.zip",
+  "gtfsArchiveLocation": "D:\\Documents\\RAPTOR-router\\example-gtfs\\PID_GTFS_new.zip",
   "testGtfsArchiveLocation": "D:\\Documents\\RAPTOR-router\\example-gtfs\\PID_GTFS.zip",
   "osmFileLocation": "D:\\Documents\\RAPTOR-router\\RAPTOR-Router\\data\\czech-republic-latest.osm",
   "routerDbFileLocation": "D:\\Documents\\RAPTOR-router\\RAPTOR-Router\\data\\cz.routerdb",

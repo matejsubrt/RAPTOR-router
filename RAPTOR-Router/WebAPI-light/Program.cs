@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using System.Web.Http;
 using Microsoft.AspNetCore.Http;
+using RAPTOR_Router.Models.Results;
 using RAPTOR_Router.Structures.Configuration;
 
 namespace WebAPI_light
@@ -26,6 +27,15 @@ namespace WebAPI_light
         public string dateTime { get; set; }
         public bool byEarliestDeparture { get; set; }
         public Settings settings { get; set; }
+    }
+
+    public class AlternativeTripsRequest
+    {
+        public string srcStopId { get; set; }
+        public string destStopId { get; set; }
+        public string dateTime { get; set; }
+        public bool previous { get; set; }
+        public int count { get; set; }
     }
 
     public class Program
@@ -96,8 +106,27 @@ namespace WebAPI_light
                 HandleRequestCoordToCoord(routerBuilder, request.srcLat, request.srcLon, request.destLat, request.destLon, request.dateTime, request.byEarliestDeparture, request.settings))
                 .WithName("GetConnectionByCoords")
                 .WithOpenApi();
+            app.MapPost("/alternative-trips", (AlternativeTripsRequest request) =>
+                    HandleAlternativeTripsRequest(request))
+                .WithName("GetAlternativeTrips")
+                .WithOpenApi();
             app.Run();
 
+        }
+
+
+        static List<SearchResult.UsedTrip> HandleAlternativeTripsRequest(AlternativeTripsRequest request)
+        {
+            DateTime dateTime;
+            if (!DateTime.TryParse(request.dateTime, out dateTime))
+            {
+                var message = "Invalid DateTime format";
+                HttpError err = new HttpError(message);
+                //return Results.BadRequest(err);
+            }
+            var routeFinder = routerBuilder.CreateDirectRouteFinder();
+            var result = routeFinder.GetAlternativeTrips(request.srcStopId, request.destStopId, dateTime, request.count, request.previous);
+            return result;
         }
 
         static IResult HandleRequestStopToStop(RouteFinderBuilder builder, string srcStopName, string destStopName, string dateTimeString, bool byEarliestDeparture, Settings settings)

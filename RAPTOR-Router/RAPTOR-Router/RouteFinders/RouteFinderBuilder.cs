@@ -286,6 +286,22 @@ namespace RAPTOR_Router.RouteFinders
             return router;
         }
 
+        public DirectRouteFinder CreateDirectRouteFinder()
+        {
+            if (raptorModel is null)
+            {
+                throw new ApplicationException("Data from a gtfs archive were not loaded yet");
+            }
+
+            if (bikeModel is null)
+            {
+                throw new ApplicationException("Data from a gbfs api were not loaded yet");
+            }
+
+            DirectRouteFinder router = new DirectRouteFinder(raptorModel, delayModel);
+            return router;
+        }
+
 
 
         /// <summary>

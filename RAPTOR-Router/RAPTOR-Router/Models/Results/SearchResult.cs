@@ -138,63 +138,65 @@ namespace RAPTOR_Router.Models.Results
             }
             TripCount++;
 
-            List<StopPass> GetStopPassesList(List<Stop> routeStops, List<StopTime> stopTimes, DateTime arrivalDateTime)
+            
+        }
+
+        public static List<StopPass> GetStopPassesList(List<Stop> routeStops, List<StopTime> stopTimes, DateTime arrivalDateTime)
+        {
+            List<StopPass> stopPasses = new();
+            DateOnly currDate = DateOnly.FromDateTime(arrivalDateTime);
+            TimeOnly arrivalTime = TimeOnly.FromDateTime(arrivalDateTime);
+            bool overMidnight = false;
+            if (stopTimes[0].ArrivalTime > arrivalTime)
             {
-                List<StopPass> stopPasses = new();
-                DateOnly currDate = DateOnly.FromDateTime(arrivalDateTime);
-                TimeOnly arrivalTime = TimeOnly.FromDateTime(arrivalDateTime);
-                bool overMidnight = false;
-                if (stopTimes[0].ArrivalTime > arrivalTime)
+                // trip goes over midnight (i.e. the arrival time is before the departure time)
+                currDate = currDate.AddDays(-1);
+                overMidnight = true;
+            }
+            for (int i = 0; i < routeStops.Count; i++)
+            {
+                DateTime stopArrivalDateTime;
+                DateTime stopDepartureDateTime;
+                if (overMidnight)
                 {
-                    // trip goes over midnight (i.e. the arrival time is before the departure time)
-                    currDate = currDate.AddDays(-1);
-                    overMidnight = true;
-                }
-                for (int i = 0; i < routeStops.Count; i++)
-                {
-                    DateTime stopArrivalDateTime;
-                    DateTime stopDepartureDateTime;
-                    if (overMidnight)
+                    // We have reached the first stop after midnight
+                    if (stopTimes[i].ArrivalTime < arrivalTime)
                     {
-                        // We have reached the first stop after midnight
-                        if (stopTimes[i].ArrivalTime < arrivalTime)
-                        {
-                            // Both the arrival and departure are after midnight
-                            currDate = currDate.AddDays(1);
-                            overMidnight = false;
-                            stopArrivalDateTime = DateTimeExtensions.FromDateAndTime(currDate, stopTimes[i].ArrivalTime);
-                            stopDepartureDateTime = DateTimeExtensions.FromDateAndTime(currDate, stopTimes[i].DepartureTime);
-                        }
-                        else if (stopTimes[i].DepartureTime != stopTimes[i].ArrivalTime && stopTimes[i].DepartureTime < arrivalTime)
-                        {
-                            // Only the departure is after midnight
-                            stopArrivalDateTime = DateTimeExtensions.FromDateAndTime(currDate, stopTimes[i].ArrivalTime);
-                            currDate = currDate.AddDays(1);
-                            overMidnight = false;
-                            stopDepartureDateTime = DateTimeExtensions.FromDateAndTime(currDate, stopTimes[i].DepartureTime);
-                        }
-                        else
-                        {
-                            stopArrivalDateTime = DateTimeExtensions.FromDateAndTime(currDate, stopTimes[i].ArrivalTime);
-                            stopDepartureDateTime = DateTimeExtensions.FromDateAndTime(currDate, stopTimes[i].DepartureTime);
-                        }
+                        // Both the arrival and departure are after midnight
+                        currDate = currDate.AddDays(1);
+                        overMidnight = false;
+                        stopArrivalDateTime = DateTimeExtensions.FromDateAndTime(currDate, stopTimes[i].ArrivalTime);
+                        stopDepartureDateTime = DateTimeExtensions.FromDateAndTime(currDate, stopTimes[i].DepartureTime);
+                    }
+                    else if (stopTimes[i].DepartureTime != stopTimes[i].ArrivalTime && stopTimes[i].DepartureTime < arrivalTime)
+                    {
+                        // Only the departure is after midnight
+                        stopArrivalDateTime = DateTimeExtensions.FromDateAndTime(currDate, stopTimes[i].ArrivalTime);
+                        currDate = currDate.AddDays(1);
+                        overMidnight = false;
+                        stopDepartureDateTime = DateTimeExtensions.FromDateAndTime(currDate, stopTimes[i].DepartureTime);
                     }
                     else
                     {
                         stopArrivalDateTime = DateTimeExtensions.FromDateAndTime(currDate, stopTimes[i].ArrivalTime);
                         stopDepartureDateTime = DateTimeExtensions.FromDateAndTime(currDate, stopTimes[i].DepartureTime);
                     }
-
-
-                    StopPass stopPass = new(routeStops[i].Name, routeStops[i].Id, stopArrivalDateTime, stopDepartureDateTime);
-                    //stopPass.Name = routeStops[i].Name;
-                    //stopPass.Id = routeStops[i].Id;
-                    //stopPass.ArrivalTime = stopArrivalDateTime;
-                    //stopPass.DepartureTime = stopDepartureDateTime;
-                    stopPasses.Add(stopPass);
                 }
-                return stopPasses;
+                else
+                {
+                    stopArrivalDateTime = DateTimeExtensions.FromDateAndTime(currDate, stopTimes[i].ArrivalTime);
+                    stopDepartureDateTime = DateTimeExtensions.FromDateAndTime(currDate, stopTimes[i].DepartureTime);
+                }
+
+
+                StopPass stopPass = new(routeStops[i].Name, routeStops[i].Id, stopArrivalDateTime, stopDepartureDateTime);
+                //stopPass.Name = routeStops[i].Name;
+                //stopPass.Id = routeStops[i].Id;
+                //stopPass.ArrivalTime = stopArrivalDateTime;
+                //stopPass.DepartureTime = stopDepartureDateTime;
+                stopPasses.Add(stopPass);
             }
+            return stopPasses;
         }
 
         /// <summary>
