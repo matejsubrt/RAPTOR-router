@@ -80,6 +80,8 @@ namespace RAPTOR_Router.Models.Static
                 GTFSCalendar gtfsCalendar = gtfs.calendars[gtfsTrip.ServiceId];
                 List<GTFSStopTime> gtfsStopTimes = gtfs.stopTimes[gtfsTrip.Id];
                 List<GTFSCalendarDate> gtfsCalendarDates = new List<GTFSCalendarDate>();
+
+                string tripId = gtfsTrip.Id;
                 if (gtfs.calendarDates.ContainsKey(gtfsTrip.ServiceId))
                 {
                     gtfsCalendarDates = gtfs.calendarDates[gtfsTrip.ServiceId];
@@ -103,7 +105,7 @@ namespace RAPTOR_Router.Models.Static
                         route.RouteStops.Add(stops[stopId]);
                     }
                 }
-                Trip trip = new Trip(gtfsStopTimes, route);
+                Trip trip = new Trip(gtfsStopTimes, route, tripId);
 
                 //add all instances of current trip to the route's RouteTrips
                 //calendar - when does a trip normally operate, calendar date - exceptions

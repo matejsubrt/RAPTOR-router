@@ -48,6 +48,8 @@ namespace RAPTOR_Router.RouteFinders
         /// </summary>
         private UniversalSearchModel searchModel;
 
+        private DelayModel delayModel;
+
 
         /// <summary>
         /// A set of currently marked stops
@@ -100,7 +102,7 @@ namespace RAPTOR_Router.RouteFinders
         /// <param name="settings">The settings to be used for the connection search</param>
         /// <param name="transitModel">The transit model holding all the static information about the transit network</param>
         /// <param name="bikeModel">The bike model holding all the information about the shared bike systems and their stations</param>
-        internal UniversalRouteFinder(bool forward, Settings settings, TransitModel transitModel, BikeModel bikeModel)
+        internal UniversalRouteFinder(bool forward, Settings settings, TransitModel transitModel, BikeModel bikeModel, DelayModel delayModel)
         {
             this.settings = settings;
             this.transitModel = transitModel;
@@ -109,6 +111,7 @@ namespace RAPTOR_Router.RouteFinders
             this.timeComp = new TimeComparator(forward);
             this.indexComp = new IndexComparator(forward);
             this.timeMpl = forward ? 1 : -1;
+            this.delayModel = delayModel;
         }
 
 
@@ -276,6 +279,7 @@ namespace RAPTOR_Router.RouteFinders
                     DateOnly.FromDateTime(bestReachTimeAtTraverseFromStopLastRound),
                     TimeOnly.FromDateTime(bestReachTimeAtTraverseFromStopLastRound),
                     searchModel.GetSearchBeginTime().AddDays(timeMpl * Settings.MAX_TRIP_LENGTH_DAYS), //Settings.MAX_TRIP_LENGTH_DAYS,
+                    delayModel,
                     out tripDate
                 );
 
@@ -517,6 +521,17 @@ namespace RAPTOR_Router.RouteFinders
                 DateOnly currTripDate = tripDate;
                 Trip currTrip = trip;
 
+                bool tripHasDelayData = delayModel.TripHasDelayData(currTripDate, currTrip.Id);
+                TripStopDelays? tripStopDelays = null;
+                if (tripHasDelayData)
+                {
+                    if (currTrip.Route.ShortName == "154" && round == 1)
+                    {
+                        Console.WriteLine();
+                    }
+                    tripStopDelays = delayModel.GetTripStopDelays(currTripDate, currTrip.Id);
+                }
+
                 if (forward)
                 {
                     for (int i = route.GetFirstStopIndex(traverseFromStop); i < route.RouteStops.Count; i++)
@@ -536,11 +551,25 @@ namespace RAPTOR_Router.RouteFinders
                 {
                     Stop currStop = route.RouteStops[i];
 
+                    if (currStop.Name == "Obchodní centrum Hostivař" && round == 1 && currTrip.Route.ShortName == "154")
+                    {
+                        Console.WriteLine();
+                    }
+
 
                     int daysToAddWhenOverMidnight = forward ? 1 : -1;
                     int firstStopIndexInDirOfSearch = forward ? route.GetFirstStopIndex(traverseFromStop) : route.GetLastStopIndex(traverseFromStop);
 
                     StopTime stopTime = currTrip.StopTimes[i];
+
+
+                    int arrivalDelay = 0;
+                    int departureDelay = 0;
+                    bool stopHasDelayData = false;
+                    if (tripHasDelayData)
+                    {
+                        stopHasDelayData = tripStopDelays.TryGetStopDelay(i, out arrivalDelay, out departureDelay);
+                    }
 
 
                     DateOnly realDate;
@@ -550,11 +579,21 @@ namespace RAPTOR_Router.RouteFinders
                         realDate = currTripDate;
 
 
-                    DateTime arrivalTime = DateTimeExtensions.FromDateAndTime(realDate, stopTime.ArrivalTime);
-                    DateTime departureTime = DateTimeExtensions.FromDateAndTime(realDate, stopTime.DepartureTime);
+                    //DateTime arrivalTime = DateTimeExtensions.FromDateAndTime(realDate, stopTime.ArrivalTime);
+                    //DateTime departureTime = DateTimeExtensions.FromDateAndTime(realDate, stopTime.DepartureTime);
 
-                    DateTime searchReachTime = forward ? arrivalTime : departureTime;
-                    DateTime searchLeaveTime = forward ? departureTime : arrivalTime;
+                    //DateTime searchReachTime = forward ? arrivalTime : departureTime;
+                    //DateTime searchLeaveTime = forward ? departureTime : arrivalTime;
+
+
+                    DateTime regularArrivalTime = DateTimeExtensions.FromDateAndTime(realDate, stopTime.ArrivalTime);
+                    DateTime regularDepartureTime = DateTimeExtensions.FromDateAndTime(realDate, stopTime.DepartureTime);
+
+                    DateTime actualArrivalTime = stopHasDelayData ? regularArrivalTime.AddSeconds(arrivalDelay) : regularArrivalTime;
+                    DateTime actualDepartureTime = stopHasDelayData ? regularDepartureTime.AddSeconds(departureDelay) : regularDepartureTime;
+
+                    DateTime searchReachTime = forward ? actualArrivalTime : actualDepartureTime;
+                    DateTime searchLeaveTime = forward ? actualDepartureTime : actualArrivalTime;
 
                     bool improved = searchModel.TryImproveReachTimeByTrip(currStop, searchReachTime, currTrip, traverseFromStop, round);
                     if (improved)
@@ -562,7 +601,7 @@ namespace RAPTOR_Router.RouteFinders
                         markedStops.Add(currStop);
                     }
 
-                    if (SearchLeaveTimeIsTransferableFromLastRoundReach(currStop, departureTime))
+                    if (SearchLeaveTimeIsTransferableFromLastRoundReach(currStop, actualDepartureTime))
                     {
                         //TODO: same as above
                         DateTime bestReachTimeLastRound = searchModel.GetBestReachTimeInRound(currStop, round - 1);
@@ -594,6 +633,7 @@ namespace RAPTOR_Router.RouteFinders
                             bestReachLastRoundDate,
                             bestReachLastRoundTime,
                             searchModel.GetSearchBeginTime().AddDays(timeMpl * Settings.MAX_TRIP_LENGTH_DAYS),
+                            delayModel,
                             out newTripDate);
                         if (newTrip != currTrip || timeComp.ImprovesTime(searchModel.GetBestReachTime(currStop), searchModel.GetBestReachTime(traverseFromStop)))
                         {
@@ -606,6 +646,12 @@ namespace RAPTOR_Router.RouteFinders
                                 currTrip = newTrip;
                                 traverseFromStop = currStop;
                                 currTripDate = newTripDate;
+
+                                tripHasDelayData = delayModel.TripHasDelayData(currTripDate, newTrip.Id);
+                                if (tripHasDelayData)
+                                {
+                                    tripStopDelays = delayModel.GetTripStopDelays(currTripDate, newTrip.Id);
+                                }
                             }
                             
                         }
@@ -819,6 +865,7 @@ namespace RAPTOR_Router.RouteFinders
 
         private SearchResult FindConnection(List<Stop> srcStops, List<BikeStation> srcBikeStations, List<Stop> destStops, List<BikeStation> destBikeStations, DateTime searchBeginTime, bool srcByCoord, bool destByCoord, Coordinates srcCoords = default, Coordinates destCoords = default)
         {
+            Stopwatch sw = Stopwatch.StartNew();
             // Sanity check
 
             if (StopListsAreIncorrect())
@@ -839,7 +886,7 @@ namespace RAPTOR_Router.RouteFinders
 
 
             this.searchModel = new UniversalSearchModel(forward, searchBeginStops, searchEndStops, searchBeginBikeStations, searchEndBikeStations,
-                searchBeginTime, settings);
+                searchBeginTime, settings, delayModel);
 
 
             HashSet<IRoutePoint> searchEndRoutePoints = new HashSet<IRoutePoint>();
@@ -887,6 +934,10 @@ namespace RAPTOR_Router.RouteFinders
 
             markedStops.Clear();
             markedRoutesWithReachedTrips.Clear();
+
+            sw.Stop();
+            Console.WriteLine("Search took: " + sw.Elapsed);
+
             return searchModel.ExtractResult(bikeModel);
 
 
@@ -1015,6 +1066,10 @@ namespace RAPTOR_Router.RouteFinders
         /// <returns>The result of the search, null if no conection could be found.</returns>
         public SearchResult FindConnection(string sourceStop, string destStop, DateTime departureTime)
         {
+            if (sourceStop == destStop)
+            {
+                return null;
+            }
             List<Stop> srcStops = transitModel.GetStopsByName(sourceStop);
             List<Stop> destStops = transitModel.GetStopsByName(destStop);
             List<BikeStation> srcBikeStations = new List<BikeStation>();

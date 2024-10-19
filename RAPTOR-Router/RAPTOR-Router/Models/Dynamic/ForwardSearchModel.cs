@@ -178,7 +178,7 @@ namespace RAPTOR_Router.Models.Dynamic
 						{
 							throw new ApplicationException("Trip and getOnStop cannot be null in an used round");
 						}
-						result.AddUsedTrip(tripToReachStop, getOnStop, (Stop)currStop, tripArrival.Time, false);
+						//result.AddUsedTrip(tripToReachStop, getOnStop, (Stop)currStop, tripArrival.Time, false);
 						currStop = getOnStop;
 					}
 					else if (arrival is StopRoutingInfoBase.BikeTripArrival bikeTripArrival)

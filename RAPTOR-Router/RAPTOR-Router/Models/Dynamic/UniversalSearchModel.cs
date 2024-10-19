@@ -49,6 +49,8 @@ namespace RAPTOR_Router.Models.Dynamic
         private bool forward;
         private DateTime worstBound;
 
+        private DelayModel delayModel;
+
 
 
 
@@ -73,7 +75,7 @@ namespace RAPTOR_Router.Models.Dynamic
         /// <param name="searchEndBikeStations">The list of bikeStations considered as the destination stations</param>
         /// <param name="searchBeginTime">The earliest possible departure time of the found connection</param>
         /// <param name="settingsUsed">The settings used for the search</param>
-        public UniversalSearchModel(bool forward, List<Stop> searchBeginStops, List<Stop> searchEndStops, List<BikeStation> searchBeginBikeStations, List<BikeStation> searchEndBikeStations, DateTime searchBeginTime, Settings settingsUsed)
+        public UniversalSearchModel(bool forward, List<Stop> searchBeginStops, List<Stop> searchEndStops, List<BikeStation> searchBeginBikeStations, List<BikeStation> searchEndBikeStations, DateTime searchBeginTime, Settings settingsUsed, DelayModel delayModel)
         {
             this.searchBeginStops = searchBeginStops;
             this.searchEndStops = searchEndStops;
@@ -87,6 +89,8 @@ namespace RAPTOR_Router.Models.Dynamic
             this.worstBound = forward ? DateTime.MaxValue : DateTime.MinValue;
             this.timeMpl = forward ? 1 : -1;
             this.bestCurrentSearchEndTime = worstBound;
+
+            this.delayModel = delayModel;
         }
 
 
@@ -230,7 +234,43 @@ namespace RAPTOR_Router.Models.Dynamic
                         {
                             throw new ApplicationException("Trip and getOnStop cannot be null in an used round");
                         }
-                        result.AddUsedTrip(tripToReachStop, realGetOnStop, realGetOffStop, tripReach.Time, !forward);
+
+                        bool tripStartedDayBefore = tripToReachStop.StopTimes[0].DepartureTime > TimeOnly.FromDateTime(tripReach.Time);
+                        DateOnly tripStartDate = tripStartedDayBefore ? DateOnly.FromDateTime(tripReach.Time.AddDays(-1)) : DateOnly.FromDateTime(tripReach.Time.Date);
+
+                        bool tripHasDelayData = delayModel.TripHasDelayData(tripStartDate, tripToReachStop.Id);
+                        bool getOnStopHasDelayData;
+                        int getOnStopDepartureDelay, currentTripDelay;
+                        if (tripHasDelayData)
+                        {
+                            getOnStopHasDelayData = delayModel.TryGetDelay(tripStartDate, tripToReachStop.Id, tripToReachStop.Route.GetFirstStopIndex(realGetOnStop), out int arrivalDelay, out int departureDelay);
+                            if (!getOnStopHasDelayData)
+                            {
+                                getOnStopDepartureDelay = 0;
+                                currentTripDelay = 0;
+                            }
+                            else
+                            {
+                                getOnStopDepartureDelay = departureDelay;
+                                currentTripDelay = GetCurrentTripDelay(tripToReachStop, tripStartDate);
+                            }
+                        }
+                        else
+                        {
+                            getOnStopHasDelayData = false;
+                            getOnStopDepartureDelay = 0;
+                            currentTripDelay = 0;
+                        }
+
+
+                        
+
+
+                        result.AddUsedTrip(tripToReachStop, realGetOnStop, realGetOffStop, tripReach.Time, getOnStopHasDelayData, getOnStopDepartureDelay, currentTripDelay, !forward);
+
+
+
+                        //result.AddUsedTrip(tripToReachStop, realGetOnStop, realGetOffStop, tripReach.Time, !forward);
                         currStop = tripReach.OtherEndStop;
                     }
                     else if (reach is StopRoutingInfoBase.BikeTripReach bikeTripReach)
@@ -264,16 +304,16 @@ namespace RAPTOR_Router.Models.Dynamic
 
                 //TODO: check
                 // Add the first transfer to the result -> that would be in round 0 and thus not added in the loop above
-                var firstArrival = currStopInfo.Reaches[0];
-                if (firstArrival is StopRoutingInfoBase.TransferReach transferReach1)
+                var firstReach = currStopInfo.Reaches[0];
+                if (firstReach is StopRoutingInfoBase.TransferReach transferReach1)
                 {
-                    result.AddUsedTransfer(transferReach1.Transfer, firstArrival.Time, !forward);
+                    result.AddUsedTransfer(transferReach1.Transfer, firstReach.Time, !forward);
                 }
-                else if (firstArrival is StopRoutingInfoBase.BikeTransferReach bikeTransferReach)
+                else if (firstReach is StopRoutingInfoBase.BikeTransferReach bikeTransferReach)
                 {
-                    result.AddUsedTransfer(bikeTransferReach.Transfer, firstArrival.Time, !forward);
+                    result.AddUsedTransfer(bikeTransferReach.Transfer, firstReach.Time, !forward);
                 }
-                else if (firstArrival is StopRoutingInfoBase.CustomTransferReach customTransferReach)
+                else if (firstReach is StopRoutingInfoBase.CustomTransferReach customTransferReach)
                 {
                     result.AddUsedTransfer(customTransferReach.Transfer, customTransferReach.Time, !forward);
                 }
@@ -282,6 +322,40 @@ namespace RAPTOR_Router.Models.Dynamic
                 result.SetDepartureAndArrivalTimesByEarliestDeparture(searchBeginTime);
 
                 return result;
+
+
+                int GetCurrentTripDelay(Trip trip, DateOnly tripStartDate)
+                {
+                    TripStopDelays stopDelays = delayModel.GetTripStopDelays(tripStartDate, trip.Id);
+                    List<StopTime> stopTimes = trip.StopTimes;
+
+                    TimeOnly currTime = TimeOnly.FromDateTime(DateTime.Now);
+
+                    
+                    //bool haveLastStopDelay = stopDelays.TryGetStopDelay(0, out int lastReachedStopArrivalDelay, out int lastReachedStopDepartureDelay);
+                    int lastReachedStopDepartureDelay = 0;
+                    for (int i = 1; i < stopTimes.Count; i++)
+                    {
+                        bool haveLastStopDelay = stopDelays.TryGetStopDelay(i, out int currReachedStopArrivalDelay, out int currReachedStopDepartureDelay);
+                        if (!haveLastStopDelay)
+                        {
+                            break;
+                        }
+                        StopTime stopTime = stopTimes[i];
+                        TimeOnly regularStopDepartureTime = stopTime.DepartureTime;
+                        TimeOnly actualStopDepartureTime = regularStopDepartureTime.AddSeconds(currReachedStopDepartureDelay);
+
+                        if (actualStopDepartureTime > currTime)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            lastReachedStopDepartureDelay = currReachedStopDepartureDelay;
+                        }
+                    }
+                    return lastReachedStopDepartureDelay;
+                }
             }
 
             Stop? GetSearchEndStopWithBestReachTimeInRound(int round)

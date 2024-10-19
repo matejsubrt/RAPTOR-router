@@ -79,7 +79,7 @@ namespace RAPTOR_Router.Models.Results
         ///     toEnd = true means the connection is being reconstructed from start to end -> backward search was used
         ///     toEnd = false means the connection is being reconstructed from end to start -> forward search was used
         /// </remarks>
-        internal void AddUsedTrip(Trip trip, Stop getOnStop, Stop getOffStop, DateTime time, bool toEnd)
+        internal void AddUsedTrip(Trip trip, Stop getOnStop, Stop getOffStop, DateTime time, bool hasDelayInfo, int delayWhenBoarded, int currentDelay, bool toEnd)
         {
             var routeStops = trip.Route.RouteStops;
 
@@ -118,7 +118,11 @@ namespace RAPTOR_Router.Models.Results
                 routeStops.IndexOf(getOffStop),
                 trip.Route.ShortName,
                 trip.Route.Color,
-                trip.Route.Type);
+                trip.Route.Type,
+                hasDelayInfo,
+                delayWhenBoarded,
+                currentDelay,
+                trip.Id);
 
 
             //UsedSegments.Insert(0, usedTrip);
@@ -348,17 +352,20 @@ namespace RAPTOR_Router.Models.Results
                 {
                     case SegmentType.Transfer:
                         UsedTransfer transfer = UsedTransfers[transferIndex];
-                        sb.AppendLine("Transfer from " + transfer.GetStartStopName() + " to " + transfer.GetEndStopName() + ", length: " + transfer.time + "s + reserve " + (usedSettings.GetMovingTransferLengthMultiplier() - 1.0) * transfer.time + "s = " + transfer.distance + "m");
+                        //sb.AppendLine("Transfer from " + transfer.GetStartStopName() + " to " + transfer.GetEndStopName() + ", length: " + transfer.time + "s + reserve " + (usedSettings.GetMovingTransferLengthMultiplier() - 1.0) * transfer.time + "s = " + transfer.distance + "m");
+                        sb.AppendLine(transfer.ToString());
                         transferIndex++;
                         break;
                     case SegmentType.Trip:
                         UsedTrip trip = UsedTrips[tripIndex];
-                        sb.AppendLine(trip.stopPasses[trip.getOnStopIndex].DepartureTime.ToLongTimeString() + " - " + trip.stopPasses[trip.getOffStopIndex].ArrivalTime.ToLongTimeString() + ": Line " + trip.routeName + " from " + trip.GetStartStopName() + " to " + trip.GetEndStopName());
+                        //sb.AppendLine(trip.stopPasses[trip.getOnStopIndex].DepartureTime.ToLongTimeString() + " - " + trip.stopPasses[trip.getOffStopIndex].ArrivalTime.ToLongTimeString() + ": Line " + trip.routeName + " from " + trip.GetStartStopName() + " to " + trip.GetEndStopName());
+                        sb.AppendLine(trip.ToString());
                         tripIndex++;
                         break;
                     case SegmentType.Bike:
                         UsedBikeTrip bikeTrip = UsedBikeTrips[bikeTripIndex];
-                        sb.AppendLine("Bike from " + bikeTrip.GetStartStopName() + " to " + bikeTrip.GetEndStopName() + ", length: " + bikeTrip.distance + "m");
+                        //sb.AppendLine("Bike from " + bikeTrip.GetStartStopName() + " to " + bikeTrip.GetEndStopName() + ", length: " + bikeTrip.distance + "m");
+                        sb.AppendLine(bikeTrip.ToString());
                         bikeTripIndex++;
                         break;
                     default:
@@ -386,13 +393,13 @@ namespace RAPTOR_Router.Models.Results
                     }
                     else
                     {
-                        DepartureDateTime = UsedTrips[0].stopPasses[UsedTrips[0].getOnStopIndex].DepartureTime.AddSeconds(-GetTotalSecondsBeforeFirstTrip());
-                        ArrivalDateTime = UsedTrips[UsedTrips.Count - 1].stopPasses[UsedTrips[UsedTrips.Count - 1].getOffStopIndex].ArrivalTime.AddSeconds(GetTotalSecondsAfterLastTrip());
+                        DepartureDateTime = UsedTrips[0].stopPasses[UsedTrips[0].getOnStopIndex].DepartureTime.AddSeconds(-GetTotalSecondsBeforeFirstTrip()).AddSeconds(UsedTrips[0].delayWhenBoarded);
+                        ArrivalDateTime = UsedTrips[^1].stopPasses[UsedTrips[^1].getOffStopIndex].ArrivalTime.AddSeconds(UsedTrips[^1].currentDelay).AddSeconds(GetTotalSecondsAfterLastTrip());
                     }
                     break;
                 case SegmentType.Trip:
-                    DepartureDateTime = UsedTrips[0].stopPasses[UsedTrips[0].getOnStopIndex].DepartureTime;
-                    ArrivalDateTime = UsedTrips[UsedTrips.Count - 1].stopPasses[UsedTrips[UsedTrips.Count - 1].getOffStopIndex].ArrivalTime.AddSeconds(GetTotalSecondsAfterLastTrip());
+                    DepartureDateTime = UsedTrips[0].stopPasses[UsedTrips[0].getOnStopIndex].DepartureTime.AddSeconds(UsedTrips[0].delayWhenBoarded);
+                    ArrivalDateTime = UsedTrips[^1].stopPasses[UsedTrips[^1].getOffStopIndex].ArrivalTime.AddSeconds(UsedTrips[^1].currentDelay).AddSeconds(GetTotalSecondsAfterLastTrip());
                     break;
                 case SegmentType.Bike:
                     if (UsedSegmentTypes.Count == 1)
@@ -408,8 +415,8 @@ namespace RAPTOR_Router.Models.Results
                     }
                     else
                     {
-                        DepartureDateTime = UsedTrips[0].stopPasses[UsedTrips[0].getOnStopIndex].DepartureTime.AddSeconds(-GetTotalSecondsBeforeFirstTrip());
-                        ArrivalDateTime = UsedTrips[UsedTrips.Count - 1].stopPasses[UsedTrips[UsedTrips.Count - 1].getOffStopIndex].ArrivalTime.AddSeconds(GetTotalSecondsAfterLastTrip());
+                        DepartureDateTime = UsedTrips[0].stopPasses[UsedTrips[0].getOnStopIndex].DepartureTime.AddSeconds(UsedTrips[0].delayWhenBoarded).AddSeconds(-GetTotalSecondsBeforeFirstTrip());
+                        ArrivalDateTime = UsedTrips[^1].stopPasses[UsedTrips[^1].getOffStopIndex].ArrivalTime.AddSeconds(UsedTrips[^1].currentDelay).AddSeconds(GetTotalSecondsAfterLastTrip());
                     }
                     break;
                 default:
@@ -698,9 +705,39 @@ namespace RAPTOR_Router.Models.Results
             /// </summary>
             [JsonInclude]
             public Color color { get; set; }
-
+            /// <summary>
+            /// The vehicle type of the trip
+            /// </summary>
             [JsonInclude]
             public Route.VehicleType vehicleType { get; set; }
+            /// <summary>
+            /// Whether the trip has current delay information available (i.e. this typically 
+            /// means the trip is en-route, or will be in the soon future)
+            /// </summary>
+            [JsonInclude]
+            public bool hasDelayInfo { get; set; }
+            /// <summary>
+            /// The delay of the trip at the getOnStop - this can either mean the expected delay 
+            /// there (if the trip has not yet arrived there), or the actual delay at that stop 
+            /// (if the trip has already been there)
+            /// </summary>
+            [JsonInclude]
+            public int delayWhenBoarded { get; set; }
+            /// <summary>
+            /// The delay of the trip at the moment of the search. This can be different from 
+            /// delayWhenBoarded if the connection is (partly) in the past - i.e. the trip has 
+            /// already been through the getOnStop, but has not yet ended.
+            /// The value is only valid at the moment of the search, and it is expected that
+            /// the client will update this value as time progresses using the TODO: API delay update endpoint
+            /// </summary>
+            [JsonInclude]
+            public int currentDelay { get; set; }
+            /// <summary>
+            /// The trip Id of the associated trip
+            /// </summary>
+            [JsonInclude]
+            public string tripId { get; set; }
+
 
             /// <summary>
             /// Creates a new UsedTrip object
@@ -716,7 +753,11 @@ namespace RAPTOR_Router.Models.Results
                 int getOffStopIndex,
                 string routeName,
                 Color color,
-                Route.VehicleType vehicleType
+                Route.VehicleType vehicleType,
+                bool hasDelayInfo,
+                int delayWhenBoarded,
+                int currentDelay,
+                string tripId
             )
             {
                 this.stopPasses = stopPasses;
@@ -725,7 +766,22 @@ namespace RAPTOR_Router.Models.Results
                 this.routeName = routeName;
                 this.color = color;
                 this.vehicleType = vehicleType;
+                this.delayWhenBoarded = delayWhenBoarded;
+                this.hasDelayInfo = hasDelayInfo;
+                this.currentDelay = currentDelay;
+                this.tripId = tripId;
             }
+
+            public override string ToString()
+            {
+                DateTime regularDepartureTime = stopPasses[getOnStopIndex].DepartureTime;
+                DateTime actualDepartureTime = regularDepartureTime.AddSeconds(delayWhenBoarded);
+
+                DateTime regularArrivalTime = stopPasses[getOffStopIndex].ArrivalTime;
+                DateTime actualArrivalTime = regularArrivalTime.AddSeconds(currentDelay);
+                return "(" + regularDepartureTime.ToLongTimeString() + ")" + actualDepartureTime.ToLongTimeString() + " - (" + regularArrivalTime.ToLongTimeString() + ")" + actualArrivalTime.ToLongTimeString() + ": Line " + routeName + " from " + GetStartStopName() + " to " + GetEndStopName();
+            }
+
             /// <summary>
             /// Gets the name of the stop where the trip is boarded
             /// </summary>
@@ -786,6 +842,11 @@ namespace RAPTOR_Router.Models.Results
                 this.destStopInfo = destStopInfo;
                 this.time = time;
                 this.distance = distance;
+            }
+
+            public override string ToString()
+            {
+                return "Transfer from " + srcStopInfo.Name + " to " + destStopInfo.Name + ", length: " + time + "s = " + distance + "m";
             }
 
             /// <summary>
@@ -856,6 +917,11 @@ namespace RAPTOR_Router.Models.Results
                 this.distance = distance;
                 this.time = time;
                 this.remainingBikes = remainingBikes;
+            }
+
+            public override string ToString()
+            {
+                return "BIKE from " + GetStartStopName() + " to " + GetEndStopName() + ", time: " + time + " = length: " + distance + "m";
             }
 
             /// <summary>

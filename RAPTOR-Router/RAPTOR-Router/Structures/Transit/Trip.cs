@@ -15,15 +15,18 @@ namespace RAPTOR_Router.Structures.Transit
         /// A list of all stop times on the trip. The indices correspond to the indices of the stops on the associated route - i.e. the stop time for the first stop is at the index 0
         /// </summary>
         public List<StopTime> StopTimes;
+
+        public string Id;
         /// <summary>
         /// Creates a new Trip object
         /// </summary>
         /// <param name="gtfsTripStopTimes">A list of the GTFSStopTimes of the trip</param>
         /// <param name="route">The associated route on which the trip is operating</param>
-        public Trip(List<GTFSStopTime> gtfsTripStopTimes, Route route)
+        public Trip(List<GTFSStopTime> gtfsTripStopTimes, Route route, string id)
         {
             Route = route;
             StopTimes = new();
+            Id = id;
             foreach (GTFSStopTime gtfsTripStopTime in gtfsTripStopTimes)
             {
                 StopTime stopTime = new StopTime(gtfsTripStopTime.ArrivalTime, gtfsTripStopTime.DepartureTime);

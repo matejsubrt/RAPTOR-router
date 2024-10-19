@@ -79,7 +79,8 @@ namespace CLIApp
 
 				DateTime departureTime;
 #if DEBUG
-				DateTime.TryParse("04/10/2024 07:07:07", out departureTime);
+				//DateTime.TryParse("04/10/2024 07:07:07", out departureTime);
+				DateTime.TryParse("19/10/2024 17:00:00", out departureTime);
 #else
 				Console.WriteLine("Enter the departure time in the DD/MM/YYYY hh:mm:ss format (i.e. \"07/07/2023 07:07:07\" corresponds to 7.7.2023, 7:07:07):");
 				string dateTime = Console.ReadLine();

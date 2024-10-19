@@ -8,6 +8,9 @@ using RAPTOR_Router.Models.Static;
 using RAPTOR_Router.Extensions;
 using Microsoft.Extensions.Configuration;
 using System.Globalization;
+using ProtoBuf;
+using System.Net;
+using TransitRealtime;
 
 
 namespace RAPTOR_Router.RouteFinders
@@ -32,6 +35,43 @@ namespace RAPTOR_Router.RouteFinders
 		{
 			
 		}
+
+
+        private static DelayModel delayModel;
+
+
+        private static void UpdateDelayModel(object state)
+        {
+            DelayModel newDelayModel = new();
+            try
+            {
+                // Fetch the GTFS Realtime feed
+                WebRequest req = HttpWebRequest.Create("https://api.golemio.cz/v2/vehiclepositions/gtfsrt/trip_updates.pb");
+                FeedMessage feed = Serializer.Deserialize<FeedMessage>(req.GetResponse().GetResponseStream());
+
+                // Process each entity (e.g., to find the latest departure delay)
+                foreach (FeedEntity entity in feed.Entities)
+                {
+                    string tripId = entity.TripUpdate.Trip.TripId;
+                    DateOnly tripStartDate = DateOnly.ParseExact(entity.TripUpdate.Trip.StartDate, "yyyyMMdd");
+                    foreach (TripUpdate.StopTimeUpdate update in entity.TripUpdate.StopTimeUpdates)
+                    {
+                        if (update.Departure != null)
+                        {
+                            int arrivalDelay = update.Arrival.Delay;
+                            int departureDelay = update.Departure.Delay;
+                            newDelayModel.AddDelay(tripStartDate, tripId, arrivalDelay, departureDelay);
+                        }
+                    }
+                }
+
+                delayModel = newDelayModel;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error updating delay info: " + ex.Message);
+            }
+        }
 
         /// <summary>
         /// Loads all the GTFS, GBFS and forbidden crossing data from the locations provided in the config file and bike data sources
@@ -71,6 +111,9 @@ namespace RAPTOR_Router.RouteFinders
             LoadGtfsData(gtfsZipArchiveLocation, forbiddenCrossings);
 			LoadGbfsData();
 			ConnectModelsThroughTransfers(forbiddenCrossings);
+
+            UpdateDelayModel(null);
+            Timer timer = new Timer(UpdateDelayModel, null, 20000, 20000);
         }
 
 		/// <summary>
@@ -239,7 +282,7 @@ namespace RAPTOR_Router.RouteFinders
                 throw new ApplicationException("Data from a gbfs api were not loaded yet");
             }
 
-            IRouteFinder router = new UniversalRouteFinder(forward, settings, raptorModel, bikeModel);
+            IRouteFinder router = new UniversalRouteFinder(forward, settings, raptorModel, bikeModel, delayModel);
             return router;
         }
 
