@@ -33,26 +33,4 @@
             return new TimeOnly(newTicks % ticksPerDay);
         }
     }
-
-    internal class TimeComparator
-    {
-        private readonly Func<DateTime, DateTime, bool> _improvesTime;
-
-        public TimeComparator(bool forward)
-        {
-            _improvesTime = forward ?
-                (a, b) => a < b :
-                (a, b) => a > b;
-        }
-
-        public bool ImprovesTime(DateTime a, DateTime b)
-        {
-            return _improvesTime(a, b);
-        }
-
-        public bool ImprovesOrEqualsTime(DateTime a, DateTime b)
-        {
-            return a == b || _improvesTime(a, b);
-        }
-    }
 }

@@ -33,7 +33,7 @@ namespace RAPTOR_Router.RouteFinders
     /// <summary>
     /// Class used for finding the quickest connection from source to destination by earliest possible departure time
     /// </summary>
-    public class UniversalRouteFinder : IRouteFinder
+    public class BasicRouteFinder : IRouteFinder
     {
         /// <summary>
         /// The transit model holding all the static information about the transit network
@@ -46,7 +46,7 @@ namespace RAPTOR_Router.RouteFinders
         /// <summary>
         /// The search model, that the router will use for the connection searching algorithm
         /// </summary>
-        private UniversalSearchModel searchModel;
+        private SearchModel searchModel;
 
         private DelayModel delayModel;
 
@@ -102,7 +102,7 @@ namespace RAPTOR_Router.RouteFinders
         /// <param name="settings">The settings to be used for the connection search</param>
         /// <param name="transitModel">The transit model holding all the static information about the transit network</param>
         /// <param name="bikeModel">The bike model holding all the information about the shared bike systems and their stations</param>
-        internal UniversalRouteFinder(bool forward, Settings settings, TransitModel transitModel, BikeModel bikeModel, DelayModel delayModel)
+        internal BasicRouteFinder(bool forward, Settings settings, TransitModel transitModel, BikeModel bikeModel, DelayModel delayModel)
         {
             this.settings = settings;
             this.transitModel = transitModel;
@@ -885,7 +885,7 @@ namespace RAPTOR_Router.RouteFinders
             AssignStopsAndStationsByDirection();
 
 
-            this.searchModel = new UniversalSearchModel(forward, searchBeginStops, searchEndStops, searchBeginBikeStations, searchEndBikeStations,
+            this.searchModel = new SearchModel(forward, searchBeginStops, searchEndStops, searchBeginBikeStations, searchEndBikeStations,
                 searchBeginTime, settings, delayModel);
 
 

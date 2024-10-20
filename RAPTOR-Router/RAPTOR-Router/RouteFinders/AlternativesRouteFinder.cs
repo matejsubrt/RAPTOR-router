@@ -14,7 +14,7 @@ using System.Collections;
 
 namespace RAPTOR_Router.RouteFinders
 {
-    public class DirectRouteFinder
+    public class AlternativesRouteFinder
     {
         /// <summary>
         /// The transit model holding all the static information about the transit network
@@ -27,7 +27,7 @@ namespace RAPTOR_Router.RouteFinders
         private List<Stop> srcStops;
         private List<Stop> destStops;
 
-        internal DirectRouteFinder(TransitModel transitModel, DelayModel delayModel)
+        internal AlternativesRouteFinder(TransitModel transitModel, DelayModel delayModel)
         {
             this.transitModel = transitModel;
             this.delayModel = delayModel;

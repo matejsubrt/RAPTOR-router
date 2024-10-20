@@ -45,21 +45,4 @@ namespace RAPTOR_Router.Extensions
             return false;
         }
     }
-
-    internal class IndexComparator
-    {
-        private readonly Func<int, int, bool> _precedesInSearchDirection;
-
-        public IndexComparator(bool forward)
-        {
-            _precedesInSearchDirection = forward ?
-                (a, b) => a < b :
-                (a, b) => a > b;
-        }
-
-        public bool PrecedesInSearchDirection(int a, int b)
-        {
-            return _precedesInSearchDirection(a, b);
-        }
-    }
 }

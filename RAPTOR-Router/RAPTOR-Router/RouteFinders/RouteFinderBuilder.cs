@@ -23,21 +23,23 @@ namespace RAPTOR_Router.RouteFinders
 		/// <summary>
 		/// The transit model that the routers should use
 		/// </summary>
-		private TransitModel? raptorModel;
+		private static TransitModel? raptorModel;
         /// <summary>
         /// The bike model the routers should use
         /// </summary>
-		private BikeModel? bikeModel;
-		/// <summary>
-		/// Initializes the builder.
-		/// </summary>
-		public RouteFinderBuilder()
+		private static BikeModel? bikeModel;
+
+        private static DelayModel delayModel;
+        /// <summary>
+        /// Initializes the builder.
+        /// </summary>
+        public RouteFinderBuilder()
 		{
 			
 		}
 
 
-        private static DelayModel delayModel;
+        
 
 
         private static void UpdateDelayModel(object state)
@@ -129,7 +131,7 @@ namespace RAPTOR_Router.RouteFinders
 				raptor = new TransitModel(gtfs, forbiddenCrossings);
 			}
 			GC.Collect();
-			this.raptorModel = raptor;
+			raptorModel = raptor;
 		}
 
         /// <summary>
@@ -228,48 +230,6 @@ namespace RAPTOR_Router.RouteFinders
             }
         }
 
-        /// <summary>
-        /// Creates a new backward route finder with the provided settings
-        /// </summary>
-        /// <remarks>Used for connection search by latest possible arrival to destination</remarks>
-        /// <param name="settings">The settings to use for the search</param>
-        /// <returns>The created RouteFinder object</returns>
-        /// <exception cref="ApplicationException">Thrown if the neccessary data were not properly loaded yet</exception>
-        public IRouteFinder CreateForwardRouteFinder(Settings settings)
-        {
-            if(raptorModel is null)
-            {
-                throw new ApplicationException("Data from a gtfs archive were not loaded yet");
-            }
-            if(bikeModel is null)
-            {
-                throw new ApplicationException("Data from a gbfs api were not loaded yet");
-            }
-            IRouteFinder router = new ForwardRouteFinder(settings, raptorModel, bikeModel);
-            return router;
-        }
-
-        /// <summary>
-        /// Creates a new forward route finder with the provided settings
-        /// </summary>
-        /// <remarks>Used for connection search by earliest possible departure from source</remarks>
-        /// <param name="settings">The settings to use for the search</param>
-        /// <returns>The created RouteFinder object</returns>
-        /// <exception cref="ApplicationException">Thrown if the neccessary data were not properly loaded yet</exception>
-		public IRouteFinder CreateBackwardRouteFinder(Settings settings)
-		{
-			if (raptorModel is null)
-			{
-				throw new ApplicationException("Data from a gtfs archive were not loaded yet");
-			}
-			if (bikeModel is null)
-			{
-				throw new ApplicationException("Data from a gbfs api were not loaded yet");
-			}
-            //IBikeRouteFinder router = new ForwardRouteFinder(settings, raptorModel, bikeModel);
-            IRouteFinder router = new BackwardRouteFinder(settings, raptorModel, bikeModel);
-            return router;
-		}
 
         public IRouteFinder CreateUniversalRouteFinder(bool forward, Settings settings)
         {
@@ -283,11 +243,11 @@ namespace RAPTOR_Router.RouteFinders
                 throw new ApplicationException("Data from a gbfs api were not loaded yet");
             }
 
-            IRouteFinder router = new UniversalRouteFinder(forward, settings, raptorModel, bikeModel, delayModel);
+            IRouteFinder router = new BasicRouteFinder(forward, settings, raptorModel, bikeModel, delayModel);
             return router;
         }
 
-        public DirectRouteFinder CreateDirectRouteFinder()
+        public AlternativesRouteFinder CreateDirectRouteFinder()
         {
             if (raptorModel is null)
             {
@@ -299,7 +259,7 @@ namespace RAPTOR_Router.RouteFinders
                 throw new ApplicationException("Data from a gbfs api were not loaded yet");
             }
 
-            DirectRouteFinder router = new DirectRouteFinder(raptorModel, delayModel);
+            AlternativesRouteFinder router = new AlternativesRouteFinder(raptorModel, delayModel);
             return router;
         }
 
@@ -318,23 +278,6 @@ namespace RAPTOR_Router.RouteFinders
 			}
 			return raptorModel.GetStopsByName(stopName).Count != 0;
 		}
-        /// <summary>
-        /// Validates a settings object - checks if all the settings are within the allowed range (of the enum values)
-        /// </summary>
-        /// <param name="settings">The settings object to check</param>
-        /// <returns>If the settings are correct to be used by the router</returns>
-		//public bool ValidateSettings(Settings settings)
-		//{
-		//	bool correct = true;
-
-		//	correct &= Enum.IsDefined(typeof(ComfortBalance), settings.ComfortBalance);
-		//	correct &= Enum.IsDefined(typeof(WalkingPreference), settings.WalkingPreference);
-		//	correct &= Enum.IsDefined(typeof(TransferTime), settings.TransferTime);
-		//	correct &= settings.WalkingPace >= 2 && settings.WalkingPace <= 60;
-		//	correct &= settings.CyclingPace >= 0 && settings.CyclingPace <= 60;
-
-		//	return correct;
-		//}
         /// <summary>
         /// Validates the provided coordinates - checks if they are within the allowed range
         /// </summary>

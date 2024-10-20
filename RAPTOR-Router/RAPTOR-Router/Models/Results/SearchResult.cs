@@ -16,6 +16,9 @@ namespace RAPTOR_Router.Models.Results
     /// <remarks>If running the program as an API, this class is serialized and returned as json in the response body</remarks>
     public class SearchResult
     {
+        /// <summary>
+        /// The settings used for the search
+        /// </summary>
         private Settings usedSettings;
         /// <summary>
         /// The public transit trips used during the best found connection
@@ -141,6 +144,13 @@ namespace RAPTOR_Router.Models.Results
             
         }
 
+        /// <summary>
+        /// Creates the list of stop passes for a trip
+        /// </summary>
+        /// <param name="routeStops">The stop list of the trip</param>
+        /// <param name="stopTimes">The stop times of the trip</param>
+        /// <param name="arrivalDateTime">The time of arrival</param>
+        /// <returns></returns>
         public static List<StopPass> GetStopPassesList(List<Stop> routeStops, List<StopTime> stopTimes, DateTime arrivalDateTime)
         {
             List<StopPass> stopPasses = new();

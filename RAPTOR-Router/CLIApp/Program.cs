@@ -54,8 +54,8 @@ namespace CLIApp
 			builder.LoadAllData();
 
 			//IRouteFinder router1 = builder.CreateBackwardRouteFinder(settings);
-            //IRouteFinder router1 = builder.CreateUniversalRouteFinder(forward, settings);
-			DirectRouteFinder router = builder.CreateDirectRouteFinder();
+            IRouteFinder router1 = builder.CreateUniversalRouteFinder(forward, settings);
+			//DirectRouteFinder router = builder.CreateDirectRouteFinder();
 
 
 
@@ -91,21 +91,21 @@ namespace CLIApp
 				}
 #endif
 
-                var result = router.GetAlternativeTripe(sourceStop, destStop, departureTime, 10, false);
-                if (result is null)
-                {
-                    Console.WriteLine("Connection could not be found, please try again");
-                }
-                else
-                {
-                    foreach (var trip in result)
-                    {
-                        Console.WriteLine(trip.ToString());
-                    }
-                }
+                //var result = router.GetAlternativeTripe(sourceStop, destStop, departureTime, 10, false);
+                //if (result is null)
+                //{
+                //    Console.WriteLine("Connection could not be found, please try again");
+                //}
+                //else
+                //{
+                //    foreach (var trip in result)
+                //    {
+                //        Console.WriteLine(trip.ToString());
+                //    }
+                //}
                 
 
-				/*var result1 = router1.FindConnection(sourceStop, destStop, departureTime);
+				var result1 = router1.FindConnection(sourceStop, destStop, departureTime);
 				//var result1 = router1.FindConnection(50.1158, 14.4476, 50.1051, 14.4743, departureTime);
                 //var result1 = router1.FindConnection(50.1158, 14.4476, 50.0683, 14.3030, departureTime);
                 if (result1 is null)
@@ -119,9 +119,9 @@ namespace CLIApp
 
                 //router1 = builder.CreateBackwardRouteFinder(settings);
 				router1 = builder.CreateUniversalRouteFinder(forward, settings);
-				*/
+				
 
-				router = builder.CreateDirectRouteFinder();
+				//router = builder.CreateDirectRouteFinder();
 			}
 		}
 	}

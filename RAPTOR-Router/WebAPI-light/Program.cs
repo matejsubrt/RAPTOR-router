@@ -172,14 +172,15 @@ namespace WebAPI_light
 
 
             IRouteFinder router;
-            if (byEarliestDeparture)
-            {
-                router = builder.CreateForwardRouteFinder(settings);
-            }
-            else
-            {
-                router = builder.CreateBackwardRouteFinder(settings);
-            }
+            //if (byEarliestDeparture)
+            //{
+            //    router = builder.CreateForwardRouteFinder(settings);
+            //}
+            //else
+            //{
+            //    router = builder.CreateBackwardRouteFinder(settings);
+            //}
+            router = builder.CreateUniversalRouteFinder(byEarliestDeparture, settings);
             var result = router.FindConnection(srcStopName, destStopName, dateTime);
 
             if(result != null)
@@ -244,14 +245,15 @@ namespace WebAPI_light
 
 
             IRouteFinder router;
-            if (byEarliestDeparture)
-            {
-                router = builder.CreateForwardRouteFinder(settings);
-            }
-            else
-            {
-                router = builder.CreateBackwardRouteFinder(settings);
-            }
+            //if (byEarliestDeparture)
+            //{
+            //    router = builder.CreateForwardRouteFinder(settings);
+            //}
+            //else
+            //{
+            //    router = builder.CreateBackwardRouteFinder(settings);
+            //}
+            router = builder.CreateUniversalRouteFinder(byEarliestDeparture, settings);
             var result = router.FindConnection(srcLat, srcLon, destLat, destLon, dateTime);
 
             if (result != null)
