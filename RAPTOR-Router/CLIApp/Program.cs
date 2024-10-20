@@ -80,7 +80,7 @@ namespace CLIApp
 				DateTime departureTime;
 #if DEBUG
 				//DateTime.TryParse("04/10/2024 07:07:07", out departureTime);
-				DateTime.TryParse("19/10/2024 17:00:00", out departureTime);
+				DateTime.TryParse("20/10/2024 12:00:00", out departureTime);
 #else
 				Console.WriteLine("Enter the departure time in the DD/MM/YYYY hh:mm:ss format (i.e. \"07/07/2023 07:07:07\" corresponds to 7.7.2023, 7:07:07):");
 				string dateTime = Console.ReadLine();
@@ -91,11 +91,19 @@ namespace CLIApp
 				}
 #endif
 
-                var result = router.GetAlternativeTripe(sourceStop, destStop, departureTime, 10, true);
-                foreach (var trip in result)
+                var result = router.GetAlternativeTripe(sourceStop, destStop, departureTime, 10, false);
+                if (result is null)
                 {
-                    Console.WriteLine(trip.ToString());
+                    Console.WriteLine("Connection could not be found, please try again");
                 }
+                else
+                {
+                    foreach (var trip in result)
+                    {
+                        Console.WriteLine(trip.ToString());
+                    }
+                }
+                
 
 				/*var result1 = router1.FindConnection(sourceStop, destStop, departureTime);
 				//var result1 = router1.FindConnection(50.1158, 14.4476, 50.1051, 14.4743, departureTime);

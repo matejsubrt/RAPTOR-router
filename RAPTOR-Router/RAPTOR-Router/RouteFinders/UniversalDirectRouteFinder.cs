@@ -45,7 +45,7 @@ namespace RAPTOR_Router.RouteFinders
             List<Stop> alternativeStops = new List<Stop>();
             alternativeStops.Add(stop); // Add the original stop
             alternativeStops.AddRange(transitModel.GetStopsByName(stop.Name)); // Add all stops with the same name
-            alternativeStops.AddRange(transitModel.GetStopsByLocation(stop.Coords.Lat, stop.Coords.Lon, 100)); // Add all stops within 100m
+            alternativeStops.AddRange(transitModel.GetStopsByLocation(stop.Coords.Lat, stop.Coords.Lon, 150)); // Add all stops within 150m
             return alternativeStops;
         }
 
@@ -53,8 +53,16 @@ namespace RAPTOR_Router.RouteFinders
         public List<SearchResult.UsedTrip> GetAlternativeTripe(string srcStopName, string destStopName, DateTime time,
             int count, bool previous)
         {
-            Stop srcStop = transitModel.GetStopsByName(srcStopName).First();
-            Stop destStop = transitModel.GetStopsByName(destStopName).First();
+            List<Stop> srcStops = transitModel.GetStopsByName(srcStopName);
+            List<Stop> destStops = transitModel.GetStopsByName(destStopName);
+
+            if (srcStops.Count == 0 || destStops.Count == 0)
+            {
+                return null;
+            }
+
+            Stop srcStop = srcStops.First();
+            Stop destStop = destStops.First();
             return GetAlternativeTrips(srcStop.Id, destStop.Id, time, count, previous);
         }
 
@@ -183,6 +191,11 @@ namespace RAPTOR_Router.RouteFinders
             List<Tuple<DateOnly, Trip>> GetAlternativeTripsOnRoute(Trip firstTrip, DateOnly tripDate, int count, bool previous)
             {
                 List<Tuple<DateOnly, Trip>> result = new();
+                if (!previous)
+                {
+                    result.Add(new Tuple<DateOnly, Trip>(tripDate, firstTrip));
+                }
+
 
                 Route route = firstTrip.Route;
                 List<Trip> tripsOnDate = route.RouteTrips[tripDate];

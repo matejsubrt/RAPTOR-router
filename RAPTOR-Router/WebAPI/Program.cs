@@ -72,7 +72,7 @@ namespace WebAPI
             }
 
             // Validate the settings
-            if (!builder.ValidateSettings(settings))
+            if (!settings.ValidateParameterValues())
             {
                 var message = "Invalid settings";
                 HttpError err = new HttpError(message);

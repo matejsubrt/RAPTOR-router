@@ -217,7 +217,8 @@ namespace RAPTOR_Router.Models.Results
             UsedTransfer usedTransfer = new UsedTransfer(
                 srcStopInfo,
                 destStopInfo,
-                transfer.GetTransferTime(usedSettings.WalkingPace),
+                usedSettings.GetAdjustedWalkingTransferTime(transfer.Distance),
+                //transfer.GetTransferTime(usedSettings.WalkingPace),
                 transfer.Distance
             );
             if (toEnd)
@@ -287,7 +288,8 @@ namespace RAPTOR_Router.Models.Results
             UsedTransfer usedTransfer = new UsedTransfer(
                 srcStopInfo,
                 destStopInfo,
-                transfer.GetTransferTime(usedSettings.WalkingPace),
+                usedSettings.GetAdjustedWalkingTransferTime(transfer.Distance),
+                //transfer.GetTransferTime(usedSettings.WalkingPace),
                 transfer.Distance
             );
             if (toEnd)
@@ -319,7 +321,7 @@ namespace RAPTOR_Router.Models.Results
             UsedTransfer usedTransfer = new UsedTransfer(
                 srcStopInfo,
                 destStopInfo,
-                transfer.GetTransferTime(usedSettings.WalkingPace),
+                usedSettings.GetAdjustedWalkingTransferTime(transfer.Distance),
                 transfer.Distance
             );
             if (toEnd)

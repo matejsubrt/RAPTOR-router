@@ -174,7 +174,8 @@ namespace RAPTOR_Router.Models.Dynamic
                 if (searchEndCustomRoutePoint is not null)
                 {
                     CustomTransfer transfer = searchEndCustomRoutePoint.GetTransferWithNormalRP(stop);
-                    DateTime arrivalTimeAtDestCustomRP = currStopInfo.Reaches[round].Time.AddSeconds(timeMpl * transfer.GetTransferTime(settingsUsed.WalkingPace));
+                    int transferTime = timeMpl * settingsUsed.GetAdjustedWalkingTransferTime(transfer.Distance);
+                    DateTime arrivalTimeAtDestCustomRP = currStopInfo.Reaches[round].Time.AddSeconds(transferTime);//timeMpl * transfer.GetTransferTime(settingsUsed.WalkingPace));
                     result.AddUsedTransfer(transfer, arrivalTimeAtDestCustomRP, !forward);
                 }
 
@@ -477,7 +478,7 @@ namespace RAPTOR_Router.Models.Dynamic
                 {
                     if (searchEndCustomRoutePoint.transferDistances.TryGetValue(stop, out var distance))
                     {
-                        int transferDuration = timeMpl * (int)(distance * settingsUsed.WalkingPace * settingsUsed.GetMovingTransferLengthMultiplier());
+                        int transferDuration = settingsUsed.GetAdjustedWalkingTransferTime(distance);//timeMpl * (int)(distance * settingsUsed.WalkingPace * settingsUsed.GetMovingTransferLengthMultiplier());
                         DateTime arrivalAtCustomRP = reachTime.AddSeconds(transferDuration);
                         if (comp.ImprovesTime(arrivalAtCustomRP, GetCurrentBestSearchEndTime()))// arrivalAtCustomRP < GetCurrentBestSearchEndTime())
                         {
@@ -521,7 +522,7 @@ namespace RAPTOR_Router.Models.Dynamic
                 {
                     if (searchEndCustomRoutePoint.transferDistances.TryGetValue(realDestBikeStation, out var distance))
                     {
-                        int transferDuration = timeMpl * (int)(distance * settingsUsed.WalkingPace * settingsUsed.GetMovingTransferLengthMultiplier());// + settingsUsed.BikeLockTime;
+                        int transferDuration = timeMpl * settingsUsed.GetAdjustedWalkingTransferTime(distance);//(int)(distance * settingsUsed.WalkingPace * settingsUsed.GetMovingTransferLengthMultiplier());// + settingsUsed.BikeLockTime;
                         DateTime reachAtCustomRP = reachTime.AddSeconds(transferDuration);
                         if (comp.ImprovesTime(reachAtCustomRP, GetCurrentBestSearchEndTime()))    //arrivalAtCustomRP < GetCurrentBestSearchEndTime())
                         {

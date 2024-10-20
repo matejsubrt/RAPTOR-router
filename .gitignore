@@ -40,3 +40,6 @@
 /RAPTOR-Router/OSMRouter/data
 /RAPTOR-Router/data
 /RAPTOR-Router/RAPTOR-Router/.vs
+/RAPTOR-Router/Visual Studio 2022/Visualizers
+/RAPTOR-Router/RAPTOR-Router.sln.DotSettings.user
+/RAPTOR-Router/WebAPI/WebAPI.http

@@ -66,6 +66,7 @@ namespace RAPTOR_Router.RouteFinders
                 }
 
                 delayModel = newDelayModel;
+                Console.WriteLine("Successfully updated delay data");
             }
             catch (Exception ex)
             {
@@ -322,18 +323,18 @@ namespace RAPTOR_Router.RouteFinders
         /// </summary>
         /// <param name="settings">The settings object to check</param>
         /// <returns>If the settings are correct to be used by the router</returns>
-		public bool ValidateSettings(Settings settings)
-		{
-			bool correct = true;
+		//public bool ValidateSettings(Settings settings)
+		//{
+		//	bool correct = true;
 
-			correct &= Enum.IsDefined(typeof(ComfortBalance), settings.ComfortBalance);
-			correct &= Enum.IsDefined(typeof(WalkingPreference), settings.WalkingPreference);
-			correct &= Enum.IsDefined(typeof(TransferTime), settings.TransferTime);
-			correct &= settings.WalkingPace >= 2 && settings.WalkingPace <= 60;
-			correct &= settings.CyclingPace >= 0 && settings.CyclingPace <= 60;
+		//	correct &= Enum.IsDefined(typeof(ComfortBalance), settings.ComfortBalance);
+		//	correct &= Enum.IsDefined(typeof(WalkingPreference), settings.WalkingPreference);
+		//	correct &= Enum.IsDefined(typeof(TransferTime), settings.TransferTime);
+		//	correct &= settings.WalkingPace >= 2 && settings.WalkingPace <= 60;
+		//	correct &= settings.CyclingPace >= 0 && settings.CyclingPace <= 60;
 
-			return correct;
-		}
+		//	return correct;
+		//}
         /// <summary>
         /// Validates the provided coordinates - checks if they are within the allowed range
         /// </summary>

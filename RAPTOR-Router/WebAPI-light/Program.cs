@@ -106,8 +106,8 @@ namespace WebAPI_light
                 HandleRequestCoordToCoord(routerBuilder, request.srcLat, request.srcLon, request.destLat, request.destLon, request.dateTime, request.byEarliestDeparture, request.settings))
                 .WithName("GetConnectionByCoords")
                 .WithOpenApi();
-            app.MapPost("/alternative-trips", (AlternativeTripsRequest request) =>
-                    HandleAlternativeTripsRequest(request))
+            app.MapPost("/alternative-trips", (AlternativeTripsRequest request) => 
+                HandleAlternativeTripsRequest(request))
                 .WithName("GetAlternativeTrips")
                 .WithOpenApi();
             app.Run();
@@ -115,18 +115,18 @@ namespace WebAPI_light
         }
 
 
-        static List<SearchResult.UsedTrip> HandleAlternativeTripsRequest(AlternativeTripsRequest request)
+        static IResult HandleAlternativeTripsRequest(AlternativeTripsRequest request)
         {
             DateTime dateTime;
             if (!DateTime.TryParse(request.dateTime, out dateTime))
             {
                 var message = "Invalid DateTime format";
                 HttpError err = new HttpError(message);
-                //return Results.BadRequest(err);
+                return Results.BadRequest(err);
             }
             var routeFinder = routerBuilder.CreateDirectRouteFinder();
             var result = routeFinder.GetAlternativeTrips(request.srcStopId, request.destStopId, dateTime, request.count, request.previous);
-            return result;
+            return Results.Ok(result);
         }
 
         static IResult HandleRequestStopToStop(RouteFinderBuilder builder, string srcStopName, string destStopName, string dateTimeString, bool byEarliestDeparture, Settings settings)
@@ -141,7 +141,7 @@ namespace WebAPI_light
             }
 
             // Validate the settings
-            if (!builder.ValidateSettings(settings))
+            if (!settings.ValidateParameterValues())
             {
                 var message = "Invalid settings";
                 HttpError err = new HttpError(message);
@@ -204,7 +204,7 @@ namespace WebAPI_light
             }
 
             // Validate the settings
-            if (!builder.ValidateSettings(settings))
+            if (!settings.ValidateParameterValues())
             {
                 var message = "Invalid settings";
                 HttpError err = new HttpError(message);

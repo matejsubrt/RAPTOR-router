@@ -68,7 +68,23 @@
             return new Settings();
         }
 
+        public bool ValidateParameterValues()
+        {
+            bool correct = true;
 
+            correct &= Enum.IsDefined(typeof(ComfortBalance), ComfortBalance);
+            correct &= Enum.IsDefined(typeof(WalkingPreference), WalkingPreference);
+            correct &= Enum.IsDefined(typeof(TransferTime), TransferTime);
+            correct &= Enum.IsDefined(typeof(BikeTripBuffer), BikeTripBuffer);
+
+            correct &= WalkingPace >= 2 && WalkingPace <= 60;
+            correct &= CyclingPace > 0 && CyclingPace <= 60;
+
+            correct &= BikeUnlockTime >= 0 && BikeUnlockTime <= 120;
+            correct &= BikeLockTime >= 0 && BikeLockTime <= 120;
+
+            return correct;
+        }
 
 
         /// <summary>

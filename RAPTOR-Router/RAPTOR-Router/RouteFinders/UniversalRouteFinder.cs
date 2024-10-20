@@ -172,7 +172,7 @@ namespace RAPTOR_Router.RouteFinders
                 if (imprToPoint is Stop)
                 {
                     // TODO: check - shouldnt there be some transferLengthMultiplier?
-                    int transferDuration = timeMpl * transfer.GetTransferTime(settings.WalkingPace);
+                    int transferDuration = timeMpl * settings.GetAdjustedWalkingTransferTime(transfer.Distance);//transfer.GetTransferTime(settings.WalkingPace);
                     DateTime arrivalTime = searchModel.GetSearchBeginTime().AddSeconds(transferDuration);
                     searchModel.SetBestReachTime(imprToPoint, arrivalTime);
                     searchModel.SetTransferReachInRound(imprToPoint, transfer, arrivalTime, round);
@@ -180,7 +180,7 @@ namespace RAPTOR_Router.RouteFinders
                 }
                 else if (useSharedBikes && imprToPoint is BikeStation)
                 {
-                    int transferDuration = timeMpl * (transfer.GetTransferTime(settings.WalkingPace));// + settings.BikeUnlockTime);
+                    int transferDuration = timeMpl * settings.GetAdjustedWalkingTransferTime(transfer.Distance);//transfer.GetTransferTime(settings.WalkingPace));// + settings.BikeUnlockTime);
                     DateTime arrivalTime = searchModel.GetSearchBeginTime().AddSeconds(transferDuration);
                     searchModel.SetBestReachTime(imprToPoint, arrivalTime);
                     searchModel.SetTransferReachInRound(imprToPoint, transfer, arrivalTime, round);
