@@ -26,6 +26,13 @@ namespace RAPTOR_Router.Models.Static
             {
                 arrivalDelay = _stopDelays[stopIndex].Item1;
                 departureDelay = _stopDelays[stopIndex].Item2;
+
+                if (arrivalDelay < -600 || departureDelay < -600)
+                {
+                    arrivalDelay = 0;
+                    departureDelay = 0;
+                    return false;
+                }
                 return true;
             }
 

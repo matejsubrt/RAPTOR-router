@@ -102,7 +102,7 @@ namespace WebAPI
             }
 
 
-            //IRouteFinder router;
+            IRouteFinder router = builder.CreateUniversalRouteFinder(byEarliestDeparture, settings);
             //if (byEarliestDeparture)
             //{
             //    router = builder.CreateForwardRouteFinder(settings);
@@ -111,18 +111,18 @@ namespace WebAPI
             //{
             //    router = builder.CreateBackwardRouteFinder(settings);
             //}
-            //var result = router.FindConnection(srcStopName, destStopName, dateTime);
+            var result = router.FindConnection(srcStopName, destStopName, dateTime);
 
-            //if (result != null)
-            //{
-            //    return Results.Ok(result);
-            //}
-            //else
-            //{
-            //    var message = "No connection found";
-            //    HttpError err = new HttpError(message);
-            //    return Results.NotFound(err);
-            //}
+            if (result != null)
+            {
+                return Results.Ok(result);
+            }
+            else
+            {
+                var message = "No connection found";
+                HttpError err = new HttpError(message);
+                return Results.NotFound(err);
+            }
         }
         static IResult HandleRequestCoordToCoord(RouteFinderBuilder builder, double srcLat, double srcLon, double destLat, double destLon, string dateTimeString, bool byEarliestDeparture, Settings settings)
         {
@@ -174,7 +174,7 @@ namespace WebAPI
             }
 
 
-            //IRouteFinder router;
+            IRouteFinder router = builder.CreateUniversalRouteFinder(byEarliestDeparture, settings);
             //if (byEarliestDeparture)
             //{
             //    router = builder.CreateForwardRouteFinder(settings);
@@ -183,18 +183,18 @@ namespace WebAPI
             //{
             //    router = builder.CreateBackwardRouteFinder(settings);
             //}
-            //var result = router.FindConnection(srcLat, srcLon, destLat, destLon, dateTime);
+            var result = router.FindConnection(srcLat, srcLon, destLat, destLon, dateTime);
 
-            //if (result != null)
-            //{
-            //    return Results.Ok(result);
-            //}
-            //else
-            //{
-            //    var message = "No connection found";
-            //    HttpError err = new HttpError(message);
-            //    return Results.NotFound(err);
-            //}
+            if (result != null)
+            {
+                return Results.Ok(result);
+            }
+            else
+            {
+                var message = "No connection found";
+                HttpError err = new HttpError(message);
+                return Results.NotFound(err);
+            }
         }
     }
 }

@@ -525,10 +525,6 @@ namespace RAPTOR_Router.RouteFinders
                 TripStopDelays? tripStopDelays = null;
                 if (tripHasDelayData)
                 {
-                    if (currTrip.Route.ShortName == "154" && round == 1)
-                    {
-                        Console.WriteLine();
-                    }
                     tripStopDelays = delayModel.GetTripStopDelays(currTripDate, currTrip.Id);
                 }
 
@@ -550,11 +546,6 @@ namespace RAPTOR_Router.RouteFinders
                 void ProcessStopAtIndex(int i)
                 {
                     Stop currStop = route.RouteStops[i];
-
-                    if (currStop.Name == "Obchodní centrum Hostivař" && round == 1 && currTrip.Route.ShortName == "154")
-                    {
-                        Console.WriteLine();
-                    }
 
 
                     int daysToAddWhenOverMidnight = forward ? 1 : -1;
@@ -861,16 +852,16 @@ namespace RAPTOR_Router.RouteFinders
             return new Tuple<List<Stop>, List<BikeStation>>(stops, bikeStations);
         }
 
-
-
-        private SearchResult FindConnection(List<Stop> srcStops, List<BikeStation> srcBikeStations, List<Stop> destStops, List<BikeStation> destBikeStations, DateTime searchBeginTime, bool srcByCoord, bool destByCoord, Coordinates srcCoords = default, Coordinates destCoords = default)
+        private bool RunRAPTOR(List<Stop> srcStops, List<BikeStation> srcBikeStations, List<Stop> destStops,
+            List<BikeStation> destBikeStations, DateTime searchBeginTime, bool srcByCoord, bool destByCoord,
+            Coordinates srcCoords = default, Coordinates destCoords = default)
         {
             Stopwatch sw = Stopwatch.StartNew();
             // Sanity check
 
             if (StopListsAreIncorrect())
             {
-                return null;
+                return false;
             }
 
 
@@ -936,9 +927,10 @@ namespace RAPTOR_Router.RouteFinders
             markedRoutesWithReachedTrips.Clear();
 
             sw.Stop();
-            Console.WriteLine("Search took: " + sw.Elapsed);
+            return true;
+            //Console.WriteLine("Search took: " + sw.Elapsed);
 
-            return searchModel.ExtractResult(bikeModel);
+            //return searchModel.ExtractResult(bikeModel);
 
 
             bool StopListsAreIncorrect()
@@ -1056,6 +1048,49 @@ namespace RAPTOR_Router.RouteFinders
                 return (forward && destByCoord) || (!forward && srcByCoord);
             }
         }
+
+        private SearchResult FindConnection(List<Stop> srcStops, List<BikeStation> srcBikeStations, List<Stop> destStops, List<BikeStation> destBikeStations, DateTime searchBeginTime, bool srcByCoord, bool destByCoord, Coordinates srcCoords = default, Coordinates destCoords = default)
+        {
+            if (RunRAPTOR(srcStops, srcBikeStations, destStops, destBikeStations, searchBeginTime, srcByCoord,
+                    destByCoord, srcCoords, destCoords))
+            {
+                return searchModel.ExtractResult(bikeModel);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private List<SearchResult>? FindConnectionWithAlternatives(List<Stop> srcStops,
+            List<BikeStation> srcBikeStations, List<Stop> destStops, List<BikeStation> destBikeStations,
+            DateTime searchBeginTime, bool srcByCoord, bool destByCoord)
+        {
+            if (RunRAPTOR(srcStops, srcBikeStations, destStops, destBikeStations, searchBeginTime, srcByCoord,
+                    destByCoord))
+            {
+                return searchModel.ExtractResultWithAlternatives(bikeModel);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public List<SearchResult>? FindConnectionWithAlternatives(string sourceStop, string destStop,
+            DateTime departureTime)
+        {
+            if (sourceStop == destStop)
+            {
+                return null;
+            }
+            List<Stop> srcStops = transitModel.GetStopsByName(sourceStop);
+            List<Stop> destStops = transitModel.GetStopsByName(destStop);
+            List<BikeStation> srcBikeStations = new List<BikeStation>();
+            List<BikeStation> destBikeStations = new List<BikeStation>();
+            return FindConnectionWithAlternatives(srcStops, srcBikeStations, destStops, destBikeStations, departureTime, false, false);
+        }
+
 
         /// <summary>
         /// Finds the connection with the earliest arrival to a destination stop with the provided name, that departs from the source stop after the specified time.

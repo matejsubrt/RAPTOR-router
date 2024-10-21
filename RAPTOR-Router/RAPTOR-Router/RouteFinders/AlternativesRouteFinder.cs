@@ -19,13 +19,12 @@ namespace RAPTOR_Router.RouteFinders
         /// <summary>
         /// The transit model holding all the static information about the transit network
         /// </summary>
-        private TransitModel transitModel;
+        private readonly TransitModel transitModel;
 
-        private DelayModel delayModel;
-
-
-        private List<Stop> srcStops;
-        private List<Stop> destStops;
+        /// <summary>
+        /// The delay model holding the delay data for the transit network
+        /// </summary>
+        private readonly DelayModel delayModel;
 
         internal AlternativesRouteFinder(TransitModel transitModel, DelayModel delayModel)
         {
@@ -145,6 +144,7 @@ namespace RAPTOR_Router.RouteFinders
                     DateOnly arrivalDate = (arrivalTime < altTrip.StopTimes[0].DepartureTime) ? altTripDate.AddDays(1) : altTripDate;
                     DateTime arrivalDateTime = DateTimeExtensions.FromDateAndTime(arrivalDate, arrivalTime);
                     int currTripDelay = GetCurrentTripDelay(altTrip, altTripDate);
+                    //TODO: error next line 21.10. 16:50 U4965Z1 U1748Z1
                     sortedTrips.Add(arrivalDateTime.AddSeconds(destArrivalDelay), new Tuple<Trip, int, int, bool, int, int>(altTrip, srcIndex, destIndex, hasSrcDelayData, srcDepartureDelay, currTripDelay));
                 }
             }

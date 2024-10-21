@@ -122,6 +122,319 @@ namespace RAPTOR_Router.Models.Dynamic
         }
 
 
+        private SearchResult? CreateResultFromStopInRound(Stop? stop, int round, BikeModel bikeModel)
+        {
+            if (stop is null)
+            {
+                return null;
+            }
+            SearchResult result = new(settingsUsed);
+            StopRoutingInfo currStopInfo = routingInfo[stop];
+
+            // TODO: This should be done when finding the best dest stop, not after!!!
+            if (searchEndCustomRoutePoint is not null)
+            {
+                CustomTransfer transfer = searchEndCustomRoutePoint.GetTransferWithNormalRP(stop);
+                int transferTime = timeMpl * settingsUsed.GetAdjustedWalkingTransferTime(transfer.Distance);
+                DateTime arrivalTimeAtDestCustomRP = currStopInfo.Reaches[round].Time.AddSeconds(transferTime);//timeMpl * transfer.GetTransferTime(settingsUsed.WalkingPace));
+                result.AddUsedTransfer(transfer, arrivalTimeAtDestCustomRP, !forward);
+            }
+
+            IRoutePoint nextRoundStartStop = stop;
+            int currRound = round;
+            while (currRound > 0)
+            {
+                IRoutePoint currStop;
+
+                var reach = currStopInfo.Reaches[currRound];
+                if (reach is StopRoutingInfo.TransferReach transferReach)
+                {
+                    result.AddUsedTransfer(transferReach.Transfer, transferReach.Time, !forward);
+                    currStop = forward ? transferReach.Transfer.From : transferReach.Transfer.To;
+                }
+                else if (reach is StopRoutingInfo.BikeTransferReach bikeTransferReach)
+                {
+                    result.AddUsedTransfer(bikeTransferReach.Transfer, bikeTransferReach.Time, !forward);
+                    currStop = forward ? bikeTransferReach.Transfer.GetSrcRoutePoint() : bikeTransferReach.Transfer.GetDestRoutePoint();
+                }
+
+
+                // In current round, no transfer has been used, i.e. we are continuing from the exact same stop -> we add a new 0 length transfer
+                else
+                {
+                    currStop = nextRoundStartStop;
+                    if (currStop is Stop s)
+                    {
+                        // in last round, we do not add a transfer
+                        if (currRound != round)
+                        {
+                            result.AddUsedTransfer(new Transfer(s, s, 0), currStopInfo.Reaches[currRound].Time.AddSeconds(timeMpl * settingsUsed.GetStationaryTransferMinimumSeconds()), !forward);
+                        }
+                    }
+                }
+
+                currStopInfo = routingInfo[currStop];
+                reach = currStopInfo.Reaches[currRound];
+
+                if (reach is StopRoutingInfo.TripReach tripReach)
+                {
+                    Stop realGetOnStop, realGetOffStop;
+
+                    if (forward)
+                    {
+                        realGetOnStop = tripReach.ReachedFromStop;
+                        realGetOffStop = (Stop)currStop;
+                    }
+                    else
+                    {
+                        realGetOnStop = (Stop)currStop;
+                        realGetOffStop = tripReach.ReachedFromStop;
+                    }
+
+                    Trip tripToReachStop = tripReach.Trip;
+                    if (tripToReachStop is null || tripReach.ReachedFromStop is null)
+                    {
+                        throw new ApplicationException("Trip and getOnStop cannot be null in an used round");
+                    }
+
+                    bool tripStartedDayBefore = tripToReachStop.StopTimes[0].DepartureTime > TimeOnly.FromDateTime(tripReach.Time);
+                    DateOnly tripStartDate = tripStartedDayBefore ? DateOnly.FromDateTime(tripReach.Time.AddDays(-1)) : DateOnly.FromDateTime(tripReach.Time.Date);
+
+                    bool tripHasDelayData = delayModel.TripHasDelayData(tripStartDate, tripToReachStop.Id);
+                    bool getOnStopHasDelayData;
+                    int getOnStopDepartureDelay, currentTripDelay;
+                    if (tripHasDelayData)
+                    {
+                        getOnStopHasDelayData = delayModel.TryGetDelay(tripStartDate, tripToReachStop.Id, tripToReachStop.Route.GetFirstStopIndex(realGetOnStop), out int arrivalDelay, out int departureDelay);
+                        if (!getOnStopHasDelayData)
+                        {
+                            getOnStopDepartureDelay = 0;
+                            currentTripDelay = 0;
+                        }
+                        else
+                        {
+                            getOnStopDepartureDelay = departureDelay;
+                            currentTripDelay = GetCurrentTripDelay(tripToReachStop, tripStartDate);
+                        }
+                    }
+                    else
+                    {
+                        getOnStopHasDelayData = false;
+                        getOnStopDepartureDelay = 0;
+                        currentTripDelay = 0;
+                    }
+
+
+
+
+
+                    result.AddUsedTrip(tripToReachStop, realGetOnStop, realGetOffStop, tripReach.Time, getOnStopHasDelayData, getOnStopDepartureDelay, currentTripDelay, !forward);
+
+
+
+                    //result.AddUsedTrip(tripToReachStop, realGetOnStop, realGetOffStop, tripReach.Time, !forward);
+                    currStop = tripReach.ReachedFromStop;
+                }
+                else if (reach is StopRoutingInfo.BikeTripReach bikeTripReach)
+                {
+                    //TODO: Check use of bike model - shouldnt it be somewhere else?
+
+                    BikeStation realSrcBikeStation, realDestBikeStation;
+
+                    if (forward)
+                    {
+                        realSrcBikeStation = bikeTripReach.From;
+                        realDestBikeStation = bikeTripReach.To;
+                    }
+                    else
+                    {
+                        realDestBikeStation = bikeTripReach.From;
+                        realSrcBikeStation = bikeTripReach.To;
+                    }
+
+
+                    result.AddUsedBikeTrip(realSrcBikeStation, realDestBikeStation, bikeModel.GetDistanceBetweenStations(bikeTripReach.From, bikeTripReach.To), !forward);
+                    currStop = bikeTripReach.From;
+                }
+
+
+
+                currStopInfo = routingInfo[currStop];
+                nextRoundStartStop = currStop;
+                currRound--;
+            }
+
+            //TODO: check
+            // Add the first transfer to the result -> that would be in round 0 and thus not added in the loop above
+            var firstReach = currStopInfo.Reaches[0];
+            if (firstReach is StopRoutingInfo.TransferReach transferReach1)
+            {
+                result.AddUsedTransfer(transferReach1.Transfer, firstReach.Time, !forward);
+            }
+            else if (firstReach is StopRoutingInfo.BikeTransferReach bikeTransferReach)
+            {
+                result.AddUsedTransfer(bikeTransferReach.Transfer, firstReach.Time, !forward);
+            }
+            else if (firstReach is StopRoutingInfo.CustomTransferReach customTransferReach)
+            {
+                result.AddUsedTransfer(customTransferReach.Transfer, customTransferReach.Time, !forward);
+            }
+
+            //TODO: implement other direction
+            result.SetDepartureAndArrivalTimesByEarliestDeparture(searchBeginTime);
+
+            return result;
+
+
+            int GetCurrentTripDelay(Trip trip, DateOnly tripStartDate)
+            {
+                TripStopDelays stopDelays = delayModel.GetTripStopDelays(tripStartDate, trip.Id);
+                List<StopTime> stopTimes = trip.StopTimes;
+
+                TimeOnly currTime = TimeOnly.FromDateTime(DateTime.Now);
+
+
+                //bool haveLastStopDelay = stopDelays.TryGetStopDelay(0, out int lastReachedStopArrivalDelay, out int lastReachedStopDepartureDelay);
+                int lastReachedStopDepartureDelay = 0;
+                for (int i = 1; i < stopTimes.Count; i++)
+                {
+                    bool haveLastStopDelay = stopDelays.TryGetStopDelay(i, out int currReachedStopArrivalDelay, out int currReachedStopDepartureDelay);
+                    if (!haveLastStopDelay)
+                    {
+                        break;
+                    }
+                    StopTime stopTime = stopTimes[i];
+                    TimeOnly regularStopDepartureTime = stopTime.DepartureTime;
+                    TimeOnly actualStopDepartureTime = regularStopDepartureTime.AddSeconds(currReachedStopDepartureDelay);
+
+                    if (actualStopDepartureTime > currTime)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        lastReachedStopDepartureDelay = currReachedStopDepartureDelay;
+                    }
+                }
+                return lastReachedStopDepartureDelay;
+            }
+        }
+
+        private Stop? GetSearchEndStopWithBestReachTimeInRound(int round)
+        {
+            Stop? stopWithBestReachTime = null;
+            DateTime bestReachTime = worstBound;
+            foreach (Stop stop in searchEndStops)
+            {
+                //arrival is earlier than best we found so far AND it is better than in last round - otherwise we do not process this round
+                if (
+                    routingInfo.ContainsKey(stop)
+                    && comp.ImprovesTime(GetBestReachTimeInRound(stop, round), bestReachTime)//GetBestReachTimeInRound(stop, round) < bestReachTime
+                    && (round == 0 || ArrivalAtStopInRoundIsBetterThanAllEarlierRounds(stop, round))
+                )
+                {
+                    stopWithBestReachTime = stop;
+                    bestReachTime = GetBestReachTimeInRound(stop, round);
+                }
+            }
+            return stopWithBestReachTime;
+        }
+
+        private bool ArrivalAtStopInRoundIsBetterThanAllEarlierRounds(Stop stop, int round)
+        {
+            DateTime bestEarlierArrival = worstBound;//DateTime.MaxValue;
+            for (int i = 0; i < round; i++)
+            {
+                DateTime reachInRoundI = GetBestReachTimeInRound(stop, i);
+                if (comp.ImprovesTime(reachInRoundI, bestEarlierArrival))//reachInRoundI < bestEarlierArrival)
+                {
+                    bestEarlierArrival = reachInRoundI;
+                }
+            }
+
+            return comp.ImprovesTime(GetBestReachTimeInRound(stop, round), bestEarlierArrival); //bestEarlierArrival > GetBestReachTimeInRound(stop, round);
+        }
+
+
+
+        public List<SearchResult>? ExtractResultWithAlternatives(BikeModel bikeModel)
+        {
+            // For each round, get the stop with the earliest arrival
+            Stop?[] searchEndStopsWithBestReachTimesRounds = new Stop[Settings.ROUNDS];
+            for (int round = 0; round < Settings.ROUNDS; round++)
+            {
+                searchEndStopsWithBestReachTimesRounds[round] = GetSearchEndStopWithBestReachTimeInRound(round);
+            }
+
+            SearchResult?[] resultsRounds = new SearchResult[Settings.ROUNDS];
+            for (int round = 0; round < Settings.ROUNDS; round++)
+            {
+                resultsRounds[round] = CreateResultFromStopInRound(searchEndStopsWithBestReachTimesRounds[round], round, bikeModel);
+            }
+
+            return GetBestResults(resultsRounds, searchEndStopsWithBestReachTimesRounds);
+
+
+            List<SearchResult>? GetBestResults(SearchResult?[] results, Stop?[] earliestDestStops)
+            {
+                int bestRound = -1;
+                DateTime bestArrivalTime = worstBound;
+                DateTime[] adjustedArrivalTimes = new DateTime[Settings.ROUNDS];
+                for (int round = 0; round < results.Length; round++)
+                {
+                    if (earliestDestStops[round] is not null)
+                    {
+                        var usedSegmentTypes = results[round]!.UsedSegmentTypes;
+
+                        bool startsWithTransfer = usedSegmentTypes[0] == SearchResult.SegmentType.Transfer;
+                        bool endsWithTransfer = usedSegmentTypes[^1] == SearchResult.SegmentType.Transfer;
+
+                        int penaltySecondsPerTransfer = settingsUsed.GetTransferPenaltySeconds();
+
+                        int transferCount = round == 0 ? round : round - 1;
+                        if (startsWithTransfer)
+                        {
+                            transferCount++;
+                        }
+                        if (endsWithTransfer)
+                        {
+                            transferCount++;
+                        }
+
+                        int totalTransferTime = timeMpl * transferCount * penaltySecondsPerTransfer;
+
+                        DateTime adjustedArrivalTime = GetBestReachTimeInRound(earliestDestStops[round]!, round).AddSeconds(totalTransferTime);
+                        adjustedArrivalTimes[round] = adjustedArrivalTime;
+
+                        if (comp.ImprovesTime(adjustedArrivalTime, bestArrivalTime))
+                        {
+                            bestArrivalTime = adjustedArrivalTime;
+                            bestRound = round;
+                        }
+                    }
+                }
+
+                if (bestRound == -1)
+                {
+                    return null;
+                }
+
+                List<SearchResult> bestResults = new();
+
+                for(int i = 0; i < Settings.ROUNDS; i++)
+                {
+                    DateTime adjustedArrivalTime = adjustedArrivalTimes[i];
+                    if (adjustedArrivalTime <= bestArrivalTime.AddMinutes(5))
+                    {
+                        bestResults.Add(results[i]!);
+                    }
+                }
+
+                return bestResults;
+            }
+        }
+
+
         /// <summary>
         /// Extracts the result of the search from the current state of the search model and returns it
         /// </summary>
@@ -139,7 +452,7 @@ namespace RAPTOR_Router.Models.Dynamic
             SearchResult?[] resultsRounds = new SearchResult[Settings.ROUNDS];
             for (int round = 0; round < Settings.ROUNDS; round++)
             {
-                resultsRounds[round] = CreateResultFromStopInRound(searchEndStopsWithBestReachTimesRounds[round], round);
+                resultsRounds[round] = CreateResultFromStopInRound(searchEndStopsWithBestReachTimesRounds[round], round, bikeModel);
             }
 
             return GetBestResult(resultsRounds, searchEndStopsWithBestReachTimesRounds);
@@ -189,238 +502,7 @@ namespace RAPTOR_Router.Models.Dynamic
                 return results[bestRound];
             }
 
-            SearchResult? CreateResultFromStopInRound(Stop? stop, int round)
-            {
-                if (stop is null)
-                {
-                    return null;
-                }
-                SearchResult result = new(settingsUsed);
-                StopRoutingInfo currStopInfo = routingInfo[stop];
-
-                // TODO: This should be done when finding the best dest stop, not after!!!
-                if (searchEndCustomRoutePoint is not null)
-                {
-                    CustomTransfer transfer = searchEndCustomRoutePoint.GetTransferWithNormalRP(stop);
-                    int transferTime = timeMpl * settingsUsed.GetAdjustedWalkingTransferTime(transfer.Distance);
-                    DateTime arrivalTimeAtDestCustomRP = currStopInfo.Reaches[round].Time.AddSeconds(transferTime);//timeMpl * transfer.GetTransferTime(settingsUsed.WalkingPace));
-                    result.AddUsedTransfer(transfer, arrivalTimeAtDestCustomRP, !forward);
-                }
-
-                IRoutePoint nextRoundStartStop = stop;
-                int currRound = round;
-                while (currRound > 0)
-                {
-                    IRoutePoint currStop;
-
-                    var reach = currStopInfo.Reaches[currRound];
-                    if (reach is StopRoutingInfo.TransferReach transferReach)
-                    {
-                        result.AddUsedTransfer(transferReach.Transfer, transferReach.Time, !forward);
-                        currStop = forward ? transferReach.Transfer.From : transferReach.Transfer.To;
-                    }
-                    else if (reach is StopRoutingInfo.BikeTransferReach bikeTransferReach)
-                    {
-                        result.AddUsedTransfer(bikeTransferReach.Transfer, bikeTransferReach.Time, !forward);
-                        currStop = forward ? bikeTransferReach.Transfer.GetSrcRoutePoint() : bikeTransferReach.Transfer.GetDestRoutePoint();
-                    }
-
-
-                    // In current round, no transfer has been used, i.e. we are continuing from the exact same stop -> we add a new 0 length transfer
-                    else
-                    {
-                        currStop = nextRoundStartStop;
-                        if (currStop is Stop s)
-                        {
-                            // in last round, we do not add a transfer
-                            if (currRound != round)
-                            {
-                                result.AddUsedTransfer(new Transfer(s, s, 0), currStopInfo.Reaches[currRound].Time.AddSeconds(timeMpl * settingsUsed.GetStationaryTransferMinimumSeconds()), !forward);
-                            }
-                        }
-                    }
-
-                    currStopInfo = routingInfo[currStop];
-                    reach = currStopInfo.Reaches[currRound];
-
-                    if (reach is StopRoutingInfo.TripReach tripReach)
-                    {
-                        Stop realGetOnStop, realGetOffStop;
-
-                        if (forward)
-                        {
-                            realGetOnStop = tripReach.ReachedFromStop;
-                            realGetOffStop = (Stop)currStop;
-                        }
-                        else
-                        {
-                            realGetOnStop = (Stop)currStop;
-                            realGetOffStop = tripReach.ReachedFromStop;
-                        }
-
-                        Trip tripToReachStop = tripReach.Trip;
-                        if (tripToReachStop is null || tripReach.ReachedFromStop is null)
-                        {
-                            throw new ApplicationException("Trip and getOnStop cannot be null in an used round");
-                        }
-
-                        bool tripStartedDayBefore = tripToReachStop.StopTimes[0].DepartureTime > TimeOnly.FromDateTime(tripReach.Time);
-                        DateOnly tripStartDate = tripStartedDayBefore ? DateOnly.FromDateTime(tripReach.Time.AddDays(-1)) : DateOnly.FromDateTime(tripReach.Time.Date);
-
-                        bool tripHasDelayData = delayModel.TripHasDelayData(tripStartDate, tripToReachStop.Id);
-                        bool getOnStopHasDelayData;
-                        int getOnStopDepartureDelay, currentTripDelay;
-                        if (tripHasDelayData)
-                        {
-                            getOnStopHasDelayData = delayModel.TryGetDelay(tripStartDate, tripToReachStop.Id, tripToReachStop.Route.GetFirstStopIndex(realGetOnStop), out int arrivalDelay, out int departureDelay);
-                            if (!getOnStopHasDelayData)
-                            {
-                                getOnStopDepartureDelay = 0;
-                                currentTripDelay = 0;
-                            }
-                            else
-                            {
-                                getOnStopDepartureDelay = departureDelay;
-                                currentTripDelay = GetCurrentTripDelay(tripToReachStop, tripStartDate);
-                            }
-                        }
-                        else
-                        {
-                            getOnStopHasDelayData = false;
-                            getOnStopDepartureDelay = 0;
-                            currentTripDelay = 0;
-                        }
-
-
-                        
-
-
-                        result.AddUsedTrip(tripToReachStop, realGetOnStop, realGetOffStop, tripReach.Time, getOnStopHasDelayData, getOnStopDepartureDelay, currentTripDelay, !forward);
-
-
-
-                        //result.AddUsedTrip(tripToReachStop, realGetOnStop, realGetOffStop, tripReach.Time, !forward);
-                        currStop = tripReach.ReachedFromStop;
-                    }
-                    else if (reach is StopRoutingInfo.BikeTripReach bikeTripReach)
-                    {
-                        //TODO: Check use of bike model - shouldnt it be somewhere else?
-
-                        BikeStation realSrcBikeStation, realDestBikeStation;
-
-                        if (forward)
-                        {
-                            realSrcBikeStation = bikeTripReach.From;
-                            realDestBikeStation = bikeTripReach.To;
-                        }
-                        else
-                        {
-                            realDestBikeStation = bikeTripReach.From;
-                            realSrcBikeStation = bikeTripReach.To;
-                        }
-
-
-                        result.AddUsedBikeTrip(realSrcBikeStation, realDestBikeStation, bikeModel.GetDistanceBetweenStations(bikeTripReach.From, bikeTripReach.To), !forward);
-                        currStop = bikeTripReach.From;
-                    }
-
-
-
-                    currStopInfo = routingInfo[currStop];
-                    nextRoundStartStop = currStop;
-                    currRound--;
-                }
-
-                //TODO: check
-                // Add the first transfer to the result -> that would be in round 0 and thus not added in the loop above
-                var firstReach = currStopInfo.Reaches[0];
-                if (firstReach is StopRoutingInfo.TransferReach transferReach1)
-                {
-                    result.AddUsedTransfer(transferReach1.Transfer, firstReach.Time, !forward);
-                }
-                else if (firstReach is StopRoutingInfo.BikeTransferReach bikeTransferReach)
-                {
-                    result.AddUsedTransfer(bikeTransferReach.Transfer, firstReach.Time, !forward);
-                }
-                else if (firstReach is StopRoutingInfo.CustomTransferReach customTransferReach)
-                {
-                    result.AddUsedTransfer(customTransferReach.Transfer, customTransferReach.Time, !forward);
-                }
-
-                //TODO: implement other direction
-                result.SetDepartureAndArrivalTimesByEarliestDeparture(searchBeginTime);
-
-                return result;
-
-
-                int GetCurrentTripDelay(Trip trip, DateOnly tripStartDate)
-                {
-                    TripStopDelays stopDelays = delayModel.GetTripStopDelays(tripStartDate, trip.Id);
-                    List<StopTime> stopTimes = trip.StopTimes;
-
-                    TimeOnly currTime = TimeOnly.FromDateTime(DateTime.Now);
-
-                    
-                    //bool haveLastStopDelay = stopDelays.TryGetStopDelay(0, out int lastReachedStopArrivalDelay, out int lastReachedStopDepartureDelay);
-                    int lastReachedStopDepartureDelay = 0;
-                    for (int i = 1; i < stopTimes.Count; i++)
-                    {
-                        bool haveLastStopDelay = stopDelays.TryGetStopDelay(i, out int currReachedStopArrivalDelay, out int currReachedStopDepartureDelay);
-                        if (!haveLastStopDelay)
-                        {
-                            break;
-                        }
-                        StopTime stopTime = stopTimes[i];
-                        TimeOnly regularStopDepartureTime = stopTime.DepartureTime;
-                        TimeOnly actualStopDepartureTime = regularStopDepartureTime.AddSeconds(currReachedStopDepartureDelay);
-
-                        if (actualStopDepartureTime > currTime)
-                        {
-                            break;
-                        }
-                        else
-                        {
-                            lastReachedStopDepartureDelay = currReachedStopDepartureDelay;
-                        }
-                    }
-                    return lastReachedStopDepartureDelay;
-                }
-            }
-
-            Stop? GetSearchEndStopWithBestReachTimeInRound(int round)
-            {
-                Stop? stopWithBestReachTime = null;
-                DateTime bestReachTime = worstBound;
-                foreach (Stop stop in searchEndStops)
-                {
-                    //arrival is earlier than best we found so far AND it is better than in last round - otherwise we do not process this round
-                    if (
-                        routingInfo.ContainsKey(stop)
-                        && comp.ImprovesTime(GetBestReachTimeInRound(stop, round), bestReachTime)//GetBestReachTimeInRound(stop, round) < bestReachTime
-                        && (round == 0 || ArrivalAtStopInRoundIsBetterThanAllEarlierRounds(stop, round))
-                    )
-                    {
-                        stopWithBestReachTime = stop;
-                        bestReachTime = GetBestReachTimeInRound(stop, round);
-                    }
-                }
-                return stopWithBestReachTime;
-            }
-
-            bool ArrivalAtStopInRoundIsBetterThanAllEarlierRounds(Stop stop, int round)
-            {
-                DateTime bestEarlierArrival = worstBound;//DateTime.MaxValue;
-                for (int i = 0; i < round; i++)
-                {
-                    DateTime reachInRoundI = GetBestReachTimeInRound(stop, i);
-                    if (comp.ImprovesTime(reachInRoundI, bestEarlierArrival))//reachInRoundI < bestEarlierArrival)
-                    {
-                        bestEarlierArrival = reachInRoundI;
-                    }
-                }
-
-                return comp.ImprovesTime(GetBestReachTimeInRound(stop, round), bestEarlierArrival); //bestEarlierArrival > GetBestReachTimeInRound(stop, round);
-            }
+            
         }
 
 
@@ -544,11 +626,6 @@ namespace RAPTOR_Router.Models.Dynamic
         {
             BikeStation newlyReachedBikeStation = forward ? realDestBikeStation : realSrcBikeStation;
             BikeStation reachedFromBikeStation = forward ? realSrcBikeStation : realDestBikeStation;
-
-            if (newlyReachedBikeStation.Name == "P5 - Nemocnice Motol výstup z metra E6")
-            {
-                Console.WriteLine();
-            }
 
             bool improves = ReachTimeImprovesCurrBest(reachTime, newlyReachedBikeStation);
 

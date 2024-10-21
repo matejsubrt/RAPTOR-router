@@ -15,6 +15,15 @@ namespace RAPTOR_Router.RouteFinders
         /// <param name="time">The departure/arrival date and time</param>
         /// <returns>The resulting best connection, null if none found</returns>
         SearchResult FindConnection(string sourceStop, string destStop, DateTime time);
+
+        /// <summary>
+        /// Solves the provided connection search problem (i.e. SearchModel) given by source and destination stop names
+        /// </summary>
+        /// <param name="sourceStop">The exact name of the source stop</param>
+        /// <param name="destStop">The exact name of the destination stop</param>
+        /// <param name="time">The departure/arrival date and time</param>
+        /// <returns>The resulting best connection, null if none found</returns>
+        List<SearchResult>? FindConnectionWithAlternatives(string sourceStop, string destStop, DateTime time);
         /// <summary>
         /// Solves the provided connection search problem (i.e. SearchModel) given by source and destination coordinates
         /// </summary>

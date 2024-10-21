@@ -6,6 +6,7 @@ using System.Web.Http;
 using Microsoft.AspNetCore.Http;
 using RAPTOR_Router.Models.Results;
 using RAPTOR_Router.Structures.Configuration;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace WebAPI_light
 {
@@ -16,6 +17,11 @@ namespace WebAPI_light
         public string dateTime { get; set; }
         public bool byEarliestDeparture { get; set; }
         public Settings settings { get; set; }
+    }
+
+    public class StopToStopRangeRequest : StopToStopRequest
+    {
+        public int rangeLength { get; set; }
     }
 
     public class CoordToCoordRequest
@@ -97,15 +103,22 @@ namespace WebAPI_light
             //    HandleRequestStops(routerBuilder, srcStopName, destStopName, dateTime, walkingPace, cyclingPace, bikeUnlockTime, bikeLockTime, useSharedBikes, bikeMax15Minutes, transferTime, comfortBalance, walkingPreference, bikeTripBuffer))
             //    .WithName("GetConnection")
             //    .WithOpenApi();
-            app.MapPost("/connection/stop-to-stop", (StopToStopRequest request) =>
+            app.MapPost("/connection/single/stop-to-stop", (StopToStopRequest request) =>
                     HandleRequestStopToStop(routerBuilder, request.srcStopName, request.destStopName, request.dateTime, request.byEarliestDeparture, request.settings))
                 .WithName("GetConnectionByStopNames")
                 .WithOpenApi();
 
-            app.MapPost("/connection/coord-to-coord", (CoordToCoordRequest request) =>
+            app.MapPost("/connection/single/coord-to-coord", (CoordToCoordRequest request) =>
                 HandleRequestCoordToCoord(routerBuilder, request.srcLat, request.srcLon, request.destLat, request.destLon, request.dateTime, request.byEarliestDeparture, request.settings))
                 .WithName("GetConnectionByCoords")
                 .WithOpenApi();
+
+
+            app.MapPost("/connection/range/stop-to-stop", (StopToStopRangeRequest request) =>
+                    HandleRangeRequestStopToStop(request))
+                .WithName("GetConnectionsRangeByStopNames")
+                .WithOpenApi();
+
             app.MapPost("/alternative-trips", (AlternativeTripsRequest request) => 
                 HandleAlternativeTripsRequest(request))
                 .WithName("GetAlternativeTrips")
@@ -259,6 +272,76 @@ namespace WebAPI_light
             if (result != null)
             {
                 return Results.Ok(result);
+            }
+            else
+            {
+                var message = "No connection found";
+                HttpError err = new HttpError(message);
+                return Results.NotFound(err);
+            }
+        }
+
+        static IResult HandleRangeRequestStopToStop(StopToStopRangeRequest request)
+        {
+            DateTime dateTime;
+            if (!DateTime.TryParse(request.dateTime, out dateTime))
+            {
+                var message = "Invalid DateTime format";
+                HttpError err = new HttpError(message);
+                return Results.BadRequest(err);
+            }
+
+            // Validate the settings
+            if (!request.settings.ValidateParameterValues())
+            {
+                var message = "Invalid settings";
+                HttpError err = new HttpError(message);
+                return Results.BadRequest(err);
+            }
+
+            // Validate the stop names
+            if (!routerBuilder.ValidateStopName(request.srcStopName) || !routerBuilder.ValidateStopName(request.destStopName))
+            {
+                var message = "Invalid stop name";
+                HttpError err = new HttpError(message);
+                return Results.BadRequest(err);
+            }
+
+
+
+            RangeRouteFinder router;
+            //if (byEarliestDeparture)
+            //{
+            //    router = builder.CreateForwardRouteFinder(settings);
+            //}
+            //else
+            //{
+            //    router = builder.CreateBackwardRouteFinder(settings);
+            //}
+            router = routerBuilder.CreateRangeRouteFinder(request.byEarliestDeparture, request.settings);
+            List<SearchResult> results = new List<SearchResult>();
+            router.FindConnectionsAsync(routerBuilder, request.byEarliestDeparture, request.settings, dateTime, dateTime.AddMinutes(request.rangeLength), request.srcStopName, request.destStopName, results).GetAwaiter().GetResult();
+            results = results.OrderBy(r => r.ArrivalDateTime).ThenBy(r => r.DepartureDateTime).ToList();
+
+            for (int i = 0; i < results.Count - 1; i++)
+            {
+                SearchResult res1 = results[i];
+                SearchResult res2 = results[i + 1];
+
+                if (res1.ArrivalDateTime >= res2.ArrivalDateTime)
+                {
+                    results.RemoveAt(i);
+                    i--;
+                }
+                else
+                {
+                    Console.WriteLine();
+                }
+            }
+
+            if (results != null)
+            {
+                return Results.Ok(results);
             }
             else
             {
