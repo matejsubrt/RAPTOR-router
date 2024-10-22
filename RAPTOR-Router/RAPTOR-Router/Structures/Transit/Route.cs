@@ -295,8 +295,8 @@ namespace RAPTOR_Router.Structures.Transit
 
                             i--;
 
-                            srcDepartureTime = tripsOnPreviousDay[i].StopTimes[0].DepartureTime;
-                            departureTime = tripsOnPreviousDay[i].StopTimes[stopIndex].DepartureTime;
+                            srcDepartureTime = bestTrip.StopTimes[0].DepartureTime;
+                            departureTime = bestTrip.StopTimes[stopIndex].DepartureTime;
                         }
 
                         if (bestTrip is not null)
