@@ -343,7 +343,7 @@ namespace WebAPI_light
             //}
             router = routerBuilder.CreateRangeRouteFinder(request.byEarliestDeparture, request.settings);
             List<SearchResult> results = new List<SearchResult>();
-            router.FindConnectionsAsync(routerBuilder, request.byEarliestDeparture, request.settings, dateTime, dateTime.AddMinutes(request.rangeLength), request.srcStopName, request.destStopName, results).GetAwaiter().GetResult();
+            router.FindConnectionsAsync(routerBuilder, request.byEarliestDeparture, request.settings, dateTime, dateTime.AddMinutes(request.rangeLength), request.srcStopName, request.destStopName).GetAwaiter().GetResult();
             
 
             if (results != null)
@@ -461,7 +461,7 @@ namespace WebAPI_light
                 }
                 else if (!request.srcByCoords && !request.destByCoords)
                 {
-                    router.FindConnectionsAsync(routerBuilder, request.byEarliestDeparture, request.settings, dateTime, dateTime.AddMinutes(request.rangeLength), request.srcStopName, request.destStopName, results).GetAwaiter().GetResult();
+                    results = router.FindConnectionsAsync(routerBuilder, request.byEarliestDeparture, request.settings, dateTime, dateTime.AddMinutes(request.rangeLength), request.srcStopName, request.destStopName).GetAwaiter().GetResult();
                 }
                 else
                 {

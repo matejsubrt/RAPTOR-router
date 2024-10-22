@@ -79,7 +79,7 @@ namespace CLIApp
                 var rangeRouter = builder.CreateRangeRouteFinder(forward, settings);
                 List<SearchResult> results = new();
                 // Await the async method
-                await rangeRouter.FindConnectionsAsync(builder, forward, settings, departureTime, departureTime.AddMinutes(15), sourceStop, destStop, results);
+                await rangeRouter.FindConnectionsAsync(builder, forward, settings, departureTime, departureTime.AddMinutes(15), sourceStop, destStop);
 
                 results = results.OrderBy(r => r.ArrivalDateTime).ThenBy(r => r.DepartureDateTime).ToList();
 

@@ -104,15 +104,14 @@ namespace RAPTOR_Router.RouteFinders
         //    return results;
         //}
 
-        public async Task FindConnectionsAsync(
+        public async Task<List<SearchResult>> FindConnectionsAsync(
             RouteFinderBuilder builder,
             bool forward,
             Settings settings,
             DateTime searchBeginRangeStart,
             DateTime searchBeginRangeEnd,
             string srcStopName,
-            string destStopName,
-            List<SearchResult> results)
+            string destStopName)
         {
             // First, collect all times at which a trip departs from the source stop/arrives at the destination stop
             // Second, add the times specified in the first step plus/minus 1 minute -> this is to ensure there are alternatives to connections that begin with a trip
@@ -151,6 +150,7 @@ namespace RAPTOR_Router.RouteFinders
             // completeness. To further ensure that the least possible important connections within the resulting gaps are missed, we also add additional times to fill the gaps
             // if the gaps are larger than a certain threshold.
 
+            List<SearchResult> results = new();
             List<Stop> srcStops = transitModel.GetStopsByName(srcStopName);
 
             HashSet<DateTime> departureTimes = new();
@@ -212,7 +212,7 @@ namespace RAPTOR_Router.RouteFinders
 
             await Task.WhenAll(tasks);
 
-            results.Sort((r1, r2) => r1.DepartureDateTime.CompareTo(r2.DepartureDateTime));
+            //results.Sort((r1, r2) => r1.DepartureDateTime.CompareTo(r2.DepartureDateTime));
 
             results = results.OrderBy(r => r.ArrivalDateTime).ThenBy(r => r.DepartureDateTime).ToList();
 
@@ -231,6 +231,8 @@ namespace RAPTOR_Router.RouteFinders
                     Console.WriteLine();
                 }
             }
+            //results = newResults;
+            return results;
         }
     }
 }
