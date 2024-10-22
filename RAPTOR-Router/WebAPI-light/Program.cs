@@ -53,18 +53,18 @@ namespace WebAPI_light
         /// <param name="args"></param>
         public static void Main(string[] args)
         {
-            var config = new ConfigurationBuilder()
-                .SetBasePath(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "..")))
-                .AddJsonFile("config.json", optional: false, reloadOnChange: true)
-                .Build();
-            string gtfsZipArchiveLocation = config["gtfsArchiveLocation"];
+            //var config = new ConfigurationBuilder()
+            //    .SetBasePath(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "..")))
+            //    .AddJsonFile("config.json", optional: false, reloadOnChange: true)
+            //    .Build();
+            //string gtfsZipArchiveLocation = config["gtfsArchiveLocation"];
 
-            if (gtfsZipArchiveLocation == null)
-            {
-                Console.WriteLine("No gtfs archive found in following location: " + config["gtfsLocation"]);
-                Console.WriteLine("Change the gtfs location in the config.json file, so that the path is correct");
-                return;
-            }
+            //if (gtfsZipArchiveLocation == null)
+            //{
+            //    Console.WriteLine("No gtfs archive found in following location: " + config["gtfsLocation"]);
+            //    Console.WriteLine("Change the gtfs location in the config.json file, so that the path is correct");
+            //    return;
+            //}
 
             routerBuilder = new RouteFinderBuilder();
             routerBuilder.LoadAllData();

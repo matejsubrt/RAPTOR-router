@@ -18,26 +18,26 @@ namespace CLIApp
 
         static void Main(string[] args)
         {
-            bool ADVANCED_ROUTING = false;
+            //bool ADVANCED_ROUTING = false;
 
-            var config = new ConfigurationBuilder()
-                .SetBasePath(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "..")))
-                .AddJsonFile("config.json", optional: false, reloadOnChange: true)
-                .Build();
-            string gtfsZipArchiveLocation = config["gtfsArchiveLocation"];
+            //var config = new ConfigurationBuilder()
+            //    .SetBasePath(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "..")))
+            //    .AddJsonFile("config.json", optional: false, reloadOnChange: true)
+            //    .Build();
+            //string gtfsZipArchiveLocation = config["gtfsArchiveLocation"];
 
-            if (gtfsZipArchiveLocation == null)
-            {
-                Console.WriteLine("No gtfs archive found in following location: " + config["gtfsLocation"]);
-                Console.WriteLine("Change the gtfs location in the config.json file, so that the path is correct");
-                return;
-            }
+            //if (gtfsZipArchiveLocation == null)
+            //{
+            //    Console.WriteLine("No gtfs archive found in following location: " + config["gtfsLocation"]);
+            //    Console.WriteLine("Change the gtfs location in the config.json file, so that the path is correct");
+            //    return;
+            //}
 
             // Call the async method using GetAwaiter().GetResult()
-            RunRouting(gtfsZipArchiveLocation).GetAwaiter().GetResult();
+            RunRouting().GetAwaiter().GetResult();
         }
 
-        static async Task RunRouting(string gtfsZipArchiveLocation)
+        static async Task RunRouting()
         {
             Settings settings = Settings.GetDefaultSettings();
             settings.BikeTripBuffer = BikeTripBuffer.None;

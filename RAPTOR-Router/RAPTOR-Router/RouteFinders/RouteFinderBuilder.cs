@@ -11,6 +11,7 @@ using System.Globalization;
 using ProtoBuf;
 using System.Net;
 using TransitRealtime;
+using System.Runtime.InteropServices;
 
 
 namespace RAPTOR_Router.RouteFinders
@@ -82,9 +83,20 @@ namespace RAPTOR_Router.RouteFinders
         /// <exception cref="Exception">The configuration is wrong</exception>
 		public void LoadAllData(string alternativeGtfsArchiveLocation = null)
 		{
-            var config = new ConfigurationBuilder()
-                .SetBasePath(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "..")))
+            var basePath = Directory.GetCurrentDirectory();
 
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                basePath = Path.GetFullPath(Path.Combine(basePath, "..", "..", "..", ".."));
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                basePath = Path.GetFullPath(Path.Combine(basePath, ".."));
+            }
+
+
+            var config = new ConfigurationBuilder()
+                .SetBasePath(basePath)
                 .AddJsonFile("config.json", optional: false, reloadOnChange: true)
                 .Build();
             string gtfsZipArchiveLocation = config["gtfsArchiveLocation"];
