@@ -212,7 +212,7 @@ namespace RAPTOR_Router.RouteFinders
 
             await Task.WhenAll(tasks);
 
-            //results.Sort((r1, r2) => r1.DepartureDateTime.CompareTo(r2.DepartureDateTime));
+            results.Sort((r1, r2) => r1.DepartureDateTime.CompareTo(r2.DepartureDateTime));
 
             results = results.OrderBy(r => r.ArrivalDateTime).ThenBy(r => r.DepartureDateTime).ToList();
 
