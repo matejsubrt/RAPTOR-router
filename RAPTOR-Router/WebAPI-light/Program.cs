@@ -10,6 +10,25 @@ using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace WebAPI_light
 {
+    public class ConnectionRequest
+    {
+        public string srcStopName { get; set; }
+        public double srcLat { get; set; }
+        public double srcLon { get; set; }
+        public string destStopName { get; set; }
+        public double destLat { get; set; }
+        public double destLon { get; set; }
+        public string dateTime { get; set; }
+        public int rangeLength { get; set; }
+
+        public bool byEarliestDeparture { get; set; }
+        public bool range { get; set; }
+        public bool srcByCoords { get; set; }
+        public bool destByCoords { get; set; }
+
+        public Settings settings { get; set; }
+    }
+
     public class StopToStopRequest
     {
         public string srcStopName { get; set; }
@@ -117,6 +136,10 @@ namespace WebAPI_light
             app.MapPost("/connection/range/stop-to-stop", (StopToStopRangeRequest request) =>
                     HandleRangeRequestStopToStop(request))
                 .WithName("GetConnectionsRangeByStopNames")
+                .WithOpenApi();
+
+            app.MapPost("/connection", (ConnectionRequest request) => HandleConnectionRequest(request))
+                .WithName("GetConnection")
                 .WithOpenApi();
 
             app.MapPost("/alternative-trips", (AlternativeTripsRequest request) => 
@@ -321,23 +344,7 @@ namespace WebAPI_light
             router = routerBuilder.CreateRangeRouteFinder(request.byEarliestDeparture, request.settings);
             List<SearchResult> results = new List<SearchResult>();
             router.FindConnectionsAsync(routerBuilder, request.byEarliestDeparture, request.settings, dateTime, dateTime.AddMinutes(request.rangeLength), request.srcStopName, request.destStopName, results).GetAwaiter().GetResult();
-            results = results.OrderBy(r => r.ArrivalDateTime).ThenBy(r => r.DepartureDateTime).ToList();
-
-            for (int i = 0; i < results.Count - 1; i++)
-            {
-                SearchResult res1 = results[i];
-                SearchResult res2 = results[i + 1];
-
-                if (res1.ArrivalDateTime >= res2.ArrivalDateTime)
-                {
-                    results.RemoveAt(i);
-                    i--;
-                }
-                else
-                {
-                    Console.WriteLine();
-                }
-            }
+            
 
             if (results != null)
             {
@@ -348,6 +355,168 @@ namespace WebAPI_light
                 var message = "No connection found";
                 HttpError err = new HttpError(message);
                 return Results.NotFound(err);
+            }
+        }
+
+        static IResult HandleConnectionRequest(ConnectionRequest request)
+        {
+            DateTime dateTime;
+            if (!DateTime.TryParse(request.dateTime, out dateTime))
+            {
+                var message = "Invalid DateTime format";
+                HttpError err = new HttpError(message);
+                return Results.BadRequest(err);
+            }
+
+            // Validate the settings
+            if (!request.settings.ValidateParameterValues())
+            {
+                var message = "Invalid settings";
+                HttpError err = new HttpError(message);
+                return Results.BadRequest(err);
+            }
+
+
+            bool srcCoordsValid = true;
+            bool srcCoordsHaveStops = true;
+            bool destCoordsValid = true;
+            bool destCoordsHaveStops = true;
+            bool srcStopNameValid = true;
+            bool destStopNameValid = true;
+
+            if (request.srcByCoords)
+            {
+                if (!routerBuilder.ValidateCoords(request.srcLat, request.srcLon))
+                {
+                    srcCoordsValid = false;
+                }
+
+                if (!routerBuilder.ValidateStopsNearCoords(request.srcLat, request.srcLon,
+                        request.settings.UseSharedBikes))
+                {
+                    srcCoordsHaveStops = false;
+                }
+            }
+            else
+            {
+                if (!routerBuilder.ValidateStopName(request.srcStopName))
+                {
+                    srcStopNameValid = false;
+                }
+            }
+
+            if (request.destByCoords)
+            {
+                if (!routerBuilder.ValidateCoords(request.destLat, request.destLon))
+                {
+                    destCoordsValid = false;
+                }
+
+                if (!routerBuilder.ValidateStopsNearCoords(request.destLat, request.destLon,
+                        request.settings.UseSharedBikes))
+                {
+                    destCoordsHaveStops = false;
+                }
+            }
+            else
+            {
+                if (!routerBuilder.ValidateStopName(request.destStopName))
+                {
+                    destStopNameValid = false;
+                }
+            }
+
+            if (!srcCoordsValid || !destCoordsValid)
+            {
+                var message = "Invalid coordinates";
+                HttpError err = new HttpError(message);
+                return Results.BadRequest(err);
+            }
+
+            if (!srcCoordsHaveStops || !destCoordsHaveStops)
+            {
+                var message = "No stops near the coordinates";
+                HttpError err = new HttpError(message);
+                return Results.BadRequest(err);
+            }
+
+            if (!srcStopNameValid || !destStopNameValid)
+            {
+                var message = "Invalid stop name";
+                HttpError err = new HttpError(message);
+                return Results.BadRequest(err);
+            }
+
+
+            if (request.range)
+            {
+                RangeRouteFinder router = routerBuilder.CreateRangeRouteFinder(request.byEarliestDeparture, request.settings);
+                List<SearchResult> results = new List<SearchResult>();
+
+                if (request.srcByCoords && request.destByCoords)
+                {
+                    var message = "Coord-to-coord range searches are not yet supported";
+                    HttpError err = new HttpError(message);
+                    return Results.BadRequest(err);
+                }
+                else if (!request.srcByCoords && !request.destByCoords)
+                {
+                    router.FindConnectionsAsync(routerBuilder, request.byEarliestDeparture, request.settings, dateTime, dateTime.AddMinutes(request.rangeLength), request.srcStopName, request.destStopName, results).GetAwaiter().GetResult();
+                }
+                else
+                {
+                    var message = "Coord-to-stop and stop-to-coord range searches are not yet supported";
+                    HttpError err = new HttpError(message);
+                    return Results.BadRequest(err);
+                }
+
+                if (results.Count == 0)
+                {
+                    var message = "No connection found";
+                    HttpError err = new HttpError(message);
+                    return Results.NotFound(err);
+                }
+                else
+                {
+                    return Results.Ok(results);
+                }
+            }
+            else
+            {
+                IRouteFinder router = routerBuilder.CreateUniversalRouteFinder(request.byEarliestDeparture, request.settings);
+                SearchResult result;
+
+                if (request.srcByCoords && request.destByCoords)
+                {
+                    result = router.FindConnection(request.srcLat, request.srcLon, request.destLat, request.destLon, dateTime);
+                }
+                else if (!request.srcByCoords && !request.destByCoords)
+                {
+                    result = router.FindConnection(request.srcStopName, request.destStopName, dateTime);
+                }
+                else
+                {
+                    var message = "Coord-to-stop and stop-to-coord searches are not yet supported";
+                    HttpError err = new HttpError(message);
+                    return Results.BadRequest(err);
+                }
+
+                // Return a list to be consistent with range searches
+                List<SearchResult> resultsList = new List<SearchResult>
+                {
+                    result
+                };
+
+                if (result != null)
+                {
+                    return Results.Ok(resultsList);
+                }
+                else
+                {
+                    var message = "No connection found";
+                    HttpError err = new HttpError(message);
+                    return Results.NotFound(err);
+                }
             }
         }
     }

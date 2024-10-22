@@ -191,13 +191,10 @@ namespace RAPTOR_Router.RouteFinders
 
                 tasks.Add(Task.Run(() =>
                 {
-                    // Create a new RouteFinder for each task
                     IRouteFinder router = builder.CreateUniversalRouteFinder(forward, settings);
 
-                    // Run the connection search
                     var searchResults = router.FindConnectionWithAlternatives(srcStopName, destStopName, departureTime);
 
-                    // Synchronize access to the results list
                     lock (results)
                     {
                         foreach (var result in searchResults)
@@ -213,11 +210,27 @@ namespace RAPTOR_Router.RouteFinders
                 }));
             }
 
-            // Wait for all tasks to complete
             await Task.WhenAll(tasks);
 
-            // Optionally sort the results by departure time if needed
-            results.Sort((r1, r2) => r1.DepartureDateTime.CompareTo(r2.DepartureDateTime));
+            //results.Sort((r1, r2) => r1.DepartureDateTime.CompareTo(r2.DepartureDateTime));
+
+            results = results.OrderBy(r => r.ArrivalDateTime).ThenBy(r => r.DepartureDateTime).ToList();
+
+            for (int i = 0; i < results.Count - 1; i++)
+            {
+                SearchResult res1 = results[i];
+                SearchResult res2 = results[i + 1];
+
+                if (res1.ArrivalDateTime >= res2.ArrivalDateTime)
+                {
+                    results.RemoveAt(i);
+                    i--;
+                }
+                else
+                {
+                    Console.WriteLine();
+                }
+            }
         }
     }
 }
