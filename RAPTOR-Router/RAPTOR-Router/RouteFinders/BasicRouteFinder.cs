@@ -649,11 +649,12 @@ namespace RAPTOR_Router.RouteFinders
                     }
                 }
 
+                //TODO: check for delays
                 bool TripGoesOverMidnight(Trip trip, int traverseFromStopIndex, int currStopIndex)
                 {
                     return forward ?
-                        trip.StopTimes[traverseFromStopIndex].DepartureTime > trip.StopTimes[currStopIndex].ArrivalTime :
-                        trip.StopTimes[traverseFromStopIndex].ArrivalTime < trip.StopTimes[currStopIndex].DepartureTime;
+                        trip.StopTimes[0].DepartureTime > trip.StopTimes[currStopIndex].ArrivalTime :
+                        trip.StopTimes[^1].ArrivalTime < trip.StopTimes[currStopIndex].DepartureTime;
                 }
 
                 bool SearchLeaveTimeIsTransferableFromLastRoundReach(Stop stop, DateTime searchLeaveTime)

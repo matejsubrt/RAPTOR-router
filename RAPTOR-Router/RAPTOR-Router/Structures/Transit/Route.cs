@@ -265,7 +265,7 @@ namespace RAPTOR_Router.Structures.Transit
 
                 //TimeOnly departureTime;
 
-
+                
                 Trip firstTripOnDay = tripsOnDate[0];
                 TimeOnly firstTripDepartureTime = firstTripOnDay.StopTimes[stopIndex].DepartureTime;
 
@@ -285,23 +285,33 @@ namespace RAPTOR_Router.Structures.Transit
                     if (RouteTrips.TryGetValue(currDate.AddDays(-1), out tripsOnPreviousDay))
                     {
                         int i = tripsOnPreviousDay.Count - 1;
-                        TimeOnly srcDepartureTime = tripsOnPreviousDay[i].StopTimes[0].DepartureTime;
-                        TimeOnly departureTime = tripsOnPreviousDay[i].StopTimes[stopIndex].DepartureTime;
+                        //TimeOnly srcDepartureTime = tripsOnPreviousDay[i].StopTimes[0].DepartureTime;
+                        //TimeOnly departureTime = tripsOnPreviousDay[i].StopTimes[stopIndex].DepartureTime;
                         Trip? bestTrip = null;
-                        while (i >= 0 && departureTime < srcDepartureTime && departureTime >= time)
+                        while (i >= 0/* && departureTime < srcDepartureTime && departureTime >= time*/)
                         {
+                            
+                            TimeOnly srcDepartureTime = tripsOnPreviousDay[i].StopTimes[0].DepartureTime;
+                            TimeOnly departureTime = tripsOnPreviousDay[i].StopTimes[stopIndex].DepartureTime;
                             // The trip goes over midnight into the day we reached the stop AND it departs from it after its reach time
+
+                            if (!(departureTime < srcDepartureTime && departureTime >= time))
+                            {
+                                break;
+                            }
+
                             bestTrip = tripsOnPreviousDay[i];
 
                             i--;
 
-                            srcDepartureTime = bestTrip.StopTimes[0].DepartureTime;
-                            departureTime = bestTrip.StopTimes[stopIndex].DepartureTime;
+                            //srcDepartureTime = bestTrip.StopTimes[0].DepartureTime;
+                            //departureTime = bestTrip.StopTimes[stopIndex].DepartureTime;
                         }
 
                         if (bestTrip is not null)
                         {
                             tripDate = currDate.AddDays(-1);
+
                             return bestTrip;
                         }
                     }
@@ -327,8 +337,6 @@ namespace RAPTOR_Router.Structures.Transit
                     bool hasDelayData = delayModel.TryGetDelay(currDate, tripsOnDate[i].Id, stopIndex, out int arrivalDelay, out int departureDelay);
                     int delayOnStop = hasDelayData ? departureDelay : 0;
                     TimeOnly actualDepartureTime = regularDepartureTime.AddSeconds(delayOnStop);
-
-
 
                     if (actualDepartureTime < tripsOnDate[i].StopTimes[0].DepartureTime)
                     {
