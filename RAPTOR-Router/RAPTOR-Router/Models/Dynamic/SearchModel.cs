@@ -316,6 +316,8 @@ namespace RAPTOR_Router.Models.Dynamic
                         lastReachedStopDepartureDelay = currReachedStopDepartureDelay;
                     }
                 }
+
+                Console.WriteLine(lastReachedStopDepartureDelay);
                 return lastReachedStopDepartureDelay;
             }
         }
