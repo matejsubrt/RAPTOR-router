@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using RAPTOR_Router.Extensions;
 using RAPTOR_Router.Structures.Bike;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using Route = Itinero.Route;
 
@@ -37,8 +38,18 @@ namespace RAPTOR_Router.GBFSParsing.Distances
         /// </summary>
         public BikeDistanceCalculator()
         {
+            var basePath = Directory.GetCurrentDirectory();
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                basePath = Path.GetFullPath(Path.Combine(basePath, "..", "..", "..", ".."));
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                basePath = Path.GetFullPath(Path.Combine(basePath, ".."));
+            }
             var config = new ConfigurationBuilder()
-                .SetBasePath(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "..")))
+                .SetBasePath(Path.GetFullPath(basePath))
                 .AddJsonFile("config.json", optional: false, reloadOnChange: true)
                 .Build();
             osmLocation = config["osmFileLocation"];
