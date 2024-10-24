@@ -327,8 +327,10 @@ namespace RAPTOR_Router.RouteFinders
                 TripStopDelays stopDelays = delayModel.GetTripStopDelays(tripStartDate, trip.Id);
                 List<StopTime> stopTimes = trip.StopTimes;
 
-                TimeOnly currTime = TimeOnly.FromDateTime(DateTime.Now);
-
+                //TimeOnly currTime = TimeOnly.FromDateTime(DateTime.Now);
+                TimeZoneInfo timeZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Prague");
+                DateTime dateTimeInZone = TimeZoneInfo.ConvertTime(DateTime.Now, timeZone);
+                TimeOnly currTime = TimeOnly.FromDateTime(dateTimeInZone);
 
                 //bool haveLastStopDelay = stopDelays.TryGetStopDelay(0, out int lastReachedStopArrivalDelay, out int lastReachedStopDepartureDelay);
                 int lastReachedStopDepartureDelay = 0;

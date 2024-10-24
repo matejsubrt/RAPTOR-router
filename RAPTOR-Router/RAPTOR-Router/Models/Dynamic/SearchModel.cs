@@ -294,7 +294,6 @@ namespace RAPTOR_Router.Models.Dynamic
                 //TimeOnly currTime = TimeOnly.FromDateTime(DateTime.Now);
                 TimeZoneInfo timeZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Prague");
                 DateTime dateTimeInZone = TimeZoneInfo.ConvertTime(DateTime.Now, timeZone);
-                Console.WriteLine(dateTimeInZone);
                 TimeOnly currTime = TimeOnly.FromDateTime(dateTimeInZone);
 
                 //bool haveLastStopDelay = stopDelays.TryGetStopDelay(0, out int lastReachedStopArrivalDelay, out int lastReachedStopDepartureDelay);
@@ -304,31 +303,22 @@ namespace RAPTOR_Router.Models.Dynamic
                     bool haveLastStopDelay = stopDelays.TryGetStopDelay(i, out int currReachedStopArrivalDelay, out int currReachedStopDepartureDelay);
                     if (!haveLastStopDelay)
                     {
-                        Console.WriteLine("DONT_HAVE_DELAY");
                         break;
                     }
                     StopTime stopTime = stopTimes[i];
                     TimeOnly regularStopDepartureTime = stopTime.DepartureTime;
                     TimeOnly actualStopDepartureTime = regularStopDepartureTime.AddSeconds(currReachedStopDepartureDelay);
 
-                    Console.WriteLine(i + " regular: " + regularStopDepartureTime.ToLongTimeString());
-                    Console.WriteLine(i + " actual: " + actualStopDepartureTime.ToLongTimeString());
-                    Console.WriteLine("CurrTime: " + currTime.ToLongTimeString());
-
                     if (actualStopDepartureTime > currTime)
                     {
-
-                        Console.WriteLine("TOO_LARGE");
                         break;
                     }
                     else
                     {
-                        Console.WriteLine("NEXT");
                         lastReachedStopDepartureDelay = currReachedStopDepartureDelay;
                     }
                 }
 
-                Console.WriteLine(lastReachedStopDepartureDelay);
                 return lastReachedStopDepartureDelay;
             }
         }

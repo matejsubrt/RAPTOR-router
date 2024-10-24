@@ -1,4 +1,4 @@
-﻿#define RANGE
+﻿//#define RANGE
 #define FIXED_TIME
 
 using System.Diagnostics;
@@ -47,7 +47,7 @@ namespace CLIApp
             settings.CyclingPace = 5;
             settings.TransferTime = TransferTime.Short;
             settings.ComfortBalance = (ComfortBalance)1;
-            settings.WalkingPreference = 0;
+            settings.WalkingPreference = WalkingPreference.Low;
             settings.UseSharedBikes = true;
 
             var builder = new RouteFinderBuilder();
@@ -63,7 +63,7 @@ namespace CLIApp
                 
                 DateTime departureTime;
 #if FIXED_TIME
-                DateTime.TryParse("21/10/2024 16:50:00", out departureTime);
+                DateTime.TryParse("22/10/2024 16:02:00", out departureTime);
 #else
                 Console.WriteLine("Enter the departure time in the DD/MM/YYYY hh:mm:ss format (i.e. \"07/07/2023 07:07:07\" corresponds to 7.7.2023, 7:07:07):");
                 string dateTime = Console.ReadLine();

@@ -228,7 +228,7 @@ namespace RAPTOR_Router.RouteFinders
                 }
                 else
                 {
-                    Console.WriteLine();
+                    //Console.WriteLine();
                 }
             }
             //results = newResults;
