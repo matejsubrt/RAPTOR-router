@@ -308,8 +308,12 @@ namespace RAPTOR_Router.Models.Dynamic
                     TimeOnly regularStopDepartureTime = stopTime.DepartureTime;
                     TimeOnly actualStopDepartureTime = regularStopDepartureTime.AddSeconds(currReachedStopDepartureDelay);
 
+                    Console.WriteLine(i + " regular: " + regularStopDepartureTime);
+                    Console.WriteLine(i + " actual: " + actualStopDepartureTime);
+
                     if (actualStopDepartureTime > currTime)
                     {
+
                         Console.WriteLine("TOO_LARGE");
                         break;
                     }
