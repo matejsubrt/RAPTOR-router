@@ -24,10 +24,8 @@ namespace RAPTOR_Router.Models.Static
         {
             if (stopIndex < _stopDelays.Count)
             {
-                //arrivalDelay = _stopDelays[stopIndex].Item1;
-                //departureDelay = _stopDelays[stopIndex].Item2;
-                arrivalDelay = 0;
-                departureDelay = 0;
+                arrivalDelay = _stopDelays[stopIndex].Item1;
+                departureDelay = _stopDelays[stopIndex].Item2;
 
                 if (arrivalDelay < -600 || departureDelay < -600)
                 {
@@ -35,8 +33,7 @@ namespace RAPTOR_Router.Models.Static
                     departureDelay = 0;
                     return false;
                 }
-
-                return false;//true;
+                return true;
             }
 
             arrivalDelay = 0;
@@ -136,8 +133,7 @@ namespace RAPTOR_Router.Models.Static
             {
                 return false;
             }
-
-            return false;//true;
+            return true;
         }
 
         public TripStopDelays GetTripStopDelays(DateOnly tripStartDate, string tripId)
