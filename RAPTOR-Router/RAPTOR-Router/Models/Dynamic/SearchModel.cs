@@ -301,6 +301,7 @@ namespace RAPTOR_Router.Models.Dynamic
                     bool haveLastStopDelay = stopDelays.TryGetStopDelay(i, out int currReachedStopArrivalDelay, out int currReachedStopDepartureDelay);
                     if (!haveLastStopDelay)
                     {
+                        Console.WriteLine("DONT_HAVE_DELAY");
                         break;
                     }
                     StopTime stopTime = stopTimes[i];
@@ -309,10 +310,12 @@ namespace RAPTOR_Router.Models.Dynamic
 
                     if (actualStopDepartureTime > currTime)
                     {
+                        Console.WriteLine("TOO_LARGE");
                         break;
                     }
                     else
                     {
+                        Console.WriteLine("NEXT");
                         lastReachedStopDepartureDelay = currReachedStopDepartureDelay;
                     }
                 }
