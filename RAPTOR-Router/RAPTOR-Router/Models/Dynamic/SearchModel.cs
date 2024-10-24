@@ -310,6 +310,7 @@ namespace RAPTOR_Router.Models.Dynamic
 
                     Console.WriteLine(i + " regular: " + regularStopDepartureTime.ToLongTimeString());
                     Console.WriteLine(i + " actual: " + actualStopDepartureTime.ToLongTimeString());
+                    Console.WriteLine("CurrTime: " + currTime.ToLongTimeString());
 
                     if (actualStopDepartureTime > currTime)
                     {
