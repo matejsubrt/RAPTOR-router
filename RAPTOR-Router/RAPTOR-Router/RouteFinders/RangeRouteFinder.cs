@@ -214,6 +214,8 @@ namespace RAPTOR_Router.RouteFinders
 
             //results.Sort((r1, r2) => r1.DepartureDateTime.CompareTo(r2.DepartureDateTime));
 
+
+            // sort by arrival time for cleaning up nonoptimal results
             results = results.OrderBy(r => r.ArrivalDateTime).ThenBy(r => r.DepartureDateTime).ToList();
 
             for (int i = 0; i < results.Count - 1; i++)
@@ -231,6 +233,11 @@ namespace RAPTOR_Router.RouteFinders
                     //Console.WriteLine();
                 }
             }
+
+            // sort by departure time for final result list
+            results = results.OrderBy(r => r.DepartureDateTime).ToList();
+
+
             //results = newResults;
             return results;
         }
