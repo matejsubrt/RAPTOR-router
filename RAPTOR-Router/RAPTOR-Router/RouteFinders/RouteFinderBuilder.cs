@@ -31,6 +31,8 @@ namespace RAPTOR_Router.RouteFinders
 		private static BikeModel? bikeModel;
 
         private static DelayModel delayModel;
+
+        private Timer _timer;
         /// <summary>
         /// Initializes the builder.
         /// </summary>
@@ -128,7 +130,7 @@ namespace RAPTOR_Router.RouteFinders
 			ConnectModelsThroughTransfers(forbiddenCrossings);
 
             UpdateDelayModel(null);
-            Timer timer = new Timer(UpdateDelayModel, null, 20000, 20000);
+            _timer = new Timer(UpdateDelayModel, null, 20000, 20000);
         }
 
 		/// <summary>

@@ -262,10 +262,6 @@ namespace RAPTOR_Router.Structures.Transit
             if (RouteTrips.ContainsKey(currDate))
             {
                 tripsOnDate = RouteTrips[currDate];
-
-                //TimeOnly departureTime;
-
-                
                 Trip firstTripOnDay = tripsOnDate[0];
                 TimeOnly firstTripDepartureTime = firstTripOnDay.StopTimes[stopIndex].DepartureTime;
 
@@ -396,21 +392,6 @@ namespace RAPTOR_Router.Structures.Transit
 
                 Trip lastTripOnDay = tripsOnDate[tripsOnDate.Count - 1];
                 TimeOnly lastTripArrivalTime = lastTripOnDay.StopTimes[stopIndex].ArrivalTime;
-
-                // if last trip of the day already crosses into the previous day, immediately return it
-                //if (lastTripArrivalTime < lastTripOnDay.StopTimes[0].DepartureTime)
-                //{
-                //    tripDate = currDate.AddDays(-1);
-                //    return lastTripOnDay;
-                //}
-
-
-
-                // if last trip of the day already is before the specified time, we do not need to check trips that arrive after midnight on the next day, as they are already covered by the last trip of the day
-
-
-
-
                 TimeOnly regularArrivalTime;
 
 
