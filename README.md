@@ -6,7 +6,11 @@
     - The Android app [PragO](https://github.com/matejsubrt/PragO) is being developed as the primary frontend interface for the user accessing the search algorithm.
     - For development purposes, the app also includes basic CLI and GUI interfaces for connection searching.
 
+------------
 
+Please note that this is a work in progress and most parts of the application are still being developed. Currently, the RAPTOR-Router, WebAPI-light and CLIApp modules are up to date. The rest of the project will get updated when the core base functionality is finalized.
+
+------------
 
 ## Documentation
 
