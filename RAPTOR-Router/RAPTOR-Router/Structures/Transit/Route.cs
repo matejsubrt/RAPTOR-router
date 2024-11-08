@@ -336,7 +336,7 @@ namespace RAPTOR_Router.Structures.Transit
 
                     if (actualDepartureTime < tripsOnDate[i].StopTimes[0].DepartureTime)
                     {
-                        tripDate = currDate.AddDays(1);
+                        tripDate = currDate;//.AddDays(1);
                         return tripsOnDate[i];
                     }
 
