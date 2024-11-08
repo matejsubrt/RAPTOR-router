@@ -16,6 +16,35 @@ namespace RAPTOR_Router.RouteFinders
 {
     public class AlternativesRouteFinder
     {
+        //SortedDictionary<DateTime, Tuple<Trip, int, int, bool, int, int>> sortedTrips = new();
+        //altTrip, srcIndex, destIndex, hasSrcDelayData, srcDepartureDelay, currTripDelay
+        private class Entry : IComparable<Entry>
+        {
+            public DateTime dateTime;
+            public Trip altTrip;
+            public int srcIndex;
+            public int destIndex;
+            public bool hasSrcDelayData;
+            public int srcDepartureDelay;
+            public int currTripDelay;
+
+            public int CompareTo(Entry other)
+            {
+                int dateTimeComparison = dateTime.CompareTo(other.dateTime);
+
+                if (dateTimeComparison != 0)
+                    return dateTimeComparison;
+
+                // Fall back to comparing other fields if dateTime is the same
+                int tripComparison = altTrip.Id.CompareTo(other.altTrip.Id); // Assuming Trip has a unique Id
+                if (tripComparison != 0)
+                    return tripComparison;
+
+                return srcIndex.CompareTo(other.srcIndex); // Further fallback to srcIndex if needed
+            }
+        }
+
+
         /// <summary>
         /// The transit model holding all the static information about the transit network
         /// </summary>
@@ -118,7 +147,8 @@ namespace RAPTOR_Router.RouteFinders
 
             // For every route from any source stop to any destination stop \
             Dictionary<Trip, Stop> trips = new();
-            SortedDictionary<DateTime, Tuple<Trip, int, int, bool, int, int>> sortedTrips = new();
+            //SortedDictionary<DateTime, Tuple<Trip, int, int, bool, int, int>> sortedTrips = new();
+            SortedSet<Entry> sortedTrips = new();
             foreach (var (route, (srcIndex, destIndex)) in connectingRoutes)
             {
                 Stop srcStop1 = route.RouteStops[srcIndex];
@@ -145,7 +175,20 @@ namespace RAPTOR_Router.RouteFinders
                     DateTime arrivalDateTime = DateTimeExtensions.FromDateAndTime(arrivalDate, arrivalTime);
                     int currTripDelay = GetCurrentTripDelay(altTrip, altTripDate);
                     //TODO: error next line 21.10. 16:50 U4965Z1 U1748Z1
-                    sortedTrips.Add(arrivalDateTime.AddSeconds(destArrivalDelay), new Tuple<Trip, int, int, bool, int, int>(altTrip, srcIndex, destIndex, hasSrcDelayData, srcDepartureDelay, currTripDelay));
+
+
+                    //sortedTrips.Add(arrivalDateTime.AddSeconds(destArrivalDelay), new Tuple<Trip, int, int, bool, int, int>(altTrip, srcIndex, destIndex, hasSrcDelayData, srcDepartureDelay, currTripDelay));
+                    Entry entry = new Entry
+                    {
+                        dateTime = arrivalDateTime.AddSeconds(destArrivalDelay),
+                        altTrip = altTrip,
+                        srcIndex = srcIndex,
+                        destIndex = destIndex,
+                        hasSrcDelayData = hasSrcDelayData,
+                        srcDepartureDelay = srcDepartureDelay,
+                        currTripDelay = currTripDelay
+                    };
+                    sortedTrips.Add(entry);
                 }
             }
 
@@ -155,28 +198,39 @@ namespace RAPTOR_Router.RouteFinders
 
             RemoveOverlappingTrips();
 
-            List<Tuple<DateTime, Trip, int, int, bool, int, int>> resultTrips = new();
+            //List<Tuple<DateTime, Trip, int, int, bool, int, int>> resultTrips = new();
+            List<Entry> resultTrips = new();
             if (previous)
             {
                 foreach (var item in sortedTrips.Skip(sortedTrips.Count - count))
                 {
-                    var (trip, srcIndex, destIndex, hasDelayData, srcDepDelay, currDelay) = item.Value;
-                    resultTrips.Add(new Tuple<DateTime, Trip, int, int, bool, int, int>(item.Key, trip, srcIndex, destIndex, hasDelayData, srcDepDelay, currDelay));
+                    //var (trip, srcIndex, destIndex, hasDelayData, srcDepDelay, currDelay) = item.Value;
+                    //resultTrips.Add(new Tuple<DateTime, Trip, int, int, bool, int, int>(item.Key, trip, srcIndex, destIndex, hasDelayData, srcDepDelay, currDelay));
+                    resultTrips.Add(item);
                 }
             }
             else
             {
                 foreach (var item in sortedTrips.Take(count))
                 {
-                    var (trip, srcIndex, destIndex, hasDelayData, srcDepDelay, currDelay) = item.Value;
-                    resultTrips.Add(new Tuple<DateTime, Trip, int, int, bool, int, int>(item.Key, trip, srcIndex, destIndex, hasDelayData, srcDepDelay, currDelay));
+                    //var (trip, srcIndex, destIndex, hasDelayData, srcDepDelay, currDelay) = item.Value;
+                    //resultTrips.Add(new Tuple<DateTime, Trip, int, int, bool, int, int>(item.Key, trip, srcIndex, destIndex, hasDelayData, srcDepDelay, currDelay));
+                    resultTrips.Add(item);
                 }
             }
 
 
             List<SearchResult.UsedTrip> result = new();
-            foreach (var (arrivalTime, trip, srcIndex, destIndex, hasDelayData, srcDepDelay, currDelay) in resultTrips)
+            foreach (Entry entry in resultTrips)
             {
+                var trip = entry.altTrip;
+                var srcIndex = entry.srcIndex;
+                var destIndex = entry.destIndex;
+                var hasDelayData = entry.hasSrcDelayData;
+                var srcDepDelay = entry.srcDepartureDelay;
+                var currDelay = entry.currTripDelay;
+                DateTime arrivalTime = entry.dateTime;
+
                 List<SearchResult.StopPass> stopsPasses =
                     SearchResult.GetStopPassesList(trip.Route.RouteStops, trip.StopTimes, arrivalTime);
                 
@@ -266,13 +320,20 @@ namespace RAPTOR_Router.RouteFinders
 
             void RemoveOverlappingTrips()
             {
-                var tripsToRemove = new List<DateTime>();
+                var tripsToRemove = new List<Entry>();
 
                 foreach (var outer in sortedTrips)
                 {
-                    var (tripA, srcIndexA, destIndexA, hasDelayDataA, srcDepDelayA, currDelayA) = outer.Value;
+                    //var (tripA, srcIndexA, destIndexA, hasDelayDataA, srcDepDelayA, currDelayA) = outer.Value;
+                    var tripA = outer.altTrip;
+                    var srcIndexA = outer.srcIndex;
+                    var destIndexA = outer.destIndex;
+                    var hasDelayDataA = outer.hasSrcDelayData;
+                    var srcDepDelayA = outer.srcDepartureDelay;
+                    var currDelayA = outer.currTripDelay;
+
                     //var tripA = outer.Value.Item1;
-                    DateTime tripAArrivalTime = outer.Key;
+                    DateTime tripAArrivalTime = outer.dateTime;
                     DateOnly tripAArrivalDate = DateOnly.FromDateTime(tripAArrivalTime);
                     DateOnly tripADepartureDate = (tripA.StopTimes[srcIndexA].DepartureTime > tripA.StopTimes[destIndexA].ArrivalTime)
                         ? tripAArrivalDate.AddDays(1)
@@ -285,10 +346,19 @@ namespace RAPTOR_Router.RouteFinders
 
                     foreach (var inner in sortedTrips)
                     {
-                        if (outer.Key == inner.Key) continue; // Skip comparing the same trip
+                        //if (outer.Key == inner.Key) continue; // Skip comparing the same trip
+                        if (outer == inner) continue; // Skip comparing the same trip
 
-                        var (tripB, srcIndexB, destIndexB, hasDelayDataB, srcDepDelayB, currDelayB) = inner.Value;
-                        DateTime tripBArrivalTime = inner.Key;
+                        var tripB = inner.altTrip;
+                        var srcIndexB = inner.srcIndex;
+                        var destIndexB = inner.destIndex;
+                        var hasDelayDataB = inner.hasSrcDelayData;
+                        var srcDepDelayB = inner.srcDepartureDelay;
+                        var currDelayB = inner.currTripDelay;
+
+
+                        //var (tripB, srcIndexB, destIndexB, hasDelayDataB, srcDepDelayB, currDelayB) = inner.Value;
+                        DateTime tripBArrivalTime = inner.dateTime;
                         DateOnly tripBArrivalDate = DateOnly.FromDateTime(tripBArrivalTime);
                         DateOnly tripBDepartureDate = (tripB.StopTimes[srcIndexB].DepartureTime > tripB.StopTimes[destIndexB].ArrivalTime)
                             ? tripBArrivalDate.AddDays(1)
@@ -304,16 +374,16 @@ namespace RAPTOR_Router.RouteFinders
                         // Check if trip A departs before trip B but arrives after trip B
                         if (tripADepartureTime < tripBDepartureTime && tripAArrivalTime > tripBArrivalTime)
                         {
-                            tripsToRemove.Add(outer.Key);
+                            tripsToRemove.Add(outer);
                             break; // Move on to the next trip after marking for removal
                         }
                     }
                 }
 
                 // Remove trips that have been marked for removal
-                foreach (var key in tripsToRemove)
+                foreach (var entry in tripsToRemove)
                 {
-                    sortedTrips.Remove(key);
+                    sortedTrips.Remove(entry);
                 }
             }
 
