@@ -184,7 +184,7 @@ namespace RAPTOR_Router.RouteFinders
             int numberOfCalls = orderedDepTimes.Count;
 
             int minutesDifference = 1;
-#if DEBUG
+#if SEQUENTIAL
             for (int i = 0; i < numberOfCalls; i++)
             {
                 var departureTime = orderedDepTimes[i];
