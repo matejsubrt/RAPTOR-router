@@ -37,14 +37,14 @@
         public DateTime GetArrivalDateTime(DateOnly tripStartDate)
         {
             var date = tripStartDate.AddDays(DaysAfterTripStartArrival);
-            return new DateTime(date.Year, date.Month, date.Day, ArrivalTime.Hour, ArrivalTime.Minute, ArrivalTime.Second);
+            return date.ToDateTime(ArrivalTime);
         }
 
         public DateTime GetDepartureDateTime(DateOnly tripStartDate)
         {
             var date = tripStartDate.AddDays(DaysAfterTripStartDeparture);
 
-            return new DateTime(date.Year, date.Month, date.Day, DepartureTime.Hour, DepartureTime.Minute, DepartureTime.Second);
+            return date.ToDateTime(DepartureTime);
         }
     }
 }

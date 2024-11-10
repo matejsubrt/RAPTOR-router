@@ -243,10 +243,37 @@ namespace RAPTOR_Router.Structures.Transit
             var stopIndex = GetFirstStopIndex(stop);
 
             var baseDate = DateOnly.FromDateTime(dateTime);
-            var tripStartDatesToSearch = new List<DateOnly> { baseDate.AddDays(-1), baseDate, baseDate.AddDays(1) };
+            //var tripStartDatesToSearch = new SortedSet<DateOnly> { baseDate.AddDays(-1), baseDate, baseDate.AddDays(1) };
 
-            foreach (DateOnly date in tripStartDatesToSearch)
+            var prevDate = baseDate.AddDays(-1);
+            var followingDate = baseDate.AddDays(1);
+
+            var trip = ProcessDate(prevDate);
+            if(trip is not null)
             {
+                tripStartDate = prevDate;
+                return trip;
+            }
+
+            trip = ProcessDate(baseDate);
+            if(trip is not null)
+            {
+                tripStartDate = baseDate;
+                return trip;
+            }
+
+            trip = ProcessDate(followingDate);
+            if(trip is not null)
+            {
+                tripStartDate = followingDate;
+                return trip;
+            }
+
+
+            tripStartDate = new DateOnly();
+            return null;
+
+            Trip ProcessDate(DateOnly date){
                 if (RouteTrips.TryGetValue(date, out List<Trip> tripsOnDate))
                 {
                     foreach (Trip trip in tripsOnDate)
@@ -254,22 +281,34 @@ namespace RAPTOR_Router.Structures.Transit
                         // TODO: some heuristic to skip trips that are not relevant (for example if regular time is earlier by more than 2 hours, dont try getting the delay)
                         var stopTime = trip.StopTimes[stopIndex];
                         var regularDepartureTime = stopTime.GetDepartureDateTime(date);
-                        bool hasDelayData = delayModel.TryGetDelay(date, trip.Id, stopIndex, out int arrivalDelay, out int departureDelay);
-                        int delayOnStop = hasDelayData ? departureDelay : 0;
 
-                        DateTime actualDepartureTime = regularDepartureTime.AddSeconds(delayOnStop);
+
+                        DateTime actualDepartureTime;
+                        if (regularDepartureTime.AddHours(2) < dateTime)
+                        {
+                            // do not try adding delay
+                            actualDepartureTime = regularDepartureTime;
+                        }
+                        else
+                        {
+                            bool hasDelayData = delayModel.TryGetDelay(date, trip.Id, stopIndex, out int arrivalDelay,
+                                out int departureDelay);
+                            int delayOnStop = hasDelayData ? departureDelay : 0;
+
+                            actualDepartureTime = regularDepartureTime.AddSeconds(delayOnStop);
+                        }
+
 
                         if (actualDepartureTime >= dateTime)
                         {
-                            tripStartDate = date;
+                            //tripStartDate = date;
                             return trip;
                         }
                     }
                 }
-            }
 
-            tripStartDate = new DateOnly();
-            return null;
+                return null;
+            }
         }
 
         public Trip GetLatestTripArrivingBeforeTimeAtStop(Stop stop, DateTime dateTime, DelayModel delayModel, out DateOnly tripStartDate)
