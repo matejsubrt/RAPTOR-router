@@ -42,6 +42,11 @@ namespace RAPTOR_Router.RouteFinders
 
                 return srcIndex.CompareTo(other.srcIndex); // Further fallback to srcIndex if needed
             }
+
+            public override string ToString()
+            {
+                return altTrip.Route.ShortName + ": " + dateTime.ToString();
+            }
         }
 
 
@@ -159,13 +164,14 @@ namespace RAPTOR_Router.RouteFinders
                 //TODO: check if the trip should be included in the result or not - probably yes unless it is the one we are searching for alternatives for
                 //Trip firstTripDepartingAfterTime = route.GetEarliestTripDepartingAfterTimeAtStop(srcStop1, dateOnly,
                 //    timeOnly, worstAllowedReachTime, delayModel, out DateOnly tripDate);
-                Trip firstTripDepartingAfterTime = route.GetEarliestAfterBeta(srcStop1, time, delayModel, out DateOnly tripDate);
+                Trip firstTripDepartingAfterTime = route.GetEarliestTripDepartingAfterTimeAtStop(srcStop1, time, delayModel, out DateOnly tripDate);
                 if (firstTripDepartingAfterTime == null)
                 {
                     continue;
                 }
                 List<Tuple<DateOnly, Trip>> alternativeTrips = GetAlternativeTripsOnRoute(firstTripDepartingAfterTime, tripDate, count, previous);
 
+                Console.WriteLine();
                 foreach (var (altTripDate, altTrip) in alternativeTrips)
                 {
                     bool hasSrcDelayData = delayModel.TryGetDelay(altTripDate, altTrip.Id, srcIndex,
@@ -197,7 +203,8 @@ namespace RAPTOR_Router.RouteFinders
             List<DateTime> toRemove = new();
 
 
-            RemoveOverlappingTrips();
+            //RemoveOverlappingTrips();
+            FilterSortedTrips();
 
             //List<Tuple<DateTime, Trip, int, int, bool, int, int>> resultTrips = new();
             List<Entry> resultTrips = new();
@@ -316,75 +323,32 @@ namespace RAPTOR_Router.RouteFinders
                     }
                 }
 
+                if (result[0].Item2.StopTimes[^1].ArrivalTime > new TimeOnly(23, 0, 0))
+                {
+                    Console.WriteLine();
+                }
+
                 return result;
             }
 
-            void RemoveOverlappingTrips()
+            void FilterSortedTrips()
             {
-                var tripsToRemove = new List<Entry>();
+                var entries = sortedTrips.ToList();
 
-                foreach (var outer in sortedTrips)
+                for (int i = 0; i < entries.Count; i++)
                 {
-                    //var (tripA, srcIndexA, destIndexA, hasDelayDataA, srcDepDelayA, currDelayA) = outer.Value;
-                    var tripA = outer.altTrip;
-                    var srcIndexA = outer.srcIndex;
-                    var destIndexA = outer.destIndex;
-                    var hasDelayDataA = outer.hasSrcDelayData;
-                    var srcDepDelayA = outer.srcDepartureDelay;
-                    var currDelayA = outer.currTripDelay;
+                    var entryA = entries[i];
 
-                    //var tripA = outer.Value.Item1;
-                    DateTime tripAArrivalTime = outer.dateTime;
-                    DateOnly tripAArrivalDate = DateOnly.FromDateTime(tripAArrivalTime);
-                    DateOnly tripADepartureDate = (tripA.StopTimes[srcIndexA].DepartureTime > tripA.StopTimes[destIndexA].ArrivalTime)
-                        ? tripAArrivalDate.AddDays(1)
-                        : tripAArrivalDate;
-                    int tripADepartureDelay = delayModel.TryGetDelay(tripADepartureDate, tripA.Id, srcIndexA, out int arrivalDelayA, out int departureDelayA)
-                        ? departureDelayA
-                        : 0;
-                    DateTime tripADepartureTime = DateTimeExtensions.FromDateAndTime(tripADepartureDate, tripA.StopTimes[srcIndexA].DepartureTime).AddSeconds(tripADepartureDelay);
-                    tripAArrivalTime = tripAArrivalTime.AddSeconds(currDelayA);
-
-                    foreach (var inner in sortedTrips)
+                    for (int j = i + 1; j < entries.Count; j++)
                     {
-                        //if (outer.Key == inner.Key) continue; // Skip comparing the same trip
-                        if (outer == inner) continue; // Skip comparing the same trip
+                        var entryB = entries[j];
 
-                        var tripB = inner.altTrip;
-                        var srcIndexB = inner.srcIndex;
-                        var destIndexB = inner.destIndex;
-                        var hasDelayDataB = inner.hasSrcDelayData;
-                        var srcDepDelayB = inner.srcDepartureDelay;
-                        var currDelayB = inner.currTripDelay;
-
-
-                        //var (tripB, srcIndexB, destIndexB, hasDelayDataB, srcDepDelayB, currDelayB) = inner.Value;
-                        DateTime tripBArrivalTime = inner.dateTime;
-                        DateOnly tripBArrivalDate = DateOnly.FromDateTime(tripBArrivalTime);
-                        DateOnly tripBDepartureDate = (tripB.StopTimes[srcIndexB].DepartureTime > tripB.StopTimes[destIndexB].ArrivalTime)
-                            ? tripBArrivalDate.AddDays(1)
-                            : tripBArrivalDate;
-                        int tripBDepartureDelay = delayModel.TryGetDelay(tripBDepartureDate, tripA.Id, srcIndexA, out int arrivalDelayB, out int departureDelayB)
-                            ? departureDelayB
-                            : 0;
-                        DateTime tripBDepartureTime = DateTimeExtensions.FromDateAndTime(tripBDepartureDate, tripB.StopTimes[srcIndexB].DepartureTime).AddSeconds(tripBDepartureDelay);
-                        tripBArrivalTime = tripBArrivalTime.AddSeconds(currDelayB);
-
-                        //var tripB = inner.Value.Item1;
-
-                        // Check if trip A departs before trip B but arrives after trip B
-                        if (tripADepartureTime < tripBDepartureTime && tripAArrivalTime > tripBArrivalTime)
+                        if (entryA.altTrip.StopTimes[entryA.srcIndex].DepartureTime < entryB.altTrip.StopTimes[entryB.srcIndex].DepartureTime &&
+                            entryA.altTrip.StopTimes[entryA.destIndex].ArrivalTime >= entryB.altTrip.StopTimes[entryB.destIndex].ArrivalTime)
                         {
-                            tripsToRemove.Add(outer);
-                            break; // Move on to the next trip after marking for removal
+                            sortedTrips.Remove(entryA);
                         }
                     }
-                }
-
-                // Remove trips that have been marked for removal
-                foreach (var entry in tripsToRemove)
-                {
-                    sortedTrips.Remove(entry);
                 }
             }
 

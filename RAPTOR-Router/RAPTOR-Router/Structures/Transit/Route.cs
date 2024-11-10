@@ -234,7 +234,7 @@ namespace RAPTOR_Router.Structures.Transit
 
 
 
-        public Trip GetEarliestAfterBeta(Stop stop, DateTime dateTime, DelayModel delayModel, out DateOnly tripStartDate)
+        public Trip GetEarliestTripDepartingAfterTimeAtStop(Stop stop, DateTime dateTime, DelayModel delayModel, out DateOnly tripStartDate)
         {
             // Get all trips that start either on the day before, the actual day or the day after the specified date
             //var datedTrips = GetDatedTripsByDateForwardIterVersion(DateOnly.FromDateTime(dateTime.AddDays(-1)), DateOnly.FromDateTime(dateTime).AddDays(1));
@@ -272,7 +272,7 @@ namespace RAPTOR_Router.Structures.Transit
             return null;
         }
 
-        public Trip GetLatestBeforeBeta(Stop stop, DateTime dateTime, DelayModel delayModel, out DateOnly tripStartDate)
+        public Trip GetLatestTripArrivingBeforeTimeAtStop(Stop stop, DateTime dateTime, DelayModel delayModel, out DateOnly tripStartDate)
         {
             // Get all trips that start either on the day before, the actual day or the day after the specified date
             //var datedTrips = GetDatedTripsByDateBackwardIterVersion(DateOnly.FromDateTime(dateTime.AddDays(-1)), DateOnly.FromDateTime(dateTime).AddDays(1));
@@ -315,8 +315,8 @@ namespace RAPTOR_Router.Structures.Transit
         public Trip GetFirstTransferableTripAtStopByReachTimeBeta(bool forward, Stop stop, DateTime dateTime, DelayModel delayModel, out DateOnly tripStartDate)
         {
             return forward ?
-                GetEarliestAfterBeta(stop, dateTime, delayModel, out tripStartDate) :
-                GetLatestBeforeBeta(stop, dateTime, delayModel, out tripStartDate);
+                GetEarliestTripDepartingAfterTimeAtStop(stop, dateTime, delayModel, out tripStartDate) :
+                GetLatestTripArrivingBeforeTimeAtStop(stop, dateTime, delayModel, out tripStartDate);
         }
 
 
