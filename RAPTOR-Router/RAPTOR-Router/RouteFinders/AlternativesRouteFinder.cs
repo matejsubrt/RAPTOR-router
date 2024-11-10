@@ -153,12 +153,13 @@ namespace RAPTOR_Router.RouteFinders
             {
                 Stop srcStop1 = route.RouteStops[srcIndex];
                 // This is not very effective, but as there should always be only a few connecting routes, it should be fine
-                DateOnly dateOnly = DateOnly.FromDateTime(time);
-                TimeOnly timeOnly = TimeOnly.FromDateTime(time);
+                //DateOnly dateOnly = DateOnly.FromDateTime(time);
+                //TimeOnly timeOnly = TimeOnly.FromDateTime(time);
 
                 //TODO: check if the trip should be included in the result or not - probably yes unless it is the one we are searching for alternatives for
-                Trip firstTripDepartingAfterTime = route.GetEarliestTripDepartingAfterTimeAtStop(srcStop1, dateOnly,
-                    timeOnly, worstAllowedReachTime, delayModel, out DateOnly tripDate);
+                //Trip firstTripDepartingAfterTime = route.GetEarliestTripDepartingAfterTimeAtStop(srcStop1, dateOnly,
+                //    timeOnly, worstAllowedReachTime, delayModel, out DateOnly tripDate);
+                Trip firstTripDepartingAfterTime = route.GetEarliestAfterBeta(srcStop1, time, delayModel, out DateOnly tripDate);
                 if (firstTripDepartingAfterTime == null)
                 {
                     continue;

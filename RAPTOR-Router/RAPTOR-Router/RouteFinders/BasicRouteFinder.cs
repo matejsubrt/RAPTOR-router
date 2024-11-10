@@ -273,15 +273,16 @@ namespace RAPTOR_Router.RouteFinders
 
                 DateOnly tripDate;
 
-                Trip trip = route.GetFirstTransferableTripAtStopByReachTime(
+                Trip trip = route.GetFirstTransferableTripAtStopByReachTimeBeta(
                     forward,
                     markedStop,
-                    DateOnly.FromDateTime(bestReachTimeAtTraverseFromStopLastRound),
-                    TimeOnly.FromDateTime(bestReachTimeAtTraverseFromStopLastRound),
-                    searchModel.GetSearchBeginTime().AddDays(timeMpl * Settings.MAX_TRIP_LENGTH_DAYS), //Settings.MAX_TRIP_LENGTH_DAYS,
+                    bestReachTimeAtTraverseFromStopLastRound,
                     delayModel,
                     out tripDate
                 );
+                //DatedTrip datedTrip = route.GetFirstTransferableTripAtStopByReachTimeBeta(forward, markedStop,
+                //    bestReachTimeAtTraverseFromStopLastRound,
+                //    searchModel.GetSearchBeginTime().AddDays(timeMpl * Settings.MAX_TRIP_LENGTH_DAYS), delayModel);
 
                 if (trip is not null)
                 {
@@ -613,17 +614,15 @@ namespace RAPTOR_Router.RouteFinders
                             return;
                         }
 
-                        DateOnly bestReachLastRoundDate = DateOnly.FromDateTime(bestReachTimeLastRound);
-                        TimeOnly bestReachLastRoundTime = TimeOnly.FromDateTime(bestReachTimeLastRound);
+                        //DateOnly bestReachLastRoundDate = DateOnly.FromDateTime(bestReachTimeLastRound);
+                        //TimeOnly bestReachLastRoundTime = TimeOnly.FromDateTime(bestReachTimeLastRound);
 
 
                         DateOnly newTripDate;
-                        Trip newTrip = route.GetFirstTransferableTripAtStopByReachTime(
+                        Trip newTrip = route.GetFirstTransferableTripAtStopByReachTimeBeta(
                             forward,
                             currStop,
-                            bestReachLastRoundDate,
-                            bestReachLastRoundTime,
-                            searchModel.GetSearchBeginTime().AddDays(timeMpl * Settings.MAX_TRIP_LENGTH_DAYS),
+                            bestReachTimeLastRound,
                             delayModel,
                             out newTripDate);
                         if (newTrip != currTrip || timeComp.ImprovesTime(searchModel.GetBestReachTime(currStop), searchModel.GetBestReachTime(traverseFromStop)))

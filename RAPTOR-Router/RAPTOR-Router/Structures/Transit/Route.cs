@@ -230,169 +230,180 @@ namespace RAPTOR_Router.Structures.Transit
 
             return stopDepartureTimes;
         }
-        
 
-        public Trip GetFirstTransferableTripAtStopByReachTime(bool forward, Stop stop, DateOnly date, TimeOnly time,
-            DateTime worstAllowedReachTime, DelayModel delayModel, out DateOnly tripDate)
+
+
+
+        public Trip GetEarliestAfterBeta(Stop stop, DateTime dateTime, DelayModel delayModel, out DateOnly tripStartDate)
+        {
+            // Get all trips that start either on the day before, the actual day or the day after the specified date
+            //var datedTrips = GetDatedTripsByDateForwardIterVersion(DateOnly.FromDateTime(dateTime.AddDays(-1)), DateOnly.FromDateTime(dateTime).AddDays(1));
+            // var datedTrips = GetDatedTripsByDateListVersion(DateOnly.FromDateTime(dateTime.AddDays(-1)), DateOnly.FromDateTime(worstAllowed).AddDays(1));
+
+            var stopIndex = GetFirstStopIndex(stop);
+
+            var baseDate = DateOnly.FromDateTime(dateTime);
+            var tripStartDatesToSearch = new List<DateOnly> { baseDate.AddDays(-1), baseDate, baseDate.AddDays(1) };
+
+            foreach (DateOnly date in tripStartDatesToSearch)
+            {
+                if (RouteTrips.TryGetValue(date, out List<Trip> tripsOnDate))
+                {
+                    foreach (Trip trip in tripsOnDate)
+                    {
+                        // TODO: some heuristic to skip trips that are not relevant (for example if regular time is earlier by more than 2 hours, dont try getting the delay)
+                        var stopTime = trip.StopTimes[stopIndex];
+                        var regularDepartureTime = stopTime.GetDepartureDateTime(date);
+                        bool hasDelayData = delayModel.TryGetDelay(date, trip.Id, stopIndex, out int arrivalDelay, out int departureDelay);
+                        int delayOnStop = hasDelayData ? departureDelay : 0;
+
+                        DateTime actualDepartureTime = regularDepartureTime.AddSeconds(delayOnStop);
+
+                        if (actualDepartureTime >= dateTime)
+                        {
+                            tripStartDate = date;
+                            return trip;
+                        }
+                    }
+                }
+            }
+
+            tripStartDate = new DateOnly();
+            return null;
+        }
+
+        public Trip GetLatestBeforeBeta(Stop stop, DateTime dateTime, DelayModel delayModel, out DateOnly tripStartDate)
+        {
+            // Get all trips that start either on the day before, the actual day or the day after the specified date
+            //var datedTrips = GetDatedTripsByDateBackwardIterVersion(DateOnly.FromDateTime(dateTime.AddDays(-1)), DateOnly.FromDateTime(dateTime).AddDays(1));
+            // var datedTrips = GetDatedTripsByDateListVersion(DateOnly.FromDateTime(dateTime.AddDays(-1)), DateOnly.FromDateTime(worstAllowed).AddDays(1));
+
+            var stopIndex = GetLastStopIndex(stop);
+
+            var baseDate = DateOnly.FromDateTime(dateTime);
+            var tripStartDatesToSearch = new List<DateOnly> { baseDate, baseDate.AddDays(-1) };
+
+
+            foreach (DateOnly date in tripStartDatesToSearch)
+            {
+                if (RouteTrips.TryGetValue(date, out List<Trip> tripsOnDate))
+                {
+                    for (int i = tripsOnDate.Count - 1; i >= 0; i--)
+                    {
+                        var trip = tripsOnDate[i];
+
+                        var stopTime = trip.StopTimes[stopIndex];
+                        var regularArrivalTime = stopTime.GetArrivalDateTime(date);
+                        bool hasDelayData = delayModel.TryGetDelay(date, trip.Id, stopIndex, out int arrivalDelay, out int departureDelay);
+                        int delayOnStop = hasDelayData ? arrivalDelay : 0;
+
+                        DateTime actualArrivalTime = regularArrivalTime.AddSeconds(delayOnStop);
+
+                        if (actualArrivalTime <= dateTime)
+                        {
+                            tripStartDate = date;
+                            return trip;
+                        }
+                    }
+                }
+            }
+
+            tripStartDate = new DateOnly();
+            return null;
+        }
+
+        public Trip GetFirstTransferableTripAtStopByReachTimeBeta(bool forward, Stop stop, DateTime dateTime, DelayModel delayModel, out DateOnly tripStartDate)
         {
             return forward ?
-                GetEarliestTripDepartingAfterTimeAtStop(stop, date, time, worstAllowedReachTime, delayModel, out tripDate) :
-                GetLatestTripArrivingBeforeTimeAtStop(stop, date, time, worstAllowedReachTime, delayModel, out tripDate);
+                GetEarliestAfterBeta(stop, dateTime, delayModel, out tripStartDate) :
+                GetLatestBeforeBeta(stop, dateTime, delayModel, out tripStartDate);
         }
 
 
-        //TODO: make private
-        /// <summary>
-        /// Finds the earliest trip serving the route at the specified stop leaving after the specified time
-        /// </summary>
-        /// <param name="stop">The stop to find the earliest trip from</param>
-        /// <param name="date">The earliest possible date of the trip</param>
-        /// <param name="time">The earliest possible time of the trip</param>
-        /// <param name="maxDaysAfter">The maximum number of days between the specified earliest time and the trip departure time</param>
-        /// <param name="tripDate">The date on which the trip actually leaves -> if the first found trip is after midnight, this date is different than the date input parameter</param>
-        /// <returns>The earliest trip, that leaves the stop after the specified time on the route, null if no trip is found</returns>
-        public Trip GetEarliestTripDepartingAfterTimeAtStop(Stop stop, DateOnly date, TimeOnly time, DateTime worstAllowedReachTime, DelayModel delayModel, out DateOnly tripDate)
-        {
-            int stopIndex = GetFirstStopIndex(stop);
-            DateOnly currDate = date;
-            DateOnly maxDate = DateOnly.FromDateTime(worstAllowedReachTime);
-            //DateOnly maxDate = date.AddDays(maxDaysAfter);
-
-            List<Trip> tripsOnDate;
-            if (RouteTrips.ContainsKey(currDate))
-            {
-                tripsOnDate = RouteTrips[currDate];
-                Trip firstTripOnDay = tripsOnDate[0];
-                TimeOnly firstTripDepartureTime = firstTripOnDay.StopTimes[stopIndex].DepartureTime;
-
-                // if first trip of the day already crosses into the next day, immediately return it
-                if (firstTripDepartureTime < firstTripOnDay.StopTimes[0].DepartureTime)
-                {
-                    tripDate = currDate.AddDays(1);
-                    return firstTripOnDay;
-                }
+        //public Trip GetFirstTransferableTripAtStopByReachTime(bool forward, Stop stop, DateOnly date, TimeOnly time,
+        //    DateTime worstAllowedReachTime, DelayModel delayModel, out DateOnly tripDate)
+        //{
+        //    return forward ?
+        //        GetEarliestTripDepartingAfterTimeAtStop(stop, date, time, worstAllowedReachTime, delayModel, out tripDate) :
+        //        GetLatestTripArrivingBeforeTimeAtStop(stop, date, time, worstAllowedReachTime, delayModel, out tripDate);
+        //}
 
 
+        ////TODO: make private
+        ///// <summary>
+        ///// Finds the earliest trip serving the route at the specified stop leaving after the specified time
+        ///// </summary>
+        ///// <param name="stop">The stop to find the earliest trip from</param>
+        ///// <param name="date">The earliest possible date of the trip</param>
+        ///// <param name="time">The earliest possible time of the trip</param>
+        ///// <param name="maxDaysAfter">The maximum number of days between the specified earliest time and the trip departure time</param>
+        ///// <param name="tripDate">The date on which the trip actually leaves -> if the first found trip is after midnight, this date is different than the date input parameter</param>
+        ///// <returns>The earliest trip, that leaves the stop after the specified time on the route, null if no trip is found</returns>
+        //public Trip GetEarliestTripDepartingAfterTimeAtStop(Stop stop, DateOnly date, TimeOnly time, DateTime worstAllowedReachTime, DelayModel delayModel, out DateOnly tripDate)
+        //{
+        //    int stopIndex = GetFirstStopIndex(stop);
+        //    DateOnly currDate = date;
+        //    DateOnly maxDate = DateOnly.FromDateTime(worstAllowedReachTime);
+        //    //DateOnly maxDate = date.AddDays(maxDaysAfter);
 
-                // if first trip of the day already is after the specified time, we need to check trips that depart before midnight on the previous day
-                if (firstTripDepartureTime >= time)
-                {
-                    List<Trip> tripsOnPreviousDay;
-                    if (RouteTrips.TryGetValue(currDate.AddDays(-1), out tripsOnPreviousDay))
-                    {
-                        int i = tripsOnPreviousDay.Count - 1;
-                        //TimeOnly srcDepartureTime = tripsOnPreviousDay[i].StopTimes[0].DepartureTime;
-                        //TimeOnly departureTime = tripsOnPreviousDay[i].StopTimes[stopIndex].DepartureTime;
-                        Trip? bestTrip = null;
-                        while (i >= 0/* && departureTime < srcDepartureTime && departureTime >= time*/)
-                        {
+        //    List<Trip> tripsOnDate;
+        //    if (RouteTrips.ContainsKey(currDate))
+        //    {
+        //        tripsOnDate = RouteTrips[currDate];
+        //        Trip firstTripOnDay = tripsOnDate[0];
+        //        TimeOnly firstTripDepartureTime = firstTripOnDay.StopTimes[stopIndex].DepartureTime;
+
+        //        // if first trip of the day already crosses into the next day, immediately return it
+        //        if (firstTripDepartureTime < firstTripOnDay.StopTimes[0].DepartureTime)
+        //        {
+        //            tripDate = currDate.AddDays(1);
+        //            return firstTripOnDay;
+        //        }
+
+
+
+        //        // if first trip of the day already is after the specified time, we need to check trips that depart before midnight on the previous day
+        //        if (firstTripDepartureTime >= time)
+        //        {
+        //            List<Trip> tripsOnPreviousDay;
+        //            if (RouteTrips.TryGetValue(currDate.AddDays(-1), out tripsOnPreviousDay))
+        //            {
+        //                int i = tripsOnPreviousDay.Count - 1;
+        //                //TimeOnly srcDepartureTime = tripsOnPreviousDay[i].StopTimes[0].DepartureTime;
+        //                //TimeOnly departureTime = tripsOnPreviousDay[i].StopTimes[stopIndex].DepartureTime;
+        //                Trip? bestTrip = null;
+        //                while (i >= 0/* && departureTime < srcDepartureTime && departureTime >= time*/)
+        //                {
                             
-                            TimeOnly srcDepartureTime = tripsOnPreviousDay[i].StopTimes[0].DepartureTime;
-                            TimeOnly departureTime = tripsOnPreviousDay[i].StopTimes[stopIndex].DepartureTime;
-                            // The trip goes over midnight into the day we reached the stop AND it departs from it after its reach time
+        //                    TimeOnly srcDepartureTime = tripsOnPreviousDay[i].StopTimes[0].DepartureTime;
+        //                    TimeOnly departureTime = tripsOnPreviousDay[i].StopTimes[stopIndex].DepartureTime;
+        //                    // The trip goes over midnight into the day we reached the stop AND it departs from it after its reach time
 
-                            if (!(departureTime < srcDepartureTime && departureTime >= time))
-                            {
-                                break;
-                            }
+        //                    if (!(departureTime < srcDepartureTime && departureTime >= time))
+        //                    {
+        //                        break;
+        //                    }
 
-                            bestTrip = tripsOnPreviousDay[i];
+        //                    bestTrip = tripsOnPreviousDay[i];
 
-                            i--;
+        //                    i--;
 
-                            //srcDepartureTime = bestTrip.StopTimes[0].DepartureTime;
-                            //departureTime = bestTrip.StopTimes[stopIndex].DepartureTime;
-                        }
+        //                    //srcDepartureTime = bestTrip.StopTimes[0].DepartureTime;
+        //                    //departureTime = bestTrip.StopTimes[stopIndex].DepartureTime;
+        //                }
 
-                        if (bestTrip is not null)
-                        {
-                            tripDate = currDate.AddDays(-1);
+        //                if (bestTrip is not null)
+        //                {
+        //                    tripDate = currDate.AddDays(-1);
 
-                            return bestTrip;
-                        }
-                    }
-                }
-
-
-
-                TimeOnly regularDepartureTime;
+        //                    return bestTrip;
+        //                }
+        //            }
+        //        }
 
 
 
-
-
-
-
-
-                //Scan the first day for trips leaving after specified time
-                for (int i = 0; i < tripsOnDate.Count; i++)
-                {
-                    //departureTime = tripsOnDate[i].StopTimes[stopIndex].DepartureTime;
-
-                    regularDepartureTime = tripsOnDate[i].StopTimes[stopIndex].DepartureTime;
-                    bool hasDelayData = delayModel.TryGetDelay(currDate, tripsOnDate[i].Id, stopIndex, out int arrivalDelay, out int departureDelay);
-                    int delayOnStop = hasDelayData ? departureDelay : 0;
-                    TimeOnly actualDepartureTime = regularDepartureTime.AddSeconds(delayOnStop);
-
-                    if (actualDepartureTime < tripsOnDate[i].StopTimes[0].DepartureTime)
-                    {
-                        tripDate = currDate;//.AddDays(1);
-                        return tripsOnDate[i];
-                    }
-
-                    if (actualDepartureTime >= time)
-                    {
-                        tripDate = currDate;
-                        return tripsOnDate[i];
-                    }
-                }
-            }
-
-
-
-
-            //scan the following days till maxDay and select first available trip
-            while (currDate < maxDate)
-            {
-                currDate = currDate.AddDays(1);
-
-                if (RouteTrips.ContainsKey(currDate) && RouteTrips[currDate].Count > 0)
-                {
-                    tripDate = currDate;
-                    return RouteTrips[currDate][0];
-                }
-            }
-            //No trip found in the specified timeframe
-            tripDate = new DateOnly();
-            return null;
-        }
-
-        /// <summary>
-        /// Finds the latest trip serving the route at the specified stop arriving before the specified time
-        /// </summary>
-        /// <param name="stop">The stop to find the latest trip to</param>
-        /// <param name="date">The latest possible date of the trip</param>
-        /// <param name="time">The latest possible time of the trip</param>
-        /// <param name="maxDaysBefore">The maximum number of days between the specified latest time and the trip arrival time</param>
-        /// <param name="tripDate">The date on which the trip actually arrives -> if the first found trip is before midnight, this date is different than the date input parameter</param>
-        /// <returns>The latest trip, that arrives at the stop before the specified time on the route, null if no trip is found</returns>
-        public Trip GetLatestTripArrivingBeforeTimeAtStop(Stop stop, DateOnly date, TimeOnly time, DateTime worstAllowedReachTime, DelayModel delayModel, out DateOnly tripDate)
-        {
-            int stopIndex = GetLastStopIndex(stop);
-            DateOnly currDate = date;
-            DateOnly minDate = DateOnly.FromDateTime(worstAllowedReachTime);
-            //DateOnly minDate = date.AddDays(-maxDaysBefore);
-
-            List<Trip> tripsOnDate;
-            if (RouteTrips.ContainsKey(currDate))
-            {
-                tripsOnDate = RouteTrips[currDate];
-
-                //TimeOnly arrivalTime;
-
-                Trip lastTripOnDay = tripsOnDate[tripsOnDate.Count - 1];
-                TimeOnly lastTripArrivalTime = lastTripOnDay.StopTimes[stopIndex].ArrivalTime;
-                TimeOnly regularArrivalTime;
+        //        TimeOnly regularDepartureTime;
 
 
 
@@ -400,72 +411,149 @@ namespace RAPTOR_Router.Structures.Transit
 
 
 
-                //Scan the first day for trips arriving before specified time
 
+        //        //Scan the first day for trips leaving after specified time
+        //        for (int i = 0; i < tripsOnDate.Count; i++)
+        //        {
+        //            //departureTime = tripsOnDate[i].StopTimes[stopIndex].DepartureTime;
 
-                // We start with the last trip of the day and go backwards
-                //TODO: check, if there could not be a trip that arrives at the stop after midnight, but is still the last trip of the day
-                int lastTripArrivingAtStopBeforeMidnightIndex = tripsOnDate.Count - 1;
-                var stopTimes1 = tripsOnDate[lastTripArrivingAtStopBeforeMidnightIndex].StopTimes;
-                var firstStopArrivalTime = stopTimes1[0].ArrivalTime;
-                var lastStopArrivalTime = stopTimes1[stopTimes1.Count - 1].ArrivalTime;
-                while(firstStopArrivalTime > lastStopArrivalTime)
-                {
-                    lastTripArrivingAtStopBeforeMidnightIndex--;
-                    if(lastTripArrivingAtStopBeforeMidnightIndex < 0)
-                    {
-                        break;
-                    }
-                    stopTimes1 = tripsOnDate[lastTripArrivingAtStopBeforeMidnightIndex].StopTimes;
-                    firstStopArrivalTime = stopTimes1[0].ArrivalTime;
-                    lastStopArrivalTime = stopTimes1[stopTimes1.Count - 1].ArrivalTime;
-                }
+        //            regularDepartureTime = tripsOnDate[i].StopTimes[stopIndex].DepartureTime;
+        //            bool hasDelayData = delayModel.TryGetDelay(currDate, tripsOnDate[i].Id, stopIndex, out int arrivalDelay, out int departureDelay);
+        //            int delayOnStop = hasDelayData ? departureDelay : 0;
+        //            TimeOnly actualDepartureTime = regularDepartureTime.AddSeconds(delayOnStop);
 
+        //            if (actualDepartureTime < tripsOnDate[i].StopTimes[0].DepartureTime)
+        //            {
+        //                tripDate = currDate.AddDays(1);
+        //                return tripsOnDate[i];
+        //            }
 
-                for (int i = lastTripArrivingAtStopBeforeMidnightIndex; i >= 0; i--)
-                {
-                    var stopTimes = tripsOnDate[i].StopTimes;
-                    //arrivalTime = stopTimes[stopIndex].ArrivalTime;
-
-                    regularArrivalTime = stopTimes[stopIndex].ArrivalTime;
-                    bool hasDelayData = delayModel.TryGetDelay(currDate, tripsOnDate[i].Id, stopIndex, out int arrivalDelay, out int departureDelay);
-                    int delayAtStop = hasDelayData ? arrivalDelay : 0;
-                    TimeOnly actualArrivalTime = regularArrivalTime.AddSeconds(delayAtStop);
+        //            if (actualDepartureTime >= time)
+        //            {
+        //                tripDate = currDate;
+        //                return tripsOnDate[i];
+        //            }
+        //        }
+        //    }
 
 
 
 
-                    if (actualArrivalTime > stopTimes[stopTimes.Count - 1].ArrivalTime)
-                    {
-                        tripDate = currDate.AddDays(-1);
-                        return tripsOnDate[i];
-                    }
+        //    //scan the following days till maxDay and select first available trip
+        //    while (currDate < maxDate)
+        //    {
+        //        currDate = currDate.AddDays(1);
 
-                    if (actualArrivalTime <= time)
-                    {
-                        tripDate = currDate;
-                        return tripsOnDate[i];
-                    }
-                }
-            }
+        //        if (RouteTrips.ContainsKey(currDate) && RouteTrips[currDate].Count > 0)
+        //        {
+        //            tripDate = currDate;
+        //            return RouteTrips[currDate][0];
+        //        }
+        //    }
+        //    //No trip found in the specified timeframe
+        //    tripDate = new DateOnly();
+        //    return null;
+        //}
+
+        ///// <summary>
+        ///// Finds the latest trip serving the route at the specified stop arriving before the specified time
+        ///// </summary>
+        ///// <param name="stop">The stop to find the latest trip to</param>
+        ///// <param name="date">The latest possible date of the trip</param>
+        ///// <param name="time">The latest possible time of the trip</param>
+        ///// <param name="maxDaysBefore">The maximum number of days between the specified latest time and the trip arrival time</param>
+        ///// <param name="tripDate">The date on which the trip actually arrives -> if the first found trip is before midnight, this date is different than the date input parameter</param>
+        ///// <returns>The latest trip, that arrives at the stop before the specified time on the route, null if no trip is found</returns>
+        //public Trip GetLatestTripArrivingBeforeTimeAtStop(Stop stop, DateOnly date, TimeOnly time, DateTime worstAllowedReachTime, DelayModel delayModel, out DateOnly tripDate)
+        //{
+        //    int stopIndex = GetLastStopIndex(stop);
+        //    DateOnly currDate = date;
+        //    DateOnly minDate = DateOnly.FromDateTime(worstAllowedReachTime);
+        //    //DateOnly minDate = date.AddDays(-maxDaysBefore);
+
+        //    List<Trip> tripsOnDate;
+        //    if (RouteTrips.ContainsKey(currDate))
+        //    {
+        //        tripsOnDate = RouteTrips[currDate];
+
+        //        //TimeOnly arrivalTime;
+
+        //        Trip lastTripOnDay = tripsOnDate[tripsOnDate.Count - 1];
+        //        TimeOnly lastTripArrivalTime = lastTripOnDay.StopTimes[stopIndex].ArrivalTime;
+        //        TimeOnly regularArrivalTime;
 
 
-            //scan the preceding days till minDay and select first available trip
-            while (currDate > minDate)
-            {
-                currDate = currDate.AddDays(-1);
 
-                if (RouteTrips.ContainsKey(currDate) && RouteTrips[currDate].Count > 0)
-                {
-                    tripDate = currDate;
-                    // last trip of the preceding day
-                    return RouteTrips[currDate][RouteTrips[currDate].Count - 1];
-                }
-            }
-            //No trip found in the specified timeframe
-            tripDate = new DateOnly();
-            return null;
-        }
+
+
+
+
+        //        //Scan the first day for trips arriving before specified time
+
+
+        //        // We start with the last trip of the day and go backwards
+        //        //TODO: check, if there could not be a trip that arrives at the stop after midnight, but is still the last trip of the day
+        //        int lastTripArrivingAtStopBeforeMidnightIndex = tripsOnDate.Count - 1;
+        //        var stopTimes1 = tripsOnDate[lastTripArrivingAtStopBeforeMidnightIndex].StopTimes;
+        //        var firstStopArrivalTime = stopTimes1[0].ArrivalTime;
+        //        var lastStopArrivalTime = stopTimes1[stopTimes1.Count - 1].ArrivalTime;
+        //        while(firstStopArrivalTime > lastStopArrivalTime)
+        //        {
+        //            lastTripArrivingAtStopBeforeMidnightIndex--;
+        //            if(lastTripArrivingAtStopBeforeMidnightIndex < 0)
+        //            {
+        //                break;
+        //            }
+        //            stopTimes1 = tripsOnDate[lastTripArrivingAtStopBeforeMidnightIndex].StopTimes;
+        //            firstStopArrivalTime = stopTimes1[0].ArrivalTime;
+        //            lastStopArrivalTime = stopTimes1[stopTimes1.Count - 1].ArrivalTime;
+        //        }
+
+
+        //        for (int i = lastTripArrivingAtStopBeforeMidnightIndex; i >= 0; i--)
+        //        {
+        //            var stopTimes = tripsOnDate[i].StopTimes;
+        //            //arrivalTime = stopTimes[stopIndex].ArrivalTime;
+
+        //            regularArrivalTime = stopTimes[stopIndex].ArrivalTime;
+        //            bool hasDelayData = delayModel.TryGetDelay(currDate, tripsOnDate[i].Id, stopIndex, out int arrivalDelay, out int departureDelay);
+        //            int delayAtStop = hasDelayData ? arrivalDelay : 0;
+        //            TimeOnly actualArrivalTime = regularArrivalTime.AddSeconds(delayAtStop);
+
+
+
+
+        //            if (actualArrivalTime > stopTimes[stopTimes.Count - 1].ArrivalTime)
+        //            {
+        //                tripDate = currDate.AddDays(-1);
+        //                return tripsOnDate[i];
+        //            }
+
+        //            if (actualArrivalTime <= time)
+        //            {
+        //                tripDate = currDate;
+        //                return tripsOnDate[i];
+        //            }
+        //        }
+        //    }
+
+
+        //    //scan the preceding days till minDay and select first available trip
+        //    while (currDate > minDate)
+        //    {
+        //        currDate = currDate.AddDays(-1);
+
+        //        if (RouteTrips.ContainsKey(currDate) && RouteTrips[currDate].Count > 0)
+        //        {
+        //            tripDate = currDate;
+        //            // last trip of the preceding day
+        //            return RouteTrips[currDate][RouteTrips[currDate].Count - 1];
+        //        }
+        //    }
+        //    //No trip found in the specified timeframe
+        //    tripDate = new DateOnly();
+        //    return null;
+        //}
 
         public override string ToString()
         {

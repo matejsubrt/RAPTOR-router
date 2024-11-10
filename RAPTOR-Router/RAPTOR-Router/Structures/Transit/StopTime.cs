@@ -13,20 +13,38 @@
         /// The time, at which the trip departs from the stop
         /// </summary>
         public TimeOnly DepartureTime { get; set; }
+
+        public byte DaysAfterTripStartArrival { get; set; }
+        public byte DaysAfterTripStartDeparture { get; set; }
         /// <summary>
         /// Creates a new StopTime object
         /// </summary>
         /// <param name="arrivalTime">The arrival time</param>
         /// <param name="departureTime">The departure time</param>
 
-        public StopTime(TimeOnly arrivalTime, TimeOnly departureTime)
+        public StopTime(TimeOnly arrivalTime, TimeOnly departureTime, byte daysAfterTripStartArrival, byte daysAfterTripStartDeparture)
         {
             ArrivalTime = arrivalTime;
             DepartureTime = departureTime;
+            DaysAfterTripStartArrival = daysAfterTripStartArrival;
+            DaysAfterTripStartDeparture = daysAfterTripStartDeparture;
         }
         public override string ToString()
         {
             return "Arr: " + ArrivalTime.ToString() + ", Dep: " + DepartureTime.ToString();
+        }
+
+        public DateTime GetArrivalDateTime(DateOnly tripStartDate)
+        {
+            var date = tripStartDate.AddDays(DaysAfterTripStartArrival);
+            return new DateTime(date.Year, date.Month, date.Day, ArrivalTime.Hour, ArrivalTime.Minute, ArrivalTime.Second);
+        }
+
+        public DateTime GetDepartureDateTime(DateOnly tripStartDate)
+        {
+            var date = tripStartDate.AddDays(DaysAfterTripStartDeparture);
+
+            return new DateTime(date.Year, date.Month, date.Day, DepartureTime.Hour, DepartureTime.Minute, DepartureTime.Second);
         }
     }
 }

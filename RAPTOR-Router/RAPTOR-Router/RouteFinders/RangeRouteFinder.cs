@@ -184,7 +184,26 @@ namespace RAPTOR_Router.RouteFinders
             int numberOfCalls = orderedDepTimes.Count;
 
             int minutesDifference = 1;
+#if DEBUG
+            for (int i = 0; i < numberOfCalls; i++)
+            {
+                var departureTime = orderedDepTimes[i];
 
+                IRouteFinder router = builder.CreateUniversalRouteFinder(forward, settings);
+                var searchResults = router.FindConnectionWithAlternatives(srcStopName, destStopName, departureTime);
+
+                lock (results)
+                {
+                    foreach (var result in searchResults)
+                    {
+                        if (result is not null)
+                        {
+                            results.Add(result);
+                        }
+                    }
+                }
+            }
+#else
             for (int i = 0; i < numberOfCalls; i++)
             {
                 var departureTime = orderedDepTimes[i];//searchBeginRangeStart.AddMinutes(i * minutesDifference);
@@ -211,6 +230,7 @@ namespace RAPTOR_Router.RouteFinders
             }
 
             await Task.WhenAll(tasks);
+#endif
 
             //results.Sort((r1, r2) => r1.DepartureDateTime.CompareTo(r2.DepartureDateTime));
 

@@ -27,9 +27,41 @@ namespace RAPTOR_Router.Structures.Transit
             Route = route;
             StopTimes = new();
             Id = id;
+
+            byte daysSinceTripStart = 0;
+            var lastStopTime = gtfsTripStopTimes[0].DepartureTime;
             foreach (GTFSStopTime gtfsTripStopTime in gtfsTripStopTimes)
             {
-                StopTime stopTime = new StopTime(gtfsTripStopTime.ArrivalTime, gtfsTripStopTime.DepartureTime);
+                byte daysAfterTripStartArrival;
+                byte daysAfterTripStartDeparture;
+
+                var arrTime = gtfsTripStopTime.ArrivalTime;
+                var depTime = gtfsTripStopTime.DepartureTime;
+
+
+                if (arrTime < lastStopTime)
+                {
+                    // we crossed midnight between last stop and this stop
+                    daysSinceTripStart += 1;
+                    daysAfterTripStartArrival = daysSinceTripStart;
+                    daysAfterTripStartDeparture = daysSinceTripStart;
+                }
+                else if (depTime < arrTime)
+                {
+                    // we crossed midnight while stationary at this stop - between arrival and departure
+                    daysAfterTripStartArrival = daysSinceTripStart;
+                    daysSinceTripStart += 1;
+                    daysAfterTripStartDeparture = daysSinceTripStart;
+                }
+                else
+                {
+                    // we did not cross midnight
+                    daysAfterTripStartArrival = daysSinceTripStart;
+                    daysAfterTripStartDeparture = daysSinceTripStart;
+                }
+
+                lastStopTime = depTime;
+                StopTime stopTime = new StopTime(arrTime, depTime, daysAfterTripStartArrival, daysAfterTripStartDeparture);
                 StopTimes.Add(stopTime);
             }
         }
