@@ -283,6 +283,8 @@ namespace RAPTOR_Router.Models.Dynamic
             //TODO: implement other direction
             result.SetDepartureAndArrivalTimesByEarliestDeparture(searchBeginTime);
 
+            result.InitializeAlternatives();
+
             return result;
 
 

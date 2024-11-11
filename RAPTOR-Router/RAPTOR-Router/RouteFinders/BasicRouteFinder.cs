@@ -561,6 +561,15 @@ namespace RAPTOR_Router.RouteFinders
                     if (tripHasDelayData)
                     {
                         stopHasDelayData = tripStopDelays.TryGetStopDelay(i, out arrivalDelay, out departureDelay);
+
+
+                        // Sometimes there is a bug in the GTFS realtime data where not all stops have delay data, but the trip has delay data
+                        // in that case, if this is a stop after the last stop with delay data, the delay data should be the same as the last stop with delay data
+                        if (!stopHasDelayData && i >= tripStopDelays.Count && tripStopDelays.Count < trip.StopTimes.Count)
+                        {
+                            (arrivalDelay, departureDelay) = tripStopDelays.GetLastStopDelay();
+                            stopHasDelayData = true;
+                        }
                     }
 
 

@@ -122,7 +122,7 @@ namespace WebAPI_light
             //    HandleRequestStops(routerBuilder, srcStopName, destStopName, dateTime, walkingPace, cyclingPace, bikeUnlockTime, bikeLockTime, useSharedBikes, bikeMax15Minutes, transferTime, comfortBalance, walkingPreference, bikeTripBuffer))
             //    .WithName("GetConnection")
             //    .WithOpenApi();
-            app.MapPost("/connection/single/stop-to-stop", (StopToStopRequest request) =>
+            /*app.MapPost("/connection/single/stop-to-stop", (StopToStopRequest request) =>
                     HandleRequestStopToStop(routerBuilder, request.srcStopName, request.destStopName, request.dateTime, request.byEarliestDeparture, request.settings))
                 .WithName("GetConnectionByStopNames")
                 .WithOpenApi();
@@ -136,36 +136,30 @@ namespace WebAPI_light
             app.MapPost("/connection/range/stop-to-stop", (StopToStopRangeRequest request) =>
                     HandleRangeRequestStopToStop(request))
                 .WithName("GetConnectionsRangeByStopNames")
-                .WithOpenApi();
+                .WithOpenApi();*/
 
-            app.MapPost("/connection", (ConnectionRequest request) => HandleConnectionRequest(request))
+            app.MapPost("/connection", (ConnectionRequest request) => 
+                    HandleConnectionRequest(request))
                 .WithName("GetConnection")
                 .WithOpenApi();
 
             app.MapPost("/alternative-trips", (AlternativeTripsRequest request) => 
-                HandleAlternativeTripsRequest(request))
+                    HandleAlternativeTripsRequest(request))
                 .WithName("GetAlternativeTrips")
+                .WithOpenApi();
+
+            app.MapPost("/update-delays", (List<SearchResult> results) =>
+                    HandleUpdateDelaysRequest(results))
+                .WithName("UpdateDelays")
                 .WithOpenApi();
             app.Run();
 
         }
 
 
-        static IResult HandleAlternativeTripsRequest(AlternativeTripsRequest request)
-        {
-            DateTime dateTime;
-            if (!DateTime.TryParse(request.dateTime, out dateTime))
-            {
-                var message = "Invalid DateTime format";
-                HttpError err = new HttpError(message);
-                return Results.BadRequest(err);
-            }
-            var routeFinder = routerBuilder.CreateDirectRouteFinder();
-            var result = routeFinder.GetAlternativeTrips(request.srcStopId, request.destStopId, dateTime, request.count, request.previous);
-            return Results.Ok(result);
-        }
+        
 
-        static IResult HandleRequestStopToStop(RouteFinderBuilder builder, string srcStopName, string destStopName, string dateTimeString, bool byEarliestDeparture, Settings settings)
+        /*static IResult HandleRequestStopToStop(RouteFinderBuilder builder, string srcStopName, string destStopName, string dateTimeString, bool byEarliestDeparture, Settings settings)
         {
             // Parse the DateTime
             DateTime dateTime;
@@ -356,7 +350,7 @@ namespace WebAPI_light
                 HttpError err = new HttpError(message);
                 return Results.NotFound(err);
             }
-        }
+        }*/
 
         static IResult HandleConnectionRequest(ConnectionRequest request)
         {
@@ -518,6 +512,28 @@ namespace WebAPI_light
                     return Results.NotFound(err);
                 }
             }
+        }
+
+        static IResult HandleAlternativeTripsRequest(AlternativeTripsRequest request)
+        {
+            DateTime dateTime;
+            if (!DateTime.TryParse(request.dateTime, out dateTime))
+            {
+                var message = "Invalid DateTime format";
+                HttpError err = new HttpError(message);
+                return Results.BadRequest(err);
+            }
+            var routeFinder = routerBuilder.CreateDirectRouteFinder();
+            var result = routeFinder.GetAlternativeTrips(request.srcStopId, request.destStopId, dateTime, request.count, request.previous);
+            return Results.Ok(result);
+        }
+
+        static IResult HandleUpdateDelaysRequest(List<SearchResult> results)
+        {
+            var delayUpdater = routerBuilder.CreateDelayUpdater();
+            delayUpdater.UpdateDelays(results);
+
+            return Results.Ok();
         }
     }
 }

@@ -10,12 +10,28 @@ using System.Text.Json.Serialization;
 
 namespace RAPTOR_Router.Models.Results
 {
+    
+
     /// <summary>
     /// Class representing the result of a connection search
     /// </summary>
     /// <remarks>If running the program as an API, this class is serialized and returned as json in the response body</remarks>
     public class SearchResult
     {
+        public class TripAlternatives
+        {
+            public int CurrIndex { get; set; }
+            public List<UsedTrip> Alternatives { get; set; } = new();
+            public int Count { get; set; }
+
+            public TripAlternatives(int currIndex, List<UsedTrip> alternatives)
+            {
+                CurrIndex = currIndex;
+                Alternatives = alternatives;
+                Count = alternatives.Count;
+            }
+        }
+
         /// <summary>
         /// The settings used for the search
         /// </summary>
@@ -23,7 +39,14 @@ namespace RAPTOR_Router.Models.Results
         /// <summary>
         /// The public transit trips used during the best found connection
         /// </summary>
+        /// <remarks>To be used for simpler client-side handling that does not support alternatives</remarks>
         public List<UsedTrip> UsedTrips { get; private set; } = new List<UsedTrip>();
+        /// <summary>
+        /// The public transit trips used during the best found connection, with their alternatives
+        /// </summary>
+        /// <remarks>To be used in client-side apps that do support trip alternatives. It is initialized with only the one best trip,
+        /// with the expectation that the user will expand this via the alternative trips API</remarks>
+        public List<TripAlternatives> UsedTripAlternatives { get; private set; } = new();
         /// <summary>
         /// The transfers used during the best found connection
         /// </summary>
@@ -207,6 +230,15 @@ namespace RAPTOR_Router.Models.Results
                 stopPasses.Add(stopPass);
             }
             return stopPasses;
+        }
+
+        internal void InitializeAlternatives()
+        {
+            foreach (UsedTrip usedTrip in UsedTrips)
+            {
+                UsedTripAlternatives.Add(new TripAlternatives(0, new List<UsedTrip> {usedTrip}));
+            }
+            
         }
 
         /// <summary>

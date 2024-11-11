@@ -40,6 +40,11 @@ namespace RAPTOR_Router.Models.Static
             departureDelay = 0;
             return false;
         }
+
+        public Tuple<int, int> GetLastStopDelay()
+        {
+            return _stopDelays[^1];
+        }
     }
     //internal class TripDelayInfo
     //{

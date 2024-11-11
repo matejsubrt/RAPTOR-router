@@ -293,6 +293,22 @@ namespace RAPTOR_Router.RouteFinders
             return router;
         }
 
+        public DelayUpdater CreateDelayUpdater()
+        {
+            if (raptorModel is null)
+            {
+                throw new ApplicationException("Data from a gtfs archive were not loaded yet");
+            }
+
+            if (bikeModel is null)
+            {
+                throw new ApplicationException("Data from a gbfs api were not loaded yet");
+            }
+
+            DelayUpdater updater = new DelayUpdater(raptorModel, delayModel);
+            return updater;
+        }
+
 
 
         /// <summary>
