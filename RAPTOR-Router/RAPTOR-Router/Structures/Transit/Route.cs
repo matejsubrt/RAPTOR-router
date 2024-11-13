@@ -105,135 +105,63 @@ namespace RAPTOR_Router.Structures.Transit
             return res;
         }
 
-        public List<DateTime> GetDepartureTimesAtStopWithinRange(Stop stop, DateTime rangeStart, DateTime rangeEnd,
-            DelayModel delayModel)
+        public List<DateTime> GetTripTimesAtStopWithinRange(Stop stop, DateTime rangeStart, DateTime rangeEnd,
+            DelayModel delayModel, bool departure)
         {
             if (rangeStart >= rangeEnd)
             {
                 throw new ArgumentException("rangeStart must be before rangeEnd");
             }
 
-            List<DateTime> stopDepartureTimes = new();
-            int stopIndex = GetFirstStopIndex(stop);
-            if (rangeStart.Date == rangeEnd.Date)
+            if (rangeStart.AddHours(6) < rangeEnd)
             {
-                DateOnly date = DateOnly.FromDateTime(rangeStart.Date);
-                DateOnly prevDate = date.AddDays(-1);
-                bool haveTripsOnDate = RouteTrips.ContainsKey(date);
-                bool haveTripsOnPrevDate = RouteTrips.ContainsKey(prevDate);
-                if (!(haveTripsOnDate || haveTripsOnPrevDate))
-                {
-                    return null;
-                }
+                throw new ArgumentException("Range is too long. Max length is 6 hours");
+            }
 
-                if (haveTripsOnPrevDate)
-                {
-                    var tripsOnPrevDate = RouteTrips[prevDate];
-                    foreach (Trip trip in tripsOnPrevDate)
-                    {
-                        TimeOnly startTime = trip.StopTimes[0].DepartureTime;
-                        TimeOnly stopDepartureTime = trip.StopTimes[stopIndex].DepartureTime;
-                        delayModel.TryGetDelay(prevDate, trip.Id, stopIndex, out int arrivalDelay, out int departureDelay);
-                        TimeOnly actualStopDepartureTime = stopDepartureTime.AddSeconds(departureDelay);
-                        if (actualStopDepartureTime < startTime)
-                        {
-                            DateTime stopDepartureDateTime =
-                                DateTimeExtensions.FromDateAndTime(date, actualStopDepartureTime);
-                            if (stopDepartureDateTime >= rangeStart && stopDepartureDateTime <= rangeEnd)
-                            {
-                                stopDepartureTimes.Add(stopDepartureDateTime);
-                            }
-                        }
-                    }
-                }
+            DateOnly rangeStartDate = DateOnly.FromDateTime(rangeStart);
+            DateOnly rangeEndDate = DateOnly.FromDateTime(rangeEnd);
+            DateOnly prevDate = rangeStartDate.AddDays(-1);
+            DateOnly nextDate = rangeStartDate.AddDays(1);
 
-                if (haveTripsOnDate)
+            List<Trip> tripsOnRangeStartDate = RouteTrips.ContainsKey(rangeStartDate) ? RouteTrips[rangeStartDate] : new();
+            List<Trip> tripsOnPrevDate = RouteTrips.ContainsKey(prevDate) ? RouteTrips[prevDate] : new();
+            List<Trip> tripsOnNextDate = (RouteTrips.ContainsKey(nextDate) && rangeEndDate > rangeStartDate) ? RouteTrips[nextDate] : new();
+
+            int stopIndex = departure ? GetFirstStopIndex(stop) : GetLastStopIndex(stop);
+
+            List<DateTime> tripTimes = new();
+
+
+            foreach (Trip trip in tripsOnPrevDate)
+            {
+                DateTime tripTime = trip.StopTimes[stopIndex].GetDepartureDateTime(prevDate);
+                if (tripTime >= rangeStart && tripTime <= rangeEnd)
                 {
-                    var tripsOnDate = RouteTrips[date];
-                    foreach (Trip trip in tripsOnDate)
-                    {
-                        TimeOnly startTime = trip.StopTimes[0].DepartureTime;
-                        TimeOnly stopDepartureTime = trip.StopTimes[stopIndex].DepartureTime;
-                        delayModel.TryGetDelay(date, trip.Id, stopIndex, out int arrivalDelay, out int departureDelay);
-                        TimeOnly actualStopDepartureTime = stopDepartureTime.AddSeconds(departureDelay);
-                        if (actualStopDepartureTime >= startTime)
-                        {
-                            DateTime stopDepartureDateTime = DateTimeExtensions.FromDateAndTime(date, actualStopDepartureTime);
-                            if (stopDepartureDateTime >= rangeStart && stopDepartureDateTime <= rangeEnd)
-                            {
-                                stopDepartureTimes.Add(stopDepartureDateTime);
-                            }
-                        }
-                    }
+                    tripTimes.Add(tripTime);
                 }
             }
-            else
+            foreach (Trip trip in tripsOnRangeStartDate)
             {
-                DateOnly date = DateOnly.FromDateTime(rangeStart.Date);
-                DateOnly nextDate = date.AddDays(1);
-                bool haveTripsOnDate = RouteTrips.ContainsKey(date);
-                bool haveTripsOnNextDate = RouteTrips.ContainsKey(nextDate);
-
-                if (!(haveTripsOnDate || haveTripsOnNextDate))
+                DateTime tripTime = trip.StopTimes[stopIndex].GetDepartureDateTime(rangeStartDate);
+                if (tripTime >= rangeStart && tripTime <= rangeEnd)
                 {
-                    return null;
+                    tripTimes.Add(tripTime);
                 }
-
-                if (haveTripsOnDate)
+            }
+            foreach (Trip trip in tripsOnNextDate)
+            {
+                DateTime tripTime = trip.StopTimes[stopIndex].GetDepartureDateTime(nextDate);
+                if (tripTime >= rangeStart && tripTime <= rangeEnd)
                 {
-                    var tripsOnDate = RouteTrips[date];
-                    foreach (Trip trip in tripsOnDate)
-                    {
-                        TimeOnly startTime = trip.StopTimes[0].DepartureTime;
-                        TimeOnly stopDepartureTime = trip.StopTimes[stopIndex].DepartureTime;
-                        delayModel.TryGetDelay(date, trip.Id, stopIndex, out int arrivalDelay, out int departureDelay);
-                        TimeOnly actualStopDepartureTime = stopDepartureTime.AddSeconds(departureDelay);
-                        if (actualStopDepartureTime >= startTime)
-                        {
-                            DateTime stopDepartureDateTime = DateTimeExtensions.FromDateAndTime(date, actualStopDepartureTime);
-                            if (stopDepartureDateTime >= rangeStart && stopDepartureDateTime <= rangeEnd)
-                            {
-                                stopDepartureTimes.Add(stopDepartureDateTime);
-                            }
-                        }
-                        else
-                        {
-                            DateTime stopDepartureDateTime = DateTimeExtensions.FromDateAndTime(nextDate, actualStopDepartureTime);
-                            if (stopDepartureDateTime >= rangeStart && stopDepartureDateTime <= rangeEnd)
-                            {
-                                stopDepartureTimes.Add(stopDepartureDateTime);
-                            }
-                        }
-                    }
-                }
-
-                if (haveTripsOnNextDate)
-                {
-                    var tripsOnNextDate = RouteTrips[nextDate];
-                    foreach (Trip trip in tripsOnNextDate)
-                    {
-                        TimeOnly startTime = trip.StopTimes[0].DepartureTime;
-                        TimeOnly stopDepartureTime = trip.StopTimes[stopIndex].DepartureTime;
-                        delayModel.TryGetDelay(nextDate, trip.Id, stopIndex, out int arrivalDelay, out int departureDelay);
-                        TimeOnly actualStopDepartureTime = stopDepartureTime.AddSeconds(departureDelay);
-                        if (actualStopDepartureTime >= startTime)
-                        {
-                            DateTime stopDepartureDateTime = DateTimeExtensions.FromDateAndTime(nextDate, actualStopDepartureTime);
-                            if (stopDepartureDateTime >= rangeStart && stopDepartureDateTime <= rangeEnd)
-                            {
-                                stopDepartureTimes.Add(stopDepartureDateTime);
-                            }
-                        }
-                    }
+                    tripTimes.Add(tripTime);
                 }
             }
 
-            return stopDepartureTimes;
+            return tripTimes;
         }
 
 
-
-
+        
         public Trip GetEarliestTripDepartingAfterTimeAtStop(Stop stop, DateTime dateTime, DelayModel delayModel, out DateOnly tripStartDate)
         {
             // Get all trips that start either on the day before, the actual day or the day after the specified date
