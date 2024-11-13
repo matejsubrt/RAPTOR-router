@@ -22,6 +22,7 @@ namespace RAPTOR_Router.RouteFinders
         {
             public DateTime dateTime;
             public Trip altTrip;
+            public DateOnly tripDate;
             public int srcIndex;
             public int destIndex;
             public bool hasSrcDelayData;
@@ -189,6 +190,7 @@ namespace RAPTOR_Router.RouteFinders
                     {
                         dateTime = arrivalDateTime.AddSeconds(destArrivalDelay),
                         altTrip = altTrip,
+                        tripDate = altTripDate,
                         srcIndex = srcIndex,
                         destIndex = destIndex,
                         hasSrcDelayData = hasSrcDelayData,
@@ -232,6 +234,7 @@ namespace RAPTOR_Router.RouteFinders
             foreach (Entry entry in resultTrips)
             {
                 var trip = entry.altTrip;
+                var tripDate = entry.tripDate;
                 var srcIndex = entry.srcIndex;
                 var destIndex = entry.destIndex;
                 var hasDelayData = entry.hasSrcDelayData;
@@ -240,7 +243,7 @@ namespace RAPTOR_Router.RouteFinders
                 DateTime arrivalTime = entry.dateTime;
 
                 List<SearchResult.StopPass> stopsPasses =
-                    SearchResult.GetStopPassesList(trip.Route.RouteStops, trip.StopTimes, arrivalTime);
+                    SearchResult.GetStopPassesList(trip.Route.RouteStops, trip.StopTimes, tripDate);
                 
                 SearchResult.UsedTrip usedTrip = new SearchResult.UsedTrip(stopsPasses, srcIndex, destIndex,
                     trip.Route.ShortName, trip.Route.Color, trip.Route.Type, hasDelayData, srcDepDelay, currDelay, trip.Id);

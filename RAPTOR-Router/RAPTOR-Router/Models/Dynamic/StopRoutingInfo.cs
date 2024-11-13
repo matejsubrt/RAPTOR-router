@@ -22,6 +22,7 @@ namespace RAPTOR_Router.Models.Dynamic
             /// The trip used to reach the stop
             /// </summary>
             public Trip Trip { get; protected set; }
+            public DateOnly TripStartDate { get; protected set; }
             /// <summary>
             /// The time at which the stop was reached
             /// </summary>
@@ -31,11 +32,12 @@ namespace RAPTOR_Router.Models.Dynamic
             /// </summary>
             public Stop ReachedFromStop { get; protected set; }
 
-            internal TripReach(Trip trip, Stop otherEndStop, DateTime reachTime)
+            internal TripReach(Trip trip, Stop otherEndStop, DateTime reachTime, DateOnly tripStartDate)
             {
                 this.Trip = trip;
                 this.ReachedFromStop = otherEndStop;
                 this.Time = reachTime;
+                TripStartDate = tripStartDate;
             }
 
             public override string ToString()

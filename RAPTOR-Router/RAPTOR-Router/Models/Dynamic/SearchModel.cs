@@ -197,8 +197,9 @@ namespace RAPTOR_Router.Models.Dynamic
                         throw new ApplicationException("Trip and getOnStop cannot be null in an used round");
                     }
 
-                    bool tripStartedDayBefore = tripToReachStop.StopTimes[0].DepartureTime > TimeOnly.FromDateTime(tripReach.Time);
-                    DateOnly tripStartDate = tripStartedDayBefore ? DateOnly.FromDateTime(tripReach.Time.AddDays(-1)) : DateOnly.FromDateTime(tripReach.Time.Date);
+                    //bool tripStartedDayBefore = tripToReachStop.StopTimes[0].DepartureTime > TimeOnly.FromDateTime(tripReach.Time);
+                    //DateOnly tripStartDate = tripStartedDayBefore ? DateOnly.FromDateTime(tripReach.Time.AddDays(-1)) : DateOnly.FromDateTime(tripReach.Time.Date);
+                    DateOnly tripStartDate = tripReach.TripStartDate;
 
                     bool tripHasDelayData = delayModel.TripHasDelayData(tripStartDate, tripToReachStop.Id);
                     bool getOnStopHasDelayData;
@@ -228,7 +229,8 @@ namespace RAPTOR_Router.Models.Dynamic
 
 
 
-                    result.AddUsedTrip(tripToReachStop, realGetOnStop, realGetOffStop, tripReach.Time, getOnStopHasDelayData, getOnStopDepartureDelay, currentTripDelay, !forward);
+                    //result.AddUsedTrip(tripToReachStop, realGetOnStop, realGetOffStop, tripReach.Time, getOnStopHasDelayData, getOnStopDepartureDelay, currentTripDelay, !forward);
+                    result.AddUsedTrip(tripToReachStop, tripStartDate, realGetOnStop, realGetOffStop, getOnStopHasDelayData, getOnStopDepartureDelay, currentTripDelay, !forward);
 
 
 
@@ -280,8 +282,15 @@ namespace RAPTOR_Router.Models.Dynamic
                 result.AddUsedTransfer(customTransferReach.Transfer, customTransferReach.Time, !forward);
             }
 
-            //TODO: implement other direction
-            result.SetDepartureAndArrivalTimesByEarliestDeparture(searchBeginTime);
+            if(forward)
+            {
+                result.SetDepartureAndArrivalTimesByEarliestDeparture(searchBeginTime);
+            }
+            else
+            {
+                result.SetDepartureAndArrivalTimesByLatestArrival(searchBeginTime);
+            }
+            //result.SetDepartureAndArrivalTimesByEarliestDeparture(searchBeginTime);
 
             result.InitializeAlternatives();
 
@@ -581,13 +590,13 @@ namespace RAPTOR_Router.Models.Dynamic
         /// <param name="reachedFromStop">The stop from which the trip was taken (i.e. where it is boarded for forward or exited for backward search)</param>
         /// <param name="round">The round in which we are improving</param>
         /// <returns>Whether the reach time was improved</returns>
-        public bool TryImproveReachTimeByTrip(Stop stop, DateTime reachTime, Trip trip, Stop reachedFromStop, int round)
+        public bool TryImproveReachTimeByTrip(Stop stop, DateTime reachTime, Trip trip, DateOnly tripDate, Stop reachedFromStop, int round)
         {
             bool improves = ReachTimeImprovesCurrBest(reachTime, stop);
 
             if (improves)
             {
-                SetTripReachInRound(stop, trip, reachedFromStop, reachTime, round);
+                SetTripReachInRound(stop, trip, tripDate, reachedFromStop, reachTime, round);
                 SetBestReachTime(stop, reachTime);
 
                 // Check if it is best arrival so far. Only check if the destination is NOT a custom route point
@@ -837,9 +846,9 @@ namespace RAPTOR_Router.Models.Dynamic
         /// <param name="otherEndStop">The stop at which the trip was reached during the search (get on/off stop)</param>
         /// <param name="reachTime">The time at which the trip reaches the stop</param>
         /// <param name="round">The round in which to set the reach</param>
-        public void SetTripReachInRound(Stop stop, Trip trip, Stop otherEndStop, DateTime reachTime, int round)
+        public void SetTripReachInRound(Stop stop, Trip trip, DateOnly tripDate, Stop otherEndStop, DateTime reachTime, int round)
         {
-            StopRoutingInfo.TripReach tripReach = new StopRoutingInfo.TripReach(trip, otherEndStop, reachTime);
+            StopRoutingInfo.TripReach tripReach = new StopRoutingInfo.TripReach(trip, otherEndStop, reachTime, tripDate);
             GetRoutingInfo(stop).Reaches[round] = tripReach;
         }
 

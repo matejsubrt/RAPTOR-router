@@ -596,7 +596,7 @@ namespace RAPTOR_Router.RouteFinders
                     DateTime searchReachTime = forward ? actualArrivalTime : actualDepartureTime;
                     DateTime searchLeaveTime = forward ? actualDepartureTime : actualArrivalTime;
 
-                    bool improved = searchModel.TryImproveReachTimeByTrip(currStop, searchReachTime, currTrip, traverseFromStop, round);
+                    bool improved = searchModel.TryImproveReachTimeByTrip(currStop, searchReachTime, currTrip, currTripDate, traverseFromStop, round);
                     if (improved)
                     {
                         markedStops.Add(currStop);
