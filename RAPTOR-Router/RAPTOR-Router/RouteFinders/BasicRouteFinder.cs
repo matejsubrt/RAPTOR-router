@@ -1073,10 +1073,11 @@ namespace RAPTOR_Router.RouteFinders
 
         private List<SearchResult>? FindConnectionWithAlternatives(List<Stop> srcStops,
             List<BikeStation> srcBikeStations, List<Stop> destStops, List<BikeStation> destBikeStations,
-            DateTime searchBeginTime, bool srcByCoord, bool destByCoord)
+            DateTime searchBeginTime, bool srcByCoord, bool destByCoord,
+            Coordinates srcCoords = default, Coordinates destCoords = default)
         {
             if (RunRAPTOR(srcStops, srcBikeStations, destStops, destBikeStations, searchBeginTime, srcByCoord,
-                    destByCoord))
+                    destByCoord, srcCoords, destCoords))
             {
                 return searchModel.ExtractResultWithAlternatives(bikeModel);
             }
@@ -1098,6 +1099,41 @@ namespace RAPTOR_Router.RouteFinders
             List<BikeStation> srcBikeStations = new List<BikeStation>();
             List<BikeStation> destBikeStations = new List<BikeStation>();
             return FindConnectionWithAlternatives(srcStops, srcBikeStations, destStops, destBikeStations, departureTime, false, false);
+        }
+
+
+        public List<SearchResult>? FindConnectionWithAlternatives(Coordinates srcCoords, Coordinates destCoords, DateTime dateTime)
+        {
+            if (srcCoords == destCoords)
+            {
+                return null;
+            }
+
+            List<Stop> srcStops = transitModel.GetStopsByLocation(srcCoords.Lat, srcCoords.Lon, settings.GetMaxTransferDistance());
+            List<Stop> destStops = transitModel.GetStopsByLocation(destCoords.Lat, destCoords.Lon, settings.GetMaxTransferDistance());
+            List<BikeStation> srcBikeStations = bikeModel.GetNearStations(srcCoords.Lat, srcCoords.Lon, settings.GetMaxTransferDistance());
+            List<BikeStation> destBikeStations = bikeModel.GetNearStations(destCoords.Lat, destCoords.Lon, settings.GetMaxTransferDistance());
+            return FindConnectionWithAlternatives(srcStops, srcBikeStations, destStops, destBikeStations, dateTime, true, true, srcCoords, destCoords);
+        }
+
+        public List<SearchResult>? FindConnectionWithAlternatives(Coordinates srcCoords, string destStopName,
+            DateTime dateTime)
+        {
+            List<Stop> srcStops = transitModel.GetStopsByLocation(srcCoords.Lat, srcCoords.Lon, settings.GetMaxTransferDistance());
+            List<Stop> destStops = transitModel.GetStopsByName(destStopName);
+            List<BikeStation> srcBikeStations = bikeModel.GetNearStations(srcCoords.Lat, srcCoords.Lon, settings.GetMaxTransferDistance());
+            List<BikeStation> destBikeStations = new List<BikeStation>();
+            return FindConnectionWithAlternatives(srcStops, srcBikeStations, destStops, destBikeStations, dateTime, true, false, srcCoords, default);
+        }
+
+        public List<SearchResult>? FindConnectionWithAlternatives(string sourceStopName, Coordinates destCoords,
+                       DateTime dateTime)
+        {
+            List<Stop> srcStops = transitModel.GetStopsByName(sourceStopName);
+            List<Stop> destStops = transitModel.GetStopsByLocation(destCoords.Lat, destCoords.Lon, settings.GetMaxTransferDistance());
+            List<BikeStation> srcBikeStations = new List<BikeStation>();
+            List<BikeStation> destBikeStations = bikeModel.GetNearStations(destCoords.Lat, destCoords.Lon, settings.GetMaxTransferDistance());
+            return FindConnectionWithAlternatives(srcStops, srcBikeStations, destStops, destBikeStations, dateTime, false, true, default, destCoords);
         }
 
 

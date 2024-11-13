@@ -1,4 +1,6 @@
-﻿namespace RAPTOR_Router.Structures.Generic
+﻿using Microsoft.VisualBasic.CompilerServices;
+
+namespace RAPTOR_Router.Structures.Generic
 {
     /// <summary>
     /// Struct representing GPS coordinates
@@ -23,6 +25,15 @@
         {
             Lat = lat;
             Lon = lon;
+        }
+
+        public static bool operator==(Coordinates c1, Coordinates c2)
+        {
+            return c1.Lat == c2.Lat && c1.Lon == c2.Lon;
+        }
+        public static bool operator!=(Coordinates c1, Coordinates c2)
+        {
+            return c1.Lat != c2.Lat || c1.Lon != c2.Lon;
         }
     }
 }

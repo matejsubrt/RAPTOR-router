@@ -1,4 +1,5 @@
 ﻿using RAPTOR_Router.Models.Results;
+using RAPTOR_Router.Structures.Generic;
 
 namespace RAPTOR_Router.RouteFinders
 {
@@ -23,7 +24,14 @@ namespace RAPTOR_Router.RouteFinders
         /// <param name="destStop">The exact name of the destination stop</param>
         /// <param name="time">The departure/arrival date and time</param>
         /// <returns>The resulting best connection, null if none found</returns>
-        List<SearchResult>? FindConnectionWithAlternatives(string sourceStop, string destStop, DateTime time);
+        List<SearchResult>? FindConnectionWithAlternatives(string sourceStopName, string destStopName, DateTime time);
+
+        List<SearchResult>? FindConnectionWithAlternatives(Coordinates srcCoords, Coordinates destCoords, DateTime time);
+
+        List<SearchResult>? FindConnectionWithAlternatives(Coordinates srcCoords, string destStopName, DateTime time);
+
+        List<SearchResult>? FindConnectionWithAlternatives(string sourceStopName, Coordinates destCoords, DateTime time);
+
         /// <summary>
         /// Solves the provided connection search problem (i.e. SearchModel) given by source and destination coordinates
         /// </summary>

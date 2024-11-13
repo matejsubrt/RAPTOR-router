@@ -7,62 +7,10 @@ using Microsoft.AspNetCore.Http;
 using RAPTOR_Router.Models.Results;
 using RAPTOR_Router.Structures.Configuration;
 using Microsoft.AspNetCore.Http.HttpResults;
+using RAPTOR_Router.Structures.Requests;
 
 namespace WebAPI_light
 {
-    public class ConnectionRequest
-    {
-        public string srcStopName { get; set; }
-        public double srcLat { get; set; }
-        public double srcLon { get; set; }
-        public string destStopName { get; set; }
-        public double destLat { get; set; }
-        public double destLon { get; set; }
-        public string dateTime { get; set; }
-        public int rangeLength { get; set; }
-
-        public bool byEarliestDeparture { get; set; }
-        public bool range { get; set; }
-        public bool srcByCoords { get; set; }
-        public bool destByCoords { get; set; }
-
-        public Settings settings { get; set; }
-    }
-
-    public class StopToStopRequest
-    {
-        public string srcStopName { get; set; }
-        public string destStopName { get; set; }
-        public string dateTime { get; set; }
-        public bool byEarliestDeparture { get; set; }
-        public Settings settings { get; set; }
-    }
-
-    public class StopToStopRangeRequest : StopToStopRequest
-    {
-        public int rangeLength { get; set; }
-    }
-
-    public class CoordToCoordRequest
-    {
-        public double srcLon { get; set; }
-        public double srcLat { get; set; }
-        public double destLon { get; set; }
-        public double destLat { get; set; }
-        public string dateTime { get; set; }
-        public bool byEarliestDeparture { get; set; }
-        public Settings settings { get; set; }
-    }
-
-    public class AlternativeTripsRequest
-    {
-        public string srcStopId { get; set; }
-        public string destStopId { get; set; }
-        public string dateTime { get; set; }
-        public bool previous { get; set; }
-        public int count { get; set; }
-    }
-
     public class Program
     {
         private static RouteFinderBuilder routerBuilder;
@@ -155,211 +103,18 @@ namespace WebAPI_light
             app.Run();
 
         }
-
-
-        
-
-        /*static IResult HandleRequestStopToStop(RouteFinderBuilder builder, string srcStopName, string destStopName, string dateTimeString, bool byEarliestDeparture, Settings settings)
-        {
-            // Parse the DateTime
-            DateTime dateTime;
-            if (!DateTime.TryParse(dateTimeString, out dateTime))
-            {
-                var message = "Invalid DateTime format";
-                HttpError err = new HttpError(message);
-                return Results.BadRequest(err);
-            }
-
-            // Validate the settings
-            if (!settings.ValidateParameterValues())
-            {
-                var message = "Invalid settings";
-                HttpError err = new HttpError(message);
-                return Results.BadRequest(err);
-            }
-
-            // Validate the stop names
-            if (!builder.ValidateStopName(srcStopName) || !builder.ValidateStopName(destStopName))
-            {
-                var message = "Invalid stop name";
-                HttpError err = new HttpError(message);
-                return Results.BadRequest(err);
-            }
-
-            // TODO: Validate the DateTime
-            //if (DateTime.Now.AddDays(14) < dateTime)
-            //{
-            //    var message = "Departure DateTime is too late";
-            //    HttpError err = new HttpError(message);
-            //    return Results.BadRequest(err);
-            //}
-            //else if(dateTime < DateTime.Now.AddDays(-1)) // TODO: check
-            //{
-            //    var message = "Departure DateTime is in the past";
-            //    HttpError err = new HttpError(message);
-            //    return Results.BadRequest(err);
-            //}
-
-
-            IRouteFinder router;
-            //if (byEarliestDeparture)
-            //{
-            //    router = builder.CreateForwardRouteFinder(settings);
-            //}
-            //else
-            //{
-            //    router = builder.CreateBackwardRouteFinder(settings);
-            //}
-            router = builder.CreateUniversalRouteFinder(byEarliestDeparture, settings);
-            var result = router.FindConnection(srcStopName, destStopName, dateTime);
-
-            if(result != null)
-            {
-                return Results.Ok(result);
-            }
-            else
-            {
-                var message = "No connection found";
-                HttpError err = new HttpError(message);
-                return Results.NotFound(err);
-            }
-        }
-        static IResult HandleRequestCoordToCoord(RouteFinderBuilder builder, double srcLat, double srcLon, double destLat, double destLon, string dateTimeString, bool byEarliestDeparture, Settings settings)
-        {
-            DateTime dateTime;
-            if (!DateTime.TryParse(dateTimeString, out dateTime))
-            {
-                var message = "Invalid DateTime format";
-                HttpError err = new HttpError(message);
-                return Results.BadRequest(err);
-            }
-
-            // Validate the settings
-            if (!settings.ValidateParameterValues())
-            {
-                var message = "Invalid settings";
-                HttpError err = new HttpError(message);
-                return Results.BadRequest(err);
-            }
-
-
-            if(!builder.ValidateCoords(srcLat, srcLon) || !builder.ValidateCoords(destLat, destLon))
-            {
-                var message = "Invalid coordinates";
-                HttpError err = new HttpError(message);
-                return Results.BadRequest(err);
-            }
-            if(!builder.ValidateStopsNearCoords(srcLat, srcLon, settings.UseSharedBikes) || !builder.ValidateStopsNearCoords(destLat, destLon, settings.UseSharedBikes))
-            {
-                var message = "No stops near the coordinates";
-                HttpError err = new HttpError(message);
-                return Results.BadRequest(err);
-            }
-
-
-
-
-
-            //if (DateTime.Now.AddDays(14) < dateTime)
-            //{
-            //    var message = "Departure DateTime is too late";
-            //    HttpError err = new HttpError(message);
-            //    return Results.BadRequest(err);
-            //}
-            //else if (dateTime < DateTime.Now.AddDays(-1)) // TODO: check
-            //{
-            //    var message = "Departure DateTime is in the past";
-            //    HttpError err = new HttpError(message);
-            //    return Results.BadRequest(err);
-            //}
-
-
-            IRouteFinder router;
-            //if (byEarliestDeparture)
-            //{
-            //    router = builder.CreateForwardRouteFinder(settings);
-            //}
-            //else
-            //{
-            //    router = builder.CreateBackwardRouteFinder(settings);
-            //}
-            router = builder.CreateUniversalRouteFinder(byEarliestDeparture, settings);
-            var result = router.FindConnection(srcLat, srcLon, destLat, destLon, dateTime);
-
-            if (result != null)
-            {
-                return Results.Ok(result);
-            }
-            else
-            {
-                var message = "No connection found";
-                HttpError err = new HttpError(message);
-                return Results.NotFound(err);
-            }
-        }
-
-        static IResult HandleRangeRequestStopToStop(StopToStopRangeRequest request)
-        {
-            DateTime dateTime;
-            if (!DateTime.TryParse(request.dateTime, out dateTime))
-            {
-                var message = "Invalid DateTime format";
-                HttpError err = new HttpError(message);
-                return Results.BadRequest(err);
-            }
-
-            // Validate the settings
-            if (!request.settings.ValidateParameterValues())
-            {
-                var message = "Invalid settings";
-                HttpError err = new HttpError(message);
-                return Results.BadRequest(err);
-            }
-
-            // Validate the stop names
-            if (!routerBuilder.ValidateStopName(request.srcStopName) || !routerBuilder.ValidateStopName(request.destStopName))
-            {
-                var message = "Invalid stop name";
-                HttpError err = new HttpError(message);
-                return Results.BadRequest(err);
-            }
-
-
-
-            RangeRouteFinder router;
-            //if (byEarliestDeparture)
-            //{
-            //    router = builder.CreateForwardRouteFinder(settings);
-            //}
-            //else
-            //{
-            //    router = builder.CreateBackwardRouteFinder(settings);
-            //}
-            router = routerBuilder.CreateRangeRouteFinder(request.byEarliestDeparture, request.settings);
-            List<SearchResult> results = new List<SearchResult>();
-            router.FindConnectionsAsync(routerBuilder, request.byEarliestDeparture, request.settings, dateTime, dateTime.AddMinutes(request.rangeLength), request.srcStopName, request.destStopName).GetAwaiter().GetResult();
-            
-
-            if (results != null)
-            {
-                return Results.Ok(results);
-            }
-            else
-            {
-                var message = "No connection found";
-                HttpError err = new HttpError(message);
-                return Results.NotFound(err);
-            }
-        }*/
-
         static IResult HandleConnectionRequest(ConnectionRequest request)
         {
             DateTime dateTime;
-            if (!DateTime.TryParse(request.dateTime, out dateTime))
+            if (request.dateTime is null)//!DateTime.TryParse(request.dateTime, out dateTime))
             {
                 var message = "Invalid DateTime format";
                 HttpError err = new HttpError(message);
                 return Results.BadRequest(err);
+            }
+            else
+            {
+                dateTime = request.dateTime.Value;
             }
 
             // Validate the settings
@@ -449,19 +204,22 @@ namespace WebAPI_light
 
                 if (request.srcByCoords && request.destByCoords)
                 {
-                    var message = "Coord-to-coord range searches are not yet supported";
-                    HttpError err = new HttpError(message);
-                    return Results.BadRequest(err);
+                    results = router.FindConnectionsAsync(routerBuilder, request).GetAwaiter().GetResult();
+                    //var message = "Coord-to-coord range searches are not yet supported";
+                    //HttpError err = new HttpError(message);
+                    //return Results.BadRequest(err);
                 }
                 else if (!request.srcByCoords && !request.destByCoords)
                 {
-                    results = router.FindConnectionsAsync(routerBuilder, request.byEarliestDeparture, request.settings, dateTime, dateTime.AddMinutes(request.rangeLength), request.srcStopName, request.destStopName).GetAwaiter().GetResult();
+                    //results = router.FindConnectionsAsync(routerBuilder, request.byEarliestDeparture, request.settings, dateTime, dateTime.AddMinutes(request.rangeLength), request.srcStopName, request.destStopName).GetAwaiter().GetResult();
+                    results = router.FindConnectionsAsync(routerBuilder, request).GetAwaiter().GetResult();
                 }
                 else
                 {
-                    var message = "Coord-to-stop and stop-to-coord range searches are not yet supported";
-                    HttpError err = new HttpError(message);
-                    return Results.BadRequest(err);
+                    results = router.FindConnectionsAsync(routerBuilder, request).GetAwaiter().GetResult();
+                    //var message = "Coord-to-stop and stop-to-coord range searches are not yet supported";
+                    //HttpError err = new HttpError(message);
+                    //return Results.BadRequest(err);
                 }
 
                 if (results.Count == 0)

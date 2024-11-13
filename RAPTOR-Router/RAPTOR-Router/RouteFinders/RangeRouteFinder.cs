@@ -1,4 +1,7 @@
-﻿using RAPTOR_Router.Extensions;
+﻿#define SEQUENTIAL
+
+
+using RAPTOR_Router.Extensions;
 using RAPTOR_Router.Models.Dynamic;
 using RAPTOR_Router.Models.Results;
 using RAPTOR_Router.Models.Static;
@@ -13,7 +16,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RAPTOR_Router.Structures.Requests;
 using RAPTOR_Router.Structures.Transit;
+
+
 
 namespace RAPTOR_Router.RouteFinders
 {
@@ -113,7 +119,7 @@ namespace RAPTOR_Router.RouteFinders
             string srcStopName,
             string destStopName)
         {
-            // First, collect all times at which a trip departs from the source stop/arrives at the destination stop
+            /*// First, collect all times at which a trip departs from the source stop/arrives at the destination stop
             // Second, add the times specified in the first step plus/minus 1 minute -> this is to ensure there are alternatives to connections that begin with a trip
             // Third, if there are any large gaps between the times, add additional times to fill the gaps
             // Finally, run the search for all the times above
@@ -148,7 +154,7 @@ namespace RAPTOR_Router.RouteFinders
             // end stop at a better time than the next trip-beginning connection, it will be found. Note that this approach is not perfect, as further connections
             // beginning with a transfer may be shadowed by this first one, but it is a compromise that allows for a good balance between efficiency and result
             // completeness. To further ensure that the least possible important connections within the resulting gaps are missed, we also add additional times to fill the gaps
-            // if the gaps are larger than a certain threshold.
+            // if the gaps are larger than a certain threshold.*/
 
             List<SearchResult> results = new();
             List<Stop> srcStops = transitModel.GetStopsByName(srcStopName);
@@ -158,8 +164,9 @@ namespace RAPTOR_Router.RouteFinders
             {
                 foreach (Route route in stop.StopRoutes)
                 {
-                    var routeDepartureTimes = route.GetDepartureTimesAtStopWithinRange(stop, searchBeginRangeStart,
-                                               searchBeginRangeEnd, delayModel);
+                    var routeDepartureTimes = route.GetTripTimesAtStopWithinRange(stop, searchBeginRangeStart,
+                        searchBeginRangeEnd, delayModel, forward);
+                        //route.GetDepartureTimesAtStopWithinRange(stop, searchBeginRangeStart, searchBeginRangeEnd, delayModel);
                     if (routeDepartureTimes is not null)
                     {
                         foreach (var depTime in routeDepartureTimes)
@@ -172,10 +179,6 @@ namespace RAPTOR_Router.RouteFinders
             }
 
             var orderedDepTimes = departureTimes.OrderBy(t => t).ToList();
-            //foreach (var orderedDepTime in orderedDepTimes)
-            //{
-            //    Console.WriteLine(orderedDepTime);
-            //}
 
 
 
@@ -261,5 +264,181 @@ namespace RAPTOR_Router.RouteFinders
             //results = newResults;
             return results;
         }
+
+        public async Task<List<SearchResult>> FindConnectionsAsync(
+            RouteFinderBuilder builder,
+            ConnectionRequest request
+        )
+        {
+            DateTime searchBeginRangeStart = request.byEarliestDeparture ? request.dateTime.Value : request.dateTime.Value.AddMinutes(-request.rangeLength);
+            DateTime searchBeginRangeEnd = request.byEarliestDeparture ? request.dateTime.Value.AddMinutes(request.rangeLength) : request.dateTime.Value;
+
+            List<SearchResult> results = new();
+
+            List<Stop> srcStops = request.srcByCoords ? transitModel.GetStopsByLocation(request.srcLat, request.srcLon, settings.GetMaxTransferDistance()) : transitModel.GetStopsByName(request.srcStopName);
+
+
+            HashSet<DateTime> tripTimes = new();
+            foreach (Stop stop in srcStops)
+            {
+                foreach (Route route in stop.StopRoutes)
+                {
+                    var routeDepartureTimes = route.GetTripTimesAtStopWithinRange(stop, searchBeginRangeStart,
+                        searchBeginRangeEnd, delayModel, forward);
+                    //route.GetDepartureTimesAtStopWithinRange(stop, searchBeginRangeStart, searchBeginRangeEnd, delayModel);
+                    if (routeDepartureTimes is not null)
+                    {
+                        foreach (var depTime in routeDepartureTimes)
+                        {
+                            var newTripTime = depTime.AddSeconds(-depTime.Second);
+                            tripTimes.Add(newTripTime);
+                        }
+                    }
+                }
+            }
+
+            var orderedTripTimes = tripTimes.OrderBy(t => t).ToList();
+
+            var tasks = new List<Task>();
+            int numberOfCalls = orderedTripTimes.Count;
+
+            int minutesDifference = 1;
+
+
+#if SEQUENTIAL
+            for (int i = 0; i < numberOfCalls; i++)
+            {
+                var departureTime = orderedTripTimes[i];
+
+                IRouteFinder router = builder.CreateUniversalRouteFinder(forward, settings);
+                List<SearchResult>? searchResults;
+
+                if (request.srcByCoords)
+                {
+                    Coordinates srcCoords = new Coordinates(request.srcLat, request.srcLon);
+                    if (request.destByCoords)
+                    {
+                        Coordinates destCoords = new Coordinates(request.destLat, request.destLon);
+                        searchResults = router.FindConnectionWithAlternatives(srcCoords, destCoords, departureTime);
+                    }
+                    else
+                    {
+                        searchResults = router.FindConnectionWithAlternatives(srcCoords, request.destStopName, departureTime);
+                    }
+                }
+                else
+                {
+                    if (request.destByCoords)
+                    {
+                        Coordinates destCoords = new Coordinates(request.destLat, request.destLon);
+                        searchResults = router.FindConnectionWithAlternatives(request.srcStopName, destCoords, departureTime);
+                    }
+                    else
+                    {
+                        searchResults = router.FindConnectionWithAlternatives(request.srcStopName, request.destStopName, departureTime);
+                    }
+                }
+
+                //var searchResults = router.FindConnectionWithAlternatives(srcStopName, destStopName, departureTime);
+
+                lock (results)
+                {
+                    foreach (var result in searchResults)
+                    {
+                        // TODO: shouldnt this not be necessary?
+                        if (result is not null)
+                        {
+                            results.Add(result);
+                        }
+                    }
+                    //results.Add(searchResult);
+                }
+            }
+#else
+            for (int i = 0; i < numberOfCalls; i++)
+            {
+                var departureTime = orderedTripTimes[i];//searchBeginRangeStart.AddMinutes(i * minutesDifference);
+
+                tasks.Add(Task.Run(() =>
+                {
+                    IRouteFinder router = builder.CreateUniversalRouteFinder(forward, settings);
+
+                    List<SearchResult>? searchResults;
+
+                    if (request.srcByCoords)
+                    {
+                        Coordinates srcCoords = new Coordinates(request.srcLat, request.srcLon);
+                        if (request.destByCoords)
+                        {
+                            Coordinates destCoords = new Coordinates(request.destLat, request.destLon);
+                            searchResults = router.FindConnectionWithAlternatives(srcCoords, destCoords, departureTime);
+                        }
+                        else
+                        {
+                            searchResults = router.FindConnectionWithAlternatives(srcCoords, request.destStopName, departureTime);
+                        }
+                    }
+                    else
+                    {
+                        if (request.destByCoords)
+                        {
+                            Coordinates destCoords = new Coordinates(request.destLat, request.destLon);
+                            searchResults = router.FindConnectionWithAlternatives(request.srcStopName, destCoords, departureTime);
+                        }
+                        else
+                        {
+                            searchResults = router.FindConnectionWithAlternatives(request.srcStopName, request.destStopName, departureTime);
+                        }
+                    }
+
+                    //var searchResults = router.FindConnectionWithAlternatives(srcStopName, destStopName, departureTime);
+
+                    lock (results)
+                    {
+                        foreach (var result in searchResults)
+                        {
+                            // TODO: shouldnt this not be necessary?
+                            if (result is not null)
+                            {
+                                results.Add(result);
+                            }
+                        }
+                        //results.Add(searchResult);
+                    }
+                }));
+            }
+
+            await Task.WhenAll(tasks);
+#endif
+
+            results = results.OrderBy(r => r.ArrivalDateTime).ThenBy(r => r.DepartureDateTime).ToList();
+
+            for (int i = 0; i < results.Count - 1; i++)
+            {
+                SearchResult res1 = results[i];
+                SearchResult res2 = results[i + 1];
+
+                if (res1.ArrivalDateTime >= res2.ArrivalDateTime)
+                {
+                    results.RemoveAt(i);
+                    i--;
+                }
+                else
+                {
+                    //Console.WriteLine();
+                }
+            }
+
+            // sort by departure time for final result list
+            results = results.OrderBy(r => r.DepartureDateTime).ToList();
+
+
+            //results = newResults;
+            return results;
+
+
+        }
     }
+
+    
 }
