@@ -32,7 +32,8 @@ namespace RAPTOR_Router.GBFSParsing.DataSources
         public void LoadStationDistances()
         {
             BikeDistanceCalculator distanceCalculator = new BikeDistanceCalculator();
-            Distances = distanceCalculator.CalculateMatrix(Stations, StationsById);
+            //Distances = distanceCalculator.CalculateMatrix(Stations, StationsById);
+            Distances = distanceCalculator.GetDistanceMatrix(StationsById);
         }
 
         /// <summary>

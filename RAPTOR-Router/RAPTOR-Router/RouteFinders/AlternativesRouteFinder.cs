@@ -323,11 +323,6 @@ namespace RAPTOR_Router.RouteFinders
                     }
                 }
 
-                if (result[0].Item2.StopTimes[^1].ArrivalTime > new TimeOnly(23, 0, 0))
-                {
-                    Console.WriteLine();
-                }
-
                 return result;
             }
 

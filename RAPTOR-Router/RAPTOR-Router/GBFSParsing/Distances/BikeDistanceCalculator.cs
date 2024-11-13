@@ -30,7 +30,9 @@ namespace RAPTOR_Router.GBFSParsing.Distances
         private RouterDb routerDb;
         string osmLocation;
         string routerDbLocation;
-        string distanceFileLocation;
+        //string distanceFileLocation;
+        private string distanceDBFileLocation;
+        private BikeDistanceDatabase distanceDB;
         StationDistanceMatrix distances = new StationDistanceMatrix();
 
         /// <summary>
@@ -54,7 +56,8 @@ namespace RAPTOR_Router.GBFSParsing.Distances
                 .Build();
             osmLocation = config["osmFileLocation"];
             routerDbLocation = config["routerDbFileLocation"];
-            distanceFileLocation = config["bikeStationDistancesFileLocationNextbike"];
+            //distanceFileLocation = config["bikeStationDistancesFileLocationNextbike"];
+            distanceDBFileLocation = config["bikeStationDistancesDBFileLocationNextbike"];
 
             if (osmLocation == null)
             {
@@ -70,11 +73,12 @@ namespace RAPTOR_Router.GBFSParsing.Distances
                 int lastIndexOfBackslash = osmLocation.LastIndexOf("\\");
                 routerDbLocation = osmLocation.Substring(0, lastIndexOfBackslash) + "\\cz.routerdb";
             }
-            if (distanceFileLocation == null)
+
+            if (distanceDBFileLocation == null)
             {
-                // needs to be specified in the config file
-                Console.WriteLine("No distance file found at the following location: " + config["bikeStationDistancesFileLocationNextbike"]);
-                Console.WriteLine("Change the distance file location in the config.json file, so that the path is correct");
+                Console.WriteLine("No distance DB file found at the following location: " + config["bikeStationDistancesDBFileLocationNextbike"]);
+                Console.WriteLine("Change the DB distance file location in the config.json file, so that the path is correct");
+                return;
             }
 
 
@@ -97,14 +101,140 @@ namespace RAPTOR_Router.GBFSParsing.Distances
                     routerDb.Serialize(stream);
                 }
             }
+
+            if (File.Exists(distanceDBFileLocation))
+            {
+                distanceDB = new BikeDistanceDatabase(distanceDBFileLocation);
+            }
+            else
+            {
+                // TODO: shouldnt exceptions be thrown in these methods?
+                Console.WriteLine("Error loading distances");
+                return;
+            }
         }
+
         /// <summary>
         /// Calculates the distances between all the bike stations and loads them into the distance matrix
         /// </summary>
-        /// <param name="stations">The list of all bike stations in the system</param>
-        /// <param name="stationsById">The dictionary to access the bikestations by their Ids</param>
+        /// <param name="stationsById">The dictionary to access the bike stations by their Ids</param>
         /// <returns>The distance matrix</returns>
-        public StationDistanceMatrix CalculateMatrix(List<BikeStation> stations, Dictionary<string, BikeStation> stationsById)
+        public StationDistanceMatrix GetDistanceMatrix(Dictionary<string, BikeStation> stationsById)
+        {
+            StationDistanceMatrix distances = distanceDB.GetDistanceMatrixAndRemoveNonExistentStations(stationsById);
+            var profile = Vehicle.Bicycle.Shortest();
+
+
+            Dictionary<string, int> unresolvableStations = new Dictionary<string, int>();
+
+            foreach (var (id1, s1) in stationsById)
+            {
+                int alreadyLoadedCount = 0;
+                int toLoadCount = 0;
+                foreach (var (id2, s2) in stationsById)
+                {
+                    if (id1.CompareTo(id2) == 1) continue;
+
+
+                    if (distances.HasDistance(s1, s2))
+                    {
+                        alreadyLoadedCount++;
+                        continue;
+                    }
+
+                    toLoadCount++;
+
+                    if (IsUnresolvable(s1, unresolvableStations) || IsUnresolvable(s2, unresolvableStations))
+                    {
+                        // One of the stations has been unresolvable too many times
+                        AddDistance(s1, s2, -1);
+                    }
+                    //TODO: change to 3500
+                    else if (DistanceExtensions.TooFarInOneDirection(s1, s2, 3000))
+                    {
+                        // The stations are too far from each other in a straight line
+                        AddDistance(s1, s2, -1);
+                    }
+                    else if (!CheckConnectivity(s1))
+                    {
+                        // The start station is not connected to network
+                        addUnresolvableStation(s1.Id, unresolvableStations);
+                        AddDistance(s1, s2, -1);
+                        Console.WriteLine("Station " + s1.Id + " is not connected");
+                    }
+                    else if (!CheckConnectivity(s2))
+                    {
+                        // The end station is not connected to network
+                        addUnresolvableStation(s2.Id, unresolvableStations);
+                        AddDistance(s1, s2, -1);
+                        Console.WriteLine("Station " + s2.Id + " is not connected");
+                    }
+                    else
+                    {
+                        // Actually calculate the distance
+                        ErrorType errorType;
+                        int result = GetBikingDistance(s1, s2, out errorType);
+                        if (result == 0)
+                        {
+                            result = 1;
+                            // for stations that are too near
+                        }
+                        AddDistance(s1, s2, result);
+
+
+                        if (errorType != ErrorType.NO_ERROR)
+                        {
+                            if (errorType == ErrorType.START_RESOLVE_ERROR)
+                            {
+                                addUnresolvableStation(s1.Id, unresolvableStations);
+                                Console.WriteLine($"Start station resolve error from {s1.Id}: {s1.Name}");
+                            }
+                            else if (errorType == ErrorType.END_RESOLVE_ERROR)
+                            {
+                                addUnresolvableStation(s2.Id, unresolvableStations);
+                                Console.WriteLine($"End station resolve error from {s2.Id}: {s2.Name}");
+                            }
+                            else if (errorType == ErrorType.ROUTE_CALCULATION_ERROR)
+                            {
+                                //addUnresolvableStation(Stations[i].Id);
+                                addUnresolvableStation(s2.Id, unresolvableStations);
+                                Console.WriteLine($"Route calculation error from {s1.Id}: {s1.Name} to {s2.Id}: {s2.Name}");
+                            }
+                        }
+                    }
+                }
+            }
+
+            return distances;
+
+
+            bool IsUnresolvable(BikeStation s1, Dictionary<string, int> unresolvableStations)
+            {
+                return unresolvableStations.ContainsKey(s1.Id) && unresolvableStations[s1.Id] > 2;
+            }
+            void AddDistance(BikeStation from, BikeStation to, int distance)
+            {
+                distances.AddDistance(from, to, distance);
+                //AppendDistanceToFile(from, to, distance);
+                distanceDB.AddOrUpdateDistance(from.Id, to.Id, distance);
+
+                Console.WriteLine("Didnt have distance from " + from.Id + " to " + to.Id + ": " + distance + "m");
+            }
+            void addUnresolvableStation(string id, Dictionary<string, int> unresolvableStations)
+            {
+                if (unresolvableStations.ContainsKey(id))
+                {
+                    unresolvableStations[id]++;
+                }
+                else
+                {
+                    unresolvableStations.Add(id, 1);
+                }
+            }
+        }
+
+
+       /*public StationDistanceMatrix CalculateMatrix(List<BikeStation> stations, Dictionary<string, BikeStation> stationsById)
         {
             //var router = new Router(routerDb);
             var profile = Vehicle.Bicycle.Shortest();
@@ -287,7 +417,7 @@ namespace RAPTOR_Router.GBFSParsing.Distances
                 writer.WriteLine(from.Id + "," + to.Id + "," + distance);
                 writer.Flush();
             }
-        }
+        }*/
         /// <summary>
         /// Checks, whether the given coordinates are connected to the network - i.e. they do not lie on a "routing island"
         /// </summary>
