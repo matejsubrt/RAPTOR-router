@@ -136,7 +136,7 @@ namespace RAPTOR_Router.Models.Dynamic
             {
                 CustomTransfer transfer = searchEndCustomRoutePoint.GetTransferWithNormalRP(stop);
                 int transferTime = timeMpl * settingsUsed.GetAdjustedWalkingTransferTime(transfer.Distance);
-                DateTime arrivalTimeAtDestCustomRP = currStopInfo.Reaches[round].Time.AddSeconds(transferTime);//timeMpl * transfer.GetTransferTime(settingsUsed.WalkingPace));
+                DateTime arrivalTimeAtDestCustomRP = currStopInfo.Reaches[round].Time.AddSeconds(transferTime);
                 result.AddUsedTransfer(transfer, arrivalTimeAtDestCustomRP, !forward);
             }
 
@@ -197,8 +197,6 @@ namespace RAPTOR_Router.Models.Dynamic
                         throw new ApplicationException("Trip and getOnStop cannot be null in an used round");
                     }
 
-                    //bool tripStartedDayBefore = tripToReachStop.StopTimes[0].DepartureTime > TimeOnly.FromDateTime(tripReach.Time);
-                    //DateOnly tripStartDate = tripStartedDayBefore ? DateOnly.FromDateTime(tripReach.Time.AddDays(-1)) : DateOnly.FromDateTime(tripReach.Time.Date);
                     DateOnly tripStartDate = tripReach.TripStartDate;
 
                     bool tripHasDelayData = delayModel.TripHasDelayData(tripStartDate, tripToReachStop.Id);
@@ -225,16 +223,8 @@ namespace RAPTOR_Router.Models.Dynamic
                         currentTripDelay = 0;
                     }
 
-
-
-
-
-                    //result.AddUsedTrip(tripToReachStop, realGetOnStop, realGetOffStop, tripReach.Time, getOnStopHasDelayData, getOnStopDepartureDelay, currentTripDelay, !forward);
                     result.AddUsedTrip(tripToReachStop, tripStartDate, realGetOnStop, realGetOffStop, getOnStopHasDelayData, getOnStopDepartureDelay, currentTripDelay, !forward);
 
-
-
-                    //result.AddUsedTrip(tripToReachStop, realGetOnStop, realGetOffStop, tripReach.Time, !forward);
                     currStop = tripReach.ReachedFromStop;
                 }
                 else if (reach is StopRoutingInfo.BikeTripReach bikeTripReach)
@@ -302,12 +292,10 @@ namespace RAPTOR_Router.Models.Dynamic
                 TripStopDelays stopDelays = delayModel.GetTripStopDelays(tripStartDate, trip.Id);
                 List<StopTime> stopTimes = trip.StopTimes;
 
-                //TimeOnly currTime = TimeOnly.FromDateTime(DateTime.Now);
                 TimeZoneInfo timeZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Prague");
                 DateTime dateTimeInZone = TimeZoneInfo.ConvertTime(DateTime.Now, timeZone);
                 TimeOnly currTime = TimeOnly.FromDateTime(dateTimeInZone);
 
-                //bool haveLastStopDelay = stopDelays.TryGetStopDelay(0, out int lastReachedStopArrivalDelay, out int lastReachedStopDepartureDelay);
                 int lastReachedStopDepartureDelay = 0;
                 for (int i = 1; i < stopTimes.Count; i++)
                 {
@@ -343,7 +331,7 @@ namespace RAPTOR_Router.Models.Dynamic
                 //arrival is earlier than best we found so far AND it is better than in last round - otherwise we do not process this round
                 if (
                     routingInfo.ContainsKey(stop)
-                    && comp.ImprovesTime(GetBestReachTimeInRound(stop, round), bestReachTime)//GetBestReachTimeInRound(stop, round) < bestReachTime
+                    && comp.ImprovesTime(GetBestReachTimeInRound(stop, round), bestReachTime)
                     && (round == 0 || ArrivalAtStopInRoundIsBetterThanAllEarlierRounds(stop, round))
                 )
                 {
@@ -356,17 +344,17 @@ namespace RAPTOR_Router.Models.Dynamic
 
         private bool ArrivalAtStopInRoundIsBetterThanAllEarlierRounds(Stop stop, int round)
         {
-            DateTime bestEarlierArrival = worstBound;//DateTime.MaxValue;
+            DateTime bestEarlierArrival = worstBound;
             for (int i = 0; i < round; i++)
             {
                 DateTime reachInRoundI = GetBestReachTimeInRound(stop, i);
-                if (comp.ImprovesTime(reachInRoundI, bestEarlierArrival))//reachInRoundI < bestEarlierArrival)
+                if (comp.ImprovesTime(reachInRoundI, bestEarlierArrival))
                 {
                     bestEarlierArrival = reachInRoundI;
                 }
             }
 
-            return comp.ImprovesTime(GetBestReachTimeInRound(stop, round), bestEarlierArrival); //bestEarlierArrival > GetBestReachTimeInRound(stop, round);
+            return comp.ImprovesTime(GetBestReachTimeInRound(stop, round), bestEarlierArrival);
         }
 
 
@@ -602,7 +590,7 @@ namespace RAPTOR_Router.Models.Dynamic
                 // Check if it is best arrival so far. Only check if the destination is NOT a custom route point
                 if (searchEndCustomRoutePoint is null)
                 {
-                    if (searchEndStops.Contains(stop) && comp.ImprovesTime(reachTime, GetCurrentBestSearchEndTime()))     // arrivalTime < GetCurrentBestSearchEndTime())
+                    if (searchEndStops.Contains(stop) && comp.ImprovesTime(reachTime, GetCurrentBestSearchEndTime()))
                     {
                         SetCurrentBestSearchEndTime(reachTime);
                     }
@@ -611,9 +599,9 @@ namespace RAPTOR_Router.Models.Dynamic
                 {
                     if (searchEndCustomRoutePoint.transferDistances.TryGetValue(stop, out var distance))
                     {
-                        int transferDuration = settingsUsed.GetAdjustedWalkingTransferTime(distance);//timeMpl * (int)(distance * settingsUsed.WalkingPace * settingsUsed.GetMovingTransferLengthMultiplier());
+                        int transferDuration = settingsUsed.GetAdjustedWalkingTransferTime(distance);
                         DateTime arrivalAtCustomRP = reachTime.AddSeconds(transferDuration);
-                        if (comp.ImprovesTime(arrivalAtCustomRP, GetCurrentBestSearchEndTime()))// arrivalAtCustomRP < GetCurrentBestSearchEndTime())
+                        if (comp.ImprovesTime(arrivalAtCustomRP, GetCurrentBestSearchEndTime()))
                         {
                             SetCurrentBestSearchEndTime(arrivalAtCustomRP);
                         }
@@ -652,7 +640,7 @@ namespace RAPTOR_Router.Models.Dynamic
                 // Check if it is best arrival so far. Only check if the destination is NOT a custom route point
                 if (searchEndCustomRoutePoint is null)
                 {
-                    if (searchEndBikeStations.Contains(realDestBikeStation) && comp.ImprovesTime(reachTime, GetCurrentBestSearchEndTime()))     //reachTime < GetCurrentBestSearchEndTime())
+                    if (searchEndBikeStations.Contains(realDestBikeStation) && comp.ImprovesTime(reachTime, GetCurrentBestSearchEndTime()))
                     {
                         SetCurrentBestSearchEndTime(reachTime);
                     }
@@ -661,9 +649,9 @@ namespace RAPTOR_Router.Models.Dynamic
                 {
                     if (searchEndCustomRoutePoint.transferDistances.TryGetValue(realDestBikeStation, out var distance))
                     {
-                        int transferDuration = timeMpl * settingsUsed.GetAdjustedWalkingTransferTime(distance);//(int)(distance * settingsUsed.WalkingPace * settingsUsed.GetMovingTransferLengthMultiplier());// + settingsUsed.BikeLockTime;
+                        int transferDuration = timeMpl * settingsUsed.GetAdjustedWalkingTransferTime(distance);
                         DateTime reachAtCustomRP = reachTime.AddSeconds(transferDuration);
-                        if (comp.ImprovesTime(reachAtCustomRP, GetCurrentBestSearchEndTime()))    //arrivalAtCustomRP < GetCurrentBestSearchEndTime())
+                        if (comp.ImprovesTime(reachAtCustomRP, GetCurrentBestSearchEndTime()))
                         {
                             SetCurrentBestSearchEndTime(reachAtCustomRP);
                         }
@@ -701,16 +689,8 @@ namespace RAPTOR_Router.Models.Dynamic
 
             int transferTime = timeMpl * settingsUsed.GetAdjustedWalkingTransferTime(transfer.Distance);
 
-            //int transferTimeBase = transfer.GetTransferTime(settingsUsed.WalkingPace);
-            //double movingTransferMultiplier = settingsUsed.GetMovingTransferLengthMultiplier();
-            //int transferTimeAdjusted = timeMpl * (int)(transferTimeBase * movingTransferMultiplier);
-            //int bikeUnlockTime = timeMpl * settingsUsed.BikeUnlockTime;
 
             int stationaryTransferTime = timeMpl * settingsUsed.GetStationaryTransferMinimumSeconds();
-
-            //int movingStopToStopTransferTime = forward
-            //    ? Math.Max(transferTimeAdjusted, stationaryTransferSeconds)
-            //    : Math.Min(transferTimeAdjusted, stationaryTransferSeconds);
 
             int movingStopToStopTransferTime = forward
                 ? Math.Max(transferTime, stationaryTransferTime)
@@ -777,10 +757,9 @@ namespace RAPTOR_Router.Models.Dynamic
             DateTime reachTimeWithTransfer = GetReachTimeUsingTransfer(realTransfer, round, toBikeStation);
             DateTime currEarliestReach = GetBestReachTime(improvingToPoint);
 
-            //bool wouldImprove = TransferImprovesArrivalTime(transfer);
-            bool wouldImprove = comp.ImprovesTime(reachTimeWithTransfer, currEarliestReach);// reachWithTransfer < currEarliestReach;
+            bool wouldImprove = comp.ImprovesTime(reachTimeWithTransfer, currEarliestReach);
 
-            bool improves = wouldImprove; // and implicitly canBeUsed && !transferForbiddenToDest && !srcReachedByTransferInRound
+            bool improves = wouldImprove;
 
             if (improves)
             {
@@ -792,14 +771,14 @@ namespace RAPTOR_Router.Models.Dynamic
                 {
                     if (toBikeStation)
                     {
-                        if (searchEndBikeStations.Contains(improvingToPoint) && comp.ImprovesTime(reachTimeWithTransfer, GetCurrentBestSearchEndTime()))// reachTimeWithTransfer < GetCurrentBestSearchEndTime())
+                        if (searchEndBikeStations.Contains(improvingToPoint) && comp.ImprovesTime(reachTimeWithTransfer, GetCurrentBestSearchEndTime()))
                         {
                             SetCurrentBestSearchEndTime(reachTimeWithTransfer);
                         }
                     }
                     else
                     {
-                        if (searchEndStops.Contains(improvingToPoint) && comp.ImprovesTime(reachTimeWithTransfer, GetCurrentBestSearchEndTime()))// reachTimeWithTransfer < GetCurrentBestSearchEndTime())
+                        if (searchEndStops.Contains(improvingToPoint) && comp.ImprovesTime(reachTimeWithTransfer, GetCurrentBestSearchEndTime()))
                         {
                             SetCurrentBestSearchEndTime(reachTimeWithTransfer);
                         }
@@ -832,7 +811,7 @@ namespace RAPTOR_Router.Models.Dynamic
         {
             // TODO: Check if it is enough to set the bestCurrentSearchEndTime here. If yes, add check for searchEndBikeStations
             GetRoutingInfo(rp).BestReachTime = reachTime;
-            if (searchEndStops.Contains(rp) && comp.ImprovesTime(reachTime, bestCurrentSearchEndTime))// reachTime < bestCurrentSearchEndTime)
+            if (searchEndStops.Contains(rp) && comp.ImprovesTime(reachTime, bestCurrentSearchEndTime))
             {
                 bestCurrentSearchEndTime = reachTime;
             }

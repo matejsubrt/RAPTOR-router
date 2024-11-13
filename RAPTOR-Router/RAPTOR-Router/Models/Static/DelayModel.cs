@@ -46,23 +46,15 @@ namespace RAPTOR_Router.Models.Static
             return _stopDelays[^1];
         }
     }
-    //internal class TripDelayInfo
-    //{
-    //    public 
-    //}
+
+
     public class DelayModel
     {
         private Dictionary<DateOnly, Dictionary<string, TripStopDelays>> delays = new();
-        //public Dictionary<string, List<int>> delays { get; private set; } = new();
 
         public DelayModel(){}
         public void AddDelay(DateOnly tripStartDate, string tripId, int arrivalDelay, int departureDelay)
         {
-            //if (!delays.ContainsKey(tripId))
-            //{
-            //    delays.Add(tripId, new List<int>());
-            //}
-            //delays[tripId].Add(delay);
             if (!delays.ContainsKey(tripStartDate))
             {
                 delays.Add(tripStartDate, new Dictionary<string, TripStopDelays>());
@@ -73,39 +65,11 @@ namespace RAPTOR_Router.Models.Static
                 tripDelaysByStartDate.Add(tripId, new TripStopDelays());
             }
 
-            //Tuple<int, int> delay = new Tuple<int, int>(arrivalDelay, departureDelay);
             tripDelaysByStartDate[tripId].AddStopDelay(arrivalDelay, departureDelay);
         }
 
-        //private Tuple<int, int> GetDelay(DateOnly tripStartDate, string tripId, int stopIndex)
-        //{
-        //    if (!delays.ContainsKey(tripStartDate))
-        //    {
-        //        return null;
-        //    }
-        //    var tripDelaysByStartDate = delays[tripStartDate];
-        //    if (!tripDelaysByStartDate.ContainsKey(tripId))
-        //    {
-        //        return null;
-        //    }
-        //    var delaysForTrip = tripDelaysByStartDate[tripId];
-        //    if (delaysForTrip.Count == 0)
-        //    {
-        //        return null;
-        //    }
-
-        //    return delaysForTrip[stopIndex];
-        //}
-
         public bool TryGetDelay(DateOnly tripStartDate, string tripId, int stopIndex, out int arrivalDelay, out int departureDelay)
         {
-            //Tuple<int, int> delay = GetDelay(tripStartDate, tripId, stopIndex);
-            //if (delay == null)
-            //{
-            //    arrivalDelay = 0;
-            //    departureDelay = 0;
-            //    return false;
-            //}
             if (!delays.ContainsKey(tripStartDate))
             {
                 arrivalDelay = 0;

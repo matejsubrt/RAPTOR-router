@@ -189,62 +189,6 @@ namespace RAPTOR_Router.Models.Static
             }
         }
 
-        //private List<ForbiddenCrossingLine> LoadForbiddenCrossings()
-        //{
-        //    var config = new ConfigurationBuilder()
-        //        .SetBasePath(Directory.GetCurrentDirectory() + "..\\..\\..\\..\\..")
-        //        .AddJsonFile("config.json", optional: false, reloadOnChange: true)
-        //        .Build();
-        //    string pointsLocation = config["forbiddenCrossingPointsLocation"];
-        //    string linesLocation = config["forbiddenCrossingLinesLocation"];
-
-        //    if (pointsLocation == null || linesLocation == null)
-        //    {
-        //        throw new Exception("Forbidden crossing points or lines location not found in the config file");
-        //    }
-
-        //    List<ForbiddenCrossingPoint> points = new();
-        //    Dictionary<int, ForbiddenCrossingPoint> pointsById = new();
-        //    using (StreamReader reader = new StreamReader(pointsLocation))
-        //    {
-        //        string line;
-        //        reader.ReadLine(); // Skip the header
-        //        while ((line = reader.ReadLine()) != null)
-        //        {
-        //            string[] parts = line.Split(',');
-
-
-        //            int id = int.Parse(parts[0]);
-        //            double lon = double.Parse(parts[1], CultureInfo.InvariantCulture);
-        //            double lat = double.Parse(parts[2], CultureInfo.InvariantCulture);
-        //            ForbiddenCrossingPoint newPoint = new ForbiddenCrossingPoint(new Coordinates(lat, lon), id);
-        //            points.Add(newPoint);
-        //            pointsById.Add(id, newPoint);
-        //        }
-        //    }
-
-        //    List<ForbiddenCrossingLine> lines = new();
-        //    using (StreamReader reader = new StreamReader(linesLocation))
-        //    {
-        //        string line;
-        //        reader.ReadLine(); // Skip the header
-        //        while ((line = reader.ReadLine()) != null)
-        //        {
-        //            string[] parts = line.Split(',');
-
-
-        //            int id = int.Parse(parts[0]);
-        //            int p1Id = int.Parse(parts[1]);
-        //            int p2Id = int.Parse(parts[2]);
-        //            string comment = parts[3];
-        //            ForbiddenCrossingLine newLine = new ForbiddenCrossingLine(pointsById[p1Id], pointsById[p2Id], id, comment);
-        //            lines.Add(newLine);
-        //        }
-        //    }
-
-        //    return lines;
-        //}
-
         /// <summary>
         /// Loads all the possible transfers at each stop
         /// </summary>

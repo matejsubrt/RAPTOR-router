@@ -16,8 +16,6 @@ namespace RAPTOR_Router.RouteFinders
 {
     public class AlternativesRouteFinder
     {
-        //SortedDictionary<DateTime, Tuple<Trip, int, int, bool, int, int>> sortedTrips = new();
-        //altTrip, srcIndex, destIndex, hasSrcDelayData, srcDepartureDelay, currTripDelay
         private class Entry : IComparable<Entry>
         {
             public DateTime dateTime;
@@ -66,13 +64,6 @@ namespace RAPTOR_Router.RouteFinders
             this.transitModel = transitModel;
             this.delayModel = delayModel;
         }
-
-        //private List<Stop> GetNearRoutePoints(string stopName)
-        //{
-        //    List<Stop> stops = transitModel.GetStopsByName(stopName);
-        //    List<BikeStation> bikeStations = new List<BikeStation>();
-        //    return new Tuple<List<Stop>, List<BikeStation>>(stops, bikeStations);
-        //}
 
         private List<Stop> GetAlternativeStops(Stop stop)
         {
@@ -130,7 +121,6 @@ namespace RAPTOR_Router.RouteFinders
 
 
             // Filter out routes that do not pass through any of the destination stops
-            //Dictionary<Route, Tuple<Tuple<Stop, int>, Tuple<Stop, int>>> connectingRoutes = new();
             Dictionary<Route, Tuple<int, int>> connectingRoutes = new();
 
             foreach (var (route, stop) in routesFromSrcStops)
@@ -141,9 +131,6 @@ namespace RAPTOR_Router.RouteFinders
                     var destIndex = route.RouteStops.IndexOf(destStop1);
                     if (destIndex != -1 && destIndex > srcIndex)
                     {
-                        //Tuple<Stop, int> srcTuple = new Tuple<Stop, int>(stop, srcIndex);
-                        //Tuple<Stop, int> destTuple = new Tuple<Stop, int>(destStop1, destIndex);
-                        //Tuple<Tuple<Stop, int>, Tuple<Stop, int>> tuple = new (srcTuple, destTuple);
                         Tuple<int, int> tuple = new(srcIndex, destIndex);
                         connectingRoutes.TryAdd(route, tuple);
                         break;
@@ -153,18 +140,12 @@ namespace RAPTOR_Router.RouteFinders
 
             // For every route from any source stop to any destination stop \
             Dictionary<Trip, Stop> trips = new();
-            //SortedDictionary<DateTime, Tuple<Trip, int, int, bool, int, int>> sortedTrips = new();
             SortedSet<Entry> sortedTrips = new();
             foreach (var (route, (srcIndex, destIndex)) in connectingRoutes)
             {
                 Stop srcStop1 = route.RouteStops[srcIndex];
-                // This is not very effective, but as there should always be only a few connecting routes, it should be fine
-                //DateOnly dateOnly = DateOnly.FromDateTime(time);
-                //TimeOnly timeOnly = TimeOnly.FromDateTime(time);
 
                 //TODO: check if the trip should be included in the result or not - probably yes unless it is the one we are searching for alternatives for
-                //Trip firstTripDepartingAfterTime = route.GetEarliestTripDepartingAfterTimeAtStop(srcStop1, dateOnly,
-                //    timeOnly, worstAllowedReachTime, delayModel, out DateOnly tripDate);
                 Trip firstTripDepartingAfterTime = route.GetEarliestTripDepartingAfterTimeAtStop(srcStop1, time, delayModel, out DateOnly tripDate);
                 if (firstTripDepartingAfterTime == null)
                 {
@@ -185,7 +166,6 @@ namespace RAPTOR_Router.RouteFinders
                     //TODO: error next line 21.10. 16:50 U4965Z1 U1748Z1
 
 
-                    //sortedTrips.Add(arrivalDateTime.AddSeconds(destArrivalDelay), new Tuple<Trip, int, int, bool, int, int>(altTrip, srcIndex, destIndex, hasSrcDelayData, srcDepartureDelay, currTripDelay));
                     Entry entry = new Entry
                     {
                         dateTime = arrivalDateTime.AddSeconds(destArrivalDelay),
@@ -205,17 +185,13 @@ namespace RAPTOR_Router.RouteFinders
             List<DateTime> toRemove = new();
 
 
-            //RemoveOverlappingTrips();
             FilterSortedTrips();
 
-            //List<Tuple<DateTime, Trip, int, int, bool, int, int>> resultTrips = new();
             List<Entry> resultTrips = new();
             if (previous)
             {
                 foreach (var item in sortedTrips.Skip(sortedTrips.Count - count))
                 {
-                    //var (trip, srcIndex, destIndex, hasDelayData, srcDepDelay, currDelay) = item.Value;
-                    //resultTrips.Add(new Tuple<DateTime, Trip, int, int, bool, int, int>(item.Key, trip, srcIndex, destIndex, hasDelayData, srcDepDelay, currDelay));
                     resultTrips.Add(item);
                 }
             }
@@ -223,8 +199,6 @@ namespace RAPTOR_Router.RouteFinders
             {
                 foreach (var item in sortedTrips.Take(count))
                 {
-                    //var (trip, srcIndex, destIndex, hasDelayData, srcDepDelay, currDelay) = item.Value;
-                    //resultTrips.Add(new Tuple<DateTime, Trip, int, int, bool, int, int>(item.Key, trip, srcIndex, destIndex, hasDelayData, srcDepDelay, currDelay));
                     resultTrips.Add(item);
                 }
             }
@@ -360,12 +334,10 @@ namespace RAPTOR_Router.RouteFinders
                 TripStopDelays stopDelays = delayModel.GetTripStopDelays(tripStartDate, trip.Id);
                 List<StopTime> stopTimes = trip.StopTimes;
 
-                //TimeOnly currTime = TimeOnly.FromDateTime(DateTime.Now);
                 TimeZoneInfo timeZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Prague");
                 DateTime dateTimeInZone = TimeZoneInfo.ConvertTime(DateTime.Now, timeZone);
                 TimeOnly currTime = TimeOnly.FromDateTime(dateTimeInZone);
 
-                //bool haveLastStopDelay = stopDelays.TryGetStopDelay(0, out int lastReachedStopArrivalDelay, out int lastReachedStopDepartureDelay);
                 int lastReachedStopDepartureDelay = 0;
                 for (int i = 1; i < stopTimes.Count; i++)
                 {

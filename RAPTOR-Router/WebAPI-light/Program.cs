@@ -20,18 +20,6 @@ namespace WebAPI_light
         /// <param name="args"></param>
         public static void Main(string[] args)
         {
-            //var config = new ConfigurationBuilder()
-            //    .SetBasePath(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "..")))
-            //    .AddJsonFile("config.json", optional: false, reloadOnChange: true)
-            //    .Build();
-            //string gtfsZipArchiveLocation = config["gtfsArchiveLocation"];
-
-            //if (gtfsZipArchiveLocation == null)
-            //{
-            //    Console.WriteLine("No gtfs archive found in following location: " + config["gtfsLocation"]);
-            //    Console.WriteLine("Change the gtfs location in the config.json file, so that the path is correct");
-            //    return;
-            //}
 
             routerBuilder = new RouteFinderBuilder();
             routerBuilder.LoadAllData();
@@ -55,37 +43,6 @@ namespace WebAPI_light
                         .ExecuteAsync(context)));
 
 
-
-            //app.MapGet("/connection", (string srcStopName, string destStopName, string departureDateTime) =>
-            //    HandleRequest(routerBuilder, srcStopName, destStopName, departureDateTime))
-            //    .WithName("GetConnection")
-            //    .WithOpenApi();
-
-            //app.MapGet("/adv-connection", (string srcStopName, string destStopName, string departureDateTime, int walkingPace, int transferTime, int comfortBalance, int walkingPreference) =>
-            //    HandleRequestAdvanced(routerBuilder, srcStopName, destStopName, departureDateTime, walkingPace, transferTime, comfortBalance, walkingPreference))
-            //    .WithName("GetAdvancedConnection")
-            //    .WithOpenApi();
-
-            //app.MapGet("/connection", (string srcStopName, string destStopName, string dateTime, int walkingPace, int cyclingPace, int bikeUnlockTime, int bikeLockTime, bool useSharedBikes, bool bikeMax15Minutes, int transferTime, int comfortBalance, int walkingPreference, int bikeTripBuffer) =>
-            //    HandleRequestStops(routerBuilder, srcStopName, destStopName, dateTime, walkingPace, cyclingPace, bikeUnlockTime, bikeLockTime, useSharedBikes, bikeMax15Minutes, transferTime, comfortBalance, walkingPreference, bikeTripBuffer))
-            //    .WithName("GetConnection")
-            //    .WithOpenApi();
-            /*app.MapPost("/connection/single/stop-to-stop", (StopToStopRequest request) =>
-                    HandleRequestStopToStop(routerBuilder, request.srcStopName, request.destStopName, request.dateTime, request.byEarliestDeparture, request.settings))
-                .WithName("GetConnectionByStopNames")
-                .WithOpenApi();
-
-            app.MapPost("/connection/single/coord-to-coord", (CoordToCoordRequest request) =>
-                HandleRequestCoordToCoord(routerBuilder, request.srcLat, request.srcLon, request.destLat, request.destLon, request.dateTime, request.byEarliestDeparture, request.settings))
-                .WithName("GetConnectionByCoords")
-                .WithOpenApi();
-
-
-            app.MapPost("/connection/range/stop-to-stop", (StopToStopRangeRequest request) =>
-                    HandleRangeRequestStopToStop(request))
-                .WithName("GetConnectionsRangeByStopNames")
-                .WithOpenApi();*/
-
             app.MapPost("/connection", (ConnectionRequest request) => 
                     HandleConnectionRequest(request))
                 .WithName("GetConnection")
@@ -106,7 +63,7 @@ namespace WebAPI_light
         static IResult HandleConnectionRequest(ConnectionRequest request)
         {
             DateTime dateTime;
-            if (request.dateTime is null)//!DateTime.TryParse(request.dateTime, out dateTime))
+            if (request.dateTime is null)
             {
                 var message = "Invalid DateTime format";
                 HttpError err = new HttpError(message);
@@ -205,21 +162,14 @@ namespace WebAPI_light
                 if (request.srcByCoords && request.destByCoords)
                 {
                     results = router.FindConnectionsAsync(routerBuilder, request).GetAwaiter().GetResult();
-                    //var message = "Coord-to-coord range searches are not yet supported";
-                    //HttpError err = new HttpError(message);
-                    //return Results.BadRequest(err);
                 }
                 else if (!request.srcByCoords && !request.destByCoords)
                 {
-                    //results = router.FindConnectionsAsync(routerBuilder, request.byEarliestDeparture, request.settings, dateTime, dateTime.AddMinutes(request.rangeLength), request.srcStopName, request.destStopName).GetAwaiter().GetResult();
                     results = router.FindConnectionsAsync(routerBuilder, request).GetAwaiter().GetResult();
                 }
                 else
                 {
                     results = router.FindConnectionsAsync(routerBuilder, request).GetAwaiter().GetResult();
-                    //var message = "Coord-to-stop and stop-to-coord range searches are not yet supported";
-                    //HttpError err = new HttpError(message);
-                    //return Results.BadRequest(err);
                 }
 
                 if (results.Count == 0)
@@ -248,6 +198,7 @@ namespace WebAPI_light
                 }
                 else
                 {
+                    //TODO: Implement
                     var message = "Coord-to-stop and stop-to-coord searches are not yet supported";
                     HttpError err = new HttpError(message);
                     return Results.BadRequest(err);

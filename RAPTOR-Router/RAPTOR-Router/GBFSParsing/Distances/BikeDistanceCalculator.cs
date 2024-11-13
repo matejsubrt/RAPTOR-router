@@ -57,11 +57,11 @@ namespace RAPTOR_Router.GBFSParsing.Distances
             osmLocation = config["osmFileLocation"];
             routerDbLocation = config["routerDbFileLocation"];
             //distanceFileLocation = config["bikeStationDistancesFileLocationNextbike"];
+            //TODO: move to Nextbike file
             distanceDBFileLocation = config["bikeStationDistancesDBFileLocationNextbike"];
 
             if (osmLocation == null)
             {
-                //TODO: stupid
                 // needs to be specified in the config file
                 Console.WriteLine("No osm file found at the following location: " + config["gtfsLocation"]);
                 Console.WriteLine("Change the osm file location in the config.json file, so that the path is correct");

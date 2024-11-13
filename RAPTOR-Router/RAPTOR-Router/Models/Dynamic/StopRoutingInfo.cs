@@ -22,6 +22,9 @@ namespace RAPTOR_Router.Models.Dynamic
             /// The trip used to reach the stop
             /// </summary>
             public Trip Trip { get; protected set; }
+            /// <summary>
+            /// The date on which the trip starts
+            /// </summary>
             public DateOnly TripStartDate { get; protected set; }
             /// <summary>
             /// The time at which the stop was reached

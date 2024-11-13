@@ -93,23 +93,6 @@ namespace RAPTOR_Router.RouteFinders
             this.delayModel = delayModel;
         }
 
-
-
-        //private List<SearchResult> FindConnection(List<Stop> srcStops, List<BikeStation> srcBikeStations, List<Stop> destStops, List<BikeStation> destBikeStations, DateTime searchBeginRangeStart, DateTime searchBeginRangeEnd, bool srcByCoord, bool destByCoord, Coordinates srcCoords = default, Coordinates destCoords = default)
-        //{
-        //    // First, collect all stops we can reach from the source stops. Collect all their 
-        //    List<SearchResult> results = new();
-        //    await 
-        //}
-
-        //private async Task<List<SearchResult>> FindConnection(bool forward, string srcStopName, string destStopName,
-        //    DateTime searchBeginRangeStart, int searchRangeMinutes, int numberOfCalls, Settings settings)
-        //{
-        //    List<SearchResult> results = new();
-        //    await FindConnectionsAsync(builder, forward, settings, searchBeginRangeStart, searchRangeMinutes, numberOfCalls, srcStopName, destStopName, results);
-        //    return results;
-        //}
-
         public async Task<List<SearchResult>> FindConnectionsAsync(
             RouteFinderBuilder builder,
             bool forward,
@@ -166,7 +149,6 @@ namespace RAPTOR_Router.RouteFinders
                 {
                     var routeDepartureTimes = route.GetTripTimesAtStopWithinRange(stop, searchBeginRangeStart,
                         searchBeginRangeEnd, delayModel, forward);
-                        //route.GetDepartureTimesAtStopWithinRange(stop, searchBeginRangeStart, searchBeginRangeEnd, delayModel);
                     if (routeDepartureTimes is not null)
                     {
                         foreach (var depTime in routeDepartureTimes)
@@ -235,8 +217,6 @@ namespace RAPTOR_Router.RouteFinders
             await Task.WhenAll(tasks);
 #endif
 
-            //results.Sort((r1, r2) => r1.DepartureDateTime.CompareTo(r2.DepartureDateTime));
-
 
             // sort by arrival time for cleaning up nonoptimal results
             results = results.OrderBy(r => r.ArrivalDateTime).ThenBy(r => r.DepartureDateTime).ToList();
@@ -251,17 +231,11 @@ namespace RAPTOR_Router.RouteFinders
                     results.RemoveAt(i);
                     i--;
                 }
-                else
-                {
-                    //Console.WriteLine();
-                }
             }
 
             // sort by departure time for final result list
             results = results.OrderBy(r => r.DepartureDateTime).ToList();
 
-
-            //results = newResults;
             return results;
         }
 
@@ -285,7 +259,6 @@ namespace RAPTOR_Router.RouteFinders
                 {
                     var routeDepartureTimes = route.GetTripTimesAtStopWithinRange(stop, searchBeginRangeStart,
                         searchBeginRangeEnd, delayModel, forward);
-                    //route.GetDepartureTimesAtStopWithinRange(stop, searchBeginRangeStart, searchBeginRangeEnd, delayModel);
                     if (routeDepartureTimes is not null)
                     {
                         foreach (var depTime in routeDepartureTimes)
@@ -339,7 +312,6 @@ namespace RAPTOR_Router.RouteFinders
                     }
                 }
 
-                //var searchResults = router.FindConnectionWithAlternatives(srcStopName, destStopName, departureTime);
 
                 lock (results)
                 {
@@ -351,7 +323,6 @@ namespace RAPTOR_Router.RouteFinders
                             results.Add(result);
                         }
                     }
-                    //results.Add(searchResult);
                 }
             }
 #else
@@ -423,17 +394,11 @@ namespace RAPTOR_Router.RouteFinders
                     results.RemoveAt(i);
                     i--;
                 }
-                else
-                {
-                    //Console.WriteLine();
-                }
             }
 
             // sort by departure time for final result list
             results = results.OrderBy(r => r.DepartureDateTime).ToList();
 
-
-            //results = newResults;
             return results;
 
 
