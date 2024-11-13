@@ -17,8 +17,8 @@
     <PackageReference Include="GtfsRealtimeBindings" Version="0.0.4" />
     <PackageReference Include="Itinero" Version="1.5.1" />
     <PackageReference Include="Itinero.IO.Osm" Version="1.5.1" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.0" />
     <PackageReference Include="protobuf-net" Version="2.4.0" />
-    <PackageReference Include="System.Data.SQLite" Version="1.0.119" />
   </ItemGroup>
 	
   <ItemGroup>
