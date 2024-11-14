@@ -7,6 +7,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
+using RAPTOR_Router.Configuration;
 
 AppDomain.CurrentDomain.SetData("DataDirectory", Directory.GetCurrentDirectory());
 
@@ -45,12 +46,8 @@ namespace ConnectionSearchTests
 
 		[AssemblyInitialize]
 		public static void AssemblyInit(TestContext context)
-		{
-			var config = new ConfigurationBuilder()
-				.SetBasePath(Directory.GetCurrentDirectory() + "..\\..\\..\\..")
-				.AddJsonFile("testConfig.json", optional: false, reloadOnChange: true)
-				.Build();
-			string gtfsZipArchiveLocation = config["gtfsArchiveLocation"];
+        {
+            string gtfsZipArchiveLocation = Config.TestGTFSArchivePath;
 
 			if (gtfsZipArchiveLocation == null)
 			{

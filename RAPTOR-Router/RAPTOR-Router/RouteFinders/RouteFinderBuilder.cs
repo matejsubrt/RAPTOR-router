@@ -12,6 +12,7 @@ using ProtoBuf;
 using System.Net;
 using TransitRealtime;
 using System.Runtime.InteropServices;
+using RAPTOR_Router.Configuration;
 
 
 namespace RAPTOR_Router.RouteFinders
@@ -33,17 +34,6 @@ namespace RAPTOR_Router.RouteFinders
         private static DelayModel delayModel;
 
         private Timer _timer;
-        /// <summary>
-        /// Initializes the builder.
-        /// </summary>
-        public RouteFinderBuilder()
-		{
-			
-		}
-
-
-        
-
 
         private static void UpdateDelayModel(object state)
         {
@@ -84,48 +74,43 @@ namespace RAPTOR_Router.RouteFinders
         /// </summary>
         /// <exception cref="Exception">The configuration is wrong</exception>
 		public void LoadAllData(string alternativeGtfsArchiveLocation = null)
-		{
-            var basePath = Directory.GetCurrentDirectory();
+        {
+            // Retrieve configuration values
+            string? gtfsZipArchiveLocation = Config.DefaultGTFSPath;
+            string? forbiddenPointsLocation = Config.ForbiddenCrossingPointsPath;
+            string? forbiddenLinesLocation = Config.ForbiddenCrossingLinesPath;
+            string nextbikeDbLocation = Config.NextbikeDbPath;
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            if (alternativeGtfsArchiveLocation != null)
             {
-                basePath = Path.GetFullPath(Path.Combine(basePath, "..", "..", "..", ".."));
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                basePath = Path.GetFullPath(Path.Combine(basePath, ".."));
-            }
-
-
-            var config = new ConfigurationBuilder()
-                .SetBasePath(basePath)
-                .AddJsonFile("config.json", optional: false, reloadOnChange: true)
-                .Build();
-            string gtfsZipArchiveLocation = config["gtfsArchiveLocation"];
-            string forbiddenPointsLocation = config["forbiddenCrossingPointsLocation"];
-            string forbiddenLinesLocation = config["forbiddenCrossingLinesLocation"];
-            
-            string nextbikeDbLocation = config["nextbikeDbLocation"];
-
-            if(alternativeGtfsArchiveLocation != null)
-            {
-                Console.WriteLine(alternativeGtfsArchiveLocation);
+                Console.WriteLine("Using non-default GTFS location: " + alternativeGtfsArchiveLocation);
                 gtfsZipArchiveLocation = alternativeGtfsArchiveLocation;
             }
 
+
+
+            // Validate the configuration - check if all values have been specified
             ValidateConfiguration();
 
 
+            // Load the forbidden crossing data
+            var forbiddenCrossings = LoadForbiddenCrossings(forbiddenPointsLocation!, forbiddenLinesLocation!);
 
 
-            var forbiddenCrossings = LoadForbiddenCrossings(forbiddenPointsLocation, forbiddenLinesLocation);
+            // Load the public transit GTFS data
+            LoadGtfsData(gtfsZipArchiveLocation!, forbiddenCrossings);
 
-            LoadGtfsData(gtfsZipArchiveLocation, forbiddenCrossings);
-			LoadGbfsData(nextbikeDbLocation);
+
+            // Load the bike providers GBFS data
+			LoadGbfsData(nextbikeDbLocation!);
+
+
+            // Connect the transit and bike models through transfers
 			ConnectModelsThroughTransfers(forbiddenCrossings);
 
-            UpdateDelayModel(null);
-            _timer = new Timer(UpdateDelayModel, null, 20000, 20000);
+
+            // Start the timer that periodically updates the delay model
+            _timer = new Timer(UpdateDelayModel, null, 0, 20000);
 
 
             void ValidateConfiguration()
@@ -152,11 +137,19 @@ namespace RAPTOR_Router.RouteFinders
 		public void LoadGtfsData(string gtfsZipArchiveLocation, List<ForbiddenCrossingLine> forbiddenCrossings)
 		{
 			TransitModel raptor;
+
+            // Load the GTFS data and parse them into a TransitModel
 			using (GTFS gtfs = GTFS.ParseZipFile(gtfsZipArchiveLocation))
 			{
 				raptor = new TransitModel(gtfs, forbiddenCrossings);
 			}
+
+            // Collect the garbage to free up memory - to get the parsed transit data, we first had to create raw GTFS objects to parse the data from, which we now do not need anymore
+            // This is the perfect place to remove them from memory, as from now on, we will only use the TransitModel object and its processed and linked data
+            // This helps to keep the memory consumption low
 			GC.Collect();
+
+
 			raptorModel = raptor;
 		}
 
@@ -261,18 +254,32 @@ namespace RAPTOR_Router.RouteFinders
             }
         }
 
-
-        public IRouteFinder CreateUniversalRouteFinder(bool forward, Settings settings)
+        private void ValidateTransitModelLoaded()
         {
             if (raptorModel is null)
             {
-                throw new ApplicationException("Data from a gtfs archive were not loaded yet");
+                throw new ApplicationException("Data from a GTFS archive were not loaded yet");
             }
+        }
 
+        private void ValidateBikeModelLoaded()
+        {
             if (bikeModel is null)
             {
-                throw new ApplicationException("Data from a gbfs api were not loaded yet");
+                throw new ApplicationException("Data from a GBFS API were not loaded yet");
             }
+        }
+
+        private void ValidateModelsLoaded()
+        {
+            ValidateTransitModelLoaded();
+            ValidateBikeModelLoaded();
+        }
+
+
+        public IRouteFinder CreateUniversalRouteFinder(bool forward, Settings settings)
+        {
+            ValidateModelsLoaded();
 
             IRouteFinder router = new BasicRouteFinder(forward, settings, raptorModel, bikeModel, delayModel);
             return router;
@@ -280,15 +287,7 @@ namespace RAPTOR_Router.RouteFinders
 
         public AlternativesRouteFinder CreateDirectRouteFinder()
         {
-            if (raptorModel is null)
-            {
-                throw new ApplicationException("Data from a gtfs archive were not loaded yet");
-            }
-
-            if (bikeModel is null)
-            {
-                throw new ApplicationException("Data from a gbfs api were not loaded yet");
-            }
+            ValidateModelsLoaded();
 
             AlternativesRouteFinder router = new AlternativesRouteFinder(raptorModel, delayModel);
             return router;
@@ -296,15 +295,7 @@ namespace RAPTOR_Router.RouteFinders
 
         public RangeRouteFinder CreateRangeRouteFinder(bool forward, Settings settings)
         {
-            if (raptorModel is null)
-            {
-                throw new ApplicationException("Data from a gtfs archive were not loaded yet");
-            }
-
-            if (bikeModel is null)
-            {
-                throw new ApplicationException("Data from a gbfs api were not loaded yet");
-            }
+            ValidateModelsLoaded();
 
             RangeRouteFinder router = new RangeRouteFinder(forward, settings, raptorModel, bikeModel, delayModel);
             return router;
@@ -312,15 +303,7 @@ namespace RAPTOR_Router.RouteFinders
 
         public DelayUpdater CreateDelayUpdater()
         {
-            if (raptorModel is null)
-            {
-                throw new ApplicationException("Data from a gtfs archive were not loaded yet");
-            }
-
-            if (bikeModel is null)
-            {
-                throw new ApplicationException("Data from a gbfs api were not loaded yet");
-            }
+            ValidateModelsLoaded();
 
             DelayUpdater updater = new DelayUpdater(raptorModel, delayModel);
             return updater;
@@ -335,10 +318,7 @@ namespace RAPTOR_Router.RouteFinders
         /// <returns>If the stop name exists in the transit model</returns>
 		public bool ValidateStopName(string stopName)
 		{
-			if (raptorModel is null)
-			{
-				return false;
-			}
+			ValidateTransitModelLoaded();
 			return raptorModel.GetStopsByName(stopName).Count != 0;
 		}
         /// <summary>
@@ -361,13 +341,11 @@ namespace RAPTOR_Router.RouteFinders
         /// <returns>If there is at least one RoutePoint near the coordinates to run search to/from</returns>
         public bool ValidateStopsNearCoords(double lat, double lon, bool includeBikes)
         {
-            if (raptorModel is null)
-            {
-                return false;
-            }
+            ValidateTransitModelLoaded();
 
             if (includeBikes)
             {
+                ValidateBikeModelLoaded();
                 return raptorModel.NearStopExists(lat, lon, 750) || bikeModel.NearStationExists(lat, lon, 750);
             }
             else
