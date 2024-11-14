@@ -43,7 +43,6 @@
         public DateTime GetDepartureDateTime(DateOnly tripStartDate)
         {
             var date = tripStartDate.AddDays(DaysAfterTripStartDeparture);
-
             return date.ToDateTime(DepartureTime);
         }
     }

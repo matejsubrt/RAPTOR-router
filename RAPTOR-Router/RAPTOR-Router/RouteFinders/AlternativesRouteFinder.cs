@@ -153,17 +153,19 @@ namespace RAPTOR_Router.RouteFinders
                 }
                 List<Tuple<DateOnly, Trip>> alternativeTrips = GetAlternativeTripsOnRoute(firstTripDepartingAfterTime, tripDate, count, previous);
 
-                Console.WriteLine();
                 foreach (var (altTripDate, altTrip) in alternativeTrips)
                 {
                     bool hasSrcDelayData = delayModel.TryGetDelay(altTripDate, altTrip.Id, srcIndex,
                         out int srcArrivalDelay, out int srcDepartureDelay);
                     bool hasDestDelayData = delayModel.TryGetDelay(altTripDate, altTrip.Id, destIndex, out int destArrivalDelay, out int destDepartureDelay);
-                    TimeOnly arrivalTime = altTrip.StopTimes[destIndex].ArrivalTime.AddSeconds(destArrivalDelay);
-                    DateOnly arrivalDate = (arrivalTime < altTrip.StopTimes[0].DepartureTime) ? altTripDate.AddDays(1) : altTripDate;
-                    DateTime arrivalDateTime = DateTimeExtensions.FromDateAndTime(arrivalDate, arrivalTime);
+
+                    DateTime arrivalDateTime = altTrip.GetArrivalDateTime(destIndex, altTripDate);
+
+                    //DateTime arrivalDateTime = altTrip.StopTimes[destIndex].GetArrivalDateTime(altTripDate);
+                    //TimeOnly arrivalTime = altTrip.StopTimes[destIndex].ArrivalTime.AddSeconds(destArrivalDelay);
+                    //DateOnly arrivalDate = (arrivalTime < altTrip.StopTimes[0].DepartureTime) ? altTripDate.AddDays(1) : altTripDate;
+                    //DateTime arrivalDateTime = DateTimeExtensions.FromDateAndTime(arrivalDate, arrivalTime);
                     int currTripDelay = GetCurrentTripDelay(altTrip, altTripDate);
-                    //TODO: error next line 21.10. 16:50 U4965Z1 U1748Z1
 
 
                     Entry entry = new Entry

@@ -13,6 +13,8 @@ namespace RAPTOR_Router.GBFSParsing.DataSources
         static string stationInfoUrl = "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_tg/cs/station_information.json";
         static string stationStatusUrl = "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_tg/cs/station_status.json";
 
+        public string DistancesDbFileLocation { get; set; }
+
         /// <summary>
         /// The list of all bike stations in the system
         /// </summary>
@@ -24,17 +26,18 @@ namespace RAPTOR_Router.GBFSParsing.DataSources
         /// <summary>
         /// The distance matrix between all bike stations
         /// </summary>
-        public StationDistanceMatrix Distances { get; private set; } = new();
+        public StationDistanceMatrix Distances { get; set; } = new();
+
 
         /// <summary>
         /// Calculates all the distances between the bike stations and loads them into the distance matrix
         /// </summary>
-        public void LoadStationDistances()
-        {
-            BikeDistanceCalculator distanceCalculator = new BikeDistanceCalculator();
-            //Distances = distanceCalculator.CalculateMatrix(Stations, StationsById);
-            Distances = distanceCalculator.GetDistanceMatrix(StationsById);
-        }
+        //public void LoadStationDistances()
+        //{
+        //    BikeDistanceCalculator distanceCalculator = new BikeDistanceCalculator();
+        //    //Distances = distanceCalculator.CalculateMatrix(Stations, StationsById);
+        //    Distances = distanceCalculator.GetDistanceMatrix(StationsById);
+        //}
 
         /// <summary>
         /// Loads all the static station data from the nextbike API

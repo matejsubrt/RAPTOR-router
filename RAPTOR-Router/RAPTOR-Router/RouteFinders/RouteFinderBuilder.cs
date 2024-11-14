@@ -104,6 +104,8 @@ namespace RAPTOR_Router.RouteFinders
             string gtfsZipArchiveLocation = config["gtfsArchiveLocation"];
             string forbiddenPointsLocation = config["forbiddenCrossingPointsLocation"];
             string forbiddenLinesLocation = config["forbiddenCrossingLinesLocation"];
+            
+            string nextbikeDbLocation = config["nextbikeDbLocation"];
 
             if(alternativeGtfsArchiveLocation != null)
             {
@@ -111,14 +113,7 @@ namespace RAPTOR_Router.RouteFinders
                 gtfsZipArchiveLocation = alternativeGtfsArchiveLocation;
             }
 
-            if (gtfsZipArchiveLocation is null)
-            {
-                throw new Exception("No gtfs archive location found in the config file");
-            }
-            if (forbiddenPointsLocation == null || forbiddenLinesLocation == null)
-            {
-                throw new Exception("Forbidden crossing points or lines location not found in the config file");
-            }
+            ValidateConfiguration();
 
 
 
@@ -126,11 +121,28 @@ namespace RAPTOR_Router.RouteFinders
             var forbiddenCrossings = LoadForbiddenCrossings(forbiddenPointsLocation, forbiddenLinesLocation);
 
             LoadGtfsData(gtfsZipArchiveLocation, forbiddenCrossings);
-			LoadGbfsData();
+			LoadGbfsData(nextbikeDbLocation);
 			ConnectModelsThroughTransfers(forbiddenCrossings);
 
             UpdateDelayModel(null);
             _timer = new Timer(UpdateDelayModel, null, 20000, 20000);
+
+
+            void ValidateConfiguration()
+            {
+                if (gtfsZipArchiveLocation is null)
+                {
+                    throw new Exception("No gtfs archive location found in the config file");
+                }
+                if (forbiddenPointsLocation == null || forbiddenLinesLocation == null)
+                {
+                    throw new Exception("Forbidden crossing points or lines location not found in the config file");
+                }
+                if (nextbikeDbLocation is null)
+                {
+                    throw new Exception("No nextbike db location found in the config file");
+                }
+            }
         }
 
 		/// <summary>
@@ -151,16 +163,21 @@ namespace RAPTOR_Router.RouteFinders
         /// <summary>
         /// Loads the data from the bike data sources and creates a data model for the connection searches to use
         /// </summary>
-		public void LoadGbfsData()
+		public void LoadGbfsData(string nextbikeDbFileLocation)
 		{
+            // Create a bike model
             bikeModel = new BikeModel();
 
-            IBikeDataSource nextbike = new NextbikeDataSource();
-			nextbike.LoadStations();
-			nextbike.LoadStationDistances();
 
-						
+            // Create the data sources
+            IBikeDataSource nextbike = new NextbikeDataSource{ DistancesDbFileLocation = nextbikeDbFileLocation };
+				
+            
+            // Add the data sources to the model
 			bikeModel.AddDataSource(nextbike);
+
+
+            // Start the timer that periodically updates the bike counts
             bikeModel.StartUpdateTimer();
         }
 

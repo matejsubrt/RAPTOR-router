@@ -103,8 +103,8 @@ namespace RAPTOR_Router.Models.Results
             int getOffStopIndex = routeStops.IndexOf(realGetOffStop);
 
 
-            DateTime departureTime = stopTimes[getOnStopIndex].GetDepartureDateTime(tripStartDate);
-            DateTime arrivalTime = stopTimes[getOffStopIndex].GetArrivalDateTime(tripStartDate);
+            DateTime departureTime = trip.GetDepartureDateTime(getOnStopIndex, tripStartDate);//stopTimes[getOnStopIndex].GetDepartureDateTime(tripStartDate);
+            DateTime arrivalTime = trip.GetArrivalDateTime(getOffStopIndex, tripStartDate);//stopTimes[getOffStopIndex].GetArrivalDateTime(tripStartDate);
 
             if (toEnd)
             {

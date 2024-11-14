@@ -20,7 +20,6 @@ namespace WebAPI_light
         /// <param name="args"></param>
         public static void Main(string[] args)
         {
-
             routerBuilder = new RouteFinderBuilder();
             routerBuilder.LoadAllData();
 
@@ -159,18 +158,8 @@ namespace WebAPI_light
                 RangeRouteFinder router = routerBuilder.CreateRangeRouteFinder(request.byEarliestDeparture, request.settings);
                 List<SearchResult> results = new List<SearchResult>();
 
-                if (request.srcByCoords && request.destByCoords)
-                {
-                    results = router.FindConnectionsAsync(routerBuilder, request).GetAwaiter().GetResult();
-                }
-                else if (!request.srcByCoords && !request.destByCoords)
-                {
-                    results = router.FindConnectionsAsync(routerBuilder, request).GetAwaiter().GetResult();
-                }
-                else
-                {
-                    results = router.FindConnectionsAsync(routerBuilder, request).GetAwaiter().GetResult();
-                }
+                results = router.FindConnectionsAsync(routerBuilder, request).GetAwaiter().GetResult();
+
 
                 if (results.Count == 0)
                 {

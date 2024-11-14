@@ -31,9 +31,9 @@ namespace RAPTOR_Router.GBFSParsing.Distances
         string osmLocation;
         string routerDbLocation;
         //string distanceFileLocation;
-        private string distanceDBFileLocation;
-        private BikeDistanceDatabase distanceDB;
-        StationDistanceMatrix distances = new StationDistanceMatrix();
+        //private string distanceDBFileLocation;
+        //private BikeDistanceDatabase distanceDB;
+        //StationDistanceMatrix distances = new StationDistanceMatrix();
 
         /// <summary>
         /// Loads the configuration info and creates a routerDb instance - either by creating a new one from the osm file, or by loading it from disk
@@ -58,7 +58,7 @@ namespace RAPTOR_Router.GBFSParsing.Distances
             routerDbLocation = config["routerDbFileLocation"];
             //distanceFileLocation = config["bikeStationDistancesFileLocationNextbike"];
             //TODO: move to Nextbike file
-            distanceDBFileLocation = config["bikeStationDistancesDBFileLocationNextbike"];
+            //distanceDBFileLocation = config["bikeStationDistancesDBFileLocationNextbike"];
 
             if (osmLocation == null)
             {
@@ -74,12 +74,12 @@ namespace RAPTOR_Router.GBFSParsing.Distances
                 routerDbLocation = osmLocation.Substring(0, lastIndexOfBackslash) + "\\cz.routerdb";
             }
 
-            if (distanceDBFileLocation == null)
-            {
-                Console.WriteLine("No distance DB file found at the following location: " + config["bikeStationDistancesDBFileLocationNextbike"]);
-                Console.WriteLine("Change the DB distance file location in the config.json file, so that the path is correct");
-                return;
-            }
+            //if (distanceDBFileLocation == null)
+            //{
+            //    Console.WriteLine("No distance DB file found at the following location: " + config["bikeStationDistancesDBFileLocationNextbike"]);
+            //    Console.WriteLine("Change the DB distance file location in the config.json file, so that the path is correct");
+            //    return;
+            //}
 
 
             // load the routerdb from disk, if it exists, otherwise create it from the osm file
@@ -102,16 +102,16 @@ namespace RAPTOR_Router.GBFSParsing.Distances
                 }
             }
 
-            if (File.Exists(distanceDBFileLocation))
-            {
-                distanceDB = new BikeDistanceDatabase(distanceDBFileLocation);
-            }
-            else
-            {
-                // TODO: shouldnt exceptions be thrown in these methods?
-                Console.WriteLine("Error loading distances");
-                return;
-            }
+            //if (File.Exists(distanceDBFileLocation))
+            //{
+            //    distanceDB = new BikeDistanceDatabase(distanceDBFileLocation);
+            //}
+            //else
+            //{
+            //    // TODO: shouldnt exceptions be thrown in these methods?
+            //    Console.WriteLine("Error loading distances");
+            //    return;
+            //}
         }
 
         /// <summary>
@@ -119,9 +119,14 @@ namespace RAPTOR_Router.GBFSParsing.Distances
         /// </summary>
         /// <param name="stationsById">The dictionary to access the bike stations by their Ids</param>
         /// <returns>The distance matrix</returns>
-        public StationDistanceMatrix GetDistanceMatrix(Dictionary<string, BikeStation> stationsById)
+        public StationDistanceMatrix GetDistanceMatrix(Dictionary<string, BikeStation> stationsById, string distanceDBFileLocation)
         {
-            StationDistanceMatrix distances = distanceDB.GetDistanceMatrixAndRemoveNonExistentStations(stationsById);
+            BikeDistanceDatabase db;
+
+            // load the distance database from disk, if it exists, otherwise create it
+            db = new BikeDistanceDatabase(distanceDBFileLocation);
+
+            StationDistanceMatrix distances = db.GetDistanceMatrixAndRemoveNonExistentStations(stationsById);
             var profile = Vehicle.Bicycle.Shortest();
 
 
@@ -216,7 +221,7 @@ namespace RAPTOR_Router.GBFSParsing.Distances
             {
                 distances.AddDistance(from, to, distance);
                 //AppendDistanceToFile(from, to, distance);
-                distanceDB.AddOrUpdateDistance(from.Id, to.Id, distance);
+                db.AddOrUpdateDistance(from.Id, to.Id, distance);
 
                 Console.WriteLine("Didnt have distance from " + from.Id + " to " + to.Id + ": " + distance + "m");
             }

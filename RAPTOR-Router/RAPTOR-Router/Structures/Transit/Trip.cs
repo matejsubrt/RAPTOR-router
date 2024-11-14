@@ -78,7 +78,15 @@ namespace RAPTOR_Router.Structures.Transit
         public static int CompareTrips(Trip trip1, Trip trip2)
         {
             return trip1.StopTimes[0].DepartureTime.CompareTo(trip2.StopTimes[0].DepartureTime);
+        }
 
+        public DateTime GetArrivalDateTime(int stopIndex, DateOnly tripDate)
+        {
+            return StopTimes[stopIndex].GetArrivalDateTime(tripDate);
+        }
+        public DateTime GetDepartureDateTime(int stopIndex, DateOnly tripDate)
+        {
+            return StopTimes[stopIndex].GetDepartureDateTime(tripDate);
         }
     }
 }

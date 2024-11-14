@@ -42,6 +42,12 @@ namespace RAPTOR_Router.Models.Static
             statusUpdateTimer.Enabled = true;
         }
 
+        //private void LoadStationDistances(IBikeDataSource source)
+        //{
+        //    BikeDistanceCalculator distanceCalculator = new BikeDistanceCalculator();
+        //    Distances = distanceCalculator.GetDistanceMatrix(source.StationsById, source.DistancesDbFileLocation);
+        //}
+
         /// <summary>
         /// Adds a new data source to the model, and merges its data with the existing data.
         /// </summary>
@@ -49,6 +55,9 @@ namespace RAPTOR_Router.Models.Static
         /// <param name="source"></param>
         public void AddDataSource(IBikeDataSource source)
         {
+            source.LoadStations();
+            source.LoadStationDistances();
+
             if (Stations.Count == 0)
             {
                 Stations = source.Stations;

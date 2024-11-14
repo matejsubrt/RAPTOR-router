@@ -134,7 +134,7 @@ namespace RAPTOR_Router.Structures.Transit
 
             foreach (Trip trip in tripsOnPrevDate)
             {
-                DateTime tripTime = trip.StopTimes[stopIndex].GetDepartureDateTime(prevDate);
+                DateTime tripTime = trip.GetDepartureDateTime(stopIndex, prevDate);//trip.StopTimes[stopIndex].GetDepartureDateTime(prevDate);
                 if (tripTime >= rangeStart && tripTime <= rangeEnd)
                 {
                     tripTimes.Add(tripTime);
@@ -142,7 +142,7 @@ namespace RAPTOR_Router.Structures.Transit
             }
             foreach (Trip trip in tripsOnRangeStartDate)
             {
-                DateTime tripTime = trip.StopTimes[stopIndex].GetDepartureDateTime(rangeStartDate);
+                DateTime tripTime = trip.GetDepartureDateTime(stopIndex, rangeStartDate);//trip.StopTimes[stopIndex].GetDepartureDateTime(rangeStartDate);
                 if (tripTime >= rangeStart && tripTime <= rangeEnd)
                 {
                     tripTimes.Add(tripTime);
@@ -150,7 +150,7 @@ namespace RAPTOR_Router.Structures.Transit
             }
             foreach (Trip trip in tripsOnNextDate)
             {
-                DateTime tripTime = trip.StopTimes[stopIndex].GetDepartureDateTime(nextDate);
+                DateTime tripTime = trip.GetDepartureDateTime(stopIndex, nextDate);//trip.StopTimes[stopIndex].GetDepartureDateTime(nextDate);
                 if (tripTime >= rangeStart && tripTime <= rangeEnd)
                 {
                     tripTimes.Add(tripTime);
@@ -201,8 +201,9 @@ namespace RAPTOR_Router.Structures.Transit
                 {
                     foreach (Trip trip in tripsOnDate)
                     {
-                        var stopTime = trip.StopTimes[stopIndex];
-                        var regularDepartureTime = stopTime.GetDepartureDateTime(date);
+                        //var stopTime = trip.StopTimes[stopIndex];
+                        //var regularDepartureTime = stopTime.GetDepartureDateTime(date);
+                        var regularDepartureTime = trip.GetDepartureDateTime(stopIndex, date);
 
 
                         DateTime actualDepartureTime;
@@ -248,8 +249,11 @@ namespace RAPTOR_Router.Structures.Transit
                     {
                         var trip = tripsOnDate[i];
 
-                        var stopTime = trip.StopTimes[stopIndex];
-                        var regularArrivalTime = stopTime.GetArrivalDateTime(date);
+                        //var stopTime = trip.StopTimes[stopIndex];
+                        //var regularArrivalTime = stopTime.GetArrivalDateTime(date);
+
+                        var regularArrivalTime = trip.GetArrivalDateTime(stopIndex, date);
+
                         bool hasDelayData = delayModel.TryGetDelay(date, trip.Id, stopIndex, out int arrivalDelay, out int departureDelay);
                         int delayOnStop = hasDelayData ? arrivalDelay : 0;
 
