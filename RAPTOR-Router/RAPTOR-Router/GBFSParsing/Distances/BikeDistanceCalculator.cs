@@ -28,7 +28,7 @@ namespace RAPTOR_Router.GBFSParsing.Distances
     /// </summary>
     public class BikeDistanceCalculator
     {
-        private RouterDb routerDb;
+        private RouterDb routerDb = new();
         
         //string distanceFileLocation;
         //private string distanceDBFileLocation;
@@ -65,7 +65,7 @@ namespace RAPTOR_Router.GBFSParsing.Distances
                 if (routerDbLocation == null)
                 {
                     // does not need to be specified in the config file -> default location is used
-                    int lastIndexOfBackslash = osmLocation.LastIndexOf("\\");
+                    int lastIndexOfBackslash = osmLocation!.LastIndexOf("\\");
                     routerDbLocation = osmLocation.Substring(0, lastIndexOfBackslash) + "\\cz.routerdb";
                 }
             }
@@ -80,13 +80,13 @@ namespace RAPTOR_Router.GBFSParsing.Distances
                 else
                 {
                     routerDb = new RouterDb();
-                    using (var stream = new FileInfo(osmLocation).OpenRead())
+                    using (var stream = new FileInfo(osmLocation!).OpenRead())
                     {
                         routerDb.LoadOsmData(stream, Vehicle.Bicycle);
                     }
 
                     // write the routerdb to disk, so that it can be used later.
-                    using (var stream = new FileInfo(routerDbLocation).Open(FileMode.Create))
+                    using (var stream = new FileInfo(routerDbLocation!).Open(FileMode.Create))
                     {
                         routerDb.Serialize(stream);
                     }

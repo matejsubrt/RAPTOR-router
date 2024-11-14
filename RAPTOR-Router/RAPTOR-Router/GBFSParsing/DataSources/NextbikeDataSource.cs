@@ -13,7 +13,7 @@ namespace RAPTOR_Router.GBFSParsing.DataSources
         static string stationInfoUrl = "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_tg/cs/station_information.json";
         static string stationStatusUrl = "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_tg/cs/station_status.json";
 
-        public string DistancesDbFileLocation { get; set; }
+        public string? DistancesDbFileLocation { get; set; }
 
         /// <summary>
         /// The list of all bike stations in the system
@@ -30,16 +30,6 @@ namespace RAPTOR_Router.GBFSParsing.DataSources
 
 
         /// <summary>
-        /// Calculates all the distances between the bike stations and loads them into the distance matrix
-        /// </summary>
-        //public void LoadStationDistances()
-        //{
-        //    BikeDistanceCalculator distanceCalculator = new BikeDistanceCalculator();
-        //    //Distances = distanceCalculator.CalculateMatrix(Stations, StationsById);
-        //    Distances = distanceCalculator.GetDistanceMatrix(StationsById);
-        //}
-
-        /// <summary>
         /// Loads all the static station data from the nextbike API
         /// </summary>
         public void LoadStations()
@@ -52,10 +42,14 @@ namespace RAPTOR_Router.GBFSParsing.DataSources
                     HttpResponseMessage response = client.GetAsync(stationInfoUrl).Result;
                     response.EnsureSuccessStatusCode();
 
-                    GBFSStationInfo root = JsonSerializer.Deserialize<GBFSStationInfo>(response.Content.ReadAsStringAsync().Result);
+                    GBFSStationInfo? root = JsonSerializer.Deserialize<GBFSStationInfo>(response.Content.ReadAsStringAsync().Result);
+                    if (root is null)
+                    {
+                        throw new InvalidOperationException("Failed to parse the response from the nextbike API");
+                    }
 
                     int local_id = 0;
-                    foreach (GBFSStation station in root.Data.Stations)
+                    foreach (GBFSStation station in root.Data!.Stations!)
                     {
                         BikeStation newStation = new BikeStation(station.StationId, station.Name, station.Lat, station.Lon, station.Capacity, local_id);
                         Stations.Add(newStation);
@@ -84,7 +78,11 @@ namespace RAPTOR_Router.GBFSParsing.DataSources
                     HttpResponseMessage response = client.GetAsync(stationStatusUrl).Result;
                     response.EnsureSuccessStatusCode();
 
-                    GBFSStationStatus root = JsonSerializer.Deserialize<GBFSStationStatus>(response.Content.ReadAsStringAsync().Result);
+                    GBFSStationStatus? root = JsonSerializer.Deserialize<GBFSStationStatus>(response.Content.ReadAsStringAsync().Result);
+                    if (root is null)
+                    {
+                        throw new InvalidOperationException("Failed to parse the response from the nextbike API");
+                    }
 
                     foreach (GBFSSingleStationStatus station in root.Data.Stations)
                     {

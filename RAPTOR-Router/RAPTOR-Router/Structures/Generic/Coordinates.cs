@@ -35,5 +35,19 @@ namespace RAPTOR_Router.Structures.Generic
         {
             return c1.Lat != c2.Lat || c1.Lon != c2.Lon;
         }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is Coordinates other)
+            {
+                return this == other;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Lat, Lon);
+        }
     }
 }

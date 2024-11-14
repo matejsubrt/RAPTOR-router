@@ -136,7 +136,7 @@ namespace RAPTOR_Router.Models.Dynamic
             {
                 CustomTransfer transfer = searchEndCustomRoutePoint.GetTransferWithNormalRP(stop);
                 int transferTime = timeMpl * settingsUsed.GetAdjustedWalkingTransferTime(transfer.Distance);
-                DateTime arrivalTimeAtDestCustomRP = currStopInfo.Reaches[round].Time.AddSeconds(transferTime);
+                DateTime arrivalTimeAtDestCustomRP = currStopInfo.Reaches[round]!.Time.AddSeconds(transferTime);
                 result.AddUsedTransfer(transfer, arrivalTimeAtDestCustomRP, !forward);
             }
 
@@ -168,7 +168,7 @@ namespace RAPTOR_Router.Models.Dynamic
                         // in last round, we do not add a transfer
                         if (currRound != round)
                         {
-                            result.AddUsedTransfer(new Transfer(s, s, 0), currStopInfo.Reaches[currRound].Time.AddSeconds(timeMpl * settingsUsed.GetStationaryTransferMinimumSeconds()), !forward);
+                            result.AddUsedTransfer(new Transfer(s, s, 0), currStopInfo.Reaches[currRound]!.Time.AddSeconds(timeMpl * settingsUsed.GetStationaryTransferMinimumSeconds()), !forward);
                         }
                     }
                 }
@@ -729,7 +729,7 @@ namespace RAPTOR_Router.Models.Dynamic
         /// <param name="round">The round in which we are trying to improve</param>
         /// <param name="DoNotImproveToRoutePoint">A functor specifying for any route point whether we can improve reach time there by a transfer</param>
         /// <returns>Whether the reach time at the route point was improved.</returns>
-        public bool TryImproveReachTimeByTransfer(ITransfer realTransfer, bool toBikeStation, int round, Func<IRoutePoint, bool> DoNotImproveToRoutePoint = null)
+        public bool TryImproveReachTimeByTransfer(ITransfer realTransfer, bool toBikeStation, int round, Func<IRoutePoint, bool>? DoNotImproveToRoutePoint = null)
         {
             IRoutePoint realSrc = realTransfer.GetSrcRoutePoint();
             IRoutePoint realDest = realTransfer.GetDestRoutePoint();
@@ -912,7 +912,7 @@ namespace RAPTOR_Router.Models.Dynamic
         /// <returns>Bool, specifying whether the RoutePoint was reached by a transfer in the round</returns>
         public bool RoutePointIsReachedByTransferInRound(IRoutePoint rp, int round)
         {
-            StopRoutingInfo.IEntry arrival = GetRoutingInfo(rp).Reaches[round];
+            StopRoutingInfo.IEntry? arrival = GetRoutingInfo(rp).Reaches[round];
             return arrival is StopRoutingInfo.TransferReach || arrival is StopRoutingInfo.BikeTransferReach || arrival is StopRoutingInfo.CustomTransferReach;
         }
 
@@ -926,7 +926,7 @@ namespace RAPTOR_Router.Models.Dynamic
         public bool RoutePointIsReachedByBikeInRound(IRoutePoint rp, int round)
         {
             //var ri = GetRoutingInfo(rp);
-            StopRoutingInfo.IEntry arrival = GetRoutingInfo(rp).Reaches[round];
+            StopRoutingInfo.IEntry? arrival = GetRoutingInfo(rp).Reaches[round];
             return arrival is StopRoutingInfo.BikeTripReach;
         }
 

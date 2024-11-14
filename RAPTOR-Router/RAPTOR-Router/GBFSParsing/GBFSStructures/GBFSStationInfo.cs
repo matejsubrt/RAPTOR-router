@@ -14,10 +14,10 @@ namespace RAPTOR_Router.GBFSParsing.GBFSStructures
         public int Ttl { get; set; }
 
         [JsonPropertyName("data")]
-        public GBFSData Data { get; set; }
+        public required GBFSData Data { get; set; }
 
         [JsonPropertyName("version")]
-        public string Version { get; set; }
+        public required string Version { get; set; }
     }
 
     /// <summary>
@@ -26,7 +26,7 @@ namespace RAPTOR_Router.GBFSParsing.GBFSStructures
     public class GBFSData
     {
         [JsonPropertyName("stations")]
-        public List<GBFSStation> Stations { get; set; }
+        public required List<GBFSStation> Stations { get; set; }
     }
 
     /// <summary>
@@ -35,13 +35,13 @@ namespace RAPTOR_Router.GBFSParsing.GBFSStructures
     public class GBFSStation
     {
         [JsonPropertyName("station_id")]
-        public string StationId { get; set; }
+        public required string StationId { get; set; }
 
         [JsonPropertyName("name")]
-        public string Name { get; set; }
+        public required string Name { get; set; }
 
         [JsonPropertyName("short_name")]
-        public string ShortName { get; set; }
+        public required string ShortName { get; set; }
 
         [JsonPropertyName("lat")]
         public double Lat { get; set; }
@@ -50,10 +50,10 @@ namespace RAPTOR_Router.GBFSParsing.GBFSStructures
         public double Lon { get; set; }
 
         [JsonPropertyName("region_id")]
-        public string RegionId { get; set; }
+        public required string RegionId { get; set; }
 
         [JsonPropertyName("rental_uris")]
-        public RentalUris RentalUris { get; set; }
+        public required RentalUris RentalUris { get; set; }
 
         [JsonPropertyName("is_virtual_station")]
         public bool IsVirtualStation { get; set; }
@@ -65,13 +65,13 @@ namespace RAPTOR_Router.GBFSParsing.GBFSStructures
     public class RentalUris
     {
         [JsonPropertyName("android")]
-        public string Android { get; set; }
+        public required string Android { get; set; }
 
         [JsonPropertyName("ios")]
-        public string Ios { get; set; }
+        public required string Ios { get; set; }
 
         [JsonPropertyName("web")]
-        public string Web { get; set; }
+        public required string Web { get; set; }
     }
 
 }

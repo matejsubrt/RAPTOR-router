@@ -90,7 +90,7 @@ namespace RAPTOR_Router.Models.Static
         /// Updates the status (bike count) of all stations in all data sources.
         /// </summary>
         /// <remarks>Called by the status update timer</remarks>
-        public void UpdateAllStationStatus(object source, ElapsedEventArgs e)
+        public void UpdateAllStationStatus(object? source, ElapsedEventArgs e)
         {
             foreach (IBikeDataSource dataSource in bikeDataSources)
             {
@@ -155,10 +155,10 @@ namespace RAPTOR_Router.Models.Static
         /// <param name="lon">The longitude of the point</param>
         /// <param name="radius">The maximum distance of the found bike station from the coordinates</param>
         /// <returns>The nearest bike station to the coordinates, null if none was found</returns>
-        public BikeStation ResolveCoordinates(double lat, double lon, int radius)
+        public BikeStation? ResolveCoordinates(double lat, double lon, int radius)
         {
             int minDistance = int.MaxValue;
-            BikeStation nearestStation = null;
+            BikeStation? nearestStation = null;
             foreach (BikeStation s in Stations)
             {
                 int distance = DistanceExtensions.SimplifiedDistanceBetween(s.Coords.Lat, s.Coords.Lon, lat, lon);

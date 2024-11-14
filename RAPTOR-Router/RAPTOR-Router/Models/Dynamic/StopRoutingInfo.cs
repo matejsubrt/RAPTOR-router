@@ -193,7 +193,7 @@ namespace RAPTOR_Router.Models.Dynamic
         /// <summary>
         /// Array of entries holding the best arrival/departure for a RoutePoint for every round of the search.
         /// </summary>
-        internal IEntry[] Entries { get; set; }
+        internal IEntry?[] Entries { get; set; }
 
         
         /// <summary>
@@ -223,7 +223,7 @@ namespace RAPTOR_Router.Models.Dynamic
         /// <summary>
         /// Gets the reaches at the RoutePoint
         /// </summary>
-        public IEntry[] Reaches
+        public IEntry?[] Reaches
         {
             get => Entries;
             set => Entries = value;

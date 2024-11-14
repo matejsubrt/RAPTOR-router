@@ -9,6 +9,7 @@ using RAPTOR_Router.Models.Results;
 using RAPTOR_Router.Extensions;
 using RAPTOR_Router.Structures.Custom;
 using RAPTOR_Router.Structures.Generic;
+using RAPTOR_Router.Structures.Requests;
 
 namespace RAPTOR_Router.RouteFinders
 {
@@ -33,22 +34,22 @@ namespace RAPTOR_Router.RouteFinders
     /// <summary>
     /// Class used for finding the quickest connection from source to destination by earliest possible departure time
     /// </summary>
-    public class BasicRouteFinder : IRouteFinder
+    public class BasicRouteFinder : ISimpleRouteFinder, ISimpleRoutingProvider
     {
         /// <summary>
         /// The transit model holding all the static information about the transit network
         /// </summary>
-        private TransitModel transitModel;
+        private readonly TransitModel transitModel;
         /// <summary>
         /// The bike model holding all the information about the shared bike systems and their stations
         /// </summary>
-        private BikeModel bikeModel;
+        private readonly BikeModel bikeModel;
         /// <summary>
         /// The search model, that the router will use for the connection searching algorithm
         /// </summary>
-        private SearchModel searchModel;
+        private SearchModel? searchModel;
 
-        private DelayModel delayModel;
+        private readonly DelayModel delayModel;
 
 
         /// <summary>
@@ -122,6 +123,11 @@ namespace RAPTOR_Router.RouteFinders
         /// <remarks>To be used for searches by stop name</remarks>
         private void InitiateSearchFromStops(bool useSharedBikes)
         {
+            if (searchModel is null)
+            {
+                throw new InvalidOperationException("Search model not initialized");
+            }
+
             searchModel.SetSearchBeginStopsReachTime();
             if (useSharedBikes)
             {
@@ -160,6 +166,11 @@ namespace RAPTOR_Router.RouteFinders
         /// <remarks>To be used for searches by coordinates</remarks>
         private void InitiateSearchFromCustomRoutePoint(CustomRoutePoint customSearchBeginRP, bool useSharedBikes)
         {
+            if (searchModel is null)
+            {
+                throw new InvalidOperationException("Search model not initialized");
+            }
+
             foreach (ITransfer transfer in customSearchBeginRP.possibleTransfers)
             {
                 IRoutePoint imprFromPoint, imprToPoint;
@@ -194,6 +205,12 @@ namespace RAPTOR_Router.RouteFinders
         /// </summary>
         private void AccumulateRoutes()
         {
+            if (searchModel is null)
+            {
+                throw new InvalidOperationException("Search model not initialized");
+            }
+
+
             markedRoutesWithReachedTrips.Clear();
 
             foreach (Stop markedStop in markedStops)
@@ -202,7 +219,7 @@ namespace RAPTOR_Router.RouteFinders
                 {
                     int markedStopIndex = forward ? route.GetFirstStopIndex(markedStop) : route.GetLastStopIndex(markedStop);
 
-                    if (markedRoutesWithReachedTrips.TryGetValue(route, out ReachedTrip existingReachedTrip))
+                    if (markedRoutesWithReachedTrips.TryGetValue(route, out ReachedTrip? existingReachedTrip))
                     {
                         int existingGetOnStopIndex = existingReachedTrip.stopIndex;
 
@@ -233,7 +250,7 @@ namespace RAPTOR_Router.RouteFinders
 
                 DateOnly tripDate;
 
-                Trip trip = route.GetFirstTransferableTripAtStopByReachTimeBeta(
+                Trip? trip = route.GetFirstTransferableTripAtStopByReachTimeBeta(
                     forward,
                     markedStop,
                     bestReachTimeAtTraverseFromStopLastRound,
@@ -261,6 +278,12 @@ namespace RAPTOR_Router.RouteFinders
         /// </summary>
         private void TraverseMarkedRoutes()
         {
+            if (searchModel is null)
+            {
+                throw new InvalidOperationException("Search model not initialized");
+            }
+
+
             foreach(KeyValuePair<Route, ReachedTrip> pair in markedRoutesWithReachedTrips)
             {
                 Route route = pair.Key;
@@ -319,7 +342,7 @@ namespace RAPTOR_Router.RouteFinders
                     bool stopHasDelayData = false;
                     if (tripHasDelayData)
                     {
-                        stopHasDelayData = tripStopDelays.TryGetStopDelay(i, out arrivalDelay, out departureDelay);
+                        stopHasDelayData = tripStopDelays!.TryGetStopDelay(i, out arrivalDelay, out departureDelay);
 
 
                         // Sometimes there is a bug in the GTFS realtime data where not all stops have delay data, but the trip has delay data
@@ -376,7 +399,7 @@ namespace RAPTOR_Router.RouteFinders
 
 
                         DateOnly newTripDate;
-                        Trip newTrip = route.GetFirstTransferableTripAtStopByReachTimeBeta(
+                        Trip? newTrip = route.GetFirstTransferableTripAtStopByReachTimeBeta(
                             forward,
                             currStop,
                             bestReachTimeLastRound,
@@ -425,6 +448,12 @@ namespace RAPTOR_Router.RouteFinders
         /// </summary>
         private void TraverseBikeRoutes()
         {
+            if (searchModel is null)
+            {
+                throw new InvalidOperationException("Search model not initialized");
+            }
+
+
             HashSet<BikeStation> newMarkedBikeStations = new();
             foreach (BikeStation markedBikeStation in markedBikeStations)
             {
@@ -521,8 +550,14 @@ namespace RAPTOR_Router.RouteFinders
         /// Takes all the stops that have been improved in current round and tries to improve all their neighbors by transfers
         /// </summary>
         /// <param name="DoNotImproveToRoutePoint">To be used when the destination is a custom RoutePoint - in that case, its near stops (from which it can be accessed by foot) may NOT also be accessed by foot</param>
-        private void ImproveByTransfers(bool useSharedBikes, bool onlyFromStops = false, Func<IRoutePoint, bool> DoNotImproveToRoutePoint = null)
+        private void ImproveByTransfers(bool useSharedBikes, bool onlyFromStops = false, Func<IRoutePoint, bool>? DoNotImproveToRoutePoint = null)
         {
+            if (searchModel is null)
+            {
+                throw new InvalidOperationException("Search model not initialized");
+            }
+
+
             HashSet<Stop> newMarkedStops = new();
             HashSet<BikeStation> newMarkedBikeStations = new();
 
@@ -554,7 +589,7 @@ namespace RAPTOR_Router.RouteFinders
             {
                 foreach (Transfer transfer in stop.Transfers)
                 {
-                    Transfer realTransfer = forward ? transfer : transfer.OppositeTransfer;
+                    Transfer realTransfer = forward ? transfer : transfer.OppositeTransfer!;
 
                     // Improve by Stop-to-Stop transfers
                     bool improved = searchModel.TryImproveReachTimeByTransfer(realTransfer, false, round, DoNotImproveToRoutePoint);
@@ -803,12 +838,50 @@ namespace RAPTOR_Router.RouteFinders
             }
         }
 
-        private SearchResult FindConnection(List<Stop> srcStops, List<BikeStation> srcBikeStations, List<Stop> destStops, List<BikeStation> destBikeStations, DateTime searchBeginTime, bool srcByCoord, bool destByCoord, Coordinates srcCoords = default, Coordinates destCoords = default)
+        //private SearchResult? FindConnection(
+        //    List<Stop> srcStops, List<BikeStation> srcBikeStations,
+        //    List<Stop> destStops, List<BikeStation> destBikeStations, 
+        //    DateTime searchBeginTime, bool srcByCoord, bool destByCoord,
+        //    Coordinates srcCoords, Coordinates destCoords,
+        //    bool allowViableALternatives)
+        //{
+        //    if (RunRAPTOR(srcStops, srcBikeStations, destStops, destBikeStations, searchBeginTime, srcByCoord,
+        //            destByCoord, srcCoords, destCoords))
+        //    {
+        //        return searchModel.ExtractResult(bikeModel);
+        //    }
+        //    else
+        //    {
+        //        return null;
+        //    }
+        //}
+
+        private List<SearchResult>? FindConnection(
+            List<Stop> srcStops, List<BikeStation> srcBikeStations, 
+            List<Stop> destStops, List<BikeStation> destBikeStations,
+            DateTime searchBeginTime, bool srcByCoord, bool destByCoord, 
+            Coordinates srcCoords, Coordinates destCoords,
+            bool allowViableAlternatives)
         {
             if (RunRAPTOR(srcStops, srcBikeStations, destStops, destBikeStations, searchBeginTime, srcByCoord,
                     destByCoord, srcCoords, destCoords))
             {
-                return searchModel.ExtractResult(bikeModel);
+                if (allowViableAlternatives)
+                {
+                    return searchModel!.ExtractResultWithAlternatives(bikeModel);
+                }
+                else
+                {
+                    SearchResult? result = searchModel!.ExtractResult(bikeModel);
+                    if (result is null)
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        return new List<SearchResult> { result };
+                    }
+                }
             }
             else
             {
@@ -816,24 +889,7 @@ namespace RAPTOR_Router.RouteFinders
             }
         }
 
-        private List<SearchResult>? FindConnectionWithAlternatives(List<Stop> srcStops,
-            List<BikeStation> srcBikeStations, List<Stop> destStops, List<BikeStation> destBikeStations,
-            DateTime searchBeginTime, bool srcByCoord, bool destByCoord,
-            Coordinates srcCoords = default, Coordinates destCoords = default)
-        {
-            if (RunRAPTOR(srcStops, srcBikeStations, destStops, destBikeStations, searchBeginTime, srcByCoord,
-                    destByCoord, srcCoords, destCoords))
-            {
-                return searchModel.ExtractResultWithAlternatives(bikeModel);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        public List<SearchResult>? FindConnectionWithAlternatives(string sourceStop, string destStop,
-            DateTime departureTime)
+        public List<SearchResult>? FindConnection(string sourceStop, string destStop, DateTime departureTime, bool allowViableAlternatives)
         {
             if (sourceStop == destStop)
             {
@@ -843,11 +899,11 @@ namespace RAPTOR_Router.RouteFinders
             List<Stop> destStops = transitModel.GetStopsByName(destStop);
             List<BikeStation> srcBikeStations = new List<BikeStation>();
             List<BikeStation> destBikeStations = new List<BikeStation>();
-            return FindConnectionWithAlternatives(srcStops, srcBikeStations, destStops, destBikeStations, departureTime, false, false);
+            return FindConnection(srcStops, srcBikeStations, destStops, destBikeStations, departureTime, false, false, default, default, allowViableAlternatives);
         }
 
 
-        public List<SearchResult>? FindConnectionWithAlternatives(Coordinates srcCoords, Coordinates destCoords, DateTime dateTime)
+        public List<SearchResult>? FindConnection(Coordinates srcCoords, Coordinates destCoords, DateTime dateTime, bool allowViableAlternatives)
         {
             if (srcCoords == destCoords)
             {
@@ -858,66 +914,118 @@ namespace RAPTOR_Router.RouteFinders
             List<Stop> destStops = transitModel.GetStopsByLocation(destCoords.Lat, destCoords.Lon, settings.GetMaxTransferDistance());
             List<BikeStation> srcBikeStations = bikeModel.GetNearStations(srcCoords.Lat, srcCoords.Lon, settings.GetMaxTransferDistance());
             List<BikeStation> destBikeStations = bikeModel.GetNearStations(destCoords.Lat, destCoords.Lon, settings.GetMaxTransferDistance());
-            return FindConnectionWithAlternatives(srcStops, srcBikeStations, destStops, destBikeStations, dateTime, true, true, srcCoords, destCoords);
+            return FindConnection(srcStops, srcBikeStations, destStops, destBikeStations, dateTime, true, true, srcCoords, destCoords, allowViableAlternatives);
         }
 
-        public List<SearchResult>? FindConnectionWithAlternatives(Coordinates srcCoords, string destStopName,
-            DateTime dateTime)
+        public List<SearchResult>? FindConnection(Coordinates srcCoords, string destStopName, DateTime dateTime, bool allowViableAlternatives)
         {
             List<Stop> srcStops = transitModel.GetStopsByLocation(srcCoords.Lat, srcCoords.Lon, settings.GetMaxTransferDistance());
             List<Stop> destStops = transitModel.GetStopsByName(destStopName);
             List<BikeStation> srcBikeStations = bikeModel.GetNearStations(srcCoords.Lat, srcCoords.Lon, settings.GetMaxTransferDistance());
             List<BikeStation> destBikeStations = new List<BikeStation>();
-            return FindConnectionWithAlternatives(srcStops, srcBikeStations, destStops, destBikeStations, dateTime, true, false, srcCoords, default);
+            return FindConnection(srcStops, srcBikeStations, destStops, destBikeStations, dateTime, true, false, srcCoords, default, allowViableAlternatives);
         }
 
-        public List<SearchResult>? FindConnectionWithAlternatives(string sourceStopName, Coordinates destCoords,
-                       DateTime dateTime)
+        public List<SearchResult>? FindConnection(string sourceStopName, Coordinates destCoords, DateTime dateTime, bool allowViableAlternatives)
         {
             List<Stop> srcStops = transitModel.GetStopsByName(sourceStopName);
             List<Stop> destStops = transitModel.GetStopsByLocation(destCoords.Lat, destCoords.Lon, settings.GetMaxTransferDistance());
             List<BikeStation> srcBikeStations = new List<BikeStation>();
             List<BikeStation> destBikeStations = bikeModel.GetNearStations(destCoords.Lat, destCoords.Lon, settings.GetMaxTransferDistance());
-            return FindConnectionWithAlternatives(srcStops, srcBikeStations, destStops, destBikeStations, dateTime, false, true, default, destCoords);
+            return FindConnection(srcStops, srcBikeStations, destStops, destBikeStations, dateTime, false, true, default, destCoords, allowViableAlternatives);
         }
 
 
-        /// <summary>
-        /// Finds the connection with the earliest arrival to a destination stop with the provided name, that departs from the source stop after the specified time.
-        /// </summary>
-        /// <param name="sourceStop">The exact name of the source stop</param>
-        /// <param name="destStop">The exact name of the destination stop</param>
-        /// <param name="departureTime">The departure date and time</param>
-        /// <returns>The result of the search, null if no conection could be found.</returns>
-        public SearchResult FindConnection(string sourceStop, string destStop, DateTime departureTime)
+        ///// <summary>
+        ///// Finds the connection with the earliest arrival to a destination stop with the provided name, that departs from the source stop after the specified time.
+        ///// </summary>
+        ///// <param name="sourceStop">The exact name of the source stop</param>
+        ///// <param name="destStop">The exact name of the destination stop</param>
+        ///// <param name="departureTime">The departure date and time</param>
+        ///// <returns>The result of the search, null if no conection could be found.</returns>
+        //public SearchResult? FindConnection(string sourceStop, string destStop, DateTime departureTime)
+        //{
+        //    if (sourceStop == destStop)
+        //    {
+        //        return null;
+        //    }
+        //    List<Stop> srcStops = transitModel.GetStopsByName(sourceStop);
+        //    List<Stop> destStops = transitModel.GetStopsByName(destStop);
+        //    List<BikeStation> srcBikeStations = new List<BikeStation>();
+        //    List<BikeStation> destBikeStations = new List<BikeStation>();
+        //    return FindConnection(srcStops, srcBikeStations, destStops, destBikeStations, departureTime, false, false);
+        //}
+
+        ///// <summary>
+        ///// Finds the connection with the earliest arrival to the destination custom route point, that departs from the source custom route point after the specified time.
+        ///// </summary>
+        ///// <remarks>Used for searches by coordinates</remarks>
+        ///// <param name="srcLat">The latitude of the source point</param>
+        ///// <param name="srcLon">The longitude of the source point</param>
+        ///// <param name="destLat">The latitude of the destination point</param>
+        ///// <param name="destLon">The longitude of the destination point</param>
+        ///// <param name="departureTime">The arrival date and time</param>
+        ///// <returns>The result of the search, null if no conection could be found.</returns>
+        //public SearchResult? FindConnection(double srcLat, double srcLon, double destLat, double destLon, DateTime departureTime)
+        //{
+        //    var (srcStops, srcBikeStations) = GetNearRoutePoints(srcLat, srcLon);
+        //    var (destStops, destBikeStations) = GetNearRoutePoints(destLat, destLon);
+        //    return FindConnection(srcStops, srcBikeStations, destStops, destBikeStations, departureTime, true, true, new Coordinates(srcLat, srcLon), new Coordinates(destLat, destLon));
+
+        //}
+
+        public CompleteSearchResult FindConnection(ConnectionRequest request)
         {
-            if (sourceStop == destStop)
+            CompleteSearchResult result = new();
+
+            var error = request.Validate(transitModel, bikeModel);
+
+            if (error != ConnectionSearchError.NoError)
             {
-                return null;
+                result.Error = error;
+                return result;
             }
-            List<Stop> srcStops = transitModel.GetStopsByName(sourceStop);
-            List<Stop> destStops = transitModel.GetStopsByName(destStop);
-            List<BikeStation> srcBikeStations = new List<BikeStation>();
-            List<BikeStation> destBikeStations = new List<BikeStation>();
-            return FindConnection(srcStops, srcBikeStations, destStops, destBikeStations, departureTime, false, false);
-        }
 
-        /// <summary>
-        /// Finds the connection with the earliest arrival to the destination custom route point, that departs from the source custom route point after the specified time.
-        /// </summary>
-        /// <remarks>Used for searches by coordinates</remarks>
-        /// <param name="srcLat">The latitude of the source point</param>
-        /// <param name="srcLon">The longitude of the source point</param>
-        /// <param name="destLat">The latitude of the destination point</param>
-        /// <param name="destLon">The longitude of the destination point</param>
-        /// <param name="departureTime">The arrival date and time</param>
-        /// <returns>The result of the search, null if no conection could be found.</returns>
-        public SearchResult FindConnection(double srcLat, double srcLon, double destLat, double destLon, DateTime departureTime)
-        {
-            var (srcStops, srcBikeStations) = GetNearRoutePoints(srcLat, srcLon);
-            var (destStops, destBikeStations) = GetNearRoutePoints(destLat, destLon);
-            return FindConnection(srcStops, srcBikeStations, destStops, destBikeStations, departureTime, true, true, new Coordinates(srcLat, srcLon), new Coordinates(destLat, destLon));
+            List<SearchResult>? resultJourneys;
 
+            if (request.srcByCoords)
+            {
+                Coordinates srcCoords = new(request.srcLat, request.srcLon);
+                if (request.destByCoords)
+                {
+                    Coordinates destCoords = new(request.destLat, request.destLon);
+                    resultJourneys = FindConnection(srcCoords, destCoords, request.dateTime!.Value, false);
+                }
+                else
+                {
+                    resultJourneys = FindConnection(srcCoords, request.destStopName!, request.dateTime!.Value, false);
+                }
+            }
+            else
+            {
+                if (request.destByCoords)
+                {
+                    Coordinates destCoords = new(request.destLat, request.destLon);
+                    resultJourneys = FindConnection(request.srcStopName!, destCoords, request.dateTime!.Value, false);
+                }
+                else
+                {
+                    resultJourneys = FindConnection(request.srcStopName!, request.destStopName!, request.dateTime!.Value, false);
+                }
+            }
+
+            if (resultJourneys is null)
+            {
+                result.Error = ConnectionSearchError.NoConnectionFound;
+            }
+            else
+            {
+                result.Error = ConnectionSearchError.NoError;
+                result.Results = resultJourneys;
+            }
+
+
+            return result;
         }
     }
 }

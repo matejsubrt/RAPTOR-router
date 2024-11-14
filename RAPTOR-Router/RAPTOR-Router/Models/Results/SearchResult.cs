@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using RAPTOR_Router.Structures.Requests;
 #pragma warning disable 1591
 using RAPTOR_Router.Structures.Bike;
 using RAPTOR_Router.Structures.Transit;
@@ -10,7 +11,35 @@ using System.Text.Json.Serialization;
 
 namespace RAPTOR_Router.Models.Results
 {
-    
+    public class AlternativeTripsSearchResult
+    {
+        public List<SearchResult.UsedTrip> Alternatives { get; set; } = new();
+        public AlternativesSearchError Error { get; set; }
+        public AlternativeTripsSearchResult() { }
+        public AlternativeTripsSearchResult(List<SearchResult.UsedTrip> alternatives, AlternativesSearchError error)
+        {
+            Alternatives = alternatives;
+            Error = error;
+        }
+    }
+
+
+    //TODO: rename this
+    public class CompleteSearchResult
+    {
+        public List<SearchResult>? Results { get; set; }
+        public ConnectionSearchError Error { get; set; }
+
+        public CompleteSearchResult()
+        {
+        }
+
+        public CompleteSearchResult(List<SearchResult> results, ConnectionSearchError error)
+        {
+            this.Results = results;
+            this.Error = error;
+        }
+    }
 
     /// <summary>
     /// Class representing the result of a connection search

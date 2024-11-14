@@ -29,33 +29,30 @@ namespace RAPTOR_Router.Configuration
                 .SetBasePath(basePath)
                 .AddJsonFile("config.json", optional: false, reloadOnChange: true)
                 .Build();
-        }
 
-        public static string? RetrieveValue(string key)
-        {
             if (_config is null)
             {
-                throw new InvalidOperationException("Configuration not loaded");
+                throw new Exception("Configuration could not be loaded - the file does not exist: " + basePath + "config.json");
             }
-            return _config[key];
         }
 
-        public static string? DefaultGTFSPath { get; } = _config["gtfsArchivePath"];
-        public static string? TestGTFSArchivePath { get; } = _config["testGtfsArchivePath"];
+        public static string? DefaultGTFSPath => _config?["gtfsArchivePath"];
+        public static string? TestGTFSArchivePath => _config?["testGtfsArchivePath"];
 
 
-        public static string? OsmFilePath { get; } = _config["osmFilePath"];
-        public static string? RouterDbFilePath { get; } = _config["routerDbFilePath"];
+        public static string? OsmFilePath => _config?["osmFilePath"];
+        public static string? RouterDbFilePath => _config?["routerDbFilePath"];
 
 
-        public static string? NextbikeDbPath { get; } = _config["nextbikeDbPath"];
+        public static string? NextbikeDbPath => _config?["nextbikeDbPath"];
 
 
-        public static string? ForbiddenCrossingPointsPath { get; } = _config["forbiddenCrossingPointsPath"];
-        public static string? ForbiddenCrossingLinesPath { get; } = _config["forbiddenCrossingLinesPath"];
+        public static string? ForbiddenCrossingPointsPath => _config?["forbiddenCrossingPointsPath"];
+        public static string? ForbiddenCrossingLinesPath => _config?["forbiddenCrossingLinesPath"];
 
 
-        public static string? TestDataFilePath { get; } = _config["testDataFilePath"];
+        public static string? TestDataFilePath => _config?["testDataFilePath"];
+
 
     }
 }

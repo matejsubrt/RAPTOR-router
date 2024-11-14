@@ -10,7 +10,7 @@ namespace RAPTOR_Router.Models.Static
     /// <summary>
     /// Class holding all the information about the public transit system and its stops, routes, trips, transfers and timetables
     /// </summary>
-    internal class TransitModel
+    public class TransitModel
     {
         /// <summary>
         /// The maximum number of meters between stops for them to be considered a transfer

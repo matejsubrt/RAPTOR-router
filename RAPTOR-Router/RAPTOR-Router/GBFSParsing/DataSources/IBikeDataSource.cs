@@ -44,6 +44,6 @@ namespace RAPTOR_Router.GBFSParsing.DataSources
         /// </summary>
         public StationDistanceMatrix Distances { get; protected set; }
 
-        public string DistancesDbFileLocation { get; set; }
+        public string? DistancesDbFileLocation { get; set; }
     }
 }

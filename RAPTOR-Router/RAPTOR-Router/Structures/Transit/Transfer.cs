@@ -22,7 +22,7 @@ namespace RAPTOR_Router.Structures.Transit
         /// <summary>
         /// A reference to the same transfer in the opposite direction
         /// </summary>
-        public Transfer OppositeTransfer { get; set; }
+        public Transfer? OppositeTransfer { get; set; }
 
         /// <summary>
         /// Creates a new Transfer object

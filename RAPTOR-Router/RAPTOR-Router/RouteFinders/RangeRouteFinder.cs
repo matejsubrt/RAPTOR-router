@@ -1,4 +1,4 @@
-﻿#define SEQUENTIAL
+﻿//#define SEQUENTIAL
 
 
 using RAPTOR_Router.Extensions;
@@ -23,24 +23,14 @@ using RAPTOR_Router.Structures.Transit;
 
 namespace RAPTOR_Router.RouteFinders
 {
-    public class RangeRouteFinder
+    public class RangeRouteFinder : IRangeRouteFinder
     {
         /// <summary>
         /// The transit model holding all the static information about the transit network
         /// </summary>
         private TransitModel transitModel;
-        /// <summary>
-        /// The bike model holding all the information about the shared bike systems and their stations
-        /// </summary>
         private BikeModel bikeModel;
-        /// <summary>
-        /// The search model, that the router will use for the connection searching algorithm
-        /// </summary>
-        private SearchModel searchModel;
-
         private DelayModel delayModel;
-
-        private RouteFinderBuilder builder;
 
 
         /// <summary>
@@ -64,11 +54,6 @@ namespace RAPTOR_Router.RouteFinders
         /// </summary>
         private Settings settings;
 
-        /// <summary>
-        /// The current round of the RAPTOR algorithm
-        /// </summary>
-        private int round = 0;
-
         private TimeComparator timeComp;
         private IndexComparator indexComp;
         private bool forward;
@@ -78,9 +63,10 @@ namespace RAPTOR_Router.RouteFinders
         /// <summary>
         /// Creates a new BasicRouter object
         /// </summary>
+        /// <param name="forward">Whether the search is run forward or backward in time</param>
         /// <param name="settings">The settings to be used for the connection search</param>
         /// <param name="transitModel">The transit model holding all the static information about the transit network</param>
-        /// <param name="bikeModel">The bike model holding all the information about the shared bike systems and their stations</param>
+        /// <param name="delayModel">The delay model holding the current delay information</param>
         internal RangeRouteFinder(bool forward, Settings settings, TransitModel transitModel, BikeModel bikeModel, DelayModel delayModel)
         {
             this.settings = settings;
@@ -93,7 +79,7 @@ namespace RAPTOR_Router.RouteFinders
             this.delayModel = delayModel;
         }
 
-        public async Task<List<SearchResult>> FindConnectionsAsync(
+        /*public async Task<List<SearchResult>> FindConnectionsAsync(
             RouteFinderBuilder builder,
             bool forward,
             Settings settings,
@@ -102,7 +88,7 @@ namespace RAPTOR_Router.RouteFinders
             string srcStopName,
             string destStopName)
         {
-            /*// First, collect all times at which a trip departs from the source stop/arrives at the destination stop
+            // First, collect all times at which a trip departs from the source stop/arrives at the destination stop
             // Second, add the times specified in the first step plus/minus 1 minute -> this is to ensure there are alternatives to connections that begin with a trip
             // Third, if there are any large gaps between the times, add additional times to fill the gaps
             // Finally, run the search for all the times above
@@ -137,7 +123,7 @@ namespace RAPTOR_Router.RouteFinders
             // end stop at a better time than the next trip-beginning connection, it will be found. Note that this approach is not perfect, as further connections
             // beginning with a transfer may be shadowed by this first one, but it is a compromise that allows for a good balance between efficiency and result
             // completeness. To further ensure that the least possible important connections within the resulting gaps are missed, we also add additional times to fill the gaps
-            // if the gaps are larger than a certain threshold.*/
+            // if the gaps are larger than a certain threshold.
 
             List<SearchResult> results = new();
             List<Stop> srcStops = transitModel.GetStopsByName(srcStopName);
@@ -167,8 +153,6 @@ namespace RAPTOR_Router.RouteFinders
 
             var tasks = new List<Task>();
             int numberOfCalls = orderedDepTimes.Count;
-
-            int minutesDifference = 1;
 #if SEQUENTIAL
             for (int i = 0; i < numberOfCalls; i++)
             {
@@ -195,21 +179,24 @@ namespace RAPTOR_Router.RouteFinders
 
                 tasks.Add(Task.Run(() =>
                 {
-                    IRouteFinder router = builder.CreateUniversalRouteFinder(forward, settings);
+                    ISimpleRoutingProvider router = builder.CreateRoutingProvider(forward, settings);
 
-                    var searchResults = router.FindConnectionWithAlternatives(srcStopName, destStopName, departureTime);
+                    var searchResults = router.FindConnection(srcStopName, destStopName, departureTime, true);
 
-                    lock (results)
+                    if (searchResults is not null)
                     {
-                        foreach (var result in searchResults)
+                        lock (results)
                         {
-                            // TODO: shouldnt this not be necessary?
-                            if (result is not null)
+                            foreach (var result in searchResults)
                             {
-                                results.Add(result);
+                                // TODO: shouldnt this not be necessary?
+                                if (result is not null)
+                                {
+                                    results.Add(result);
+                                }
                             }
+                            //results.Add(searchResult);
                         }
-                        //results.Add(searchResult);
                     }
                 }));
             }
@@ -237,19 +224,32 @@ namespace RAPTOR_Router.RouteFinders
             results = results.OrderBy(r => r.DepartureDateTime).ToList();
 
             return results;
-        }
+        }*/
 
-        public async Task<List<SearchResult>> FindConnectionsAsync(
-            RouteFinderBuilder builder,
+        
+
+        public async Task<CompleteSearchResult> FindConnectionsAsync(
             ConnectionRequest request
         )
         {
-            DateTime searchBeginRangeStart = request.byEarliestDeparture ? request.dateTime.Value : request.dateTime.Value.AddMinutes(-request.rangeLength);
-            DateTime searchBeginRangeEnd = request.byEarliestDeparture ? request.dateTime.Value.AddMinutes(request.rangeLength) : request.dateTime.Value;
+            CompleteSearchResult result = new();
+
+            var error = request.Validate(transitModel, bikeModel);//ValidateRequest(request);
+
+            if(error != ConnectionSearchError.NoError)
+            {
+                result.Error = error;
+                return result;
+            }
+
+            DateTime dateTime = request.dateTime!.Value;
+
+            DateTime searchBeginRangeStart = request.byEarliestDeparture ? dateTime : dateTime.AddMinutes(-request.rangeLength);
+            DateTime searchBeginRangeEnd = request.byEarliestDeparture ? dateTime.AddMinutes(request.rangeLength) : dateTime;
 
             List<SearchResult> results = new();
 
-            List<Stop> srcStops = request.srcByCoords ? transitModel.GetStopsByLocation(request.srcLat, request.srcLon, settings.GetMaxTransferDistance()) : transitModel.GetStopsByName(request.srcStopName);
+            List<Stop> srcStops = request.srcByCoords ? transitModel.GetStopsByLocation(request.srcLat, request.srcLon, settings.GetMaxTransferDistance()) : transitModel.GetStopsByName(request.srcStopName!);
 
 
             HashSet<DateTime> tripTimes = new();
@@ -275,15 +275,12 @@ namespace RAPTOR_Router.RouteFinders
             var tasks = new List<Task>();
             int numberOfCalls = orderedTripTimes.Count;
 
-            int minutesDifference = 1;
-
-
 #if SEQUENTIAL
             for (int i = 0; i < numberOfCalls; i++)
             {
                 var departureTime = orderedTripTimes[i];
 
-                IRouteFinder router = builder.CreateUniversalRouteFinder(forward, settings);
+                ISimpleRouteFinder router = builder.CreateUniversalRouteFinder(forward, settings);
                 List<SearchResult>? searchResults;
 
                 if (request.srcByCoords)
@@ -292,11 +289,11 @@ namespace RAPTOR_Router.RouteFinders
                     if (request.destByCoords)
                     {
                         Coordinates destCoords = new Coordinates(request.destLat, request.destLon);
-                        searchResults = router.FindConnectionWithAlternatives(srcCoords, destCoords, departureTime);
+                        searchResults = router.FindConnection(srcCoords, destCoords, departureTime, true);
                     }
                     else
                     {
-                        searchResults = router.FindConnectionWithAlternatives(srcCoords, request.destStopName, departureTime);
+                        searchResults = router.FindConnection(srcCoords, request.destStopName, departureTime, true);
                     }
                 }
                 else
@@ -304,11 +301,11 @@ namespace RAPTOR_Router.RouteFinders
                     if (request.destByCoords)
                     {
                         Coordinates destCoords = new Coordinates(request.destLat, request.destLon);
-                        searchResults = router.FindConnectionWithAlternatives(request.srcStopName, destCoords, departureTime);
+                        searchResults = router.FindConnection(request.srcStopName, destCoords, departureTime, true);
                     }
                     else
                     {
-                        searchResults = router.FindConnectionWithAlternatives(request.srcStopName, request.destStopName, departureTime);
+                        searchResults = router.FindConnection(request.srcStopName, request.destStopName, departureTime, true);
                     }
                 }
 
@@ -328,11 +325,11 @@ namespace RAPTOR_Router.RouteFinders
 #else
             for (int i = 0; i < numberOfCalls; i++)
             {
-                var departureTime = orderedTripTimes[i];//searchBeginRangeStart.AddMinutes(i * minutesDifference);
+                var departureTime = orderedTripTimes[i];
 
                 tasks.Add(Task.Run(() =>
                 {
-                    IRouteFinder router = builder.CreateUniversalRouteFinder(forward, settings);
+                    ISimpleRoutingProvider router = RouteFinderBuilder.CreateRoutingProvider(forward, settings);
 
                     List<SearchResult>? searchResults;
 
@@ -342,11 +339,11 @@ namespace RAPTOR_Router.RouteFinders
                         if (request.destByCoords)
                         {
                             Coordinates destCoords = new Coordinates(request.destLat, request.destLon);
-                            searchResults = router.FindConnectionWithAlternatives(srcCoords, destCoords, departureTime);
+                            searchResults = router.FindConnection(srcCoords, destCoords, departureTime, true);
                         }
                         else
                         {
-                            searchResults = router.FindConnectionWithAlternatives(srcCoords, request.destStopName, departureTime);
+                            searchResults = router.FindConnection(srcCoords, request.destStopName!, departureTime, true);
                         }
                     }
                     else
@@ -354,27 +351,29 @@ namespace RAPTOR_Router.RouteFinders
                         if (request.destByCoords)
                         {
                             Coordinates destCoords = new Coordinates(request.destLat, request.destLon);
-                            searchResults = router.FindConnectionWithAlternatives(request.srcStopName, destCoords, departureTime);
+                            searchResults = router.FindConnection(request.srcStopName!, destCoords, departureTime, true);
                         }
                         else
                         {
-                            searchResults = router.FindConnectionWithAlternatives(request.srcStopName, request.destStopName, departureTime);
+                            searchResults = router.FindConnection(request.srcStopName!, request.destStopName!, departureTime, true);
                         }
                     }
 
                     //var searchResults = router.FindConnectionWithAlternatives(srcStopName, destStopName, departureTime);
 
-                    lock (results)
+                    if (searchResults is not null)
                     {
-                        foreach (var result in searchResults)
+                        lock (results)
                         {
-                            // TODO: shouldnt this not be necessary?
-                            if (result is not null)
+                            foreach (var result in searchResults)
                             {
-                                results.Add(result);
+                                // TODO: shouldnt this not be necessary?
+                                if (result is not null)
+                                {
+                                    results.Add(result);
+                                }
                             }
                         }
-                        //results.Add(searchResult);
                     }
                 }));
             }
@@ -399,9 +398,17 @@ namespace RAPTOR_Router.RouteFinders
             // sort by departure time for final result list
             results = results.OrderBy(r => r.DepartureDateTime).ToList();
 
-            return results;
+            if (results is not null && results.Count > 0)
+            {
+                result.Error = ConnectionSearchError.NoError;
+                result.Results = results;
+            }
+            else
+            {
+                result.Error = ConnectionSearchError.NoConnectionFound;
+            }
 
-
+            return result;
         }
     }
 

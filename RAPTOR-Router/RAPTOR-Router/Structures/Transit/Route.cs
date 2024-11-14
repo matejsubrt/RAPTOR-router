@@ -162,7 +162,7 @@ namespace RAPTOR_Router.Structures.Transit
 
 
         
-        public Trip GetEarliestTripDepartingAfterTimeAtStop(Stop stop, DateTime dateTime, DelayModel delayModel, out DateOnly tripStartDate)
+        public Trip? GetEarliestTripDepartingAfterTimeAtStop(Stop stop, DateTime dateTime, DelayModel delayModel, out DateOnly tripStartDate)
         {
             var stopIndex = GetFirstStopIndex(stop);
 
@@ -196,8 +196,8 @@ namespace RAPTOR_Router.Structures.Transit
             tripStartDate = new DateOnly();
             return null;
 
-            Trip ProcessDate(DateOnly date){
-                if (RouteTrips.TryGetValue(date, out List<Trip> tripsOnDate))
+            Trip? ProcessDate(DateOnly date){
+                if (RouteTrips.TryGetValue(date, out List<Trip>? tripsOnDate))
                 {
                     foreach (Trip trip in tripsOnDate)
                     {
@@ -233,7 +233,7 @@ namespace RAPTOR_Router.Structures.Transit
             }
         }
 
-        public Trip GetLatestTripArrivingBeforeTimeAtStop(Stop stop, DateTime dateTime, DelayModel delayModel, out DateOnly tripStartDate)
+        public Trip? GetLatestTripArrivingBeforeTimeAtStop(Stop stop, DateTime dateTime, DelayModel delayModel, out DateOnly tripStartDate)
         {
             var stopIndex = GetLastStopIndex(stop);
 
@@ -243,7 +243,7 @@ namespace RAPTOR_Router.Structures.Transit
 
             foreach (DateOnly date in tripStartDatesToSearch)
             {
-                if (RouteTrips.TryGetValue(date, out List<Trip> tripsOnDate))
+                if (RouteTrips.TryGetValue(date, out List<Trip>? tripsOnDate))
                 {
                     for (int i = tripsOnDate.Count - 1; i >= 0; i--)
                     {
@@ -272,7 +272,7 @@ namespace RAPTOR_Router.Structures.Transit
             return null;
         }
 
-        public Trip GetFirstTransferableTripAtStopByReachTimeBeta(bool forward, Stop stop, DateTime dateTime, DelayModel delayModel, out DateOnly tripStartDate)
+        public Trip? GetFirstTransferableTripAtStopByReachTimeBeta(bool forward, Stop stop, DateTime dateTime, DelayModel delayModel, out DateOnly tripStartDate)
         {
             return forward ?
                 GetEarliestTripDepartingAfterTimeAtStop(stop, dateTime, delayModel, out tripStartDate) :

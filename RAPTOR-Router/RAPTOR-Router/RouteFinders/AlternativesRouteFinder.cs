@@ -11,6 +11,7 @@ using RAPTOR_Router.Structures.Configuration;
 using RAPTOR_Router.Structures.Transit;
 using RAPTOR_Router.Structures.Bike;
 using System.Collections;
+using RAPTOR_Router.Structures.Requests;
 
 namespace RAPTOR_Router.RouteFinders
 {
@@ -27,8 +28,22 @@ namespace RAPTOR_Router.RouteFinders
             public int srcDepartureDelay;
             public int currTripDelay;
 
-            public int CompareTo(Entry other)
+            public Entry(DateTime dateTime, Trip altTrip, DateOnly tripDate, int srcIndex, int destIndex, bool hasSrcDelayData, int srcDepartureDelay, int currTripDelay)
             {
+                this.dateTime = dateTime;
+                this.altTrip = altTrip;
+                this.tripDate = tripDate;
+                this.srcIndex = srcIndex;
+                this.destIndex = destIndex;
+                this.hasSrcDelayData = hasSrcDelayData;
+                this.srcDepartureDelay = srcDepartureDelay;
+                this.currTripDelay = currTripDelay;
+            }
+
+            public int CompareTo(Entry? other)
+            {
+                if (other == null)
+                    return 1;
                 int dateTimeComparison = dateTime.CompareTo(other.dateTime);
 
                 if (dateTimeComparison != 0)
@@ -75,7 +90,7 @@ namespace RAPTOR_Router.RouteFinders
         }
 
 
-        public List<SearchResult.UsedTrip> GetAlternativeTripe(string srcStopName, string destStopName, DateTime time,
+        public List<SearchResult.UsedTrip>? GetAlternativeTripe(string srcStopName, string destStopName, DateTime time,
             int count, bool previous)
         {
             List<Stop> srcStops = transitModel.GetStopsByName(srcStopName);
@@ -91,13 +106,36 @@ namespace RAPTOR_Router.RouteFinders
             return GetAlternativeTrips(srcStop.Id, destStop.Id, time, count, previous);
         }
 
-        public List<SearchResult.UsedTrip> GetAlternativeTrips(string srcStopId, string destStopId, DateTime time, int count,
-            bool previous)
+
+        public AlternativeTripsSearchResult GetAlternativeTrips(AlternativeTripsRequest request)
         {
-            if (count > 10)
+            AlternativeTripsSearchResult result = new();
+
+            AlternativesSearchError error = request.Validate(transitModel);
+            if (error != AlternativesSearchError.NoError)
             {
-                return null;
+                result.Error = error;
+                return result;
             }
+
+            List<SearchResult.UsedTrip>? alternativeTrips = GetAlternativeTripe(request.srcStopId!, request.destStopId!, request.dateTime!.Value, request.count, request.previous);
+
+            if (alternativeTrips is null || alternativeTrips.Count == 0)
+            {
+                result.Error = AlternativesSearchError.NoTripsFound;
+            }
+            else
+            {
+                result.Error = AlternativesSearchError.NoError;
+                result.Alternatives = alternativeTrips;
+            }
+
+            return result;
+        }
+
+
+        private List<SearchResult.UsedTrip>? GetAlternativeTrips(string srcStopId, string destStopId, DateTime time, int count, bool previous)
+        {
             DateTime worstAllowedReachTime = previous ? time.AddDays(-Settings.MAX_TRIP_LENGTH_DAYS) : time.AddDays(Settings.MAX_TRIP_LENGTH_DAYS);
 
 
@@ -146,8 +184,8 @@ namespace RAPTOR_Router.RouteFinders
                 Stop srcStop1 = route.RouteStops[srcIndex];
 
                 //TODO: check if the trip should be included in the result or not - probably yes unless it is the one we are searching for alternatives for
-                Trip firstTripDepartingAfterTime = route.GetEarliestTripDepartingAfterTimeAtStop(srcStop1, time, delayModel, out DateOnly tripDate);
-                if (firstTripDepartingAfterTime == null)
+                Trip? firstTripDepartingAfterTime = route.GetEarliestTripDepartingAfterTimeAtStop(srcStop1, time, delayModel, out DateOnly tripDate);
+                if (firstTripDepartingAfterTime is null)
                 {
                     continue;
                 }
@@ -169,16 +207,16 @@ namespace RAPTOR_Router.RouteFinders
 
 
                     Entry entry = new Entry
-                    {
-                        dateTime = arrivalDateTime.AddSeconds(destArrivalDelay),
-                        altTrip = altTrip,
-                        tripDate = altTripDate,
-                        srcIndex = srcIndex,
-                        destIndex = destIndex,
-                        hasSrcDelayData = hasSrcDelayData,
-                        srcDepartureDelay = srcDepartureDelay,
-                        currTripDelay = currTripDelay
-                    };
+                    (
+                        arrivalDateTime.AddSeconds(destArrivalDelay),
+                        altTrip,
+                        altTripDate,
+                        srcIndex,
+                        destIndex,
+                        hasSrcDelayData,
+                        srcDepartureDelay,
+                        currTripDelay
+                    );
                     sortedTrips.Add(entry);
                 }
             }
@@ -260,12 +298,12 @@ namespace RAPTOR_Router.RouteFinders
                     if (result.Count < count)
                     {
                         DateOnly prevDate = tripDate.AddDays(-1);
-                        bool notZero = route.RouteTrips.TryGetValue(prevDate, out List<Trip> tripsOnPrevDate);
+                        bool notZero = route.RouteTrips.TryGetValue(prevDate, out List<Trip>? tripsOnPrevDate);
                         if (!notZero)
                         {
                             return result;
                         }
-                        currIndex = tripsOnPrevDate.Count - 1;
+                        currIndex = tripsOnPrevDate!.Count - 1;
                         while (currIndex >= 0 && result.Count < count)
                         {
                             Tuple<DateOnly, Trip> tuple = new Tuple<DateOnly, Trip>(prevDate, tripsOnPrevDate[currIndex]);
@@ -287,13 +325,13 @@ namespace RAPTOR_Router.RouteFinders
                     if (result.Count < count)
                     {
                         DateOnly nextDate = tripDate.AddDays(1);
-                        bool notZero = route.RouteTrips.TryGetValue(nextDate, out List<Trip> tripsOnNextDate);
+                        bool notZero = route.RouteTrips.TryGetValue(nextDate, out List<Trip>? tripsOnNextDate);
                         if (!notZero)
                         {
                             return result;
                         }
                         currIndex = 0;
-                        while (currIndex < tripsOnNextDate.Count && result.Count < count)
+                        while (currIndex < tripsOnNextDate!.Count && result.Count < count)
                         {
                             Tuple<DateOnly, Trip> tuple = new Tuple<DateOnly, Trip>(nextDate, tripsOnNextDate[currIndex]);
                             result.Add(tuple);

@@ -13,15 +13,15 @@ namespace WebAPI_light
 {
     public class Program
     {
-        private static RouteFinderBuilder routerBuilder;
+        //private static RouteFinderBuilder routerBuilder = new();
         /// <summary>
         /// Parses the gtfs data in the configured zip archive, initiates a web API on /connection, that returns a JSON representation of the result of the search.
         /// </summary>
         /// <param name="args"></param>
         public static void Main(string[] args)
         {
-            routerBuilder = new RouteFinderBuilder();
-            routerBuilder.LoadAllData();
+            //routerBuilder = new RouteFinderBuilder();
+            RouteFinderBuilder.LoadAllData();
 
 
             var appBuilder = WebApplication.CreateBuilder(args);
@@ -59,179 +59,64 @@ namespace WebAPI_light
             app.Run();
 
         }
-        static IResult HandleConnectionRequest(ConnectionRequest request)
+        static async Task<IResult> HandleConnectionRequest(ConnectionRequest request)
         {
-            DateTime dateTime;
-            if (request.dateTime is null)
+            if (request.settings is null)
             {
-                var message = "Invalid DateTime format";
-                HttpError err = new HttpError(message);
-                return Results.BadRequest(err);
-            }
-            else
-            {
-                dateTime = request.dateTime.Value;
-            }
-
-            // Validate the settings
-            if (!request.settings.ValidateParameterValues())
-            {
-                var message = "Invalid settings";
-                HttpError err = new HttpError(message);
+                HttpError err = new HttpError(ConnectionSearchError.InvalidSettings.ToMessage());
                 return Results.BadRequest(err);
             }
 
-
-            bool srcCoordsValid = true;
-            bool srcCoordsHaveStops = true;
-            bool destCoordsValid = true;
-            bool destCoordsHaveStops = true;
-            bool srcStopNameValid = true;
-            bool destStopNameValid = true;
-
-            if (request.srcByCoords)
-            {
-                if (!routerBuilder.ValidateCoords(request.srcLat, request.srcLon))
-                {
-                    srcCoordsValid = false;
-                }
-
-                if (!routerBuilder.ValidateStopsNearCoords(request.srcLat, request.srcLon,
-                        request.settings.UseSharedBikes))
-                {
-                    srcCoordsHaveStops = false;
-                }
-            }
-            else
-            {
-                if (!routerBuilder.ValidateStopName(request.srcStopName))
-                {
-                    srcStopNameValid = false;
-                }
-            }
-
-            if (request.destByCoords)
-            {
-                if (!routerBuilder.ValidateCoords(request.destLat, request.destLon))
-                {
-                    destCoordsValid = false;
-                }
-
-                if (!routerBuilder.ValidateStopsNearCoords(request.destLat, request.destLon,
-                        request.settings.UseSharedBikes))
-                {
-                    destCoordsHaveStops = false;
-                }
-            }
-            else
-            {
-                if (!routerBuilder.ValidateStopName(request.destStopName))
-                {
-                    destStopNameValid = false;
-                }
-            }
-
-            if (!srcCoordsValid || !destCoordsValid)
-            {
-                var message = "Invalid coordinates";
-                HttpError err = new HttpError(message);
-                return Results.BadRequest(err);
-            }
-
-            if (!srcCoordsHaveStops || !destCoordsHaveStops)
-            {
-                var message = "No stops near the coordinates";
-                HttpError err = new HttpError(message);
-                return Results.BadRequest(err);
-            }
-
-            if (!srcStopNameValid || !destStopNameValid)
-            {
-                var message = "Invalid stop name";
-                HttpError err = new HttpError(message);
-                return Results.BadRequest(err);
-            }
-
-
+            CompleteSearchResult result;
             if (request.range)
             {
-                RangeRouteFinder router = routerBuilder.CreateRangeRouteFinder(request.byEarliestDeparture, request.settings);
-                List<SearchResult> results = new List<SearchResult>();
-
-                results = router.FindConnectionsAsync(routerBuilder, request).GetAwaiter().GetResult();
-
-
-                if (results.Count == 0)
-                {
-                    var message = "No connection found";
-                    HttpError err = new HttpError(message);
-                    return Results.NotFound(err);
-                }
-                else
-                {
-                    return Results.Ok(results);
-                }
+                IRangeRouteFinder router = RouteFinderBuilder.CreateRangeRouteFinder(request.byEarliestDeparture, request.settings);
+                result = await router.FindConnectionsAsync(request);
             }
             else
             {
-                IRouteFinder router = routerBuilder.CreateUniversalRouteFinder(request.byEarliestDeparture, request.settings);
-                SearchResult result;
+                ISimpleRouteFinder router = RouteFinderBuilder.CreateSimpleRouteFinder(request.byEarliestDeparture, request.settings);
+                result = router.FindConnection(request);
+            }
 
-                if (request.srcByCoords && request.destByCoords)
-                {
-                    result = router.FindConnection(request.srcLat, request.srcLon, request.destLat, request.destLon, dateTime);
-                }
-                else if (!request.srcByCoords && !request.destByCoords)
-                {
-                    result = router.FindConnection(request.srcStopName, request.destStopName, dateTime);
-                }
-                else
-                {
-                    //TODO: Implement
-                    var message = "Coord-to-stop and stop-to-coord searches are not yet supported";
-                    HttpError err = new HttpError(message);
-                    return Results.BadRequest(err);
-                }
 
-                // Return a list to be consistent with range searches
-                List<SearchResult> resultsList = new List<SearchResult>
-                {
-                    result
-                };
-
-                if (result != null)
-                {
-                    return Results.Ok(resultsList);
-                }
-                else
-                {
-                    var message = "No connection found";
-                    HttpError err = new HttpError(message);
-                    return Results.NotFound(err);
-                }
+            switch (result.Error)
+            {
+                case ConnectionSearchError.NoError:
+                    return Results.Ok(result.Results);
+                case ConnectionSearchError.NoConnectionFound:
+                    HttpError err404 = new HttpError(result.Error.ToMessage());
+                    return Results.NotFound(err404);
+                default:
+                    HttpError err500 = new HttpError(result.Error.ToMessage());
+                    return Results.BadRequest(err500);
             }
         }
 
         static IResult HandleAlternativeTripsRequest(AlternativeTripsRequest request)
         {
-            DateTime dateTime;
-            if (!DateTime.TryParse(request.dateTime, out dateTime))
+            var routeFinder = RouteFinderBuilder.CreateDirectRouteFinder();
+            AlternativeTripsSearchResult result = routeFinder.GetAlternativeTrips(request);
+
+            switch (result.Error)
             {
-                var message = "Invalid DateTime format";
-                HttpError err = new HttpError(message);
-                return Results.BadRequest(err);
+                case AlternativesSearchError.NoError:
+                    return Results.Ok(result.Alternatives);
+                case AlternativesSearchError.NoTripsFound:
+                    HttpError err404 = new HttpError(result.Error.ToMessage());
+                    return Results.NotFound(err404);
+                default:
+                    HttpError err500 = new HttpError(result.Error.ToMessage());
+                    return Results.BadRequest(err500);
             }
-            var routeFinder = routerBuilder.CreateDirectRouteFinder();
-            var result = routeFinder.GetAlternativeTrips(request.srcStopId, request.destStopId, dateTime, request.count, request.previous);
-            return Results.Ok(result);
         }
 
         static IResult HandleUpdateDelaysRequest(List<SearchResult> results)
         {
-            var delayUpdater = routerBuilder.CreateDelayUpdater();
+            var delayUpdater = RouteFinderBuilder.CreateDelayUpdater();
             delayUpdater.UpdateDelays(results);
 
-            return Results.Ok();
+            return Results.Ok(results);
         }
     }
 }
