@@ -6,12 +6,13 @@ using RAPTOR_Router.Extensions;
 using RAPTOR_Router.Models.Static;
 using RAPTOR_Router.Structures.Configuration;
 using RAPTOR_Router.Structures.Custom;
+using Itinero;
 
 namespace RAPTOR_Router.Models.Dynamic
 {
 
     /// <summary>
-    /// A class holding all the dynamic data of a single connection search. The BasicRouteFinder uses this class to store and access the data of the search.
+    /// A class holding all the dynamic data of a single connection search. The BasicRouteFinder uses this class to store and access the data of a single search.
     /// </summary>
     /// <remarks>Can be used for both search directions.</remarks>
     internal class SearchModel
@@ -92,17 +93,19 @@ namespace RAPTOR_Router.Models.Dynamic
         /// </summary>
         private DateTime bestCurrentSearchEndTime;
 
-        
+
 
         /// <summary>
         /// Creates a new SearchModel object
         /// </summary>
+        /// <param name="forward">Whether the search is run in the forward direction</param>
         /// <param name="searchBeginStops">The list of stops considered as the source stops - typically stops from one node sharing the same name</param>
         /// <param name="searchEndStops">The list of stops considered as the destination stops - typically stops from one node sharing the same name</param>
         /// <param name="searchBeginBikeStations">The list of bikeStations considered as the source stations</param>
         /// <param name="searchEndBikeStations">The list of bikeStations considered as the destination stations</param>
         /// <param name="searchBeginTime">The start time of the search (earliest departure for forward searches, latest arrival for backward searches)</param>
         /// <param name="settingsUsed">The settings used for the search</param>
+        /// <param name="delayModel"></param>
         public SearchModel(bool forward, List<Stop> searchBeginStops, List<Stop> searchEndStops, List<BikeStation> searchBeginBikeStations, List<BikeStation> searchEndBikeStations, DateTime searchBeginTime, Settings settingsUsed, DelayModel delayModel)
         {
             this.searchBeginStops = searchBeginStops;
@@ -121,7 +124,14 @@ namespace RAPTOR_Router.Models.Dynamic
             this.delayModel = delayModel;
         }
 
-
+        /// <summary>
+        /// For a given stop and round, creates the best possible SearchResult that reaches the stop in the round (i.e. with exactly so many trips)
+        /// </summary>
+        /// <param name="stop">The stop</param>
+        /// <param name="round">The round</param>
+        /// <param name="bikeModel">The bike model of the search</param>
+        /// <returns>The best search result that reaches the stop in round</returns>
+        /// <exception cref="ApplicationException"></exception>
         private SearchResult? CreateResultFromStopInRound(Stop? stop, int round, BikeModel bikeModel)
         {
             if (stop is null)
@@ -131,13 +141,12 @@ namespace RAPTOR_Router.Models.Dynamic
             SearchResult result = new(settingsUsed);
             StopRoutingInfo currStopInfo = routingInfo[stop];
 
-            // TODO: This should be done when finding the best dest stop, not after!!!
             if (searchEndCustomRoutePoint is not null)
             {
                 CustomTransfer transfer = searchEndCustomRoutePoint.GetTransferWithNormalRP(stop);
-                int transferTime = timeMpl * settingsUsed.GetAdjustedWalkingTransferTime(transfer.Distance);
-                DateTime arrivalTimeAtDestCustomRP = currStopInfo.Reaches[round]!.Time.AddSeconds(transferTime);
-                result.AddUsedTransfer(transfer, arrivalTimeAtDestCustomRP, !forward);
+                //int transferTime = timeMpl * settingsUsed.GetAdjustedWalkingTransferTime(transfer.Distance);
+                //DateTime arrivalTimeAtDestCustomRP = currStopInfo.Reaches[round]!.Time.AddSeconds(transferTime);
+                result.AddUsedTransfer(transfer, !forward);
             }
 
             IRoutePoint nextRoundStartStop = stop;
@@ -149,12 +158,12 @@ namespace RAPTOR_Router.Models.Dynamic
                 var reach = currStopInfo.Reaches[currRound];
                 if (reach is StopRoutingInfo.TransferReach transferReach)
                 {
-                    result.AddUsedTransfer(transferReach.Transfer, transferReach.Time, !forward);
+                    result.AddUsedTransfer(transferReach.Transfer, !forward);
                     currStop = forward ? transferReach.Transfer.From : transferReach.Transfer.To;
                 }
                 else if (reach is StopRoutingInfo.BikeTransferReach bikeTransferReach)
                 {
-                    result.AddUsedTransfer(bikeTransferReach.Transfer, bikeTransferReach.Time, !forward);
+                    result.AddUsedTransfer(bikeTransferReach.Transfer, !forward);
                     currStop = forward ? bikeTransferReach.Transfer.GetSrcRoutePoint() : bikeTransferReach.Transfer.GetDestRoutePoint();
                 }
 
@@ -168,7 +177,7 @@ namespace RAPTOR_Router.Models.Dynamic
                         // in last round, we do not add a transfer
                         if (currRound != round)
                         {
-                            result.AddUsedTransfer(new Transfer(s, s, 0), currStopInfo.Reaches[currRound]!.Time.AddSeconds(timeMpl * settingsUsed.GetStationaryTransferMinimumSeconds()), !forward);
+                            result.AddUsedTransfer(new Transfer(s, s, 0), !forward);
                         }
                     }
                 }
@@ -261,15 +270,15 @@ namespace RAPTOR_Router.Models.Dynamic
             var firstReach = currStopInfo.Reaches[0];
             if (firstReach is StopRoutingInfo.TransferReach transferReach1)
             {
-                result.AddUsedTransfer(transferReach1.Transfer, firstReach.Time, !forward);
+                result.AddUsedTransfer(transferReach1.Transfer, !forward);
             }
             else if (firstReach is StopRoutingInfo.BikeTransferReach bikeTransferReach)
             {
-                result.AddUsedTransfer(bikeTransferReach.Transfer, firstReach.Time, !forward);
+                result.AddUsedTransfer(bikeTransferReach.Transfer, !forward);
             }
             else if (firstReach is StopRoutingInfo.CustomTransferReach customTransferReach)
             {
-                result.AddUsedTransfer(customTransferReach.Transfer, customTransferReach.Time, !forward);
+                result.AddUsedTransfer(customTransferReach.Transfer, !forward);
             }
 
             if(forward)
@@ -280,7 +289,6 @@ namespace RAPTOR_Router.Models.Dynamic
             {
                 result.SetDepartureAndArrivalTimesByLatestArrival(searchBeginTime);
             }
-            //result.SetDepartureAndArrivalTimesByEarliestDeparture(searchBeginTime);
 
             result.InitializeAlternatives();
 
@@ -322,27 +330,74 @@ namespace RAPTOR_Router.Models.Dynamic
             }
         }
 
+        /// <summary>
+        /// For a given round, gets the stop with the best reach time in the round
+        /// </summary>
+        /// <param name="round">The round</param>
+        /// <returns>The stop with the best reach time in the round</returns>
         private Stop? GetSearchEndStopWithBestReachTimeInRound(int round)
         {
             Stop? stopWithBestReachTime = null;
             DateTime bestReachTime = worstBound;
+
+
             foreach (Stop stop in searchEndStops)
             {
-                //arrival is earlier than best we found so far AND it is better than in last round - otherwise we do not process this round
+                DateTime reachTime;
+                if (searchEndCustomRoutePoint is not null)
+                {
+                    CustomTransfer transfer = searchEndCustomRoutePoint.GetTransferWithNormalRP(stop);
+                    int transferTime = timeMpl * settingsUsed.GetAdjustedWalkingTransferTime(transfer.Distance);
+                    DateTime stopReachTime = GetBestReachTimeInRound(stop, round);
+                    if (stopReachTime == worstBound)
+                    {
+                        reachTime = stopReachTime;
+                    }
+                    else
+                    {
+                        reachTime = stopReachTime.AddSeconds(transferTime);
+                    }
+                }
+                else
+                {
+                    reachTime = GetBestReachTimeInRound(stop, round);
+                }
+
+                // Reach is better than best we found so far AND it is better than in last round - otherwise we do not process this round
                 if (
                     routingInfo.ContainsKey(stop)
-                    && comp.ImprovesTime(GetBestReachTimeInRound(stop, round), bestReachTime)
-                    && (round == 0 || ArrivalAtStopInRoundIsBetterThanAllEarlierRounds(stop, round))
-                )
-                {
+                    && comp.ImprovesTime(reachTime, bestReachTime)
+                    && (round == 0 || ReachTimeAtStopInRoundIsBetterThanAllEarlierRounds(stop, round))
+                ) {
                     stopWithBestReachTime = stop;
-                    bestReachTime = GetBestReachTimeInRound(stop, round);
+                    bestReachTime = reachTime;
                 }
             }
             return stopWithBestReachTime;
         }
 
-        private bool ArrivalAtStopInRoundIsBetterThanAllEarlierRounds(Stop stop, int round)
+        /// <summary>
+        /// Gets the best search end stops with the best reach times for each round
+        /// </summary>
+        /// <returns>The search end stops with the best reach times for each round</returns>
+        private Stop?[] GetSearchEndStopsWithBestReachTimesByRounds()
+        {
+            Stop?[] bestSearchEndStops = new Stop[Settings.ROUNDS];
+            for (int round = 0; round < Settings.ROUNDS; round++)
+            {
+                bestSearchEndStops[round] = GetSearchEndStopWithBestReachTimeInRound(round);
+            }
+
+            return bestSearchEndStops;
+        }
+
+        /// <summary>
+        /// Finds out whether the reach time at the specified stop in the specified round is better than the best reach time in previous rounds at that point
+        /// </summary>
+        /// <param name="stop">The stop</param>
+        /// <param name="round">The round</param>
+        /// <returns>Whether the reach time is better than all earlier ones</returns>
+        private bool ReachTimeAtStopInRoundIsBetterThanAllEarlierRounds(Stop stop, int round)
         {
             DateTime bestEarlierArrival = worstBound;
             for (int i = 0; i < round; i++)
@@ -357,24 +412,38 @@ namespace RAPTOR_Router.Models.Dynamic
             return comp.ImprovesTime(GetBestReachTimeInRound(stop, round), bestEarlierArrival);
         }
 
-
-
-        public List<SearchResult>? ExtractResultWithAlternatives(BikeModel bikeModel)
+        /// <summary>
+        /// Gets the search result with the best reach time for every round
+        /// </summary>
+        /// <param name="bestSearchEndStops">The stops with best reach time in each round</param>
+        /// <param name="bikeModel">The bike model</param>
+        /// <returns>Search results with the best reach time for every round</returns>
+        private SearchResult?[] CreateResultsFromBestStops(Stop?[] bestSearchEndStops, BikeModel bikeModel)
         {
-            // For each round, get the stop with the earliest arrival
-            Stop?[] searchEndStopsWithBestReachTimesRounds = new Stop[Settings.ROUNDS];
-            for (int round = 0; round < Settings.ROUNDS; round++)
-            {
-                searchEndStopsWithBestReachTimesRounds[round] = GetSearchEndStopWithBestReachTimeInRound(round);
-            }
-
             SearchResult?[] resultsRounds = new SearchResult[Settings.ROUNDS];
             for (int round = 0; round < Settings.ROUNDS; round++)
             {
-                resultsRounds[round] = CreateResultFromStopInRound(searchEndStopsWithBestReachTimesRounds[round], round, bikeModel);
+                resultsRounds[round] = CreateResultFromStopInRound(bestSearchEndStops[round], round, bikeModel);
             }
 
-            return GetBestResults(resultsRounds, searchEndStopsWithBestReachTimesRounds);
+            return resultsRounds;
+        }
+
+        /// <summary>
+        /// Extracts the results of the search from the current state of the search model and returns them
+        /// </summary>
+        /// <param name="bikeModel">The bike model</param>
+        /// <returns>The results of a search</returns>
+        /// <remarks>As opposed to the ExtractResult function, if results for multiple rounds
+        /// are close enough in time and comfort, returns them all</remarks>
+        public List<SearchResult>? ExtractResultWithAlternatives(BikeModel bikeModel)
+        {
+            // For each round, get the stop with the earliest arrival
+            Stop?[] bestSearchEndStops = GetSearchEndStopsWithBestReachTimesByRounds();
+
+            SearchResult?[] resultsRounds = CreateResultsFromBestStops(bestSearchEndStops, bikeModel);
+
+            return GetBestResults(resultsRounds, bestSearchEndStops);
 
 
             List<SearchResult>? GetBestResults(SearchResult?[] results, Stop?[] earliestDestStops)
@@ -442,23 +511,15 @@ namespace RAPTOR_Router.Models.Dynamic
         /// Extracts the result of the search from the current state of the search model and returns it
         /// </summary>
         /// <returns>The best result found in the search</returns>
-        /// <exception cref="ApplicationException">Thrown if the extraction fails, meaning the search model was in an invalid state.</exception>
+        /// <remarks>As opposed to the ExtractResultWithAlternatives function, only extracts the single best result</remarks>
         public SearchResult? ExtractResult(BikeModel bikeModel)
         {
             // For each round, get the stop with the earliest arrival
-            Stop?[] searchEndStopsWithBestReachTimesRounds = new Stop[Settings.ROUNDS];
-            for (int round = 0; round < Settings.ROUNDS; round++)
-            {
-                searchEndStopsWithBestReachTimesRounds[round] = GetSearchEndStopWithBestReachTimeInRound(round);
-            }
+            Stop?[] bestSearchEndStops = GetSearchEndStopsWithBestReachTimesByRounds();
 
-            SearchResult?[] resultsRounds = new SearchResult[Settings.ROUNDS];
-            for (int round = 0; round < Settings.ROUNDS; round++)
-            {
-                resultsRounds[round] = CreateResultFromStopInRound(searchEndStopsWithBestReachTimesRounds[round], round, bikeModel);
-            }
+            SearchResult?[] resultsRounds = CreateResultsFromBestStops(bestSearchEndStops, bikeModel);
 
-            return GetBestResult(resultsRounds, searchEndStopsWithBestReachTimesRounds);
+            return GetBestResult(resultsRounds, bestSearchEndStops);
 
 
             SearchResult? GetBestResult(SearchResult?[] results, Stop?[] earliestDestStops)
@@ -913,7 +974,7 @@ namespace RAPTOR_Router.Models.Dynamic
         /// <returns>Bool, specifying whether the RoutePoint was reached by a transfer in the round</returns>
         public bool RoutePointIsReachedByTransferInRound(IRoutePoint rp, int round)
         {
-            StopRoutingInfo.IEntry? arrival = GetRoutingInfo(rp).Reaches[round];
+            StopRoutingInfo.IRoutingEntry? arrival = GetRoutingInfo(rp).Reaches[round];
             return arrival is StopRoutingInfo.TransferReach || arrival is StopRoutingInfo.BikeTransferReach || arrival is StopRoutingInfo.CustomTransferReach;
         }
 
@@ -927,7 +988,7 @@ namespace RAPTOR_Router.Models.Dynamic
         public bool RoutePointIsReachedByBikeInRound(IRoutePoint rp, int round)
         {
             //var ri = GetRoutingInfo(rp);
-            StopRoutingInfo.IEntry? arrival = GetRoutingInfo(rp).Reaches[round];
+            StopRoutingInfo.IRoutingEntry? arrival = GetRoutingInfo(rp).Reaches[round];
             return arrival is StopRoutingInfo.BikeTripReach;
         }
 

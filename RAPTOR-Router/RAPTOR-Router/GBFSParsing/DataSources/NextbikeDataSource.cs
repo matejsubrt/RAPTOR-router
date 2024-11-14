@@ -6,13 +6,22 @@ using System.Text.Json;
 namespace RAPTOR_Router.GBFSParsing.DataSources
 {
     /// <summary>
-    /// Data source for Nextbike bike sharing system
+    /// Data source for the Nextbike bike sharing system
     /// </summary>
     public class NextbikeDataSource : IBikeDataSource
     {
+        /// <summary>
+        /// The URL of the API endpoint for the station information
+        /// </summary>
         static string stationInfoUrl = "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_tg/cs/station_information.json";
+        /// <summary>
+        /// The URL of the API endpoint for the current station status
+        /// </summary>
         static string stationStatusUrl = "https://gbfs.nextbike.net/maps/gbfs/v2/nextbike_tg/cs/station_status.json";
 
+        /// <summary>
+        /// The location of the distances database file
+        /// </summary>
         public string? DistancesDbFileLocation { get; set; }
 
         /// <summary>
@@ -34,7 +43,6 @@ namespace RAPTOR_Router.GBFSParsing.DataSources
         /// </summary>
         public void LoadStations()
         {
-
             using (HttpClient client = new HttpClient())
             {
                 try

@@ -1,12 +1,8 @@
 ﻿using Itinero;
 using Itinero.IO.Osm;
 using Itinero.Osm.Vehicles;
-using Microsoft.Extensions.Configuration;
 using RAPTOR_Router.Extensions;
 using RAPTOR_Router.Structures.Bike;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography;
 using RAPTOR_Router.Configuration;
 using Route = Itinero.Route;
 
@@ -29,11 +25,6 @@ namespace RAPTOR_Router.GBFSParsing.Distances
     public class BikeDistanceCalculator
     {
         private RouterDb routerDb = new();
-        
-        //string distanceFileLocation;
-        //private string distanceDBFileLocation;
-        //private BikeDistanceDatabase distanceDB;
-        //StationDistanceMatrix distances = new StationDistanceMatrix();
 
         /// <summary>
         /// Loads the configuration info and creates a routerDb instance - either by creating a new one from the osm file, or by loading it from disk
@@ -98,16 +89,15 @@ namespace RAPTOR_Router.GBFSParsing.Distances
         /// Calculates the distances between all the bike stations and loads them into the distance matrix
         /// </summary>
         /// <param name="stationsById">The dictionary to access the bike stations by their Ids</param>
+        /// <param name="distanceDBFileLocation">Location of the file in which previously already computed distances are stored</param>
         /// <returns>The distance matrix</returns>
         public StationDistanceMatrix GetDistanceMatrix(Dictionary<string, BikeStation> stationsById, string distanceDBFileLocation)
         {
-            BikeDistanceDatabase db;
-
             // load the distance database from disk, if it exists, otherwise create it
-            db = new BikeDistanceDatabase(distanceDBFileLocation);
+            BikeDistanceDatabase db = new BikeDistanceDatabase(distanceDBFileLocation);
+
 
             StationDistanceMatrix distances = db.GetDistanceMatrixAndRemoveNonExistentStations(stationsById);
-            var profile = Vehicle.Bicycle.Shortest();
 
 
             Dictionary<string, int> unresolvableStations = new Dictionary<string, int>();

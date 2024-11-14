@@ -1,23 +1,18 @@
-﻿using RAPTOR_Router.Models.Dynamic;
-using RAPTOR_Router.Models.Static;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using RAPTOR_Router.Models.Static;
 using RAPTOR_Router.Extensions;
 using RAPTOR_Router.Models.Results;
 using RAPTOR_Router.Structures.Configuration;
 using RAPTOR_Router.Structures.Transit;
-using RAPTOR_Router.Structures.Bike;
-using System.Collections;
 using RAPTOR_Router.Structures.Requests;
 
 namespace RAPTOR_Router.RouteFinders
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class AlternativesRouteFinder
     {
-        private class Entry : IComparable<Entry>
+        private class AlternativeEntry : IComparable<AlternativeEntry>
         {
             public DateTime dateTime;
             public Trip altTrip;
@@ -28,7 +23,7 @@ namespace RAPTOR_Router.RouteFinders
             public int srcDepartureDelay;
             public int currTripDelay;
 
-            public Entry(DateTime dateTime, Trip altTrip, DateOnly tripDate, int srcIndex, int destIndex, bool hasSrcDelayData, int srcDepartureDelay, int currTripDelay)
+            public AlternativeEntry(DateTime dateTime, Trip altTrip, DateOnly tripDate, int srcIndex, int destIndex, bool hasSrcDelayData, int srcDepartureDelay, int currTripDelay)
             {
                 this.dateTime = dateTime;
                 this.altTrip = altTrip;
@@ -40,7 +35,7 @@ namespace RAPTOR_Router.RouteFinders
                 this.currTripDelay = currTripDelay;
             }
 
-            public int CompareTo(Entry? other)
+            public int CompareTo(AlternativeEntry? other)
             {
                 if (other == null)
                     return 1;
@@ -49,12 +44,12 @@ namespace RAPTOR_Router.RouteFinders
                 if (dateTimeComparison != 0)
                     return dateTimeComparison;
 
-                // Fall back to comparing other fields if dateTime is the same
-                int tripComparison = altTrip.Id.CompareTo(other.altTrip.Id); // Assuming Trip has a unique Id
+                
+                int tripComparison = altTrip.Id.CompareTo(other.altTrip.Id);
                 if (tripComparison != 0)
                     return tripComparison;
 
-                return srcIndex.CompareTo(other.srcIndex); // Further fallback to srcIndex if needed
+                return srcIndex.CompareTo(other.srcIndex);
             }
 
             public override string ToString()
@@ -107,9 +102,9 @@ namespace RAPTOR_Router.RouteFinders
         }
 
 
-        public AlternativeTripsSearchResult GetAlternativeTrips(AlternativeTripsRequest request)
+        public AlternativeTripsApiResponseResult GetAlternativeTrips(AlternativeTripsRequest request)
         {
-            AlternativeTripsSearchResult result = new();
+            AlternativeTripsApiResponseResult result = new();
 
             AlternativesSearchError error = request.Validate(transitModel);
             if (error != AlternativesSearchError.NoError)
@@ -136,133 +131,32 @@ namespace RAPTOR_Router.RouteFinders
 
         private List<SearchResult.UsedTrip>? GetAlternativeTrips(string srcStopId, string destStopId, DateTime time, int count, bool previous)
         {
-            DateTime worstAllowedReachTime = previous ? time.AddDays(-Settings.MAX_TRIP_LENGTH_DAYS) : time.AddDays(Settings.MAX_TRIP_LENGTH_DAYS);
-
-
             Stop srcStop = transitModel.stops[srcStopId];
             Stop destStop = transitModel.stops[destStopId];
 
+            // Get all stops that are alternatives to the source and destination stops
+            // i.e. stops with the same name and stops within 150m
             List<Stop> srcStops = GetAlternativeStops(srcStop);
             List<Stop> destStops = GetAlternativeStops(destStop);
 
-
             // Gather all routes passing through any of the source stops
-            Dictionary<Route, Stop> routesFromSrcStops = new();
-
-            foreach (Stop stop in srcStops)
-            {
-                foreach (Route route in stop.StopRoutes)
-                {
-                    routesFromSrcStops.TryAdd(route, stop);
-                }
-            }
-
+            Dictionary<Route, Stop> routesFromSrcStops = GetRoutesFromSrcStops();
 
             // Filter out routes that do not pass through any of the destination stops
-            Dictionary<Route, Tuple<int, int>> connectingRoutes = new();
+            Dictionary<Route, Tuple<int, int>> connectingRoutes = GetConnectingRoutes();
 
-            foreach (var (route, stop) in routesFromSrcStops)
-            {
-                var srcIndex = route.RouteStops.IndexOf(stop);
-                foreach(Stop destStop1 in destStops)
-                {
-                    var destIndex = route.RouteStops.IndexOf(destStop1);
-                    if (destIndex != -1 && destIndex > srcIndex)
-                    {
-                        Tuple<int, int> tuple = new(srcIndex, destIndex);
-                        connectingRoutes.TryAdd(route, tuple);
-                        break;
-                    }
-                }
-            }
+            // For every route from any source stop to any destination stop,
+            // find its <count> best connecting alternative trips
+            SortedSet<AlternativeEntry> sortedTrips = GetSortedConnectingTrips();
 
-            // For every route from any source stop to any destination stop \
-            Dictionary<Trip, Stop> trips = new();
-            SortedSet<Entry> sortedTrips = new();
-            foreach (var (route, (srcIndex, destIndex)) in connectingRoutes)
-            {
-                Stop srcStop1 = route.RouteStops[srcIndex];
+            // Remove all trips that are dominated by another trip
+            RemoveDominatedTrips();
 
-                //TODO: check if the trip should be included in the result or not - probably yes unless it is the one we are searching for alternatives for
-                Trip? firstTripDepartingAfterTime = route.GetEarliestTripDepartingAfterTimeAtStop(srcStop1, time, delayModel, out DateOnly tripDate);
-                if (firstTripDepartingAfterTime is null)
-                {
-                    continue;
-                }
-                List<Tuple<DateOnly, Trip>> alternativeTrips = GetAlternativeTripsOnRoute(firstTripDepartingAfterTime, tripDate, count, previous);
+            // Get the <count> best connecting trips out of all the alternatives
+            List<AlternativeEntry> resultTrips = GetBestConnectingTrips();
 
-                foreach (var (altTripDate, altTrip) in alternativeTrips)
-                {
-                    bool hasSrcDelayData = delayModel.TryGetDelay(altTripDate, altTrip.Id, srcIndex,
-                        out int srcArrivalDelay, out int srcDepartureDelay);
-                    bool hasDestDelayData = delayModel.TryGetDelay(altTripDate, altTrip.Id, destIndex, out int destArrivalDelay, out int destDepartureDelay);
-
-                    DateTime arrivalDateTime = altTrip.GetArrivalDateTime(destIndex, altTripDate);
-
-                    //DateTime arrivalDateTime = altTrip.StopTimes[destIndex].GetArrivalDateTime(altTripDate);
-                    //TimeOnly arrivalTime = altTrip.StopTimes[destIndex].ArrivalTime.AddSeconds(destArrivalDelay);
-                    //DateOnly arrivalDate = (arrivalTime < altTrip.StopTimes[0].DepartureTime) ? altTripDate.AddDays(1) : altTripDate;
-                    //DateTime arrivalDateTime = DateTimeExtensions.FromDateAndTime(arrivalDate, arrivalTime);
-                    int currTripDelay = GetCurrentTripDelay(altTrip, altTripDate);
-
-
-                    Entry entry = new Entry
-                    (
-                        arrivalDateTime.AddSeconds(destArrivalDelay),
-                        altTrip,
-                        altTripDate,
-                        srcIndex,
-                        destIndex,
-                        hasSrcDelayData,
-                        srcDepartureDelay,
-                        currTripDelay
-                    );
-                    sortedTrips.Add(entry);
-                }
-            }
-
-            // Clean up the trips - if a trip A departs before a trip B, but arrives after B, remove A
-            List<DateTime> toRemove = new();
-
-
-            FilterSortedTrips();
-
-            List<Entry> resultTrips = new();
-            if (previous)
-            {
-                foreach (var item in sortedTrips.Skip(sortedTrips.Count - count))
-                {
-                    resultTrips.Add(item);
-                }
-            }
-            else
-            {
-                foreach (var item in sortedTrips.Take(count))
-                {
-                    resultTrips.Add(item);
-                }
-            }
-
-
-            List<SearchResult.UsedTrip> result = new();
-            foreach (Entry entry in resultTrips)
-            {
-                var trip = entry.altTrip;
-                var tripDate = entry.tripDate;
-                var srcIndex = entry.srcIndex;
-                var destIndex = entry.destIndex;
-                var hasDelayData = entry.hasSrcDelayData;
-                var srcDepDelay = entry.srcDepartureDelay;
-                var currDelay = entry.currTripDelay;
-                DateTime arrivalTime = entry.dateTime;
-
-                List<SearchResult.StopPass> stopsPasses =
-                    SearchResult.GetStopPassesList(trip.Route.RouteStops, trip.StopTimes, tripDate);
-                
-                SearchResult.UsedTrip usedTrip = new SearchResult.UsedTrip(stopsPasses, srcIndex, destIndex,
-                    trip.Route.ShortName, trip.Route.Color, trip.Route.Type, hasDelayData, srcDepDelay, currDelay, trip.Id);
-                result.Add(usedTrip);
-            }
+            // Convert the alternative entries to used trips that will be returned
+            List<SearchResult.UsedTrip> result = GetUsedTripsFromAlternativeEntries();
 
             return result;
 
@@ -343,27 +237,6 @@ namespace RAPTOR_Router.RouteFinders
                 return result;
             }
 
-            void FilterSortedTrips()
-            {
-                var entries = sortedTrips.ToList();
-
-                for (int i = 0; i < entries.Count; i++)
-                {
-                    var entryA = entries[i];
-
-                    for (int j = i + 1; j < entries.Count; j++)
-                    {
-                        var entryB = entries[j];
-
-                        if (entryA.altTrip.StopTimes[entryA.srcIndex].DepartureTime < entryB.altTrip.StopTimes[entryB.srcIndex].DepartureTime &&
-                            entryA.altTrip.StopTimes[entryA.destIndex].ArrivalTime >= entryB.altTrip.StopTimes[entryB.destIndex].ArrivalTime)
-                        {
-                            sortedTrips.Remove(entryA);
-                        }
-                    }
-                }
-            }
-
             int GetCurrentTripDelay(Trip trip, DateOnly tripStartDate)
             {
                 bool tripHasDelayData = delayModel.TripHasDelayData(tripStartDate, trip.Id);
@@ -400,6 +273,153 @@ namespace RAPTOR_Router.RouteFinders
                     }
                 }
                 return lastReachedStopDepartureDelay;
+            }
+
+            Dictionary<Route, Stop> GetRoutesFromSrcStops()
+            {
+                Dictionary<Route, Stop> routesFromSrcStops = new();
+
+                foreach (Stop stop in srcStops)
+                {
+                    foreach (Route route in stop.StopRoutes)
+                    {
+                        routesFromSrcStops.TryAdd(route, stop);
+                    }
+                }
+
+                return routesFromSrcStops;
+            }
+
+            Dictionary<Route, Tuple<int, int>> GetConnectingRoutes()
+            {
+                Dictionary<Route, Tuple<int, int>> connectingRoutes = new();
+
+                foreach (var (route, stop) in routesFromSrcStops)
+                {
+                    var srcIndex = route.RouteStops.IndexOf(stop);
+                    foreach (Stop destStop1 in destStops)
+                    {
+                        var destIndex = route.RouteStops.IndexOf(destStop1);
+                        if (destIndex != -1 && destIndex > srcIndex)
+                        {
+                            Tuple<int, int> tuple = new(srcIndex, destIndex);
+                            connectingRoutes.TryAdd(route, tuple);
+                            break;
+                        }
+                    }
+                }
+
+                return connectingRoutes;
+            }
+
+            SortedSet<AlternativeEntry> GetSortedConnectingTrips()
+            {
+                SortedSet<AlternativeEntry> sortedTrips = new();
+                foreach (var (route, (srcIndex, destIndex)) in connectingRoutes)
+                {
+                    Stop srcStop1 = route.RouteStops[srcIndex];
+
+                    //TODO: check if the trip should be included in the result or not - probably yes unless it is the one we are searching for alternatives for
+                    Trip? firstTripDepartingAfterTime = route.GetEarliestTripDepartingAfterTimeAtStop(srcStop1, time, delayModel, out DateOnly tripDate);
+                    if (firstTripDepartingAfterTime is null)
+                    {
+                        continue;
+                    }
+                    List<Tuple<DateOnly, Trip>> alternativeTrips = GetAlternativeTripsOnRoute(firstTripDepartingAfterTime, tripDate, count, previous);
+
+                    foreach (var (altTripDate, altTrip) in alternativeTrips)
+                    {
+                        bool hasSrcDelayData = delayModel.TryGetDelay(altTripDate, altTrip.Id, srcIndex, out int srcArrivalDelay, out int srcDepartureDelay);
+                        bool hasDestDelayData = delayModel.TryGetDelay(altTripDate, altTrip.Id, destIndex, out int destArrivalDelay, out int destDepartureDelay);
+
+                        DateTime arrivalDateTime = altTrip.GetArrivalDateTime(destIndex, altTripDate);
+
+                        int currTripDelay = GetCurrentTripDelay(altTrip, altTripDate);
+
+
+                        AlternativeEntry alternativeEntry = new AlternativeEntry
+                        (
+                            arrivalDateTime.AddSeconds(destArrivalDelay),
+                            altTrip,
+                            altTripDate,
+                            srcIndex,
+                            destIndex,
+                            hasSrcDelayData,
+                            srcDepartureDelay,
+                            currTripDelay
+                        );
+                        sortedTrips.Add(alternativeEntry);
+                    }
+                }
+
+                return sortedTrips;
+            }
+
+            void RemoveDominatedTrips()
+            {
+                var entries = sortedTrips.ToList();
+
+                for (int i = 0; i < entries.Count; i++)
+                {
+                    var entryA = entries[i];
+
+                    for (int j = i + 1; j < entries.Count; j++)
+                    {
+                        var entryB = entries[j];
+
+                        if (entryA.altTrip.StopTimes[entryA.srcIndex].DepartureTime < entryB.altTrip.StopTimes[entryB.srcIndex].DepartureTime &&
+                            entryA.altTrip.StopTimes[entryA.destIndex].ArrivalTime >= entryB.altTrip.StopTimes[entryB.destIndex].ArrivalTime)
+                        {
+                            sortedTrips.Remove(entryA);
+                        }
+                    }
+                }
+            }
+
+            List<AlternativeEntry> GetBestConnectingTrips()
+            {
+                List<AlternativeEntry> resultTrips = new();
+                if (previous)
+                {
+                    foreach (var item in sortedTrips.Skip(sortedTrips.Count - count))
+                    {
+                        resultTrips.Add(item);
+                    }
+                }
+                else
+                {
+                    foreach (var item in sortedTrips.Take(count))
+                    {
+                        resultTrips.Add(item);
+                    }
+                }
+
+                return resultTrips;
+            }
+
+            List<SearchResult.UsedTrip> GetUsedTripsFromAlternativeEntries()
+            {
+                List<SearchResult.UsedTrip> result = new();
+                foreach (AlternativeEntry entry in resultTrips)
+                {
+                    var trip = entry.altTrip;
+                    var tripDate = entry.tripDate;
+                    var srcIndex = entry.srcIndex;
+                    var destIndex = entry.destIndex;
+                    var hasDelayData = entry.hasSrcDelayData;
+                    var srcDepDelay = entry.srcDepartureDelay;
+                    var currDelay = entry.currTripDelay;
+                    DateTime arrivalTime = entry.dateTime;
+
+                    List<SearchResult.StopPass> stopsPasses =
+                        SearchResult.GetStopPassesList(trip.Route.RouteStops, trip.StopTimes, tripDate);
+
+                    SearchResult.UsedTrip usedTrip = new SearchResult.UsedTrip(stopsPasses, srcIndex, destIndex,
+                        trip.Route.ShortName, trip.Route.Color, trip.Route.Type, hasDelayData, srcDepDelay, currDelay, trip.Id);
+                    result.Add(usedTrip);
+                }
+
+                return result;
             }
         }
     }

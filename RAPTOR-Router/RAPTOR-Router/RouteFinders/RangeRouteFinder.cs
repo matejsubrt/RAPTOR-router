@@ -228,18 +228,18 @@ namespace RAPTOR_Router.RouteFinders
 
         
 
-        public async Task<CompleteSearchResult> FindConnectionsAsync(
+        public async Task<ConnectionApiResponseResult> FindConnectionsAsync(
             ConnectionRequest request
         )
         {
-            CompleteSearchResult result = new();
+            ConnectionApiResponseResult apiResponseResult = new();
 
             var error = request.Validate(transitModel, bikeModel);//ValidateRequest(request);
 
             if(error != ConnectionSearchError.NoError)
             {
-                result.Error = error;
-                return result;
+                apiResponseResult.Error = error;
+                return apiResponseResult;
             }
 
             DateTime dateTime = request.dateTime!.Value;
@@ -427,15 +427,15 @@ namespace RAPTOR_Router.RouteFinders
 
             if (results is not null && results.Count > 0)
             {
-                result.Error = ConnectionSearchError.NoError;
-                result.Results = results;
+                apiResponseResult.Error = ConnectionSearchError.NoError;
+                apiResponseResult.Results = results;
             }
             else
             {
-                result.Error = ConnectionSearchError.NoConnectionFound;
+                apiResponseResult.Error = ConnectionSearchError.NoConnectionFound;
             }
 
-            return result;
+            return apiResponseResult;
         }
     }
 

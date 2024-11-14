@@ -36,6 +36,13 @@ namespace RAPTOR_Router.Extensions
             return _improvesTime(a, b);
         }
 
+        /// <summary>
+        /// Compares two times and returns whether the first time is better or same as the second time based on the search direction.
+        /// </summary>
+        /// <remarks>If the search runs forward, this means the first time is earlier or same as the second.</remarks>
+        /// <param name="a">The first time to compare</param>
+        /// <param name="b">The second time to compare</param>
+        /// <returns>Whether time a is better or same as time b in the search direction</returns>
         public bool ImprovesOrEqualsTime(DateTime a, DateTime b)
         {
             return a == b || _improvesTime(a, b);
@@ -65,9 +72,9 @@ namespace RAPTOR_Router.Extensions
         /// Compares two indices and returns whether the first index precedes the second index based on the search direction.
         /// </summary>
         /// <remarks>If the search runs forward, this means that the first index is less than the second.</remarks>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
+        /// <param name="a">The first index</param>
+        /// <param name="b">The second index</param>
+        /// <returns>Whether index a precedes index b in the search direction</returns>
         public bool PrecedesInSearchDirection(int a, int b)
         {
             return _precedesInSearchDirection(a, b);

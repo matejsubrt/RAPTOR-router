@@ -57,28 +57,28 @@ namespace WebAPI_light
                 return Results.BadRequest(problemDetails);
             }
 
-            CompleteSearchResult result;
+            ConnectionApiResponseResult apiResponseResult;
             if (request.range)
             {
                 IRangeRouteFinder router = RouteFinderBuilder.CreateRangeRouteFinder(request.byEarliestDeparture, request.settings);
-                result = await router.FindConnectionsAsync(request);
+                apiResponseResult = await router.FindConnectionsAsync(request);
             }
             else
             {
                 ISimpleRouteFinder router = RouteFinderBuilder.CreateSimpleRouteFinder(request.byEarliestDeparture, request.settings);
-                result = router.FindConnection(request);
+                apiResponseResult = router.FindConnection(request);
             }
 
-            switch (result.Error)
+            switch (apiResponseResult.Error)
             {
                 case ConnectionSearchError.NoError:
-                    return Results.Ok(result.Results);
+                    return Results.Ok(apiResponseResult.Results);
                 case ConnectionSearchError.NoConnectionFound:
                     var notFoundDetails = new ProblemDetails
                     {
                         Status = StatusCodes.Status404NotFound,
                         Title = "No connection found",
-                        Detail = result.Error.ToMessage()
+                        Detail = apiResponseResult.Error.ToMessage()
                     };
                     return Results.NotFound(notFoundDetails);
                 default:
@@ -86,7 +86,7 @@ namespace WebAPI_light
                     {
                         Status = StatusCodes.Status400BadRequest,
                         Title = "Bad request",
-                        Detail = result.Error.ToMessage()
+                        Detail = apiResponseResult.Error.ToMessage()
                     };
                     return Results.BadRequest(badRequestDetails);
             }
@@ -95,7 +95,7 @@ namespace WebAPI_light
         static IResult HandleAlternativeTripsRequest(AlternativeTripsRequest request)
         {
             var routeFinder = RouteFinderBuilder.CreateDirectRouteFinder();
-            AlternativeTripsSearchResult result = routeFinder.GetAlternativeTrips(request);
+            AlternativeTripsApiResponseResult result = routeFinder.GetAlternativeTrips(request);
 
             switch (result.Error)
             {

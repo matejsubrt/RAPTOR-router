@@ -16,7 +16,6 @@ namespace RAPTOR_Router.GBFSParsing.DataSources
         /// <summary>
         /// Creates and fills a matrix of real-world distances between all stations
         /// </summary>
-        //public void LoadStationDistances();
         public void LoadStationDistances()
         {
             if (StationsById is null || DistancesDbFileLocation is null)
@@ -26,6 +25,7 @@ namespace RAPTOR_Router.GBFSParsing.DataSources
             BikeDistanceCalculator distanceCalculator = new BikeDistanceCalculator();
             Distances = distanceCalculator.GetDistanceMatrix(StationsById, DistancesDbFileLocation);
         }
+
         /// <summary>
         /// Loads the dynamic station information from the data source - i.e. the number of available bikes at each station
         /// </summary>
@@ -35,15 +35,20 @@ namespace RAPTOR_Router.GBFSParsing.DataSources
         /// The list of all bike stations in the system
         /// </summary>
         public List<BikeStation> Stations { get; }
+
         /// <summary>
         /// The list of all bike stations in the system, indexed by their unique Id
         /// </summary>
         public Dictionary<string, BikeStation> StationsById { get; }
+
         /// <summary>
         /// The matrix of real-world distances between all stations
         /// </summary>
         public StationDistanceMatrix Distances { get; protected set; }
 
-        public string? DistancesDbFileLocation { get; set; }
+        /// <summary>
+        /// The location of this system's database file containing the distances between its bike stations
+        /// </summary>
+        public string? DistancesDbFileLocation { get; protected set; }
     }
 }

@@ -3,6 +3,9 @@ using RAPTOR_Router.Structures.Interfaces;
 
 namespace RAPTOR_Router.Extensions
 {
+    /// <summary>
+    /// Class with tools for calculating distances between GPS coordinates
+    /// </summary>
     internal static class DistanceExtensions
     {
         const double latConst = 111113.9; //distance between latitudes of 1 degree

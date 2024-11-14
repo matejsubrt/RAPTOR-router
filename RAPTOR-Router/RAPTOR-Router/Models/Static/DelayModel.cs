@@ -42,10 +42,6 @@ namespace RAPTOR_Router.Models.Static
                 departureDelay = _stopDelays[^1].Item2;
                 return true;
             }
-
-            arrivalDelay = 0;
-            departureDelay = 0;
-            return false;
         }
 
         public Tuple<int, int> GetLastStopDelay()

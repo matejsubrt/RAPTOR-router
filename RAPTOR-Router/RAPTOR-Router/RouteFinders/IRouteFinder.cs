@@ -9,12 +9,12 @@ namespace RAPTOR_Router.RouteFinders
     /// </summary>
     public interface IRangeRouteFinder
     {
-        Task<CompleteSearchResult> FindConnectionsAsync(ConnectionRequest request);
+        Task<ConnectionApiResponseResult> FindConnectionsAsync(ConnectionRequest request);
     }
 
     public interface ISimpleRouteFinder
     {
-       CompleteSearchResult FindConnection(ConnectionRequest request);
+       ConnectionApiResponseResult FindConnection(ConnectionRequest request);
     }
 
     public interface ISimpleRoutingProvider

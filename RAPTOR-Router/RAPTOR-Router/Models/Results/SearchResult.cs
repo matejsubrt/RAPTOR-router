@@ -11,48 +11,35 @@ using System.Text.Json.Serialization;
 
 namespace RAPTOR_Router.Models.Results
 {
-    public class AlternativeTripsSearchResult
-    {
-        public List<SearchResult.UsedTrip> Alternatives { get; set; } = new();
-        public AlternativesSearchError Error { get; set; }
-        public AlternativeTripsSearchResult() { }
-        public AlternativeTripsSearchResult(List<SearchResult.UsedTrip> alternatives, AlternativesSearchError error)
-        {
-            Alternatives = alternatives;
-            Error = error;
-        }
-    }
-
-
-    //TODO: rename this
-    public class CompleteSearchResult
-    {
-        public List<SearchResult>? Results { get; set; }
-        public ConnectionSearchError Error { get; set; }
-
-        public CompleteSearchResult()
-        {
-        }
-
-        public CompleteSearchResult(List<SearchResult> results, ConnectionSearchError error)
-        {
-            this.Results = results;
-            this.Error = error;
-        }
-    }
-
     /// <summary>
     /// Class representing the result of a connection search
     /// </summary>
     /// <remarks>If running the program as an API, this class is serialized and returned as json in the response body</remarks>
     public class SearchResult
     {
+        /// <summary>
+        /// A class representing a list of trip alternatives together with the index of the currently selected trip
+        /// </summary>
         public class TripAlternatives
         {
+            /// <summary>
+            /// The index of the currently selected trip
+            /// </summary>
             public int CurrIndex { get; set; }
+            /// <summary>
+            /// The list of trip alternatives
+            /// </summary>
             public List<UsedTrip> Alternatives { get; set; } = new();
+            /// <summary>
+            /// The count of trip alternatives
+            /// </summary>
             public int Count { get; set; }
 
+            /// <summary>
+            /// Creates a new TripAlternatives object
+            /// </summary>
+            /// <param name="currIndex">The index of the currently selected trip</param>
+            /// <param name="alternatives">The list of alternatives</param>
             public TripAlternatives(int currIndex, List<UsedTrip> alternatives)
             {
                 CurrIndex = currIndex;
@@ -122,29 +109,27 @@ namespace RAPTOR_Router.Models.Results
             usedSettings = settings;
         }
 
+        /// <summary>
+        /// Adds a new used trip to the result
+        /// </summary>
+        /// <param name="trip">The trip to add</param>
+        /// <param name="tripStartDate">The date on which the trip starts</param>
+        /// <param name="realGetOnStop">The stop at which the stop is boarded (by the user in real life)</param>
+        /// <param name="realGetOffStop">The stop at which the trip is deboarded (by the user in real life)</param>
+        /// <param name="hasDelayInfo">Whether the trip has delay data available</param>
+        /// <param name="delayWhenBoarded">The delay when the trip was/will be boarded</param>
+        /// <param name="currentDelay">The current delay of the trip (may be different from delayWhenBoarded if trip was already boarded)</param>
+        /// <param name="toEnd">Whether to append the trip to the end of the used trips list - depends on the search direction</param>
+        /// <remarks>
+        ///     toEnd = true means the connection is being reconstructed from start to end -> backward search was used
+        ///     toEnd = false means the connection is being reconstructed from end to start -> forward search was used
+        /// </remarks>
         internal void AddUsedTrip(Trip trip, DateOnly tripStartDate, Stop realGetOnStop, Stop realGetOffStop, bool hasDelayInfo, int delayWhenBoarded, int currentDelay, bool toEnd)
         {
             var routeStops = trip.Route.RouteStops;
-            var stopTimes = trip.StopTimes;
-            DateTime destStopArrivalDateTime;
 
             int getOnStopIndex = routeStops.IndexOf(realGetOnStop);
             int getOffStopIndex = routeStops.IndexOf(realGetOffStop);
-
-
-            DateTime departureTime = trip.GetDepartureDateTime(getOnStopIndex, tripStartDate);//stopTimes[getOnStopIndex].GetDepartureDateTime(tripStartDate);
-            DateTime arrivalTime = trip.GetArrivalDateTime(getOffStopIndex, tripStartDate);//stopTimes[getOffStopIndex].GetArrivalDateTime(tripStartDate);
-
-            if (toEnd)
-            {
-                // The connection is being constructed from the front (we append to the end), meaning the search was run backwards, meaning time is the SOURCE DEPARTURE time -> we need to find the destination arrival time
-                destStopArrivalDateTime = arrivalTime;
-            }
-            else
-            {
-                // The connection is being constructed from the back (we append to the start), meaning the search was run forwards, meaning time is the DESTINATION ARRIVAL time
-                destStopArrivalDateTime = departureTime;
-            }
 
             List<StopPass> stopPasses = GetStopPassesList(routeStops, trip.StopTimes, tripStartDate);
 
@@ -161,7 +146,6 @@ namespace RAPTOR_Router.Models.Results
                 trip.Id);
 
 
-            //UsedSegments.Insert(0, usedTrip);
             if (toEnd)
             {
                 UsedTrips.Add(usedTrip);
@@ -173,8 +157,6 @@ namespace RAPTOR_Router.Models.Results
                 UsedSegmentTypes.Insert(0, SegmentType.Trip);
             }
             TripCount++;
-
-
         }
 
         /// <summary>
@@ -183,7 +165,7 @@ namespace RAPTOR_Router.Models.Results
         /// <param name="routeStops">The stop list of the trip</param>
         /// <param name="stopTimes">The stop times of the trip</param>
         /// <param name="tripStartDate">The date on which the trip starts</param>
-        /// <returns></returns>
+        /// <returns>The stop passes list</returns>
         public static List<StopPass> GetStopPassesList(List<Stop> routeStops, List<StopTime> stopTimes, DateOnly tripStartDate)
         {
             List<StopPass> stopPasses = new();
@@ -198,6 +180,9 @@ namespace RAPTOR_Router.Models.Results
             return stopPasses;
         }
 
+        /// <summary>
+        /// Initializes the alternatives list for each used trip - puts one trip in each list
+        /// </summary>
         internal void InitializeAlternatives()
         {
             foreach (UsedTrip usedTrip in UsedTrips)
@@ -211,12 +196,12 @@ namespace RAPTOR_Router.Models.Results
         /// Creates an used transfer from the provided arguments, adds it to UsedTransfers
         /// </summary>
         /// <param name="toEnd">Specifies if the used transfer should be appended to the end or beginning of UsedTransfers</param>
+        /// <param name="transfer">The transfer to add</param>
         /// <remarks>
         ///     toEnd = true means the connection is being reconstructed from start to end -> backward search was used
         ///     toEnd = false means the connection is being reconstructed from end to start -> forward search was used
         /// </remarks>
-        /// <param name="transfer">The transfer to add</param>
-        internal void AddUsedTransfer(Transfer transfer, DateTime destArrivalTime, bool toEnd)
+        internal void AddUsedTransfer(Transfer transfer, bool toEnd)
         {
             var realSrc = transfer.From;
             var realDest = transfer.To;
@@ -286,7 +271,7 @@ namespace RAPTOR_Router.Models.Results
         ///     toEnd = false means the connection is being reconstructed from end to start -> forward search was used
         /// </remarks>
         /// <param name="transfer">The transfer to add</param>
-        internal void AddUsedTransfer(BikeTransfer transfer, DateTime arrivalTime, bool toEnd)
+        internal void AddUsedTransfer(BikeTransfer transfer, bool toEnd)
         {
             var realSrc = transfer.GetSrcRoutePoint();
             var realDest = transfer.GetDestRoutePoint();
@@ -320,7 +305,7 @@ namespace RAPTOR_Router.Models.Results
         ///     toEnd = false means the connection is being reconstructed from end to start -> forward search was used
         /// </remarks>
         /// <param name="transfer">The transfer to add</param>
-        internal void AddUsedTransfer(CustomTransfer transfer, DateTime arrivalTime, bool toEnd)
+        internal void AddUsedTransfer(CustomTransfer transfer, bool toEnd)
         {
             RoutePointInfo srcStopInfo = new(transfer.GetSrcRoutePoint().Name, transfer.GetSrcRoutePoint().Id, transfer.GetSrcRoutePoint().Coords.Lat, transfer.GetSrcRoutePoint().Coords.Lon);
             RoutePointInfo destStopInfo = new(transfer.GetDestRoutePoint().Name, transfer.GetDestRoutePoint().Id, transfer.GetDestRoutePoint().Coords.Lat, transfer.GetDestRoutePoint().Coords.Lon);
@@ -383,6 +368,10 @@ namespace RAPTOR_Router.Models.Results
             return sb.ToString();
         }
 
+        /// <summary>
+        /// Gets the total number of seconds it takes from the beginning of the connection until boarding the first trip
+        /// </summary>
+        /// <returns>The number of seconds before first trip</returns>
         int GetTotalSecondsBeforeFirstTrip()
         {
             int segmentIndex = 0;
@@ -406,6 +395,10 @@ namespace RAPTOR_Router.Models.Results
             }
             return resultSeconds;
         }
+        /// <summary>
+        /// Gets the total number of seconds it takes from the deboarding of the last trip until the destination is reached
+        /// </summary>
+        /// <returns>The number of seconds after last trip</returns>
         int GetTotalSecondsAfterLastTrip()
         {
             int segmentIndex = UsedSegmentTypes.Count - 1;
@@ -430,7 +423,10 @@ namespace RAPTOR_Router.Models.Results
             return resultSeconds;
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="originalEarliestDepartureTime"></param>
         public void SetDepartureAndArrivalTimesByEarliestDeparture(DateTime originalEarliestDepartureTime)
         {
             DateTime firstTripGetOnTime = UsedTrips.Count > 0 ? UsedTrips[0].stopPasses[UsedTrips[0].getOnStopIndex].DepartureTime : DateTime.MaxValue;
@@ -677,7 +673,7 @@ namespace RAPTOR_Router.Models.Results
             /// The vehicle type of the trip
             /// </summary>
             [JsonInclude]
-            public Route.VehicleType vehicleType { get; set; }
+            public VehicleType vehicleType { get; set; }
             /// <summary>
             /// Whether the trip has current delay information available (i.e. this typically 
             /// means the trip is en-route, or will be in the soon future)
@@ -721,7 +717,7 @@ namespace RAPTOR_Router.Models.Results
                 int getOffStopIndex,
                 string routeName,
                 Color color,
-                Route.VehicleType vehicleType,
+                VehicleType vehicleType,
                 bool hasDelayInfo,
                 int delayWhenBoarded,
                 int currentDelay,

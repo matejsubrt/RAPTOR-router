@@ -202,8 +202,6 @@ namespace RAPTOR_Router.Structures.Transit
                 {
                     foreach (Trip trip in tripsOnDate)
                     {
-                        //var stopTime = trip.StopTimes[stopIndex];
-                        //var regularDepartureTime = stopTime.GetDepartureDateTime(date);
                         var regularDepartureTime = trip.GetDepartureDateTime(stopIndex, date);
 
 
@@ -240,17 +238,32 @@ namespace RAPTOR_Router.Structures.Transit
             var stopIndex = GetLastStopIndex(stop);
 
             var baseDate = DateOnly.FromDateTime(dateTime);
-            var tripStartDatesToSearch = new List<DateOnly> { baseDate, baseDate.AddDays(-1) };
+            var prevDate = baseDate.AddDays(-1);
 
+            var trip = ProcessDate(baseDate);
+            if (trip is not null)
+            {
+                tripStartDate = prevDate;
+                return trip;
+            }
 
-            foreach (DateOnly date in tripStartDatesToSearch)
+            trip = ProcessDate(prevDate);
+            if (trip is not null)
+            {
+                tripStartDate = baseDate;
+                return trip;
+            }
+
+            tripStartDate = new DateOnly();
+            return null;
+
+            Trip? ProcessDate(DateOnly date)
             {
                 if (RouteTrips.TryGetValue(date, out List<Trip>? tripsOnDate))
                 {
                     for (int i = tripsOnDate.Count - 1; i >= 0; i--)
                     {
                         var trip = tripsOnDate[i];
-
 
                         var regularArrivalTime = trip.GetArrivalDateTime(stopIndex, date);
 
@@ -261,15 +274,13 @@ namespace RAPTOR_Router.Structures.Transit
 
                         if (actualArrivalTime <= dateTime)
                         {
-                            tripStartDate = date;
                             return trip;
                         }
                     }
                 }
-            }
 
-            tripStartDate = new DateOnly();
-            return null;
+                return null;
+            }
         }
 
         public Trip? GetFirstTransferableTripAtStopByReachTimeBeta(bool forward, Stop stop, DateTime dateTime, DelayModel delayModel, out DateOnly tripStartDate)
@@ -281,25 +292,7 @@ namespace RAPTOR_Router.Structures.Transit
 
         public override string ToString()
         {
-            return ShortName + ": From " + RouteStops[0] + " to " + RouteStops[RouteStops.Count - 1];
-        }
-
-
-        /// <summary>
-        /// Enum representing the type of the vehicle that serves the route
-        /// </summary>
-        public enum VehicleType
-        {
-            TRAM = 0,                       // Tram, Streetcar, Light rail
-            METRO = 1,                      // Subway, Metro
-            RAIL = 2,                       // Rail (Intercity or long-distance travel)
-            BUS = 3,                        // Bus (Short- and long-distance routes)
-            FERRY = 4,                      // Ferry
-            CABLE_TRAM = 5,                 // Cable tram
-            AERIAL_LIFT = 6,                // Aerial lift, suspended cable car
-            FUNICULAR = 7,                  // Funicular
-            TROLLEYBUS = 11,                // Trolleybus
-            MONORAIL = 12                   // Monorail
+            return ShortName + ": From " + RouteStops[0] + " to " + RouteStops[^1];
         }
     }
 }

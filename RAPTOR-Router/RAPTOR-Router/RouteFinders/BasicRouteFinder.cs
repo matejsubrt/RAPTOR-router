@@ -974,16 +974,16 @@ namespace RAPTOR_Router.RouteFinders
 
         //}
 
-        public CompleteSearchResult FindConnection(ConnectionRequest request)
+        public ConnectionApiResponseResult FindConnection(ConnectionRequest request)
         {
-            CompleteSearchResult result = new();
+            ConnectionApiResponseResult apiResponseResult = new();
 
             var error = request.Validate(transitModel, bikeModel);
 
             if (error != ConnectionSearchError.NoError)
             {
-                result.Error = error;
-                return result;
+                apiResponseResult.Error = error;
+                return apiResponseResult;
             }
 
             List<SearchResult>? resultJourneys;
@@ -1016,16 +1016,16 @@ namespace RAPTOR_Router.RouteFinders
 
             if (resultJourneys is null)
             {
-                result.Error = ConnectionSearchError.NoConnectionFound;
+                apiResponseResult.Error = ConnectionSearchError.NoConnectionFound;
             }
             else
             {
-                result.Error = ConnectionSearchError.NoError;
-                result.Results = resultJourneys;
+                apiResponseResult.Error = ConnectionSearchError.NoError;
+                apiResponseResult.Results = resultJourneys;
             }
 
 
-            return result;
+            return apiResponseResult;
         }
     }
 }

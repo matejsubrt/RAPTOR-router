@@ -2,21 +2,30 @@
 using RAPTOR_Router.Structures.Configuration;
 using RAPTOR_Router.Structures.Custom;
 using RAPTOR_Router.Structures.Transit;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RAPTOR_Router.Models.Dynamic
 {
-
+    /// <summary>
+    /// A class representing the current routing information for a single RoutePoint
+    /// </summary>
     public class StopRoutingInfo
     {
         /// <summary>
+        /// Interface for a routing entry. An entry can either be an arrival entry or a departure entry, based on the search direction.
+        /// </summary>
+        public interface IRoutingEntry
+        {
+            /// <summary>
+            /// The best time of the entry
+            /// </summary>
+            public DateTime Time { get; }
+        }
+
+
+        /// <summary>
         /// Class representing a reach of a stop by a trip
         /// </summary>
-        public class TripReach : IEntry
+        public class TripReach : IRoutingEntry
         {
             /// <summary>
             /// The trip used to reach the stop
@@ -35,6 +44,13 @@ namespace RAPTOR_Router.Models.Dynamic
             /// </summary>
             public Stop ReachedFromStop { get; protected set; }
 
+            /// <summary>
+            /// Creates a new TripReach object
+            /// </summary>
+            /// <param name="trip">The trip by which the stop was reached</param>
+            /// <param name="otherEndStop">The stop on which the trip was boarded/deboarded</param>
+            /// <param name="reachTime">The time at which the stop was reached</param>
+            /// <param name="tripStartDate">The date at which the trip starts</param>
             internal TripReach(Trip trip, Stop otherEndStop, DateTime reachTime, DateOnly tripStartDate)
             {
                 this.Trip = trip;
@@ -43,6 +59,10 @@ namespace RAPTOR_Router.Models.Dynamic
                 TripStartDate = tripStartDate;
             }
 
+            /// <summary>
+            /// Returns a string representation of the TripReach object
+            /// </summary>
+            /// <returns>The string representation</returns>
             public override string ToString()
             {
                 return "TripReach at " + Time.ToShortTimeString() + ": " + Trip.Route.ShortName + " to/from " + ReachedFromStop.Name;
@@ -52,7 +72,7 @@ namespace RAPTOR_Router.Models.Dynamic
         /// <summary>
         /// Class representing a reach of a stop by a transfer
         /// </summary>
-        public class TransferReach : IEntry
+        public class TransferReach : IRoutingEntry
         {
             /// <summary>
             /// The transfer used for the entry
@@ -62,12 +82,21 @@ namespace RAPTOR_Router.Models.Dynamic
             /// The time at which the stop was reached
             /// </summary>
             public DateTime Time { get; protected set; }
+            /// <summary>
+            /// Creates a new TransferReach object
+            /// </summary>
+            /// <param name="transfer">The transfer by which the stop was reached</param>
+            /// <param name="reachTime">The time at which the stop was reached</param>
             internal TransferReach(Transfer transfer, DateTime reachTime)
             {
                 this.Transfer = transfer;
                 this.Time = reachTime;
             }
 
+            /// <summary>
+            /// Returns a string representation of the TransferReach object
+            /// </summary>
+            /// <returns>The string representation</returns>
             public override string ToString()
             {
                 return "TransferReach at " + Time.ToShortTimeString() + ": " + Transfer.From.Name + " to " + Transfer.To.Name;
@@ -77,7 +106,7 @@ namespace RAPTOR_Router.Models.Dynamic
         /// <summary>
         /// Class representing a reach of a stop by a bike transfer
         /// </summary>
-        public class BikeTransferReach : IEntry
+        public class BikeTransferReach : IRoutingEntry
         {
             /// <summary>
             /// The bike transfer used for the entry
@@ -87,12 +116,21 @@ namespace RAPTOR_Router.Models.Dynamic
             /// The time at which the RoutePoint was reached
             /// </summary>
             public DateTime Time { get; protected set; }
+            /// <summary>
+            /// Creates a new BikeTransferReach object
+            /// </summary>
+            /// <param name="transfer">The bike transfer by which the RoutePoint was reached</param>
+            /// <param name="reachTime">The time at which the RoutePoint was reached</param>
             internal BikeTransferReach(BikeTransfer transfer, DateTime reachTime)
             {
                 this.Transfer = transfer;
                 this.Time = reachTime;
             }
 
+            /// <summary>
+            /// Returns a string representation of the BikeTransferReach object
+            /// </summary>
+            /// <returns>The string representation</returns>
             public override string ToString()
             {
                 return "BikeTransferReach at " + Time.ToShortTimeString() + ": " + Transfer.GetSrcRoutePoint().Name + " to " + Transfer.GetDestRoutePoint().Name;
@@ -102,7 +140,7 @@ namespace RAPTOR_Router.Models.Dynamic
         /// <summary>
         /// Class representing a reach of a stop by a custom transfer
         /// </summary>
-        public class CustomTransferReach : IEntry
+        public class CustomTransferReach : IRoutingEntry
         {
             /// <summary>
             /// The custom transfer used for the entry
@@ -112,12 +150,21 @@ namespace RAPTOR_Router.Models.Dynamic
             /// The reach time
             /// </summary>
             public DateTime Time { get; }
+            /// <summary>
+            /// Creates a new CustomTransferReach object
+            /// </summary>
+            /// <param name="transfer">The custom transfer by which the RoutePoint was reached</param>
+            /// <param name="reachTime">The time at which the RoutePoint was reached</param>
             internal CustomTransferReach(CustomTransfer transfer, DateTime reachTime)
             {
                 Transfer = transfer;
                 Time = reachTime;
             }
 
+            /// <summary>
+            /// Returns a string representation of the CustomTransferReach object
+            /// </summary>
+            /// <returns>The string representation</returns>
             public override string ToString()
             {
                 return "CustomTransferReach at " + Time.ToShortTimeString() + ": " + Transfer.GetSrcRoutePoint().Name + " to " + Transfer.GetDestRoutePoint().Name;
@@ -127,7 +174,7 @@ namespace RAPTOR_Router.Models.Dynamic
         /// <summary>
         /// Class representing a reach of a stop by a bike trip
         /// </summary>
-        public class BikeTripReach : IEntry
+        public class BikeTripReach : IRoutingEntry
         {
             /// <summary>
             /// The bike station from which the bike trip was traversed
@@ -141,6 +188,12 @@ namespace RAPTOR_Router.Models.Dynamic
             /// The time at which the To bike station was reached
             /// </summary>
             public DateTime Time { get; protected set; }
+            /// <summary>
+            /// Creates a new BikeTripReach object
+            /// </summary>
+            /// <param name="from">The station from which the bike trip was traversed</param>
+            /// <param name="to">The station that was reached by the trip</param>
+            /// <param name="reachTime">The time at which the station was reached</param>
             internal BikeTripReach(BikeStation from, BikeStation to, DateTime reachTime)
             {
                 this.From = from;
@@ -148,6 +201,10 @@ namespace RAPTOR_Router.Models.Dynamic
                 this.Time = reachTime;
             }
 
+            /// <summary>
+            /// Returns a string representation of the BikeTripReach object
+            /// </summary>
+            /// <returns>The string representation</returns>
             public override string ToString()
             {
                 return "BikeTripReach at " + Time.ToShortTimeString() + ": " + From.Name + " to " + To.Name;
@@ -157,33 +214,32 @@ namespace RAPTOR_Router.Models.Dynamic
         /// <summary>
         /// Class representing a reach of a stop by an implicit search start
         /// </summary>
-        public class ImplicitSearchStartReach : IEntry
+        public class ImplicitSearchStartReach : IRoutingEntry
         {
             /// <summary>
             /// The time at which the RoutePoint was reached
             /// </summary>
             public DateTime Time { get; protected set; }
+            /// <summary>
+            /// Creates a new ImplicitSearchStartReach object
+            /// </summary>
+            /// <param name="reachTime">The time at which the RoutePoint is implicitly reached</param>
             public ImplicitSearchStartReach(DateTime reachTime)
             {
                 this.Time = reachTime;
             }
 
+            /// <summary>
+            /// Returns a string representation of the ImplicitSearchStartReach object
+            /// </summary>
+            /// <returns>The string representation</returns>
             public override string ToString()
             {
                 return "ImplicitSearchStartReach at " + Time.ToShortTimeString();
             }
         }
 
-        /// <summary>
-        /// Interface for an entry. An entry can either be an arrival entry or a departure entry, based on the search direction.
-        /// </summary>
-        public interface IEntry
-        {
-            /// <summary>
-            /// The best time of the entry
-            /// </summary>
-            public DateTime Time { get; }
-        }
+        
 
         /// <summary>
         /// The current earliest best time at which the RoutePoint was reached
@@ -193,7 +249,7 @@ namespace RAPTOR_Router.Models.Dynamic
         /// <summary>
         /// Array of entries holding the best arrival/departure for a RoutePoint for every round of the search.
         /// </summary>
-        internal IEntry?[] Entries { get; set; }
+        internal IRoutingEntry?[] Entries { get; set; }
 
         
         /// <summary>
@@ -204,7 +260,7 @@ namespace RAPTOR_Router.Models.Dynamic
         {
             BestTime = forward ? DateTime.MaxValue : DateTime.MinValue;
 
-            Entries = new IEntry[Settings.ROUNDS + 1];
+            Entries = new IRoutingEntry[Settings.ROUNDS + 1];
             for (int i = 0; i < Entries.Count(); i++)
             {
                 Entries[i] = null;
@@ -223,7 +279,7 @@ namespace RAPTOR_Router.Models.Dynamic
         /// <summary>
         /// Gets the reaches at the RoutePoint
         /// </summary>
-        public IEntry?[] Reaches
+        public IRoutingEntry?[] Reaches
         {
             get => Entries;
             set => Entries = value;

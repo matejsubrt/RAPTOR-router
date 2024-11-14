@@ -3,16 +3,26 @@ using Microsoft.Data.Sqlite;
 using RAPTOR_Router.GBFSParsing.Distances;
 using RAPTOR_Router.Structures.Bike;
 
+/// <summary>
+/// A class used for creating, reading and editing a SQLite database containing distances between bike stations of a single bike network
+/// </summary>
 public class BikeDistanceDatabase
 {
     private readonly string dbPath;
 
-    public BikeDistanceDatabase(string databaseFilePath = "bike_distances.db")
+    /// <summary>
+    /// Creates a new instance of the BikeDistanceDatabase class and creates the database file if it does not exist
+    /// </summary>
+    /// <param name="databaseFilePath">The path to the database file</param>
+    public BikeDistanceDatabase(string databaseFilePath)
     {
         dbPath = $"Data Source={databaseFilePath}";
         CreateDatabaseAndTable();
     }
 
+    /// <summary>
+    /// Creates a new SQLite database file and a table for storing distances between bike stations
+    /// </summary>
     private void CreateDatabaseAndTable()
     {
         using (var connection = new SqliteConnection(dbPath))
@@ -36,7 +46,14 @@ public class BikeDistanceDatabase
         }
     }
 
-    public void AddOrUpdateDistance(string stationA, string stationB, double distance)
+
+    /// <summary>
+    /// Adds or updates the distance between two bike stations in the database
+    /// </summary>
+    /// <param name="stationAId">The id of the first station</param>
+    /// <param name="stationBId">The id of the second station</param>
+    /// <param name="distance">The distance between the stations</param>
+    public void AddOrUpdateDistance(string stationAId, string stationBId, double distance)
     {
         using (var connection = new SqliteConnection(dbPath))
         {
@@ -49,8 +66,8 @@ public class BikeDistanceDatabase
 
             using (var command = new SqliteCommand(insertQuery, connection))
             {
-                command.Parameters.AddWithValue("@StationA", stationA);
-                command.Parameters.AddWithValue("@StationB", stationB);
+                command.Parameters.AddWithValue("@StationA", stationAId);
+                command.Parameters.AddWithValue("@StationB", stationBId);
                 command.Parameters.AddWithValue("@Distance", distance);
                 command.ExecuteNonQuery();
             }
@@ -59,7 +76,14 @@ public class BikeDistanceDatabase
         }
     }
 
-    public double GetDistance(string stationA, string stationB)
+    /// <summary>
+    /// Retrieves a distance between two bike stations from the database
+    /// </summary>
+    /// <param name="stationAId">The id of the first station</param>
+    /// <param name="stationBId">The id of the second station</param>
+    /// <returns>The distance between the stations in meters</returns>
+    /// <remarks>The order of the 2 parameters does not matter</remarks>
+    public double GetDistance(string stationAId, string stationBId)
     {
         using (var connection = new SqliteConnection(dbPath))
         {
@@ -73,8 +97,8 @@ public class BikeDistanceDatabase
 
             using (var command = new SqliteCommand(selectQuery, connection))
             {
-                command.Parameters.AddWithValue("@StationA", stationA);
-                command.Parameters.AddWithValue("@StationB", stationB);
+                command.Parameters.AddWithValue("@StationA", stationAId);
+                command.Parameters.AddWithValue("@StationB", stationBId);
 
                 var result = command.ExecuteScalar();
                 return result == null ? -1 : Convert.ToDouble(result);
@@ -82,7 +106,12 @@ public class BikeDistanceDatabase
         }
     }
 
-    private void RemoveStation(SqliteConnection connection, string station)
+    /// <summary>
+    /// Removes a station from the database, along with all distances involving it
+    /// </summary>
+    /// <param name="connection">The SQLite connection to use for the removal</param>
+    /// <param name="stationId">The id of the station to remove</param>
+    private void RemoveStation(SqliteConnection connection, string stationId)
     {
         string deleteQuery = @"
             DELETE FROM Distances 
@@ -90,11 +119,16 @@ public class BikeDistanceDatabase
 
         using (var command = new SqliteCommand(deleteQuery, connection))
         {
-            command.Parameters.AddWithValue("@Station", station);
+            command.Parameters.AddWithValue("@Station", stationId);
             command.ExecuteNonQuery();
         }
     }
 
+    /// <summary>
+    /// Creates a StationDistanceMatrix object from the distances stored in the database and removes all distances involving stations that are not in the provided dictionary
+    /// </summary>
+    /// <param name="stationsById">A dictionary of all the currently existent stations of the system indexed by their ids</param>
+    /// <returns>The matrix with the loaded distances</returns>
     public StationDistanceMatrix GetDistanceMatrixAndRemoveNonExistentStations(Dictionary<string, BikeStation> stationsById)
     {
         using (var connection = new SqliteConnection(dbPath))
