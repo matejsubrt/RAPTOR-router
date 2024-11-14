@@ -1,35 +1,23 @@
 using RAPTOR_Router.RouteFinders;
-using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using System.Web.Http;
 using Microsoft.AspNetCore.Http;
 using RAPTOR_Router.Models.Results;
-using RAPTOR_Router.Structures.Configuration;
-using Microsoft.AspNetCore.Http.HttpResults;
 using RAPTOR_Router.Structures.Requests;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI_light
 {
     public class Program
     {
-        //private static RouteFinderBuilder routerBuilder = new();
-        /// <summary>
-        /// Parses the gtfs data in the configured zip archive, initiates a web API on /connection, that returns a JSON representation of the result of the search.
-        /// </summary>
-        /// <param name="args"></param>
         public static void Main(string[] args)
         {
-            //routerBuilder = new RouteFinderBuilder();
             RouteFinderBuilder.LoadAllData();
-
 
             var appBuilder = WebApplication.CreateBuilder(args);
             appBuilder.Services.AddAuthorization();
             appBuilder.Services.AddEndpointsApiExplorer();
             appBuilder.Services.AddSwaggerGen();
-
-
 
             var app = appBuilder.Build();
             app.UseSwagger();
@@ -41,30 +29,32 @@ namespace WebAPI_light
                     => await Results.Problem()
                         .ExecuteAsync(context)));
 
-
-            app.MapPost("/connection", (ConnectionRequest request) => 
-                    HandleConnectionRequest(request))
+            app.MapPost("/connection", (ConnectionRequest request) => HandleConnectionRequest(request))
                 .WithName("GetConnection")
                 .WithOpenApi();
 
-            app.MapPost("/alternative-trips", (AlternativeTripsRequest request) => 
-                    HandleAlternativeTripsRequest(request))
+            app.MapPost("/alternative-trips", (AlternativeTripsRequest request) => HandleAlternativeTripsRequest(request))
                 .WithName("GetAlternativeTrips")
                 .WithOpenApi();
 
-            app.MapPost("/update-delays", (List<SearchResult> results) =>
-                    HandleUpdateDelaysRequest(results))
+            app.MapPost("/update-delays", (List<SearchResult> results) => HandleUpdateDelaysRequest(results))
                 .WithName("UpdateDelays")
                 .WithOpenApi();
-            app.Run();
 
+            app.Run();
         }
+
         static async Task<IResult> HandleConnectionRequest(ConnectionRequest request)
         {
             if (request.settings is null)
             {
-                HttpError err = new HttpError(ConnectionSearchError.InvalidSettings.ToMessage());
-                return Results.BadRequest(err);
+                var problemDetails = new ProblemDetails
+                {
+                    Status = StatusCodes.Status400BadRequest,
+                    Title = "Invalid settings",
+                    Detail = ConnectionSearchError.InvalidSettings.ToMessage()
+                };
+                return Results.BadRequest(problemDetails);
             }
 
             CompleteSearchResult result;
@@ -79,17 +69,26 @@ namespace WebAPI_light
                 result = router.FindConnection(request);
             }
 
-
             switch (result.Error)
             {
                 case ConnectionSearchError.NoError:
                     return Results.Ok(result.Results);
                 case ConnectionSearchError.NoConnectionFound:
-                    HttpError err404 = new HttpError(result.Error.ToMessage());
-                    return Results.NotFound(err404);
+                    var notFoundDetails = new ProblemDetails
+                    {
+                        Status = StatusCodes.Status404NotFound,
+                        Title = "No connection found",
+                        Detail = result.Error.ToMessage()
+                    };
+                    return Results.NotFound(notFoundDetails);
                 default:
-                    HttpError err500 = new HttpError(result.Error.ToMessage());
-                    return Results.BadRequest(err500);
+                    var badRequestDetails = new ProblemDetails
+                    {
+                        Status = StatusCodes.Status400BadRequest,
+                        Title = "Bad request",
+                        Detail = result.Error.ToMessage()
+                    };
+                    return Results.BadRequest(badRequestDetails);
             }
         }
 
@@ -103,11 +102,21 @@ namespace WebAPI_light
                 case AlternativesSearchError.NoError:
                     return Results.Ok(result.Alternatives);
                 case AlternativesSearchError.NoTripsFound:
-                    HttpError err404 = new HttpError(result.Error.ToMessage());
-                    return Results.NotFound(err404);
+                    var notFoundDetails = new ProblemDetails
+                    {
+                        Status = StatusCodes.Status404NotFound,
+                        Title = "No alternative trips found",
+                        Detail = result.Error.ToMessage()
+                    };
+                    return Results.NotFound(notFoundDetails);
                 default:
-                    HttpError err500 = new HttpError(result.Error.ToMessage());
-                    return Results.BadRequest(err500);
+                    var badRequestDetails = new ProblemDetails
+                    {
+                        Status = StatusCodes.Status400BadRequest,
+                        Title = "Bad request",
+                        Detail = result.Error.ToMessage()
+                    };
+                    return Results.BadRequest(badRequestDetails);
             }
         }
 
@@ -120,3 +129,4 @@ namespace WebAPI_light
         }
     }
 }
+
