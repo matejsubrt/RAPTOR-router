@@ -1,4 +1,4 @@
-﻿//#define SEQUENTIAL
+﻿#define SEQUENTIAL
 
 
 using RAPTOR_Router.Extensions;

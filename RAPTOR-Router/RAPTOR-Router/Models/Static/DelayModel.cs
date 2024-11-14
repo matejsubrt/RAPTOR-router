@@ -35,6 +35,13 @@ namespace RAPTOR_Router.Models.Static
                 }
                 return true;
             }
+            else
+            {
+                // There is sometimes no data for the last few stops, so we return the last delay in the data
+                arrivalDelay = _stopDelays[^1].Item1;
+                departureDelay = _stopDelays[^1].Item2;
+                return true;
+            }
 
             arrivalDelay = 0;
             departureDelay = 0;

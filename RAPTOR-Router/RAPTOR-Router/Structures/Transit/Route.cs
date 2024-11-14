@@ -236,6 +236,7 @@ namespace RAPTOR_Router.Structures.Transit
 
         public Trip? GetLatestTripArrivingBeforeTimeAtStop(Stop stop, DateTime dateTime, DelayModel delayModel, out DateOnly tripStartDate)
         {
+            
             var stopIndex = GetLastStopIndex(stop);
 
             var baseDate = DateOnly.FromDateTime(dateTime);
@@ -252,6 +253,11 @@ namespace RAPTOR_Router.Structures.Transit
 
                         //var stopTime = trip.StopTimes[stopIndex];
                         //var regularArrivalTime = stopTime.GetArrivalDateTime(date);
+
+                        if (stop.Id == "U321Z12P" && trip.Route.ShortName == "149")
+                        {
+                            Console.WriteLine();
+                        }
 
                         var regularArrivalTime = trip.GetArrivalDateTime(stopIndex, date);
 

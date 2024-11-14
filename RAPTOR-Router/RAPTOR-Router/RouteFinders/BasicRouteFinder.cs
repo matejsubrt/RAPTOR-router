@@ -301,6 +301,10 @@ namespace RAPTOR_Router.RouteFinders
 
             void TraverseRoute(Route route, Stop traverseFromStop, Trip trip, DateOnly tripDate)
             {
+                if (traverseFromStop.Id == "U321Z12P")
+                {
+                    Console.WriteLine();
+                }
                 DateOnly currTripDate = tripDate;
                 Trip currTrip = trip;
 
