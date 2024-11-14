@@ -251,13 +251,6 @@ namespace RAPTOR_Router.Structures.Transit
                     {
                         var trip = tripsOnDate[i];
 
-                        //var stopTime = trip.StopTimes[stopIndex];
-                        //var regularArrivalTime = stopTime.GetArrivalDateTime(date);
-
-                        if (stop.Id == "U321Z12P" && trip.Route.ShortName == "149")
-                        {
-                            Console.WriteLine();
-                        }
 
                         var regularArrivalTime = trip.GetArrivalDateTime(stopIndex, date);
 
