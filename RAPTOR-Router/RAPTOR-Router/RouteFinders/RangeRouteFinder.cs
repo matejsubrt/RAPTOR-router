@@ -249,21 +249,46 @@ namespace RAPTOR_Router.RouteFinders
 
             List<SearchResult> results = new();
 
-            List<Stop> srcStops = request.srcByCoords ? transitModel.GetStopsByLocation(request.srcLat, request.srcLon, settings.GetMaxTransferDistance()) : transitModel.GetStopsByName(request.srcStopName!);
+            List<Stop> searchBeginStops;
+            if (request.byEarliestDeparture)
+            {
+                if (request.srcByCoords)
+                {
+                    searchBeginStops = transitModel.GetStopsByLocation(request.srcLat, request.srcLon, settings.GetMaxTransferDistance());
+                }
+                else
+                {
+                    searchBeginStops = transitModel.GetStopsByName(request.srcStopName!);
+                }
+            }
+            else
+            {
+                if (request.destByCoords)
+                {
+                    searchBeginStops = transitModel.GetStopsByLocation(request.destLat, request.destLon, settings.GetMaxTransferDistance());
+                }
+                else
+                {
+                    searchBeginStops = transitModel.GetStopsByName(request.destStopName!);
+                }
+            }
 
 
             HashSet<DateTime> tripTimes = new();
-            foreach (Stop stop in srcStops)
+            foreach (Stop stop in searchBeginStops)
             {
                 foreach (Route route in stop.StopRoutes)
                 {
-                    var routeDepartureTimes = route.GetTripTimesAtStopWithinRange(stop, searchBeginRangeStart,
+                    var routeTripTimes = route.GetTripTimesAtStopWithinRange(stop, searchBeginRangeStart,
                         searchBeginRangeEnd, delayModel, forward);
-                    if (routeDepartureTimes is not null)
+                    if (routeTripTimes is not null)
                     {
-                        foreach (var depTime in routeDepartureTimes)
+                        foreach (var tripTime in routeTripTimes)
                         {
-                            var newTripTime = depTime.AddSeconds(-depTime.Second);
+                            // Round the time down (earliest departure) or up (latest arrival) to the nearest minute
+                            // This is to partly reduce the number of calls to the search algorithm
+                            int secondsToAdd = request.byEarliestDeparture ? (60 - tripTime.Second) : -tripTime.Second;
+                            var newTripTime = tripTime.AddSeconds(secondsToAdd);
                             tripTimes.Add(newTripTime);
                         }
                     }
@@ -280,7 +305,7 @@ namespace RAPTOR_Router.RouteFinders
             {
                 var departureTime = orderedTripTimes[i];
 
-                ISimpleRouteFinder router = builder.CreateUniversalRouteFinder(forward, settings);
+                ISimpleRoutingProvider router = RouteFinderBuilder.CreateRoutingProvider(forward, settings);
                 List<SearchResult>? searchResults;
 
                 if (request.srcByCoords)
@@ -293,7 +318,7 @@ namespace RAPTOR_Router.RouteFinders
                     }
                     else
                     {
-                        searchResults = router.FindConnection(srcCoords, request.destStopName, departureTime, true);
+                        searchResults = router.FindConnection(srcCoords, request.destStopName!, departureTime, true);
                     }
                 }
                 else
@@ -301,23 +326,25 @@ namespace RAPTOR_Router.RouteFinders
                     if (request.destByCoords)
                     {
                         Coordinates destCoords = new Coordinates(request.destLat, request.destLon);
-                        searchResults = router.FindConnection(request.srcStopName, destCoords, departureTime, true);
+                        searchResults = router.FindConnection(request.srcStopName!, destCoords, departureTime, true);
                     }
                     else
                     {
-                        searchResults = router.FindConnection(request.srcStopName, request.destStopName, departureTime, true);
+                        searchResults = router.FindConnection(request.srcStopName!, request.destStopName!, departureTime, true);
                     }
                 }
 
-
-                lock (results)
+                if (searchResults is not null)
                 {
-                    foreach (var result in searchResults)
+                    lock (results)
                     {
-                        // TODO: shouldnt this not be necessary?
-                        if (result is not null)
+                        foreach (var searchResult in searchResults)
                         {
-                            results.Add(result);
+                            // TODO: shouldnt this not be necessary?
+                            if (searchResult is not null)
+                            {
+                                results.Add(searchResult);
+                            }
                         }
                     }
                 }

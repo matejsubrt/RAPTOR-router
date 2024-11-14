@@ -425,8 +425,9 @@ namespace RAPTOR_Router.Models.Dynamic
 
                 for(int i = 0; i < Settings.ROUNDS; i++)
                 {
+                    //TODO: change 5 from constant to variable
                     DateTime adjustedArrivalTime = adjustedArrivalTimes[i];
-                    if (adjustedArrivalTime <= bestArrivalTime.AddMinutes(5))
+                    if (comp.ImprovesTime(adjustedArrivalTime, bestArrivalTime.AddMinutes(timeMpl * 5)))//adjustedArrivalTime <= bestArrivalTime.AddMinutes(5))
                     {
                         bestResults.Add(results[i]!);
                     }

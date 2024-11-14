@@ -106,7 +106,7 @@ namespace RAPTOR_Router.Structures.Transit
         }
 
         public List<DateTime> GetTripTimesAtStopWithinRange(Stop stop, DateTime rangeStart, DateTime rangeEnd,
-            DelayModel delayModel, bool departure)
+            DelayModel delayModel, bool forward)
         {
             if (rangeStart >= rangeEnd)
             {
@@ -127,14 +127,14 @@ namespace RAPTOR_Router.Structures.Transit
             List<Trip> tripsOnPrevDate = RouteTrips.ContainsKey(prevDate) ? RouteTrips[prevDate] : new();
             List<Trip> tripsOnNextDate = (RouteTrips.ContainsKey(nextDate) && rangeEndDate > rangeStartDate) ? RouteTrips[nextDate] : new();
 
-            int stopIndex = departure ? GetFirstStopIndex(stop) : GetLastStopIndex(stop);
+            int stopIndex = forward ? GetFirstStopIndex(stop) : GetLastStopIndex(stop);
 
             List<DateTime> tripTimes = new();
 
 
             foreach (Trip trip in tripsOnPrevDate)
             {
-                DateTime tripTime = trip.GetDepartureDateTime(stopIndex, prevDate);//trip.StopTimes[stopIndex].GetDepartureDateTime(prevDate);
+                DateTime tripTime = forward ? trip.GetDepartureDateTime(stopIndex, prevDate) : trip.GetArrivalDateTime(stopIndex, prevDate);
                 if (tripTime >= rangeStart && tripTime <= rangeEnd)
                 {
                     tripTimes.Add(tripTime);
@@ -142,7 +142,7 @@ namespace RAPTOR_Router.Structures.Transit
             }
             foreach (Trip trip in tripsOnRangeStartDate)
             {
-                DateTime tripTime = trip.GetDepartureDateTime(stopIndex, rangeStartDate);//trip.StopTimes[stopIndex].GetDepartureDateTime(rangeStartDate);
+                DateTime tripTime = forward ? trip.GetDepartureDateTime(stopIndex, rangeStartDate) : trip.GetArrivalDateTime(stopIndex, rangeStartDate);//trip.StopTimes[stopIndex].GetDepartureDateTime(rangeStartDate);
                 if (tripTime >= rangeStart && tripTime <= rangeEnd)
                 {
                     tripTimes.Add(tripTime);
@@ -150,7 +150,8 @@ namespace RAPTOR_Router.Structures.Transit
             }
             foreach (Trip trip in tripsOnNextDate)
             {
-                DateTime tripTime = trip.GetDepartureDateTime(stopIndex, nextDate);//trip.StopTimes[stopIndex].GetDepartureDateTime(nextDate);
+                // TODO: can there be a trip on nextDate that is before rangeEnd?
+                DateTime tripTime = forward ? trip.GetDepartureDateTime(stopIndex, nextDate) : trip.GetArrivalDateTime(stopIndex, nextDate);//trip.StopTimes[stopIndex].GetDepartureDateTime(nextDate);
                 if (tripTime >= rangeStart && tripTime <= rangeEnd)
                 {
                     tripTimes.Add(tripTime);
