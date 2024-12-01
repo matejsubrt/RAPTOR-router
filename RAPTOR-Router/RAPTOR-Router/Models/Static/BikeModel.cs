@@ -116,8 +116,7 @@ namespace RAPTOR_Router.Models.Static
         /// <summary>
         /// Gets all the bike stations within the given radius of the given coordinates.
         /// </summary>
-        /// <param name="lat">The latitude of the point</param>
-        /// <param name="lon">The longitude of the point</param>
+        /// <param name="coords">The coordinates at which to get the near stations</param>
         /// <param name="radius">The maximum distance of the found bike station from the coordinates</param>
         /// <returns>The list of all near stations</returns>
         public List<BikeStation> GetNearStations(Coordinates coords, int radius)
@@ -149,33 +148,9 @@ namespace RAPTOR_Router.Models.Static
         }
 
         /// <summary>
-        /// Gets the nearest bike station to the given coordinates.
-        /// </summary>
-        /// <param name="lat">The latitude of the point</param>
-        /// <param name="lon">The longitude of the point</param>
-        /// <param name="radius">The maximum distance of the found bike station from the coordinates</param>
-        /// <returns>The nearest bike station to the coordinates, null if none was found</returns>
-        //public BikeStation? ResolveCoordinates(double lat, double lon, int radius)
-        //{
-        //    int minDistance = int.MaxValue;
-        //    BikeStation? nearestStation = null;
-        //    foreach (BikeStation s in Stations)
-        //    {
-        //        int distance = DistanceExtensions.SimplifiedDistanceBetween(s.Coords.Lat, s.Coords.Lon, lat, lon);
-        //        if (distance < minDistance)
-        //        {
-        //            nearestStation = s;
-        //            minDistance = distance;
-        //        }
-        //    }
-        //    return nearestStation;
-        //}
-
-        /// <summary>
         /// Finds out whether a bike station exists within the given radius of the given coordinates.
         /// </summary>
-        /// <param name="lat">The latitude of the point</param>
-        /// <param name="lon">The longitude of the point</param>
+        /// <param name="coords">The coordinates for which to find out whether a near station exists</param>
         /// <param name="radius">The maximum distance of the found bike station from the coordinates</param>
         /// <returns>Bool specifying whether there is a station within the radius</returns>
         public bool NearStationExists(Coordinates coords, int radius)

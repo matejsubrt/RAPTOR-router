@@ -8,6 +8,10 @@ using RAPTOR_Router.Models.Static;
 
 namespace RAPTOR_Router.RouteFinders
 {
+    /// <summary>
+    /// Class used for updating delays of trips, that are part of search results.
+    /// Used to provide the client with the most up-to-date information even after the search has been performed.
+    /// </summary>
     public class DelayUpdater
     {
         private TransitModel transitModel;
@@ -19,7 +23,10 @@ namespace RAPTOR_Router.RouteFinders
             this.delayModel = delayModel;
         }
 
-
+        /// <summary>
+        /// Updates the delays of the trips in the search results.
+        /// </summary>
+        /// <param name="results">The search results to update delay data for</param>
         public void UpdateDelays(List<SearchResult> results)
         {
             foreach (var result in results)

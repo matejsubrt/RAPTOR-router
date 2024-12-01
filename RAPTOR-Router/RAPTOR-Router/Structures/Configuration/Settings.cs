@@ -68,6 +68,10 @@
             return new Settings();
         }
 
+        /// <summary>
+        /// Validates the settings parameters
+        /// </summary>
+        /// <returns>Whether all the settings parameters have correct values</returns>
         public bool ValidateParameterValues()
         {
             bool correct = true;

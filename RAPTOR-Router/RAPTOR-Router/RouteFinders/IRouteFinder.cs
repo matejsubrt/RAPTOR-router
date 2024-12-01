@@ -5,34 +5,74 @@ using RAPTOR_Router.Structures.Requests;
 namespace RAPTOR_Router.RouteFinders
 {
     /// <summary>
-    /// An interface for all RouteFinder objects, which are used to solve the connection search problem
+    /// An interface for RangeRouteFinder objects, which are used to solve the connection search problem within a time range
     /// </summary>
     public interface IRangeRouteFinder
     {
+        /// <summary>
+        /// Finds the best connections within a range according to the connection request object
+        /// </summary>
+        /// <param name="request">The connection request object</param>
+        /// <returns>The connection response object, including the result and the error information</returns>
         Task<ConnectionApiResponseResult> FindConnectionsAsync(ConnectionRequest request);
     }
 
+    /// <summary>
+    /// An interface for RouteFinder objects, which are used to solve the simple (single) connection search problem
+    /// </summary>
     public interface ISimpleRouteFinder
     {
-       ConnectionApiResponseResult FindConnection(ConnectionRequest request);
+        /// <summary>
+        /// Finds the best connection(s) according to the connection request object
+        /// </summary>
+        /// <param name="request">The connection request object</param>
+        /// <returns>The connection response object, including the result and the error information</returns>
+        ConnectionApiResponseResult FindConnection(ConnectionRequest request);
     }
 
+    /// <summary>
+    /// An interface for a routing provider (i.e. a class that can solve connection search problems and provide this functionality to a range/other route finder)
+    /// </summary>
     public interface ISimpleRoutingProvider
     {
         /// <summary>
-        /// Solves the provided connection search problem (i.e. SearchModel) given by source and destination stop names
+        /// Finds the best connection(s) between the 2 stops using their names
         /// </summary>
-        /// <param name="sourceStopName">The exact name of the source stop</param>
-        /// <param name="destStopName">The exact name of the destination stop</param>
-        /// <param name="time">The departure/arrival date and time</param>
-        /// <param name="includeViableAlternatives">Whether to include viable alternatives in the search - i.e. if results with different transfer counts are similar in time and comfort, return all</param>
-        /// <returns>The resulting best connection, null if none found</returns>
-        List<SearchResult>? FindConnection(string sourceStopName, string destStopName, DateTime time, bool includeViableAlternatives);
+        /// <param name="srcStopName">The name of the source stop (exact)</param>
+        /// <param name="destStopName">The name of the destination stop (exact)</param>
+        /// <param name="searchBeginTime">The time at which the search starts (i.e. departure time if this is a forward search, arrival date otherwise</param>
+        /// <param name="includeViableAlternatives">Whether to also include connections with different number of trips than the best one found, assuming they do not differ much in quality.</param>
+        /// <returns>The list of best found connections (if allowViableAlternatives is false, only contains 0 or 1 item)</returns>
+        List<SearchResult>? FindConnection(string srcStopName, string destStopName, DateTime searchBeginTime, bool includeViableAlternatives);
 
-        List<SearchResult>? FindConnection(Coordinates srcCoords, Coordinates destCoords, DateTime time, bool includeViableAlternatives);
+        /// <summary>
+        /// Finds the best connection(s) between the 2 coordinate points
+        /// </summary>
+        /// <param name="srcCoords">The source point coordinates</param>
+        /// <param name="destCoords">The destination point coordinates</param>
+        /// <param name="searchBeginTime">The time at which the search starts (i.e. departure time if this is a forward search, arrival date otherwise</param>
+        /// <param name="includeViableAlternatives">Whether to also include connections with different number of trips than the best one found, assuming they do not differ much in quality.</param>
+        /// <returns>The list of best found connections (if allowViableAlternatives is false, only contains 0 or 1 item)</returns>
+        List<SearchResult>? FindConnection(Coordinates srcCoords, Coordinates destCoords, DateTime searchBeginTime, bool includeViableAlternatives);
 
-        List<SearchResult>? FindConnection(Coordinates srcCoords, string destStopName, DateTime time, bool includeViableAlternatives);
+        /// <summary>
+        /// Finds the best connection(s) from the source coordinates to the destination stop with the given name
+        /// </summary>
+        /// <param name="srcCoords">The source point coordinates</param>
+        /// <param name="destStopName">The destination stop name (exact)</param>
+        /// <param name="searchBeginTime">The time at which the search starts (i.e. departure time if this is a forward search, arrival date otherwise</param>
+        /// <param name="includeViableAlternatives">Whether to also include connections with different number of trips than the best one found, assuming they do not differ much in quality.</param>
+        /// <returns>The list of best found connections (if allowViableAlternatives is false, only contains 0 or 1 item)</returns>
+        List<SearchResult>? FindConnection(Coordinates srcCoords, string destStopName, DateTime searchBeginTime, bool includeViableAlternatives);
 
-        List<SearchResult>? FindConnection(string sourceStopName, Coordinates destCoords, DateTime time, bool includeViableAlternatives);
+        /// <summary>
+        /// Finds the best connection(s) from the source stop with the given name to the destination coordinates
+        /// </summary>
+        /// <param name="srcStopName">The source stop name (exact)</param>
+        /// <param name="destCoords">The destination point coordinates</param>
+        /// <param name="searchBeginTime">The time at which the search starts (i.e. departure time if this is a forward search, arrival date otherwise</param>
+        /// <param name="includeViableAlternatives">Whether to also include connections with different number of trips than the best one found, assuming they do not differ much in quality.</param>
+        /// <returns>The list of best found connections (if allowViableAlternatives is false, only contains 0 or 1 item)</returns>
+        List<SearchResult>? FindConnection(string srcStopName, Coordinates destCoords, DateTime searchBeginTime, bool includeViableAlternatives);
     }
 }

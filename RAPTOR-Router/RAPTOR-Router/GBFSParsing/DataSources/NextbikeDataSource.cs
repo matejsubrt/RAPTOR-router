@@ -50,7 +50,7 @@ namespace RAPTOR_Router.GBFSParsing.DataSources
                     HttpResponseMessage response = client.GetAsync(stationInfoUrl).Result;
                     response.EnsureSuccessStatusCode();
 
-                    GBFSStationInfo? root = JsonSerializer.Deserialize<GBFSStationInfo>(response.Content.ReadAsStringAsync().Result);
+                    GBFSRoot? root = JsonSerializer.Deserialize<GBFSRoot>(response.Content.ReadAsStringAsync().Result);
                     if (root is null)
                     {
                         throw new InvalidOperationException("Failed to parse the response from the nextbike API");

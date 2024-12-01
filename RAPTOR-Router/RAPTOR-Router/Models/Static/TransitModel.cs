@@ -29,6 +29,7 @@ namespace RAPTOR_Router.Models.Static
         /// Constructs the RAPTOR model object from the provided GTFS object
         /// </summary>
         /// <param name="gtfs">The GTFS object containing the timetable GTFS data to be used for routing</param>
+        /// <param name="forbiddenCrossings">The list of forbidden crossing lines to take into account when loading transfers</param>
         public TransitModel(GTFS gtfs, List<ForbiddenCrossingLine> forbiddenCrossings)
         {
             LoadDataFromGtfs(gtfs, forbiddenCrossings);
@@ -37,9 +38,10 @@ namespace RAPTOR_Router.Models.Static
         /// Loads the raw gtfs date into useful structures to later be used by the router
         /// </summary>
         /// <param name="gtfs">The raw GTFS data to process</param>
+        /// <param name="forbiddenCrossings">The list of forbidden crossing lines to take into account when loading transfers</param>
         public void LoadDataFromGtfs(GTFS gtfs, List<ForbiddenCrossingLine> forbiddenCrossings)
         {
-            LoadStopsFromGtfsStops(gtfs.stops);
+            LoadStopsFromGtfsStops(gtfs.Stops);
 
             LoadRoutes(gtfs);
 
@@ -71,20 +73,20 @@ namespace RAPTOR_Router.Models.Static
         private void LoadRoutes(GTFS gtfs)
         {
             Dictionary<string, Route> uniqueRoutes = new Dictionary<string, Route>();
-            var gtfsTrips = gtfs.trips.Values;
+            var gtfsTrips = gtfs.Trips.Values;
 
             foreach (GTFSTrip gtfsTrip in gtfsTrips)
             {
                 Route route;
-                GTFSRoute gtfsRoute = gtfs.routes[gtfsTrip.RouteId];
-                GTFSCalendar gtfsCalendar = gtfs.calendars[gtfsTrip.ServiceId];
-                List<GTFSStopTime> gtfsStopTimes = gtfs.stopTimes[gtfsTrip.Id];
+                GTFSRoute gtfsRoute = gtfs.Routes[gtfsTrip.RouteId];
+                GTFSCalendar gtfsCalendar = gtfs.Calendars[gtfsTrip.ServiceId];
+                List<GTFSStopTime> gtfsStopTimes = gtfs.StopTimes[gtfsTrip.Id];
                 List<GTFSCalendarDate> gtfsCalendarDates = new List<GTFSCalendarDate>();
 
                 string tripId = gtfsTrip.Id;
-                if (gtfs.calendarDates.ContainsKey(gtfsTrip.ServiceId))
+                if (gtfs.CalendarDates.ContainsKey(gtfsTrip.ServiceId))
                 {
-                    gtfsCalendarDates = gtfs.calendarDates[gtfsTrip.ServiceId];
+                    gtfsCalendarDates = gtfs.CalendarDates[gtfsTrip.ServiceId];
                 }
 
                 //Get ids of all stops in the trip, create a unique identifier by combining the trip's routeId with its stopIds
@@ -275,8 +277,7 @@ namespace RAPTOR_Router.Models.Static
         /// <summary>
         /// Gets all the stops within the given radius of the given coordinates
         /// </summary>
-        /// <param name="lat">The latitude of the point</param>
-        /// <param name="lon">The longitude of the point</param>
+        /// <param name="coords">The coordinates at which to look for the stops</param>
         /// <param name="radius">The maximum distance of a near stop from the coordinates</param>
         /// <returns>List of all the stops within the given radius from the coordinates</returns>
         public List<Stop> GetStopsByLocation(Coordinates coords, int radius)
@@ -295,8 +296,7 @@ namespace RAPTOR_Router.Models.Static
         /// <summary>
         /// Finds out whether a stop exists within the given radius of the given coordinates
         /// </summary>
-        /// <param name="lat">The latitude of the point</param>
-        /// <param name="lon">The longitude of the point</param>
+        /// <param name="coords">The coordinates at which to find out whether a near stop exists</param>
         /// <param name="radius">The maximum distance of a near stop from the coordinates</param>
         /// <returns>Bool specifying whether a near stop exists</returns>
         public bool NearStopExists(Coordinates coords, int radius)

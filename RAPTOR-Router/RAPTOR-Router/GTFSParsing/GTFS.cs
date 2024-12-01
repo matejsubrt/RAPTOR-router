@@ -9,13 +9,34 @@ namespace RAPTOR_Router.GTFSParsing
     /// </summary>
     public class GTFS : IDisposable
     {
-        public Dictionary<string, GTFSAgency> agencies { get; private set; } = new();
-        public Dictionary<string, GTFSCalendar> calendars { get; private set; } = new();
-        public Dictionary<string, List<GTFSCalendarDate>> calendarDates { get; private set; } = new();
-        public Dictionary<string, GTFSRoute> routes { get; private set; } = new();
-        public Dictionary<string, GTFSStop> stops { get; private set; } = new();
-        public Dictionary<string, List<GTFSStopTime>> stopTimes { get; private set; } = new();
-        public Dictionary<string, GTFSTrip> trips { get; private set; } = new();
+        /// <summary>
+        /// A dictionary of all GTFS agencies within the GTFS data, indexed by their id
+        /// </summary>
+        public Dictionary<string, GTFSAgency> Agencies { get; private set; } = new();
+        /// <summary>
+        /// A dictionary of all GTFS calendars within the GTFS data, indexed by their service id
+        /// </summary>
+        public Dictionary<string, GTFSCalendar> Calendars { get; private set; } = new();
+        /// <summary>
+        /// A dictionary indexed by service ids, holding for each service the list of its GTFS calendar dates
+        /// </summary>
+        public Dictionary<string, List<GTFSCalendarDate>> CalendarDates { get; private set; } = new();
+        /// <summary>
+        /// A dictionary of all GTFS routes within the GTFS data, indexed by their id
+        /// </summary>
+        public Dictionary<string, GTFSRoute> Routes { get; private set; } = new();
+        /// <summary>
+        /// A dictionary of all GTFS stops within the GTFS data, indexed by their id
+        /// </summary>
+        public Dictionary<string, GTFSStop> Stops { get; private set; } = new();
+        /// <summary>
+        /// A dictionary indexed by trip Ids, holding for each trip the list of its GTFS stop times
+        /// </summary>
+        public Dictionary<string, List<GTFSStopTime>> StopTimes { get; private set; } = new();
+        /// <summary>
+        /// A dictionary of all GTFS trips within the GTFS data, indexed by their id
+        /// </summary>
+        public Dictionary<string, GTFSTrip> Trips { get; private set; } = new();
 
         /// <summary>
         /// Loads the agencies info from the agencies.txt GTFS file
@@ -34,7 +55,7 @@ namespace RAPTOR_Router.GTFSParsing
                 List<GTFSAgency> list = csv.GetRecords<GTFSAgency>().ToList();
                 foreach (var agency in list)
                 {
-                    agencies.Add(agency.GetId(), agency);
+                    Agencies.Add(agency.Id, agency);
                 }
             }
         }
@@ -55,7 +76,7 @@ namespace RAPTOR_Router.GTFSParsing
                 List<GTFSCalendar> list = csv.GetRecords<GTFSCalendar>().ToList();
                 foreach (var calendar in list)
                 {
-                    calendars.Add(calendar.GetId(), calendar);
+                    Calendars.Add(calendar.ServiceId, calendar);
                 }
             }
         }
@@ -76,13 +97,13 @@ namespace RAPTOR_Router.GTFSParsing
                 List<GTFSCalendarDate> list = csv.GetRecords<GTFSCalendarDate>().ToList();
                 foreach (var calendarDate in list)
                 {
-                    if (calendarDates.ContainsKey(calendarDate.GetId()))
+                    if (CalendarDates.ContainsKey(calendarDate.ServiceId))
                     {
-                        calendarDates[calendarDate.GetId()].Add(calendarDate);
+                        CalendarDates[calendarDate.ServiceId].Add(calendarDate);
                     }
                     else
                     {
-                        calendarDates.Add(calendarDate.GetId(), new List<GTFSCalendarDate> { calendarDate });
+                        CalendarDates.Add(calendarDate.ServiceId, new List<GTFSCalendarDate> { calendarDate });
                     }
                 }
             }
@@ -104,7 +125,7 @@ namespace RAPTOR_Router.GTFSParsing
                 List<GTFSRoute> list = csv.GetRecords<GTFSRoute>().ToList();
                 foreach (var route in list)
                 {
-                    routes.Add(route.GetId(), route);
+                    Routes.Add(route.Id, route);
                 }
             }
         }
@@ -128,7 +149,7 @@ namespace RAPTOR_Router.GTFSParsing
                     //virtual stops for trains, where the trains do not stop are present in the file
                     if (stop.Id[0] != 'T')
                     {
-                        stops.Add(stop.GetId(), stop);
+                        Stops.Add(stop.Id, stop);
                     }
                 }
             }
@@ -150,14 +171,14 @@ namespace RAPTOR_Router.GTFSParsing
                 List<GTFSStopTime> list = csv.GetRecords<GTFSStopTime>().ToList();
                 foreach (var stopTime in list)
                 {
-                    string tripId = stopTime.GetId();
-                    if (stopTimes.ContainsKey(tripId) && stopTime.StopId[0] != 'T')
+                    string tripId = stopTime.TripId;
+                    if (StopTimes.ContainsKey(tripId) && stopTime.StopId[0] != 'T')
                     {
-                        stopTimes[tripId].Add(stopTime);
+                        StopTimes[tripId].Add(stopTime);
                     }
                     else if (stopTime.StopId[0]!= 'T')
                     {
-                        stopTimes.Add(tripId, new List<GTFSStopTime> { stopTime });
+                        StopTimes.Add(tripId, new List<GTFSStopTime> { stopTime });
                     }
                 }
             }
@@ -179,7 +200,7 @@ namespace RAPTOR_Router.GTFSParsing
                 List<GTFSTrip> list = csv.GetRecords<GTFSTrip>().ToList();
                 foreach (var trip in list)
                 {
-                    trips.Add(trip.GetId(), trip);
+                    Trips.Add(trip.Id, trip);
                 }
             }
         }
@@ -209,13 +230,13 @@ namespace RAPTOR_Router.GTFSParsing
         public void Dispose()
         {
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
-            stops = null;
-            calendars = null;
-            routes = null;
-            stopTimes = null;
-            trips = null;
-            calendarDates = null;
-            agencies = null;
+            Stops = null;
+            Calendars = null;
+            Routes = null;
+            StopTimes = null;
+            Trips = null;
+            CalendarDates = null;
+            Agencies = null;
 #pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
         }
     }

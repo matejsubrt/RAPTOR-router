@@ -5,6 +5,9 @@
     /// </summary>
     public interface IIdentifiable
     {
-        public string GetId();
+        /// <summary>
+        /// The unique string id of the object
+        /// </summary>
+        public string Id { get; }
     }
 }

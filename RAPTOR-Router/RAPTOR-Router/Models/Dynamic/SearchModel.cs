@@ -637,6 +637,7 @@ namespace RAPTOR_Router.Models.Dynamic
         /// <param name="stop">The stop to try to improve reach time at</param>
         /// <param name="reachTime">The reach time at the stop using the trip</param>
         /// <param name="trip">The trip to try improving with</param>
+        /// <param name="tripDate">The start date of the trip</param>
         /// <param name="reachedFromStop">The stop from which the trip was taken (i.e. where it is boarded for forward or exited for backward search)</param>
         /// <param name="round">The round in which we are improving</param>
         /// <returns>Whether the reach time was improved</returns>
@@ -884,6 +885,7 @@ namespace RAPTOR_Router.Models.Dynamic
         /// </summary>
         /// <param name="stop">The stop to which the reach is being set</param>
         /// <param name="trip">The trip to be taken to the stop</param>
+        /// <param name="tripDate">The start date of the trip</param>
         /// <param name="otherEndStop">The stop at which the trip was reached during the search (get on/off stop)</param>
         /// <param name="reachTime">The time at which the trip reaches the stop</param>
         /// <param name="round">The round in which to set the reach</param>

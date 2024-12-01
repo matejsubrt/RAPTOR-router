@@ -9,17 +9,17 @@ namespace RAPTOR_Router.Structures.Requests
 {
     public class AlternativeTripsRequest
     {
-        public string? srcStopId { get; set; }
-        public string? destStopId { get; set; }
-        public DateTime? dateTime { get; set; }
-        public bool previous { get; set; }
-        public int count { get; set; }
-        public string tripId { get; set; }
+        public required string srcStopId { get; set; }
+        public required string destStopId { get; set; }
+        public required DateTime dateTime { get; set; }
+        public required bool previous { get; set; }
+        public required int count { get; set; }
+        public required string tripId { get; set; }
 
 
         public AlternativesSearchError Validate(TransitModel transitModel)
         {
-            if (dateTime is null)
+            if (dateTime < DateTime.Now.AddDays(-14) || dateTime > DateTime.Now.AddDays(14))
             {
                 return AlternativesSearchError.InvalidDateTime;
             }

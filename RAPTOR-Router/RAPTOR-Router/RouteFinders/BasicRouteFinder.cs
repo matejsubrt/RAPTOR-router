@@ -128,9 +128,11 @@ namespace RAPTOR_Router.RouteFinders
         /// <summary>
         /// Creates a new BasicRouter object
         /// </summary>
+        /// <param name="forward">Whether the search is forward or backward</param>
         /// <param name="settings">The settings to be used for the connection search</param>
         /// <param name="transitModel">The transit model holding all the static information about the transit network</param>
         /// <param name="bikeModel">The bike model holding all the information about the shared bike systems and their stations</param>
+        /// <param name="delayModel">The delay model holding all the current delay data for all active trips</param>
         internal BasicRouteFinder(bool forward, Settings settings, TransitModel transitModel, BikeModel bikeModel, DelayModel delayModel)
         {
             this.settings = settings;
@@ -577,6 +579,8 @@ namespace RAPTOR_Router.RouteFinders
         /// <summary>
         /// Takes all the stops that have been improved in current round and tries to improve all their neighbors by transfers
         /// </summary>
+        /// <param name="useSharedBikes">Whether the search should consider shared bikes</param>
+        /// <param name="onlyFromStops">Whether to only use transfers from stops</param>
         /// <param name="DoNotImproveToRoutePoint">To be used when the destination is a custom RoutePoint - in that case, its near stops (from which it can be accessed by foot) may NOT also be accessed by foot</param>
         private void ImproveByTransfers(bool useSharedBikes, bool onlyFromStops = false, Func<IRoutePoint, bool>? DoNotImproveToRoutePoint = null)
         {
@@ -866,24 +870,6 @@ namespace RAPTOR_Router.RouteFinders
             }
         }
 
-        //private SearchResult? FindConnection(
-        //    List<Stop> srcStops, List<BikeStation> srcBikeStations,
-        //    List<Stop> destStops, List<BikeStation> destBikeStations, 
-        //    DateTime searchBeginTime, bool srcByCoord, bool destByCoord,
-        //    Coordinates srcCoords, Coordinates destCoords,
-        //    bool allowViableALternatives)
-        //{
-        //    if (RunRAPTOR(srcStops, srcBikeStations, destStops, destBikeStations, searchBeginTime, srcByCoord,
-        //            destByCoord, srcCoords, destCoords))
-        //    {
-        //        return searchModel.ExtractResult(bikeModel);
-        //    }
-        //    else
-        //    {
-        //        return null;
-        //    }
-        //}
-
         private List<SearchResult>? FindConnection(
             List<Stop> srcStops, List<BikeStation> srcBikeStations, 
             List<Stop> destStops, List<BikeStation> destBikeStations,
@@ -917,21 +903,41 @@ namespace RAPTOR_Router.RouteFinders
             }
         }
 
-        public List<SearchResult>? FindConnection(string sourceStop, string destStop, DateTime departureTime, bool allowViableAlternatives)
+
+
+
+        /// <summary>
+        /// Finds the best connection(s) between the 2 stops using their names
+        /// </summary>
+        /// <param name="srcStopName">The name of the source stop (exact)</param>
+        /// <param name="destStopName">The name of the destination stop (exact)</param>
+        /// <param name="searchBeginTime">The time at which the search starts (i.e. departure time if this is a forward search, arrival date otherwise</param>
+        /// <param name="allowViableAlternatives">Whether to also include connections with different number of trips than the best one found, assuming they do not differ much in quality.</param>
+        /// <returns>The list of best found connections (if allowViableAlternatives is false, only contains 0 or 1 item)</returns>
+        public List<SearchResult>? FindConnection(string srcStopName, string destStopName, DateTime searchBeginTime, bool allowViableAlternatives)
         {
-            if (sourceStop == destStop)
+            if (srcStopName == destStopName)
             {
                 return null;
             }
-            List<Stop> srcStops = transitModel.GetStopsByName(sourceStop);
-            List<Stop> destStops = transitModel.GetStopsByName(destStop);
+            List<Stop> srcStops = transitModel.GetStopsByName(srcStopName);
+            List<Stop> destStops = transitModel.GetStopsByName(destStopName);
             List<BikeStation> srcBikeStations = new List<BikeStation>();
             List<BikeStation> destBikeStations = new List<BikeStation>();
-            return FindConnection(srcStops, srcBikeStations, destStops, destBikeStations, departureTime, false, false, default, default, allowViableAlternatives);
+            return FindConnection(srcStops, srcBikeStations, destStops, destBikeStations, searchBeginTime, false, false, default, default, allowViableAlternatives);
         }
 
 
-        public List<SearchResult>? FindConnection(Coordinates srcCoords, Coordinates destCoords, DateTime dateTime, bool allowViableAlternatives)
+
+        /// <summary>
+        /// Finds the best connection(s) between the 2 coordinate points
+        /// </summary>
+        /// <param name="srcCoords">The source point coordinates</param>
+        /// <param name="destCoords">The destination point coordinates</param>
+        /// <param name="searchBeginTime">The time at which the search starts (i.e. departure time if this is a forward search, arrival date otherwise</param>
+        /// <param name="allowViableAlternatives">Whether to also include connections with different number of trips than the best one found, assuming they do not differ much in quality.</param>
+        /// <returns>The list of best found connections (if allowViableAlternatives is false, only contains 0 or 1 item)</returns>
+        public List<SearchResult>? FindConnection(Coordinates srcCoords, Coordinates destCoords, DateTime searchBeginTime, bool allowViableAlternatives)
         {
             if (srcCoords == destCoords)
             {
@@ -942,66 +948,49 @@ namespace RAPTOR_Router.RouteFinders
             List<Stop> destStops = transitModel.GetStopsByLocation(destCoords, settings.GetMaxTransferDistance());
             List<BikeStation> srcBikeStations = bikeModel.GetNearStations(srcCoords, settings.GetMaxTransferDistance());
             List<BikeStation> destBikeStations = bikeModel.GetNearStations(destCoords, settings.GetMaxTransferDistance());
-            return FindConnection(srcStops, srcBikeStations, destStops, destBikeStations, dateTime, true, true, srcCoords, destCoords, allowViableAlternatives);
+            return FindConnection(srcStops, srcBikeStations, destStops, destBikeStations, searchBeginTime, true, true, srcCoords, destCoords, allowViableAlternatives);
         }
 
-        public List<SearchResult>? FindConnection(Coordinates srcCoords, string destStopName, DateTime dateTime, bool allowViableAlternatives)
+        /// <summary>
+        /// Finds the best connection(s) from the source coordinates to the destination stop with the given name
+        /// </summary>
+        /// <param name="srcCoords">The source point coordinates</param>
+        /// <param name="destStopName">The destination stop name (exact)</param>
+        /// <param name="searchBeginTime">The time at which the search starts (i.e. departure time if this is a forward search, arrival date otherwise</param>
+        /// <param name="allowViableAlternatives">Whether to also include connections with different number of trips than the best one found, assuming they do not differ much in quality.</param>
+        /// <returns>The list of best found connections (if allowViableAlternatives is false, only contains 0 or 1 item)</returns>
+        public List<SearchResult>? FindConnection(Coordinates srcCoords, string destStopName, DateTime searchBeginTime, bool allowViableAlternatives)
         {
             List<Stop> srcStops = transitModel.GetStopsByLocation(srcCoords, settings.GetMaxTransferDistance());
             List<Stop> destStops = transitModel.GetStopsByName(destStopName);
             List<BikeStation> srcBikeStations = bikeModel.GetNearStations(srcCoords, settings.GetMaxTransferDistance());
             List<BikeStation> destBikeStations = new List<BikeStation>();
-            return FindConnection(srcStops, srcBikeStations, destStops, destBikeStations, dateTime, true, false, srcCoords, default, allowViableAlternatives);
+            return FindConnection(srcStops, srcBikeStations, destStops, destBikeStations, searchBeginTime, true, false, srcCoords, default, allowViableAlternatives);
         }
 
-        public List<SearchResult>? FindConnection(string sourceStopName, Coordinates destCoords, DateTime dateTime, bool allowViableAlternatives)
+        /// <summary>
+        /// Finds the best connection(s) from the source stop with the given name to the destination coordinates
+        /// </summary>
+        /// <param name="srcStopName">The source stop name (exact)</param>
+        /// <param name="destCoords">The destination point coordinates</param>
+        /// <param name="searchBeginTime">The time at which the search starts (i.e. departure time if this is a forward search, arrival date otherwise</param>
+        /// <param name="allowViableAlternatives">Whether to also include connections with different number of trips than the best one found, assuming they do not differ much in quality.</param>
+        /// <returns>The list of best found connections (if allowViableAlternatives is false, only contains 0 or 1 item)</returns>
+        public List<SearchResult>? FindConnection(string srcStopName, Coordinates destCoords, DateTime searchBeginTime, bool allowViableAlternatives)
         {
-            List<Stop> srcStops = transitModel.GetStopsByName(sourceStopName);
+            List<Stop> srcStops = transitModel.GetStopsByName(srcStopName);
             List<Stop> destStops = transitModel.GetStopsByLocation(destCoords, settings.GetMaxTransferDistance());
             List<BikeStation> srcBikeStations = new List<BikeStation>();
             List<BikeStation> destBikeStations = bikeModel.GetNearStations(destCoords, settings.GetMaxTransferDistance());
-            return FindConnection(srcStops, srcBikeStations, destStops, destBikeStations, dateTime, false, true, default, destCoords, allowViableAlternatives);
+            return FindConnection(srcStops, srcBikeStations, destStops, destBikeStations, searchBeginTime, false, true, default, destCoords, allowViableAlternatives);
         }
 
 
-        ///// <summary>
-        ///// Finds the connection with the earliest arrival to a destination stop with the provided name, that departs from the source stop after the specified time.
-        ///// </summary>
-        ///// <param name="sourceStop">The exact name of the source stop</param>
-        ///// <param name="destStop">The exact name of the destination stop</param>
-        ///// <param name="departureTime">The departure date and time</param>
-        ///// <returns>The result of the search, null if no conection could be found.</returns>
-        //public SearchResult? FindConnection(string sourceStop, string destStop, DateTime departureTime)
-        //{
-        //    if (sourceStop == destStop)
-        //    {
-        //        return null;
-        //    }
-        //    List<Stop> srcStops = transitModel.GetStopsByName(sourceStop);
-        //    List<Stop> destStops = transitModel.GetStopsByName(destStop);
-        //    List<BikeStation> srcBikeStations = new List<BikeStation>();
-        //    List<BikeStation> destBikeStations = new List<BikeStation>();
-        //    return FindConnection(srcStops, srcBikeStations, destStops, destBikeStations, departureTime, false, false);
-        //}
-
-        ///// <summary>
-        ///// Finds the connection with the earliest arrival to the destination custom route point, that departs from the source custom route point after the specified time.
-        ///// </summary>
-        ///// <remarks>Used for searches by coordinates</remarks>
-        ///// <param name="srcLat">The latitude of the source point</param>
-        ///// <param name="srcLon">The longitude of the source point</param>
-        ///// <param name="destLat">The latitude of the destination point</param>
-        ///// <param name="destLon">The longitude of the destination point</param>
-        ///// <param name="departureTime">The arrival date and time</param>
-        ///// <returns>The result of the search, null if no conection could be found.</returns>
-        //public SearchResult? FindConnection(double srcLat, double srcLon, double destLat, double destLon, DateTime departureTime)
-        //{
-        //    var (srcStops, srcBikeStations) = GetNearRoutePoints(srcLat, srcLon);
-        //    var (destStops, destBikeStations) = GetNearRoutePoints(destLat, destLon);
-        //    return FindConnection(srcStops, srcBikeStations, destStops, destBikeStations, departureTime, true, true, new Coordinates(srcLat, srcLon), new Coordinates(destLat, destLon));
-
-        //}
-
+        /// <summary>
+        /// Finds the best connections using the given request
+        /// </summary>
+        /// <param name="request">The connection request object</param>
+        /// <returns>The complete connection request response object (including the error type if an error occurs)</returns>
         public ConnectionApiResponseResult FindConnection(ConnectionRequest request)
         {
             ConnectionApiResponseResult apiResponseResult = new();

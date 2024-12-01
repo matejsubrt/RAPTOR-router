@@ -121,31 +121,6 @@ namespace RAPTOR_Router.RouteFinders
         /// <summary>
         /// Gets the list of alternative trips between two stops
         /// </summary>
-        /// <param name="srcStopName">The name of the source stop</param>
-        /// <param name="destStopName">The name of the destination stop</param>
-        /// <param name="time">The time</param>
-        /// <param name="count">The count of alternative trips to find</param>
-        /// <param name="previous">Whether we are looking for trips departing before the dateTime or later</param>
-        /// <returns></returns>
-        //public List<SearchResult.UsedTrip>? GetAlternativeTripe(string srcStopName, string destStopName, DateTime time,
-        //    int count, bool previous)
-        //{
-        //    List<Stop> srcStops = transitModel.GetStopsByName(srcStopName);
-        //    List<Stop> destStops = transitModel.GetStopsByName(destStopName);
-
-        //    if (srcStops.Count == 0 || destStops.Count == 0)
-        //    {
-        //        return null;
-        //    }
-
-        //    Stop srcStop = srcStops.First();
-        //    Stop destStop = destStops.First();
-        //    return GetAlternativeTrips(srcStop.Id, destStop.Id, time, count, previous);
-        //}
-
-        /// <summary>
-        /// Gets the list of alternative trips between two stops
-        /// </summary>
         /// <param name="request">The alternative trips request to respond to</param>
         /// <returns>The result of the search</returns>
         public AlternativeTripsApiResponseResult GetAlternativeTrips(AlternativeTripsRequest request)
@@ -159,7 +134,7 @@ namespace RAPTOR_Router.RouteFinders
                 return result;
             }
 
-            List<SearchResult.UsedTrip>? alternativeTrips = GetAlternativeTrips(request.srcStopId!, request.destStopId!, request.dateTime!.Value, request.count, request.previous, request.tripId);
+            List<SearchResult.UsedTrip>? alternativeTrips = GetAlternativeTripsList(request);
 
             if (alternativeTrips is null || alternativeTrips.Count == 0)
             {
@@ -177,16 +152,12 @@ namespace RAPTOR_Router.RouteFinders
         /// <summary>
         /// Gets the list of alternative trips between two stops
         /// </summary>
-        /// <param name="srcStopId">The ID of the source stop</param>
-        /// <param name="destStopId">The ID of the destination stop</param>
-        /// <param name="time">The time</param>
-        /// <param name="count">The count of trips to find</param>
-        /// <param name="previous">Whether to look for trips departing before or after te time</param>
+        /// <param name="request">The alternative trips request object</param>
         /// <returns>The list of alternative trips</returns>
-        private List<SearchResult.UsedTrip>? GetAlternativeTrips(string srcStopId, string destStopId, DateTime time, int count, bool previous, string tripId)
+        private List<SearchResult.UsedTrip>? GetAlternativeTripsList(AlternativeTripsRequest request)
         {
-            Stop srcStop = transitModel.stops[srcStopId];
-            Stop destStop = transitModel.stops[destStopId];
+            Stop srcStop = transitModel.stops[request.srcStopId];
+            Stop destStop = transitModel.stops[request.destStopId];
 
             // Get all stops that are alternatives to the source and destination stops
             // i.e. stops with the same name and stops within 150m
@@ -203,7 +174,7 @@ namespace RAPTOR_Router.RouteFinders
             // find its <count> best connecting alternative trips
             SortedSet<AlternativeEntry> sortedTrips = GetSortedConnectingTrips();
 
-            if (!previous)
+            if (!request.previous)
             {
                 RemoveIdenticalTrips();
             }
@@ -379,12 +350,12 @@ namespace RAPTOR_Router.RouteFinders
                     Stop srcStop1 = route.RouteStops[srcIndex];
 
                     //TODO: check if the trip should be included in the result or not - probably yes unless it is the one we are searching for alternatives for
-                    Trip? firstTripDepartingAfterTime = route.GetEarliestTripDepartingAfterTimeAtStop(srcStop1, time, delayModel, out DateOnly tripDate);
+                    Trip? firstTripDepartingAfterTime = route.GetEarliestTripDepartingAfterTimeAtStop(srcStop1, request.dateTime, delayModel, out DateOnly tripDate);
                     if (firstTripDepartingAfterTime is null)
                     {
                         continue;
                     }
-                    List<Tuple<DateOnly, Trip>> alternativeTrips = GetAlternativeTripsOnRoute(firstTripDepartingAfterTime, tripDate, count, previous);
+                    List<Tuple<DateOnly, Trip>> alternativeTrips = GetAlternativeTripsOnRoute(firstTripDepartingAfterTime, tripDate, request.count, request.previous);
 
                     foreach (var (altTripDate, altTrip) in alternativeTrips)
                     {
@@ -422,7 +393,7 @@ namespace RAPTOR_Router.RouteFinders
                 {
                     delayModel.TryGetDelay(trip.tripDate, trip.altTrip.Id, trip.srcIndex, out int arrivalDelay, out int departureDelay);
 
-                    if (trip.altTrip.GetDepartureDateTime(trip.srcIndex, trip.tripDate).AddSeconds(departureDelay) <= time || tripId == trip.altTrip.Id)
+                    if (trip.altTrip.GetDepartureDateTime(trip.srcIndex, trip.tripDate).AddSeconds(departureDelay) <= request.dateTime || request.tripId == trip.altTrip.Id)
                     {
                         itemsToRemove.Add(trip);
                     }
@@ -459,16 +430,16 @@ namespace RAPTOR_Router.RouteFinders
             List<AlternativeEntry> GetBestConnectingTrips()
             {
                 List<AlternativeEntry> resultTrips = new();
-                if (previous)
+                if (request.previous)
                 {
-                    foreach (var item in sortedTrips.Skip(sortedTrips.Count - count))
+                    foreach (var item in sortedTrips.Skip(sortedTrips.Count - request.count))
                     {
                         resultTrips.Add(item);
                     }
                 }
                 else
                 {
-                    foreach (var item in sortedTrips.Take(count))
+                    foreach (var item in sortedTrips.Take(request.count))
                     {
                         resultTrips.Add(item);
                     }
@@ -494,9 +465,25 @@ namespace RAPTOR_Router.RouteFinders
                     List<SearchResult.StopPass> stopsPasses =
                         SearchResult.GetStopPassesList(trip.Route.RouteStops, trip.StopTimes, tripDate);
 
-                    SearchResult.UsedTrip usedTrip = new SearchResult.UsedTrip(stopsPasses, srcIndex, destIndex,
+                    SearchResult.UsedTrip usedTrip = new SearchResult.UsedTrip
+                    {
+                        stopPasses = stopsPasses,
+                        getOnStopIndex = srcIndex,
+                        getOffStopIndex = destIndex,
+                        routeName = trip.Route.ShortName,
+                        color = trip.Route.Color,
+                        vehicleType = trip.Route.Type,
+                        hasDelayInfo = hasDelayData,
+                        delayWhenBoarded = srcDepDelay,
+                        currentDelay = currDelay,
+                        tripId = trip.Id
+                    };
+
+
+
+                    /*(stopsPasses, srcIndex, destIndex,
                         trip.Route.ShortName, trip.Route.Color, trip.Route.Type, hasDelayData, srcDepDelay, currDelay, trip.Id);
-                    result.Add(usedTrip);
+                    result.Add(usedTrip);*/
                 }
 
                 return result;

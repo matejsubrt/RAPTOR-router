@@ -150,6 +150,7 @@ namespace RAPTOR_Router.RouteFinders
         /// Parses the provided gtfs zip archive and creates a data model for the connection searches to use
         /// </summary>
         /// <param name="gtfsZipArchiveLocation">The location of the zip gtfs archive</param>
+        /// <param name="forbiddenCrossings">The list of lines forbidden to cross via a transfer</param>
         private static void LoadGtfsData(string gtfsZipArchiveLocation, List<ForbiddenCrossingLine> forbiddenCrossings)
         {
             TransitModel raptor;
@@ -303,7 +304,12 @@ namespace RAPTOR_Router.RouteFinders
             ValidateDelayModelLoaded();
         }
 
-
+        /// <summary>
+        /// Creates a routing provider that can be provided to a range route finder to provide its basic routing functionality
+        /// </summary>
+        /// <param name="forward">Whether it will be used to run forward or backward searches</param>
+        /// <param name="settings">The settings to use for the searches</param>
+        /// <returns>The created routing provider</returns>
         public static ISimpleRoutingProvider CreateRoutingProvider(bool forward, Settings settings)
         {
             ValidateModelsLoaded();
@@ -312,6 +318,12 @@ namespace RAPTOR_Router.RouteFinders
             return router;
         }
 
+        /// <summary>
+        /// Creates a simple route finder that can be used to find a single connection between two points
+        /// </summary>
+        /// <param name="forward">Whether it will be used to run forward or backward searches</param>
+        /// <param name="settings">The settings to use for the searches</param>
+        /// <returns>The created simple route finder</returns>
         public static ISimpleRouteFinder CreateSimpleRouteFinder(bool forward, Settings settings)
         {
             ValidateModelsLoaded();
@@ -320,6 +332,10 @@ namespace RAPTOR_Router.RouteFinders
             return router;
         }
 
+        /// <summary>
+        /// Creates an alternatives route finder that can be used to find alternative (earlier/later) direct trips between 2 points
+        /// </summary>
+        /// <returns>The created alternatives route finder</returns>
         public static AlternativesRouteFinder CreateDirectRouteFinder()
         {
             ValidateTransitModelLoaded();
@@ -329,14 +345,24 @@ namespace RAPTOR_Router.RouteFinders
             return router;
         }
 
-        public static RangeRouteFinder CreateRangeRouteFinder(bool forward, Settings settings)
+        /// <summary>
+        /// Creates a range route finder that can be used to find the best connections between two points within a certain time range
+        /// </summary>
+        /// <param name="forward">Whether it will be used to run forward or backward searches</param>
+        /// <param name="settings">The settings to use for the searches</param>
+        /// <returns>The created range route finder</returns>
+        public static IRangeRouteFinder CreateRangeRouteFinder(bool forward, Settings settings)
         {
             ValidateModelsLoaded();
 
-            RangeRouteFinder router = new RangeRouteFinder(forward, settings, transitModel!, bikeModel!, delayModel!);
+            IRangeRouteFinder router = new RangeRouteFinder(forward, settings, transitModel!, bikeModel!, delayModel!);
             return router;
         }
 
+        /// <summary>
+        /// Creates a delay updater that can be used to update the delay data of existing search results
+        /// </summary>
+        /// <returns>The created delay updater</returns>
         public static DelayUpdater CreateDelayUpdater()
         {
             ValidateTransitModelLoaded();

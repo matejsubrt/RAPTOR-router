@@ -1,4 +1,4 @@
-﻿#define SEQUENTIAL
+﻿//#define SEQUENTIAL
 
 
 using RAPTOR_Router.Extensions;
@@ -23,6 +23,9 @@ using RAPTOR_Router.Structures.Transit;
 
 namespace RAPTOR_Router.RouteFinders
 {
+    /// <summary>
+    /// A route finder that finds a set of the best connections within a given time range
+    /// </summary>
     public class RangeRouteFinder : IRangeRouteFinder
     {
         /// <summary>
@@ -66,6 +69,7 @@ namespace RAPTOR_Router.RouteFinders
         /// <param name="forward">Whether the search is run forward or backward in time</param>
         /// <param name="settings">The settings to be used for the connection search</param>
         /// <param name="transitModel">The transit model holding all the static information about the transit network</param>
+        /// <param name="bikeModel">The bike model holding the bike data</param>
         /// <param name="delayModel">The delay model holding the current delay information</param>
         internal RangeRouteFinder(bool forward, Settings settings, TransitModel transitModel, BikeModel bikeModel, DelayModel delayModel)
         {
@@ -227,14 +231,18 @@ namespace RAPTOR_Router.RouteFinders
         }*/
 
         
-
+        /// <summary>
+        /// Finds the best connections within a given time range
+        /// </summary>
+        /// <param name="request">The connection request object</param>
+        /// <returns>The connection request response, including the error data if there was an error</returns>
         public async Task<ConnectionApiResponseResult> FindConnectionsAsync(
             ConnectionRequest request
         )
         {
             ConnectionApiResponseResult apiResponseResult = new();
 
-            var error = request.Validate(transitModel, bikeModel);//ValidateRequest(request);
+            var error = request.Validate(transitModel, bikeModel);
 
             if(error != ConnectionSearchError.NoError)
             {

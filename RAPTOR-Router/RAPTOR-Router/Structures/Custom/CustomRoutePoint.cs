@@ -31,6 +31,9 @@ namespace RAPTOR_Router.Structures.Custom
         /// </summary>
         public List<CustomTransfer> possibleTransfers { get; private set; } = new();
 
+        /// <summary>
+        /// Dictionary containing the distances to all other route points reachable from this route point via a transfer
+        /// </summary>
         public Dictionary<IRoutePoint, int> transferDistances { get; private set; } = new();
 
         /// <summary>

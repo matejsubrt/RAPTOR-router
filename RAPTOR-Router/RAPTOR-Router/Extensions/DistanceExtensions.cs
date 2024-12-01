@@ -94,8 +94,11 @@ namespace RAPTOR_Router.Extensions
         /// <summary>
         /// Calculates whether two RoutePoints are too far apart in one direction (N/S or E/W) to be worth calculating the real distance
         /// </summary>
+        /// <param name="rp1">The first route point</param>
+        /// <param name="rp2">The second route point</param>
         /// <param name="maxMeters">The maximal number of meters to not be too far apart.</param>
         /// <returns>Bool specifying whether the two points are further apart than maxMeters</returns>
+        /// <remarks>Uses simplified distance calculation, only works reliably near Prague.</remarks>
         public static bool TooFarInOneDirection(IRoutePoint rp1, IRoutePoint rp2, int maxMeters)
         {
             return TooFarInOneDirection(rp1.Coords.Lat, rp1.Coords.Lon, rp2.Coords.Lat, rp2.Coords.Lon, maxMeters);
@@ -103,8 +106,11 @@ namespace RAPTOR_Router.Extensions
         /// <summary>
         /// Calculates whether two GPS coordinates are too far apart in one direction (N/S or E/W) to be worth calculating the real distance
         /// </summary>
+        /// <param name="c1">The first coordinates</param>
+        /// <param name="c2">The first coordinates</param>
         /// <param name="maxMeters">The maximal number of meters to not be too far apart.</param>
         /// <returns>Bool specifying whether the two points are further apart than maxMeters</returns>
+        /// <remarks>Uses simplified distance calculation, only works reliably near Prague.</remarks>
         public static bool TooFarInOneDirection(Coordinates c1, Coordinates c2, int maxMeters)
         {
             return TooFarInOneDirection(c1.Lat, c1.Lon, c2.Lat, c2.Lon, maxMeters);

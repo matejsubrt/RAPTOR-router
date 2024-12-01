@@ -56,6 +56,10 @@ namespace RAPTOR_Router.Structures.Bike
             LocalId = localId;
         }
 
+        /// <summary>
+        /// Returns a string representation of the bike station
+        /// </summary>
+        /// <returns>The string representation of the bike station</returns>
         public override string ToString()
         {
             return Name + ": BikeCount = " + BikeCount;

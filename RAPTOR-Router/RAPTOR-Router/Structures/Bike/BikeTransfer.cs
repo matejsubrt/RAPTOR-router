@@ -63,6 +63,11 @@ namespace RAPTOR_Router.Structures.Bike
             To = stop;
             Distance = dist;
         }
+
+        /// <summary>
+        /// Returns a string representation of the bike transfer
+        /// </summary>
+        /// <returns>A string representation of the bike transfer</returns>
         public override string ToString()
         {
             return "Transfer from " + From.Name + " to " + To.Name;

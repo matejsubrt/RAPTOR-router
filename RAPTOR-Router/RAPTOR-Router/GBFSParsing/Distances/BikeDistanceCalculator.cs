@@ -13,9 +13,21 @@ namespace RAPTOR_Router.GBFSParsing.Distances
     /// </summary>
     public enum ErrorType
     {
+        /// <summary>
+        /// No error occurred
+        /// </summary>
         NO_ERROR,
+        /// <summary>
+        /// The start point could not be resolved
+        /// </summary>
         START_RESOLVE_ERROR,
+        /// <summary>
+        /// The end point could not be resolved
+        /// </summary>
         END_RESOLVE_ERROR,
+        /// <summary>
+        /// The route between the two points could not be calculated
+        /// </summary>
         ROUTE_CALCULATION_ERROR
     }
 

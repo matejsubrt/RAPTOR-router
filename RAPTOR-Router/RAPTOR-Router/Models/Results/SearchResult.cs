@@ -134,18 +134,19 @@ namespace RAPTOR_Router.Models.Results
 
             List<StopPass> stopPasses = GetStopPassesList(routeStops, trip.StopTimes, tripStartDate);
 
-            UsedTrip usedTrip = new UsedTrip(
-                stopPasses,
-                getOnStopIndex,
-                getOffStopIndex,
-                trip.Route.ShortName,
-                trip.Route.Color,
-                trip.Route.Type,
-                hasDelayInfo,
-                delayWhenBoarded,
-                currentDelay,
-                trip.Id);
-
+            UsedTrip usedTrip = new UsedTrip
+            {
+                stopPasses = stopPasses,
+                getOnStopIndex = getOnStopIndex,
+                getOffStopIndex = getOffStopIndex,
+                routeName = trip.Route.ShortName,
+                color = trip.Route.Color,
+                vehicleType = trip.Route.Type,
+                hasDelayInfo = hasDelayInfo,
+                delayWhenBoarded = delayWhenBoarded,
+                currentDelay = currentDelay,
+                tripId = trip.Id
+            };
 
             if (toEnd)
             {
@@ -243,13 +244,15 @@ namespace RAPTOR_Router.Models.Results
         {
             RoutePointInfo srcStopInfo = new(from.Name, from.Id, from.Coords.Lat, from.Coords.Lon);
             RoutePointInfo destStopInfo = new(to.Name, to.Id, to.Coords.Lat, to.Coords.Lon);
-            UsedBikeTrip usedBikeTrip = new UsedBikeTrip(
-                srcStopInfo,
-                destStopInfo,
-                distance,
-                usedSettings.GetBikeTripTime(distance),
-                from.BikeCount
-            );
+            UsedBikeTrip usedBikeTrip = new UsedBikeTrip
+            {
+                srcStopInfo = srcStopInfo,
+                destStopInfo = destStopInfo,
+                distance = distance,
+                time = usedSettings.GetBikeTripTime(distance),
+                remainingBikes = from.BikeCount
+            };
+
             if (toEnd)
             {
                 UsedBikeTrips.Add(usedBikeTrip);
@@ -655,45 +658,54 @@ namespace RAPTOR_Router.Models.Results
             /// The list of the stop passes of the trip
             /// </summary>
             [JsonInclude]
-            public List<StopPass> stopPasses = new List<StopPass>();
+            public required List<StopPass> stopPasses = new List<StopPass>();
+
             /// <summary>
             /// The index of the stop where the trip is boarded
             /// </summary>
             [JsonInclude]
-            public int getOnStopIndex { get; set; }
+            public required int getOnStopIndex { get; set; }
+
             /// <summary>
             /// The index of the stop where the trip is gotten out of
             /// </summary>
             [JsonInclude]
-            public int getOffStopIndex { get; set; }
+            public required int getOffStopIndex { get; set; }
+
             /// <summary>
             /// The name (i.e. the headsign) of the route of the trip
             /// </summary>
             [JsonInclude]
-            public string routeName { get; set; }
+            public required string routeName { get; set; }
+
             /// <summary>
             /// The color of the trip's route
             /// </summary>
             [JsonInclude]
-            public Color color { get; set; }
+            public required Color color { get; set; }
+
             /// <summary>
             /// The vehicle type of the trip
             /// </summary>
             [JsonInclude]
-            public VehicleType vehicleType { get; set; }
+            public required VehicleType vehicleType { get; set; }
+
+
             /// <summary>
             /// Whether the trip has current delay information available (i.e. this typically 
             /// means the trip is en-route, or will be in the soon future)
             /// </summary>
             [JsonInclude]
-            public bool hasDelayInfo { get; set; }
+            public required bool hasDelayInfo { get; set; }
+
             /// <summary>
             /// The delay of the trip at the getOnStop - this can either mean the expected delay 
             /// there (if the trip has not yet arrived there), or the actual delay at that stop 
             /// (if the trip has already been there)
             /// </summary>
             [JsonInclude]
-            public int delayWhenBoarded { get; set; }
+            public required int delayWhenBoarded { get; set; }
+
             /// <summary>
             /// The delay of the trip at the moment of the search. This can be different from 
             /// delayWhenBoarded if the connection is (partly) in the past - i.e. the trip has 
@@ -702,46 +714,14 @@ namespace RAPTOR_Router.Models.Results
             /// the client will update this value as time progresses using the TODO: API delay update endpoint
             /// </summary>
             [JsonInclude]
-            public int currentDelay { get; set; }
+            public required int currentDelay { get; set; }
+
             /// <summary>
             /// The trip Id of the associated trip
             /// </summary>
             [JsonInclude]
-            public string tripId { get; set; }
+            public required string tripId { get; set; }
 
-
-            /// <summary>
-            /// Creates a new UsedTrip object
-            /// </summary>
-            /// <param name="stopPasses">The list of stop passes of the trip</param>
-            /// <param name="getOnStopIndex">The index of the stop where the trip is boarded</param>
-            /// <param name="getOffStopIndex">The index of the stop where the trip is exited</param>
-            /// <param name="routeName">The name of the trip's route</param>
-            /// <param name="color">The color of the trip's route</param>
-            public UsedTrip(
-                List<StopPass> stopPasses,
-                int getOnStopIndex,
-                int getOffStopIndex,
-                string routeName,
-                Color color,
-                VehicleType vehicleType,
-                bool hasDelayInfo,
-                int delayWhenBoarded,
-                int currentDelay,
-                string tripId
-            )
-            {
-                this.stopPasses = stopPasses;
-                this.getOnStopIndex = getOnStopIndex;
-                this.getOffStopIndex = getOffStopIndex;
-                this.routeName = routeName;
-                this.color = color;
-                this.vehicleType = vehicleType;
-                this.delayWhenBoarded = delayWhenBoarded;
-                this.hasDelayInfo = hasDelayInfo;
-                this.currentDelay = currentDelay;
-                this.tripId = tripId;
-            }
 
             /// <summary>
             /// Creates a string representation of the trip
@@ -857,49 +837,29 @@ namespace RAPTOR_Router.Models.Results
             /// The information about the source station of the bike trip
             /// </summary>
             [JsonInclude]
-            public RoutePointInfo srcStopInfo { get; set; }
+            public required RoutePointInfo srcStopInfo { get; set; }
             /// <summary>
             /// The information about the destination station of the bike trip
             /// </summary>
             [JsonInclude]
-            public RoutePointInfo destStopInfo { get; set; }
+            public required RoutePointInfo destStopInfo { get; set; }
             /// <summary>
             /// The distance of the bike trip in meters
             /// </summary>
             [JsonInclude]
-            public int distance { get; set; }
+            public required int distance { get; set; }
             /// <summary>
             /// The time it takes to complete the bike trip in seconds
             /// </summary>
             [JsonInclude]
-            public int time { get; set; }
+            public required int time { get; set; }
 
             /// <summary>
             /// The number of remaining bikes at the source station
             /// </summary>
             [JsonInclude]
-            public int remainingBikes { get; set; }
+            public required int remainingBikes { get; set; }
 
-            /// <summary>
-            /// Creates a new UsedBikeTrip object
-            /// </summary>
-            /// <param name="srcStopInfo">The info about the trip source station</param>
-            /// <param name="destStopInfo">The info about the trip destination station</param>
-            /// <param name="distance">The length of the trip in meters</param>
-            /// <param name="time">The length of the trip in seconds</param>
-            public UsedBikeTrip(
-                RoutePointInfo srcStopInfo,
-                RoutePointInfo destStopInfo,
-                int distance,
-                int time,
-                int remainingBikes
-            ){
-                this.srcStopInfo = srcStopInfo;
-                this.destStopInfo = destStopInfo;
-                this.distance = distance;
-                this.time = time;
-                this.remainingBikes = remainingBikes;
-            }
 
             /// <summary>
             /// Creates a string representation of the bike trip

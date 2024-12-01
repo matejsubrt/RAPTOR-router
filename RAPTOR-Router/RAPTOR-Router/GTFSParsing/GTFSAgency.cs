@@ -8,22 +8,40 @@ namespace RAPTOR_Router.GTFSParsing
     /// </summary>
     public class GTFSAgency : IIdentifiable
     {
+        /// <summary>
+        /// The id of the agency
+        /// </summary>
         [Name("agency_id")]
-        public string Id { get; set; }
-        [Name("agency_name")]
-        public string Name { get; set; }
-        [Name("agency_url")]
-        public string Url { get; set; }
-        [Name("agency_timezone")]
-        public string Timezone { get; set; }
-        [Name("agency_lang")]
-        public string Language { get; set; }
-        [Name("agency_phone")]
-        public string Phone { get; set; }
+        public required string Id { get; set; }
 
-        public string GetId()
-        {
-            return Id;
-        }
+        /// <summary>
+        /// The name of the agency
+        /// </summary>
+        [Name("agency_name")]
+        public string? Name { get; set; }
+
+        /// <summary>
+        /// The url of the agencies website
+        /// </summary>
+        [Name("agency_url")]
+        public string? Url { get; set; }
+
+        /// <summary>
+        /// The timezone of the agency
+        /// </summary>
+        [Name("agency_timezone")]
+        public string? Timezone { get; set; }
+
+        /// <summary>
+        /// The language of the agency
+        /// </summary>
+        [Name("agency_lang")]
+        public string? Language { get; set; }
+
+        /// <summary>
+        /// The phone number of the agency
+        /// </summary>
+        [Name("agency_phone")]
+        public string? Phone { get; set; }
     }
 }
