@@ -14,6 +14,7 @@ namespace RAPTOR_Router.Structures.Requests
         public DateTime? dateTime { get; set; }
         public bool previous { get; set; }
         public int count { get; set; }
+        public string tripId { get; set; }
 
 
         public AlternativesSearchError Validate(TransitModel transitModel)

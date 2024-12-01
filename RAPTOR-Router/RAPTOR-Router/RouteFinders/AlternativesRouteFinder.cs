@@ -183,7 +183,7 @@ namespace RAPTOR_Router.RouteFinders
         /// <param name="count">The count of trips to find</param>
         /// <param name="previous">Whether to look for trips departing before or after te time</param>
         /// <returns>The list of alternative trips</returns>
-        private List<SearchResult.UsedTrip>? GetAlternativeTrips(string srcStopId, string destStopId, DateTime time, int count, bool previous)
+        private List<SearchResult.UsedTrip>? GetAlternativeTrips(string srcStopId, string destStopId, DateTime time, int count, bool previous, string tripId)
         {
             Stop srcStop = transitModel.stops[srcStopId];
             Stop destStop = transitModel.stops[destStopId];
@@ -413,13 +413,13 @@ namespace RAPTOR_Router.RouteFinders
 
             void RemoveIdenticalTrips()
             {
-                var itemsToRemove = new List<AlternativeEntry>(); // Replace YourType with the actual type of elements in sortedTrips
+                var itemsToRemove = new List<AlternativeEntry>();
 
                 foreach (var trip in sortedTrips)
                 {
                     delayModel.TryGetDelay(trip.tripDate, trip.altTrip.Id, trip.srcIndex, out int arrivalDelay, out int departureDelay);
 
-                    if (trip.altTrip.GetDepartureDateTime(trip.srcIndex, trip.tripDate).AddSeconds(departureDelay) <= time)
+                    if (trip.altTrip.GetDepartureDateTime(trip.srcIndex, trip.tripDate).AddSeconds(departureDelay) <= time || tripId == trip.altTrip.Id)
                     {
                         itemsToRemove.Add(trip);
                     }
