@@ -127,21 +127,21 @@ namespace RAPTOR_Router.RouteFinders
         /// <param name="count">The count of alternative trips to find</param>
         /// <param name="previous">Whether we are looking for trips departing before the dateTime or later</param>
         /// <returns></returns>
-        public List<SearchResult.UsedTrip>? GetAlternativeTripe(string srcStopName, string destStopName, DateTime time,
-            int count, bool previous)
-        {
-            List<Stop> srcStops = transitModel.GetStopsByName(srcStopName);
-            List<Stop> destStops = transitModel.GetStopsByName(destStopName);
+        //public List<SearchResult.UsedTrip>? GetAlternativeTripe(string srcStopName, string destStopName, DateTime time,
+        //    int count, bool previous)
+        //{
+        //    List<Stop> srcStops = transitModel.GetStopsByName(srcStopName);
+        //    List<Stop> destStops = transitModel.GetStopsByName(destStopName);
 
-            if (srcStops.Count == 0 || destStops.Count == 0)
-            {
-                return null;
-            }
+        //    if (srcStops.Count == 0 || destStops.Count == 0)
+        //    {
+        //        return null;
+        //    }
 
-            Stop srcStop = srcStops.First();
-            Stop destStop = destStops.First();
-            return GetAlternativeTrips(srcStop.Id, destStop.Id, time, count, previous);
-        }
+        //    Stop srcStop = srcStops.First();
+        //    Stop destStop = destStops.First();
+        //    return GetAlternativeTrips(srcStop.Id, destStop.Id, time, count, previous);
+        //}
 
         /// <summary>
         /// Gets the list of alternative trips between two stops
@@ -159,7 +159,7 @@ namespace RAPTOR_Router.RouteFinders
                 return result;
             }
 
-            List<SearchResult.UsedTrip>? alternativeTrips = GetAlternativeTrips(request.srcStopId!, request.destStopId!, request.dateTime!.Value, request.count, request.previous);
+            List<SearchResult.UsedTrip>? alternativeTrips = GetAlternativeTrips(request.srcStopId!, request.destStopId!, request.dateTime!.Value, request.count, request.previous, request.tripId);
 
             if (alternativeTrips is null || alternativeTrips.Count == 0)
             {
