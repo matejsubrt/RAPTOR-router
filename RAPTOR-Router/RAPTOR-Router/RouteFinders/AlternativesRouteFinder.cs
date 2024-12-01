@@ -411,26 +411,6 @@ namespace RAPTOR_Router.RouteFinders
                 return sortedTrips;
             }
 
-            void RemoveIdenticalTrips()
-            {
-                var itemsToRemove = new List<AlternativeEntry>(); // Replace YourType with the actual type of elements in sortedTrips
-
-                foreach (var trip in sortedTrips)
-                {
-                    delayModel.TryGetDelay(trip.tripDate, trip.altTrip.Id, trip.srcIndex, out int arrivalDelay, out int departureDelay);
-                    if (trip.altTrip.GetDepartureDateTime(trip.srcIndex, trip.tripDate).AddSeconds(departureDelay) <= time)
-                    {
-                        itemsToRemove.Add(trip);
-                    }
-                }
-
-                foreach (var trip in itemsToRemove)
-                {
-                    sortedTrips.Remove(trip);
-                }
-
-            }
-
             void RemoveDominatedTrips()
             {
                 var entries = sortedTrips.ToList();
