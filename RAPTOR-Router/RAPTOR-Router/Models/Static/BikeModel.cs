@@ -19,10 +19,11 @@ namespace RAPTOR_Router.Models.Static
         /// List of all the bike stations in all systems.
         /// </summary>
         public List<BikeStation> Stations { get; private set; }
+
+
         private Dictionary<string, BikeStation> StationsById;
         private StationDistanceMatrix Distances;
         private List<IBikeDataSource> bikeDataSources;
-
         private Timer statusUpdateTimer;
 
         /// <summary>
@@ -42,17 +43,10 @@ namespace RAPTOR_Router.Models.Static
             statusUpdateTimer.Enabled = true;
         }
 
-        //private void LoadStationDistances(IBikeDataSource source)
-        //{
-        //    BikeDistanceCalculator distanceCalculator = new BikeDistanceCalculator();
-        //    Distances = distanceCalculator.GetDistanceMatrix(source.StationsById, source.DistancesDbFileLocation);
-        //}
-
         /// <summary>
         /// Adds a new data source to the model, and merges its data with the existing data.
         /// </summary>
-        /// <remarks>The data source has to already be initialized</remarks>
-        /// <param name="source"></param>
+        /// <param name="source">The data source to add</param>
         public void AddDataSource(IBikeDataSource source)
         {
             source.LoadStations();
@@ -108,6 +102,12 @@ namespace RAPTOR_Router.Models.Static
             return Distances.GetDistancesFromStation(station);
         }
 
+        /// <summary>
+        /// Gets the distance between the 2 bike stations in meters
+        /// </summary>
+        /// <param name="s1">The first station</param>
+        /// <param name="s2">The second station</param>
+        /// <returns>The distance in meters</returns>
         public int GetDistanceBetweenStations(BikeStation s1, BikeStation s2)
         {
             return Distances.GetDistance(s1, s2);

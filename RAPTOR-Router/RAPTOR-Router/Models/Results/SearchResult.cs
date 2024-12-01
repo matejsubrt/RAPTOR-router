@@ -12,9 +12,10 @@ using System.Text.Json.Serialization;
 namespace RAPTOR_Router.Models.Results
 {
     /// <summary>
-    /// Class representing the result of a connection search
+    /// Class representing a single journey that is found during a connection search
     /// </summary>
-    /// <remarks>If running the program as an API, this class is serialized and returned as json in the response body</remarks>
+    ///
+    // TODO: rename
     public class SearchResult
     {
         /// <summary>
@@ -424,9 +425,10 @@ namespace RAPTOR_Router.Models.Results
         }
 
         /// <summary>
-        /// 
+        /// Sets the journey's departure and arrival times based on the trips and transfers used in the connection and the original earliest departure time
         /// </summary>
-        /// <param name="originalEarliestDepartureTime"></param>
+        /// <param name="originalEarliestDepartureTime">The original earliest possible departure time used for finding the result</param>
+        /// <remarks>To be used for forward searches</remarks>
         public void SetDepartureAndArrivalTimesByEarliestDeparture(DateTime originalEarliestDepartureTime)
         {
             DateTime firstTripGetOnTime = UsedTrips.Count > 0 ? UsedTrips[0].stopPasses[UsedTrips[0].getOnStopIndex].DepartureTime : DateTime.MaxValue;
@@ -479,6 +481,11 @@ namespace RAPTOR_Router.Models.Results
 
             
         }
+
+        /// <summary>
+        /// Sets the journey's departure and arrival times based on the trips and transfers used in the connection and the original latest arrival time
+        /// </summary>
+        /// <param name="originalLatestArrivalTime">The original latest possible arrival time used for finding the result</param>
         public void SetDepartureAndArrivalTimesByLatestArrival(DateTime originalLatestArrivalTime)
         {
             DateTime firstTripGetOnTime = UsedTrips.Count > 0 ? UsedTrips[0].stopPasses[UsedTrips[0].getOnStopIndex].DepartureTime : DateTime.MaxValue;
@@ -553,7 +560,7 @@ namespace RAPTOR_Router.Models.Results
 
 
         /// <summary>
-        /// Class repressenting a stop of a trip used in a found connection, containing the stop name, id, arrival and departure time
+        /// Class representing a stop of a trip used in a found connection, containing the stop name, id, arrival and departure time
         /// </summary>
         /// <remarks>Intended for easy serialization</remarks>
         public class StopPass
@@ -736,6 +743,10 @@ namespace RAPTOR_Router.Models.Results
                 this.tripId = tripId;
             }
 
+            /// <summary>
+            /// Creates a string representation of the trip
+            /// </summary>
+            /// <returns>The string representation</returns>
             public override string ToString()
             {
                 DateTime regularDepartureTime = stopPasses[getOnStopIndex].DepartureTime;
@@ -808,6 +819,10 @@ namespace RAPTOR_Router.Models.Results
                 this.distance = distance;
             }
 
+            /// <summary>
+            /// Creates a string representation of the transfer
+            /// </summary>
+            /// <returns>The string representation</returns>
             public override string ToString()
             {
                 return "Transfer from " + srcStopInfo.Name + " to " + destStopInfo.Name + ", length: " + time + "s = " + distance + "m";
@@ -859,6 +874,9 @@ namespace RAPTOR_Router.Models.Results
             [JsonInclude]
             public int time { get; set; }
 
+            /// <summary>
+            /// The number of remaining bikes at the source station
+            /// </summary>
             [JsonInclude]
             public int remainingBikes { get; set; }
 
@@ -883,24 +901,29 @@ namespace RAPTOR_Router.Models.Results
                 this.remainingBikes = remainingBikes;
             }
 
+            /// <summary>
+            /// Creates a string representation of the bike trip
+            /// </summary>
+            /// <returns>The string representation</returns>
             public override string ToString()
             {
                 return "BIKE from " + GetStartStopName() + " to " + GetEndStopName() + ", time: " + time + " = length: " + distance + "m";
             }
 
             /// <summary>
-            /// Gets the name of the stop where the bike trip begins
+            /// Gets the name of the station where the bike trip begins
             /// </summary>
-            /// <returns></returns>
+            /// <returns>The start bike station names</returns>
             public string GetStartStopName()
             {
+                //TODO: rename
                 return srcStopInfo.Name;
             }
 
             /// <summary>
-            /// Gets the name of the stop where the bike trip ends
+            /// Gets the name of the station where the bike trip ends
             /// </summary>
-            /// <returns></returns>
+            /// <returns>The end bike station name</returns>
             public string GetEndStopName()
             {
                 return destStopInfo.Name;

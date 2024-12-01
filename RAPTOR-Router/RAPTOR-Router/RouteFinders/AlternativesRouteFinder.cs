@@ -8,10 +8,13 @@ using RAPTOR_Router.Structures.Requests;
 namespace RAPTOR_Router.RouteFinders
 {
     /// <summary>
-    /// 
+    /// Class used for finding alternative trips between two stops
     /// </summary>
     public class AlternativesRouteFinder
     {
+        /// <summary>
+        /// Class representing an alternative trip entry
+        /// </summary>
         private class AlternativeEntry : IComparable<AlternativeEntry>
         {
             public DateTime dateTime;
@@ -23,6 +26,17 @@ namespace RAPTOR_Router.RouteFinders
             public int srcDepartureDelay;
             public int currTripDelay;
 
+            /// <summary>
+            /// Creates a new AlternativeEntry object
+            /// </summary>
+            /// <param name="dateTime">The arrival time</param>
+            /// <param name="altTrip">The trip</param>
+            /// <param name="tripDate">The start date of the trip</param>
+            /// <param name="srcIndex">The index of the source stop within the trip</param>
+            /// <param name="destIndex">The index of the destination stop within the trip</param>
+            /// <param name="hasSrcDelayData">Whether there is delay data present for the trip</param>
+            /// <param name="srcDepartureDelay">The delay of the trip at the source stop index</param>
+            /// <param name="currTripDelay">The current delay of the trip</param>
             public AlternativeEntry(DateTime dateTime, Trip altTrip, DateOnly tripDate, int srcIndex, int destIndex, bool hasSrcDelayData, int srcDepartureDelay, int currTripDelay)
             {
                 this.dateTime = dateTime;
@@ -35,6 +49,11 @@ namespace RAPTOR_Router.RouteFinders
                 this.currTripDelay = currTripDelay;
             }
 
+            /// <summary>
+            /// Compares this AlternativeEntry to another one
+            /// </summary>
+            /// <param name="other">The other entry</param>
+            /// <returns>The result of the comparison</returns>
             public int CompareTo(AlternativeEntry? other)
             {
                 if (other == null)
@@ -52,6 +71,10 @@ namespace RAPTOR_Router.RouteFinders
                 return srcIndex.CompareTo(other.srcIndex);
             }
 
+            /// <summary>
+            /// Creates a string representation of the AlternativeEntry
+            /// </summary>
+            /// <returns>The string representation</returns>
             public override string ToString()
             {
                 return altTrip.Route.ShortName + ": " + dateTime.ToString();
@@ -69,12 +92,22 @@ namespace RAPTOR_Router.RouteFinders
         /// </summary>
         private readonly DelayModel delayModel;
 
+        /// <summary>
+        /// Creates a new AlternativesRouteFinder object
+        /// </summary>
+        /// <param name="transitModel">The transit model to use for the search</param>
+        /// <param name="delayModel">The delay model to use for the search</param>
         internal AlternativesRouteFinder(TransitModel transitModel, DelayModel delayModel)
         {
             this.transitModel = transitModel;
             this.delayModel = delayModel;
         }
 
+        /// <summary>
+        /// Gets the list of all stops within the transit model that are considered alternative tho this one - i.e. stops with the same name and stops within 150m
+        /// </summary>
+        /// <param name="stop">The stop</param>
+        /// <returns>The list of alternative stops</returns>
         private List<Stop> GetAlternativeStops(Stop stop)
         {
             List<Stop> alternativeStops = new List<Stop>();
@@ -84,7 +117,15 @@ namespace RAPTOR_Router.RouteFinders
             return alternativeStops;
         }
 
-
+        /// <summary>
+        /// Gets the list of alternative trips between two stops
+        /// </summary>
+        /// <param name="srcStopName">The name of the source stop</param>
+        /// <param name="destStopName">The name of the destination stop</param>
+        /// <param name="time">The time</param>
+        /// <param name="count">The count of alternative trips to find</param>
+        /// <param name="previous">Whether we are looking for trips departing before the dateTime or later</param>
+        /// <returns></returns>
         public List<SearchResult.UsedTrip>? GetAlternativeTripe(string srcStopName, string destStopName, DateTime time,
             int count, bool previous)
         {
@@ -101,7 +142,11 @@ namespace RAPTOR_Router.RouteFinders
             return GetAlternativeTrips(srcStop.Id, destStop.Id, time, count, previous);
         }
 
-
+        /// <summary>
+        /// Gets the list of alternative trips between two stops
+        /// </summary>
+        /// <param name="request">The alternative trips request to respond to</param>
+        /// <returns>The result of the search</returns>
         public AlternativeTripsApiResponseResult GetAlternativeTrips(AlternativeTripsRequest request)
         {
             AlternativeTripsApiResponseResult result = new();
@@ -113,7 +158,7 @@ namespace RAPTOR_Router.RouteFinders
                 return result;
             }
 
-            List<SearchResult.UsedTrip>? alternativeTrips = GetAlternativeTripe(request.srcStopId!, request.destStopId!, request.dateTime!.Value, request.count, request.previous);
+            List<SearchResult.UsedTrip>? alternativeTrips = GetAlternativeTrips(request.srcStopId!, request.destStopId!, request.dateTime!.Value, request.count, request.previous);
 
             if (alternativeTrips is null || alternativeTrips.Count == 0)
             {
@@ -128,7 +173,15 @@ namespace RAPTOR_Router.RouteFinders
             return result;
         }
 
-
+        /// <summary>
+        /// Gets the list of alternative trips between two stops
+        /// </summary>
+        /// <param name="srcStopId">The ID of the source stop</param>
+        /// <param name="destStopId">The ID of the destination stop</param>
+        /// <param name="time">The time</param>
+        /// <param name="count">The count of trips to find</param>
+        /// <param name="previous">Whether to look for trips departing before or after te time</param>
+        /// <returns>The list of alternative trips</returns>
         private List<SearchResult.UsedTrip>? GetAlternativeTrips(string srcStopId, string destStopId, DateTime time, int count, bool previous)
         {
             Stop srcStop = transitModel.stops[srcStopId];
@@ -244,7 +297,7 @@ namespace RAPTOR_Router.RouteFinders
                 {
                     return 0;
                 }
-                TripStopDelays stopDelays = delayModel.GetTripStopDelays(tripStartDate, trip.Id);
+                TripStopDelays stopDelays = delayModel.GetTripStopDelaysUnsafe(tripStartDate, trip.Id);
                 List<StopTime> stopTimes = trip.StopTimes;
 
                 TimeZoneInfo timeZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Prague");

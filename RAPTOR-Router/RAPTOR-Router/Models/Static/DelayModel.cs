@@ -6,20 +6,40 @@ using System.Threading.Tasks;
 
 namespace RAPTOR_Router.Models.Static
 {
+    /// <summary>
+    /// Class representing the delays for a single trip
+    /// </summary>
     public class TripStopDelays
     {
         private List<Tuple<int, int>> _stopDelays = new();
 
+        /// <summary>
+        /// The number of stops for which we have delay data
+        /// </summary>
         public int Count
         {
             get => _stopDelays.Count;
         }
 
+        /// <summary>
+        /// Adds a new delay entry to the list
+        /// </summary>
+        /// <param name="arrivalDelay">The delay on arrival</param>
+        /// <param name="departureDelay">The delay on departure</param>
         public void AddStopDelay(int arrivalDelay, int departureDelay)
         {
             _stopDelays.Add(new Tuple<int, int>(arrivalDelay, departureDelay));
         }
 
+        /// <summary>
+        /// Tries to get the delay data for a specific stop
+        /// </summary>
+        /// <param name="stopIndex">The index of the stop</param>
+        /// <param name="arrivalDelay">The delay at the stop on arrival</param>
+        /// <param name="departureDelay">The delay at the stop on departure</param>
+        /// <returns>Whether the data was found and valid</returns>
+        /// <remarks>Sometimes the delay data is missing in the source json for the last few stops of a trip,
+        /// so this function uses the last available delay data before that if that happens.</remarks>
         public bool TryGetStopDelay(int stopIndex, out int arrivalDelay, out int departureDelay)
         {
             if (stopIndex < _stopDelays.Count)
@@ -44,20 +64,34 @@ namespace RAPTOR_Router.Models.Static
             }
         }
 
+        /// <summary>
+        /// Gets the delay at the last stop we have data for
+        /// </summary>
+        /// <returns>A tuple of the arrival and departure delays at the last stop</returns>
         public Tuple<int, int> GetLastStopDelay()
         {
+            //TODO: check if this was not replaced by the TryGetStopDelay method
             return _stopDelays[^1];
         }
     }
 
-
+    /// <summary>
+    /// Class holding all the current delay data for all active trips
+    /// </summary>
     public class DelayModel
     {
         private Dictionary<DateOnly, Dictionary<string, TripStopDelays>> delays = new();
 
-        public DelayModel(){}
+        /// <summary>
+        /// Adds delay data for a specific trip
+        /// </summary>
+        /// <param name="tripStartDate">The start date of the trip</param>
+        /// <param name="tripId">The ID of the trip</param>
+        /// <param name="arrivalDelay">The arrival delay</param>
+        /// <param name="departureDelay">The departure delay</param>
         public void AddDelay(DateOnly tripStartDate, string tripId, int arrivalDelay, int departureDelay)
         {
+            //TODO: change the implementation of this
             if (!delays.ContainsKey(tripStartDate))
             {
                 delays.Add(tripStartDate, new Dictionary<string, TripStopDelays>());
@@ -71,6 +105,15 @@ namespace RAPTOR_Router.Models.Static
             tripDelaysByStartDate[tripId].AddStopDelay(arrivalDelay, departureDelay);
         }
 
+        /// <summary>
+        /// Tries to get the delay data for a specific trip
+        /// </summary>
+        /// <param name="tripStartDate">The start date of the trip</param>
+        /// <param name="tripId">The ID of the trip</param>
+        /// <param name="stopIndex">The index of the desired stop within the trip</param>
+        /// <param name="arrivalDelay">The arrival delay at the stop</param>
+        /// <param name="departureDelay">The departure delay at the stop</param>
+        /// <returns>Whether delay data for the stop was successfully found</returns>
         public bool TryGetDelay(DateOnly tripStartDate, string tripId, int stopIndex, out int arrivalDelay, out int departureDelay)
         {
             if (!delays.ContainsKey(tripStartDate))
@@ -94,6 +137,12 @@ namespace RAPTOR_Router.Models.Static
             return haveDelay;
         }
 
+        /// <summary>
+        /// Checks if a specific trip has delay data present
+        /// </summary>
+        /// <param name="tripStartDate">The start date of the trip</param>
+        /// <param name="tripId">The ID of the trip</param>
+        /// <returns>Whether the delay data for the trip is present</returns>
         public bool TripHasDelayData(DateOnly tripStartDate, string tripId)
         {
             if (!delays.ContainsKey(tripStartDate))
@@ -108,7 +157,14 @@ namespace RAPTOR_Router.Models.Static
             return true;
         }
 
-        public TripStopDelays GetTripStopDelays(DateOnly tripStartDate, string tripId)
+        /// <summary>
+        /// Gets the TripStopDelays object for a specific trip
+        /// </summary>
+        /// <param name="tripStartDate">The start date of the trip</param>
+        /// <param name="tripId">The ID of the trip</param>
+        /// <returns>The TripStopDelays object of the trip</returns>
+        /// <remarks>Fails if the data is not present</remarks>
+        public TripStopDelays GetTripStopDelaysUnsafe(DateOnly tripStartDate, string tripId)
         {
             return delays[tripStartDate][tripId];
         }

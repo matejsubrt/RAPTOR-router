@@ -34,7 +34,7 @@ namespace RAPTOR_Router.RouteFinders
 
                         if (tripHasDelayData)
                         {
-                            var tripStopDelays = delayModel.GetTripStopDelays(tripStartDate, trip.tripId);
+                            var tripStopDelays = delayModel.GetTripStopDelaysUnsafe(tripStartDate, trip.tripId);
 
                             bool hasGetOnDelay = tripStopDelays.TryGetStopDelay(trip.getOnStopIndex,
                                                                out int getOnArrivalDelay, out int getOnDepartureDelay);

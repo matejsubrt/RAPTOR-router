@@ -63,7 +63,7 @@ namespace CLIApp
                 
                 DateTime departureTime;
 #if FIXED_TIME
-                DateTime.TryParse("22/10/2024 16:02:00", out departureTime);
+                DateTime.TryParse("08/11/2024 14:15:00", out departureTime);
 #else
                 Console.WriteLine("Enter the departure time in the DD/MM/YYYY hh:mm:ss format (i.e. \"07/07/2023 07:07:07\" corresponds to 7.7.2023, 7:07:07):");
                 string dateTime = Console.ReadLine();

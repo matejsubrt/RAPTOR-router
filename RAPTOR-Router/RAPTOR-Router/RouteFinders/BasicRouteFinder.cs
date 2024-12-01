@@ -13,13 +13,35 @@ using RAPTOR_Router.Structures.Requests;
 
 namespace RAPTOR_Router.RouteFinders
 {
+    /// <summary>
+    /// Class representing a trip that was reached during the algorithm together with the data about the stop it was reached on
+    /// </summary>
     class ReachedTrip
     {
+        /// <summary>
+        /// The trip that was reached
+        /// </summary>
         public Trip trip { get; }
+        /// <summary>
+        /// The stop at which it was reached
+        /// </summary>
         public Stop reachedOnStop { get; }
+        /// <summary>
+        /// The start date of the trip
+        /// </summary>
         public DateOnly tripDate { get; }
+        /// <summary>
+        /// The index of the stop in the route where the trip was reached
+        /// </summary>
         public int stopIndex { get; }
 
+        /// <summary>
+        /// Creates a new ReachedTrip object
+        /// </summary>
+        /// <param name="trip">The trip</param>
+        /// <param name="reachedOnStop">The stop where the trip was reached</param>
+        /// <param name="tripDate">The start date of the trip</param>
+        /// <param name="stopIndex">The index of the source stop</param>
         public ReachedTrip(Trip trip, Stop reachedOnStop, DateOnly tripDate, int stopIndex)
         {
             this.trip = trip;
@@ -48,7 +70,9 @@ namespace RAPTOR_Router.RouteFinders
         /// The search model, that the router will use for the connection searching algorithm
         /// </summary>
         private SearchModel? searchModel;
-
+        /// <summary>
+        /// The delay model holding all the current delay data for all active trips
+        /// </summary>
         private readonly DelayModel delayModel;
 
 
@@ -61,10 +85,8 @@ namespace RAPTOR_Router.RouteFinders
         /// </summary>
         private HashSet<BikeStation> markedBikeStations = new();
         /// <summary>
-        /// A dictionary storing for every currently marked route the stop at which it first can be boarded - i.e. the first marked stop it passes through
+        /// A dictionary storing for every currently marked route the trip that was reached on it and the stop it was reached on
         /// </summary>
-        //private Dictionary<Route, Stop> markedRoutesWithReachedStops = new();
-
         private Dictionary<Route, ReachedTrip> markedRoutesWithReachedTrips = new();
 
 
@@ -83,6 +105,12 @@ namespace RAPTOR_Router.RouteFinders
         private bool forward;
         private int timeMpl;
 
+        /// <summary>
+        /// Assigns route points from a real-world transfer according to the search direction
+        /// </summary>
+        /// <param name="transfer">The real-world transfer (in the direction in which it would be used by the user)</param>
+        /// <param name="imprFromPoint">The point from which the transfer was passed during the search</param>
+        /// <param name="imprToPoint">The point to which the transfer leads during the search</param>
         private void OrderTransferPointsBySearchDirection(ITransfer transfer, out IRoutePoint imprFromPoint, out IRoutePoint imprToPoint)
         {
             if (forward)
@@ -308,7 +336,7 @@ namespace RAPTOR_Router.RouteFinders
                 TripStopDelays? tripStopDelays = null;
                 if (tripHasDelayData)
                 {
-                    tripStopDelays = delayModel.GetTripStopDelays(currTripDate, currTrip.Id);
+                    tripStopDelays = delayModel.GetTripStopDelaysUnsafe(currTripDate, currTrip.Id);
                 }
 
                 if (forward)
@@ -420,7 +448,7 @@ namespace RAPTOR_Router.RouteFinders
                                 tripHasDelayData = delayModel.TripHasDelayData(currTripDate, newTrip.Id);
                                 if (tripHasDelayData)
                                 {
-                                    tripStopDelays = delayModel.GetTripStopDelays(currTripDate, newTrip.Id);
+                                    tripStopDelays = delayModel.GetTripStopDelaysUnsafe(currTripDate, newTrip.Id);
                                 }
                             }
                             
