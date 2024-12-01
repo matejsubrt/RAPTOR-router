@@ -38,6 +38,8 @@ namespace RAPTOR_Router.Configuration
                 .AddJsonFile("config.json", optional: false, reloadOnChange: true)
                 .Build();
 
+            Console.WriteLine("Base Path: " + basePath);
+
             if (_config is null)
             {
                 throw new FileNotFoundException("Configuration could not be loaded - the file does not exist: " + basePath + "config.json");
