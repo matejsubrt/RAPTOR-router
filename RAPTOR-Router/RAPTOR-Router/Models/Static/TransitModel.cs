@@ -279,12 +279,12 @@ namespace RAPTOR_Router.Models.Static
         /// <param name="lon">The longitude of the point</param>
         /// <param name="radius">The maximum distance of a near stop from the coordinates</param>
         /// <returns>List of all the stops within the given radius from the coordinates</returns>
-        public List<Stop> GetStopsByLocation(double lat, double lon, int radius)
+        public List<Stop> GetStopsByLocation(Coordinates coords, int radius)
         {
             List<Stop> result = new();
             foreach (Stop stop in stops.Values)
             {
-                if (DistanceExtensions.SimplifiedDistanceBetween(stop.Coords.Lat, stop.Coords.Lon, lat, lon) < radius)
+                if (DistanceExtensions.SimplifiedDistanceBetween(stop.Coords, coords) < radius)
                 {
                     result.Add(stop);
                 }
@@ -299,11 +299,11 @@ namespace RAPTOR_Router.Models.Static
         /// <param name="lon">The longitude of the point</param>
         /// <param name="radius">The maximum distance of a near stop from the coordinates</param>
         /// <returns>Bool specifying whether a near stop exists</returns>
-        public bool NearStopExists(double lat, double lon, int radius)
+        public bool NearStopExists(Coordinates coords, int radius)
         {
             foreach (Stop stop in stops.Values)
             {
-                if (DistanceExtensions.SimplifiedDistanceBetween(stop.Coords.Lat, stop.Coords.Lon, lat, lon) < radius)
+                if (DistanceExtensions.SimplifiedDistanceBetween(stop.Coords, coords) < radius)
                 {
                     return true;
                 }

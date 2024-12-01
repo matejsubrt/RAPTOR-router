@@ -114,7 +114,7 @@ namespace RAPTOR_Router.RouteFinders
             List<Stop> alternativeStops = new List<Stop>();
             alternativeStops.Add(stop); // Add the original stop
             alternativeStops.AddRange(transitModel.GetStopsByName(stop.Name)); // Add all stops with the same name
-            alternativeStops.AddRange(transitModel.GetStopsByLocation(stop.Coords.Lat, stop.Coords.Lon, 150)); // Add all stops within 150m
+            alternativeStops.AddRange(transitModel.GetStopsByLocation(stop.Coords, 150)); // Add all stops within 150m
             return alternativeStops;
         }
 

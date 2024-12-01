@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RAPTOR_Router.Models.Static;
+using RAPTOR_Router.Structures.Generic;
 
 namespace RAPTOR_Router.Structures.Requests
 {
@@ -31,7 +32,7 @@ namespace RAPTOR_Router.Structures.Requests
 
 
 
-        private bool ValidateStopsNearCoords(double lat, double lon, bool useSharedBikes, TransitModel transitModel, BikeModel bikeModel)
+        private bool ValidateStopsNearCoords(Coordinates coords, bool useSharedBikes, TransitModel transitModel, BikeModel bikeModel)
         {
             if(transitModel is null){
                 throw new InvalidOperationException("Transit model not loaded");
@@ -41,11 +42,11 @@ namespace RAPTOR_Router.Structures.Requests
                 {
                     throw new InvalidOperationException("Bike model not loaded");
                 }
-                return transitModel.NearStopExists(lat, lon, 750) || bikeModel.NearStationExists(lat, lon, 750);
+                return transitModel.NearStopExists(coords, 750) || bikeModel.NearStationExists(coords, 750);
             }
             else
             {
-                return transitModel.NearStopExists(lat, lon, 750);
+                return transitModel.NearStopExists(coords, 750);
             }
         }
 
@@ -57,11 +58,6 @@ namespace RAPTOR_Router.Structures.Requests
             }
 
             return stopName is not null && transitModel.GetStopsByName(stopName).Count != 0;
-        }
-
-        private bool ValidateCoords(double lat, double lon)
-        {
-            return lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180;
         }
 
         public ConnectionSearchError Validate(TransitModel transitModel, BikeModel bikeModel)
@@ -87,13 +83,13 @@ namespace RAPTOR_Router.Structures.Requests
 
             if (srcByCoords)
             {
-                if (!ValidateCoords(srcLat, srcLon))
+                Coordinates srcCoords = new Coordinates(srcLat, srcLon);
+                if (srcCoords.ValidateValue())
                 {
                     srcCoordsValid = false;
                 }
 
-                if (!ValidateStopsNearCoords(srcLat, srcLon,
-                        settings.UseSharedBikes, transitModel, bikeModel))
+                if (!ValidateStopsNearCoords(srcCoords, settings.UseSharedBikes, transitModel, bikeModel))
                 {
                     srcCoordsHaveStops = false;
                 }
@@ -108,13 +104,13 @@ namespace RAPTOR_Router.Structures.Requests
 
             if (destByCoords)
             {
-                if (!ValidateCoords(destLat, destLon))
+                Coordinates destCoords = new Coordinates(destLat, destLon);
+                if (destCoords.ValidateValue())
                 {
                     destCoordsValid = false;
                 }
 
-                if (!ValidateStopsNearCoords(destLat, destLon,
-                        settings.UseSharedBikes, transitModel, bikeModel))
+                if (!ValidateStopsNearCoords(destCoords, settings.UseSharedBikes, transitModel, bikeModel))
                 {
                     destCoordsHaveStops = false;
                 }

@@ -49,5 +49,10 @@ namespace RAPTOR_Router.Structures.Generic
         {
             return HashCode.Combine(Lat, Lon);
         }
+
+        public bool ValidateValue()
+        {
+            return Lat >= -90 && Lat <= 90 && Lon >= -180 && Lon <= 180;
+        }
     }
 }

@@ -658,19 +658,19 @@ namespace RAPTOR_Router.RouteFinders
         }
 
 
-        public Tuple<List<Stop>, List<BikeStation>> GetNearRoutePoints(double lat, double lon)
-        {
-            List<Stop> nearStops = transitModel.GetStopsByLocation(lat, lon, settings.GetMaxTransferDistance());
-            List<BikeStation> nearBikeStations = bikeModel.GetNearStations(lat, lon, settings.GetMaxTransferDistance());
-            return new Tuple<List<Stop>, List<BikeStation>>(nearStops, nearBikeStations);
-        }
+        //public Tuple<List<Stop>, List<BikeStation>> GetNearRoutePoints(double lat, double lon)
+        //{
+        //    List<Stop> nearStops = transitModel.GetStopsByLocation(lat, lon, settings.GetMaxTransferDistance());
+        //    List<BikeStation> nearBikeStations = bikeModel.GetNearStations(lat, lon, settings.GetMaxTransferDistance());
+        //    return new Tuple<List<Stop>, List<BikeStation>>(nearStops, nearBikeStations);
+        //}
 
-        public Tuple<List<Stop>, List<BikeStation>> GetNearRoutePoints(string stopName)
-        {
-            List<Stop> stops = transitModel.GetStopsByName(stopName);
-            List<BikeStation> bikeStations = new List<BikeStation>();
-            return new Tuple<List<Stop>, List<BikeStation>>(stops, bikeStations);
-        }
+        //public Tuple<List<Stop>, List<BikeStation>> GetNearRoutePoints(string stopName)
+        //{
+        //    List<Stop> stops = transitModel.GetStopsByName(stopName);
+        //    List<BikeStation> bikeStations = new List<BikeStation>();
+        //    return new Tuple<List<Stop>, List<BikeStation>>(stops, bikeStations);
+        //}
 
         private bool RunRAPTOR(List<Stop> srcStops, List<BikeStation> srcBikeStations, List<Stop> destStops,
             List<BikeStation> destBikeStations, DateTime searchBeginTime, bool srcByCoord, bool destByCoord,
@@ -938,18 +938,18 @@ namespace RAPTOR_Router.RouteFinders
                 return null;
             }
 
-            List<Stop> srcStops = transitModel.GetStopsByLocation(srcCoords.Lat, srcCoords.Lon, settings.GetMaxTransferDistance());
-            List<Stop> destStops = transitModel.GetStopsByLocation(destCoords.Lat, destCoords.Lon, settings.GetMaxTransferDistance());
-            List<BikeStation> srcBikeStations = bikeModel.GetNearStations(srcCoords.Lat, srcCoords.Lon, settings.GetMaxTransferDistance());
-            List<BikeStation> destBikeStations = bikeModel.GetNearStations(destCoords.Lat, destCoords.Lon, settings.GetMaxTransferDistance());
+            List<Stop> srcStops = transitModel.GetStopsByLocation(srcCoords, settings.GetMaxTransferDistance());
+            List<Stop> destStops = transitModel.GetStopsByLocation(destCoords, settings.GetMaxTransferDistance());
+            List<BikeStation> srcBikeStations = bikeModel.GetNearStations(srcCoords, settings.GetMaxTransferDistance());
+            List<BikeStation> destBikeStations = bikeModel.GetNearStations(destCoords, settings.GetMaxTransferDistance());
             return FindConnection(srcStops, srcBikeStations, destStops, destBikeStations, dateTime, true, true, srcCoords, destCoords, allowViableAlternatives);
         }
 
         public List<SearchResult>? FindConnection(Coordinates srcCoords, string destStopName, DateTime dateTime, bool allowViableAlternatives)
         {
-            List<Stop> srcStops = transitModel.GetStopsByLocation(srcCoords.Lat, srcCoords.Lon, settings.GetMaxTransferDistance());
+            List<Stop> srcStops = transitModel.GetStopsByLocation(srcCoords, settings.GetMaxTransferDistance());
             List<Stop> destStops = transitModel.GetStopsByName(destStopName);
-            List<BikeStation> srcBikeStations = bikeModel.GetNearStations(srcCoords.Lat, srcCoords.Lon, settings.GetMaxTransferDistance());
+            List<BikeStation> srcBikeStations = bikeModel.GetNearStations(srcCoords, settings.GetMaxTransferDistance());
             List<BikeStation> destBikeStations = new List<BikeStation>();
             return FindConnection(srcStops, srcBikeStations, destStops, destBikeStations, dateTime, true, false, srcCoords, default, allowViableAlternatives);
         }
@@ -957,9 +957,9 @@ namespace RAPTOR_Router.RouteFinders
         public List<SearchResult>? FindConnection(string sourceStopName, Coordinates destCoords, DateTime dateTime, bool allowViableAlternatives)
         {
             List<Stop> srcStops = transitModel.GetStopsByName(sourceStopName);
-            List<Stop> destStops = transitModel.GetStopsByLocation(destCoords.Lat, destCoords.Lon, settings.GetMaxTransferDistance());
+            List<Stop> destStops = transitModel.GetStopsByLocation(destCoords, settings.GetMaxTransferDistance());
             List<BikeStation> srcBikeStations = new List<BikeStation>();
-            List<BikeStation> destBikeStations = bikeModel.GetNearStations(destCoords.Lat, destCoords.Lon, settings.GetMaxTransferDistance());
+            List<BikeStation> destBikeStations = bikeModel.GetNearStations(destCoords, settings.GetMaxTransferDistance());
             return FindConnection(srcStops, srcBikeStations, destStops, destBikeStations, dateTime, false, true, default, destCoords, allowViableAlternatives);
         }
 

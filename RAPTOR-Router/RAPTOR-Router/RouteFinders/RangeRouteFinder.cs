@@ -254,7 +254,8 @@ namespace RAPTOR_Router.RouteFinders
             {
                 if (request.srcByCoords)
                 {
-                    searchBeginStops = transitModel.GetStopsByLocation(request.srcLat, request.srcLon, settings.GetMaxTransferDistance());
+                    Coordinates srcCoords = new Coordinates(request.srcLat, request.srcLon);
+                    searchBeginStops = transitModel.GetStopsByLocation(srcCoords, settings.GetMaxTransferDistance());
                 }
                 else
                 {
@@ -265,7 +266,8 @@ namespace RAPTOR_Router.RouteFinders
             {
                 if (request.destByCoords)
                 {
-                    searchBeginStops = transitModel.GetStopsByLocation(request.destLat, request.destLon, settings.GetMaxTransferDistance());
+                    Coordinates destCoords = new Coordinates(request.destLat, request.destLon);
+                    searchBeginStops = transitModel.GetStopsByLocation(destCoords, settings.GetMaxTransferDistance());
                 }
                 else
                 {

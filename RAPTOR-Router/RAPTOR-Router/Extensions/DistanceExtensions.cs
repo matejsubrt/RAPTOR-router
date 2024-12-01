@@ -45,7 +45,7 @@ namespace RAPTOR_Router.Extensions
         /// </summary>
         /// <remarks>Does NOT take the curvature of the earth into account. ONLY works well for coordinates near the 50th parallel. Simpler and faster to compute than the real earth-surface distance. For exact distances, see {@link DistanceBetween}</remarks>
         /// <returns>The approximate distance between the two points in meters.</returns>
-        public static int SimplifiedDistanceBetween(double lat1, double lon1, double lat2, double lon2)
+        private static int SimplifiedDistanceBetween(double lat1, double lon1, double lat2, double lon2)
         {
 
             var lat1m = lat1 * latConst;
@@ -78,9 +78,13 @@ namespace RAPTOR_Router.Extensions
         /// <summary>
         /// Calculates whether two GPS coordinates are too far apart in one direction (N/S or E/W) to be worth calculating the real distance
         /// </summary>
+        /// <param name="lat1">The latitude of the first point</param>
+        /// <param name="lon1">The longitude of the first point</param>
+        /// <param name="lat2">The latitude of the second point</param>
+        /// <param name="lon2">The longitude of the second point</param>
         /// <param name="maxMeters">The maximal number of meters to not be too far apart.</param>
         /// <returns>Bool specifying whether the two points are further apart than maxMeters</returns>
-        public static bool TooFarInOneDirection(double lat1, double lon1, double lat2, double lon2, int maxMeters)
+        private static bool TooFarInOneDirection(double lat1, double lon1, double lat2, double lon2, int maxMeters)
         {
             var latDiffMeters = Math.Abs(lat1 - lat2) * latConst;
             var lonDiffMeters = Math.Abs(lon1 - lon2) * lonConst50N;

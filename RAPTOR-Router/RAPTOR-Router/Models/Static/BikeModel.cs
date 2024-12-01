@@ -4,7 +4,7 @@ using RAPTOR_Router.GBFSParsing.DataSources;
 using RAPTOR_Router.GBFSParsing.Distances;
 using RAPTOR_Router.Extensions;
 using System.Timers;
-
+using RAPTOR_Router.Structures.Generic;
 using Timer = System.Timers.Timer;
 
 
@@ -120,17 +120,17 @@ namespace RAPTOR_Router.Models.Static
         /// <param name="lon">The longitude of the point</param>
         /// <param name="radius">The maximum distance of the found bike station from the coordinates</param>
         /// <returns>The list of all near stations</returns>
-        public List<BikeStation> GetNearStations(double lat, double lon, int radius)
+        public List<BikeStation> GetNearStations(Coordinates coords, int radius)
         {
             List<BikeStation> nearStations = new List<BikeStation>();
             foreach (BikeStation s in Stations)
             {
                 // Skip stations that are too far away in one direction to speed up the calculation
-                if (DistanceExtensions.TooFarInOneDirection(lat, lon, s.Coords.Lat, s.Coords.Lon, radius))
+                if (DistanceExtensions.TooFarInOneDirection(coords, s.Coords, radius))
                 {
                     continue;
                 }
-                if (DistanceExtensions.SimplifiedDistanceBetween(s.Coords.Lat, s.Coords.Lon, lat, lon) < radius)
+                if (DistanceExtensions.SimplifiedDistanceBetween(s.Coords, coords) < radius)
                 {
                     nearStations.Add(s);
                 }
@@ -145,7 +145,7 @@ namespace RAPTOR_Router.Models.Static
         /// <returns>The list of all near stations</returns>
         public List<BikeStation> GetNearStations(IRoutePoint rp, int radius)
         {
-            return GetNearStations(rp.Coords.Lat, rp.Coords.Lon, radius);
+            return GetNearStations(rp.Coords, radius);
         }
 
         /// <summary>
@@ -155,21 +155,21 @@ namespace RAPTOR_Router.Models.Static
         /// <param name="lon">The longitude of the point</param>
         /// <param name="radius">The maximum distance of the found bike station from the coordinates</param>
         /// <returns>The nearest bike station to the coordinates, null if none was found</returns>
-        public BikeStation? ResolveCoordinates(double lat, double lon, int radius)
-        {
-            int minDistance = int.MaxValue;
-            BikeStation? nearestStation = null;
-            foreach (BikeStation s in Stations)
-            {
-                int distance = DistanceExtensions.SimplifiedDistanceBetween(s.Coords.Lat, s.Coords.Lon, lat, lon);
-                if (distance < minDistance)
-                {
-                    nearestStation = s;
-                    minDistance = distance;
-                }
-            }
-            return nearestStation;
-        }
+        //public BikeStation? ResolveCoordinates(double lat, double lon, int radius)
+        //{
+        //    int minDistance = int.MaxValue;
+        //    BikeStation? nearestStation = null;
+        //    foreach (BikeStation s in Stations)
+        //    {
+        //        int distance = DistanceExtensions.SimplifiedDistanceBetween(s.Coords.Lat, s.Coords.Lon, lat, lon);
+        //        if (distance < minDistance)
+        //        {
+        //            nearestStation = s;
+        //            minDistance = distance;
+        //        }
+        //    }
+        //    return nearestStation;
+        //}
 
         /// <summary>
         /// Finds out whether a bike station exists within the given radius of the given coordinates.
@@ -178,11 +178,11 @@ namespace RAPTOR_Router.Models.Static
         /// <param name="lon">The longitude of the point</param>
         /// <param name="radius">The maximum distance of the found bike station from the coordinates</param>
         /// <returns>Bool specifying whether there is a station within the radius</returns>
-        public bool NearStationExists(double lat, double lon, int radius)
+        public bool NearStationExists(Coordinates coords, int radius)
         {
             foreach (BikeStation s in Stations)
             {
-                if (DistanceExtensions.SimplifiedDistanceBetween(s.Coords.Lat, s.Coords.Lon, lat, lon) < radius)
+                if (DistanceExtensions.SimplifiedDistanceBetween(s.Coords, coords) < radius)
                 {
                     return true;
                 }
