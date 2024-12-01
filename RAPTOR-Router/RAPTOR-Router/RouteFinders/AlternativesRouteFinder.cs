@@ -1,4 +1,5 @@
-﻿using RAPTOR_Router.Models.Static;
+﻿using System.Collections.Immutable;
+using RAPTOR_Router.Models.Static;
 using RAPTOR_Router.Extensions;
 using RAPTOR_Router.Models.Results;
 using RAPTOR_Router.Structures.Configuration;
@@ -201,6 +202,8 @@ namespace RAPTOR_Router.RouteFinders
             // For every route from any source stop to any destination stop,
             // find its <count> best connecting alternative trips
             SortedSet<AlternativeEntry> sortedTrips = GetSortedConnectingTrips();
+
+            RemoveIdenticalTrips();
 
             // Remove all trips that are dominated by another trip
             RemoveDominatedTrips();
@@ -406,6 +409,26 @@ namespace RAPTOR_Router.RouteFinders
                 }
 
                 return sortedTrips;
+            }
+
+            void RemoveIdenticalTrips()
+            {
+                var itemsToRemove = new List<AlternativeEntry>(); // Replace YourType with the actual type of elements in sortedTrips
+
+                foreach (var trip in sortedTrips)
+                {
+                    delayModel.TryGetDelay(trip.tripDate, trip.altTrip.Id, trip.srcIndex, out int arrivalDelay, out int departureDelay);
+                    if (trip.altTrip.GetDepartureDateTime(trip.srcIndex, trip.tripDate).AddSeconds(departureDelay) <= time)
+                    {
+                        itemsToRemove.Add(trip);
+                    }
+                }
+
+                foreach (var trip in itemsToRemove)
+                {
+                    sortedTrips.Remove(trip);
+                }
+
             }
 
             void RemoveDominatedTrips()
