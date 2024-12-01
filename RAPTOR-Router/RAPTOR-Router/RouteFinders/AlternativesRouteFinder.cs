@@ -203,7 +203,10 @@ namespace RAPTOR_Router.RouteFinders
             // find its <count> best connecting alternative trips
             SortedSet<AlternativeEntry> sortedTrips = GetSortedConnectingTrips();
 
-            RemoveIdenticalTrips();
+            if (!previous)
+            {
+                RemoveIdenticalTrips();
+            }
 
             // Remove all trips that are dominated by another trip
             RemoveDominatedTrips();
