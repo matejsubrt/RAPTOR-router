@@ -34,7 +34,7 @@
 		<Folder Include="Documentation\" />
 	</ItemGroup>
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Exec Command="doxygen ..\..\docs\doxyfile.doxygen" />
+		<!--<Exec Command="doxygen ..\..\docs\doxyfile.doxygen" />-->
 	</Target>
 
 </Project>
