@@ -1,12 +1,19 @@
 var searchData=
 [
-  ['ibikedatasource_0',['IBikeDataSource',['../interface_r_a_p_t_o_r___router_1_1_g_b_f_s_parsing_1_1_data_sources_1_1_i_bike_data_source.html',1,'RAPTOR_Router::GBFSParsing::DataSources']]],
-  ['ientry_1',['IEntry',['../interface_r_a_p_t_o_r___router_1_1_models_1_1_dynamic_1_1_stop_routing_info_base_1_1_i_entry.html',1,'RAPTOR_Router::Models::Dynamic::StopRoutingInfoBase']]],
-  ['iidentifiable_2',['IIdentifiable',['../interface_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_i_identifiable.html',1,'RAPTOR_Router::GTFSParsing']]],
-  ['implicitendarrival_3',['ImplicitEndArrival',['../class_r_a_p_t_o_r___router_1_1_models_1_1_dynamic_1_1_stop_routing_info_base_1_1_implicit_end_arrival.html',1,'RAPTOR_Router::Models::Dynamic::StopRoutingInfoBase']]],
-  ['implicitentry_4',['ImplicitEntry',['../class_r_a_p_t_o_r___router_1_1_models_1_1_dynamic_1_1_stop_routing_info_base_1_1_implicit_entry.html',1,'RAPTOR_Router::Models::Dynamic::StopRoutingInfoBase']]],
-  ['implicitstartdeparture_5',['ImplicitStartDeparture',['../class_r_a_p_t_o_r___router_1_1_models_1_1_dynamic_1_1_stop_routing_info_base_1_1_implicit_start_departure.html',1,'RAPTOR_Router::Models::Dynamic::StopRoutingInfoBase']]],
-  ['iroutefinder_6',['IRouteFinder',['../interface_r_a_p_t_o_r___router_1_1_route_finders_1_1_i_route_finder.html',1,'RAPTOR_Router::RouteFinders']]],
-  ['iroutepoint_7',['IRoutePoint',['../interface_r_a_p_t_o_r___router_1_1_structures_1_1_interfaces_1_1_i_route_point.html',1,'RAPTOR_Router::Structures::Interfaces']]],
-  ['itransfer_8',['ITransfer',['../interface_r_a_p_t_o_r___router_1_1_structures_1_1_interfaces_1_1_i_transfer.html',1,'RAPTOR_Router::Structures::Interfaces']]]
+  ['gbfsdata_0',['GBFSData',['../class_r_a_p_t_o_r___router_1_1_g_b_f_s_parsing_1_1_g_b_f_s_structures_1_1_g_b_f_s_data.html',1,'RAPTOR_Router::GBFSParsing::GBFSStructures']]],
+  ['gbfsroot_1',['GBFSRoot',['../class_r_a_p_t_o_r___router_1_1_g_b_f_s_parsing_1_1_g_b_f_s_structures_1_1_g_b_f_s_root.html',1,'RAPTOR_Router::GBFSParsing::GBFSStructures']]],
+  ['gbfssinglestationstatus_2',['GBFSSingleStationStatus',['../class_r_a_p_t_o_r___router_1_1_g_b_f_s_parsing_1_1_g_b_f_s_structures_1_1_g_b_f_s_single_station_status.html',1,'RAPTOR_Router::GBFSParsing::GBFSStructures']]],
+  ['gbfsstation_3',['GBFSStation',['../class_r_a_p_t_o_r___router_1_1_g_b_f_s_parsing_1_1_g_b_f_s_structures_1_1_g_b_f_s_station.html',1,'RAPTOR_Router::GBFSParsing::GBFSStructures']]],
+  ['gbfsstationstatus_4',['GBFSStationStatus',['../class_r_a_p_t_o_r___router_1_1_g_b_f_s_parsing_1_1_g_b_f_s_structures_1_1_g_b_f_s_station_status.html',1,'RAPTOR_Router::GBFSParsing::GBFSStructures']]],
+  ['gbfsstatusdata_5',['GBFSStatusData',['../class_r_a_p_t_o_r___router_1_1_g_b_f_s_parsing_1_1_g_b_f_s_structures_1_1_g_b_f_s_status_data.html',1,'RAPTOR_Router::GBFSParsing::GBFSStructures']]],
+  ['gtfs_6',['GTFS',['../class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s.html',1,'RAPTOR_Router::GTFSParsing']]],
+  ['gtfsagency_7',['GTFSAgency',['../class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_agency.html',1,'RAPTOR_Router::GTFSParsing']]],
+  ['gtfscalendar_8',['GTFSCalendar',['../class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_calendar.html',1,'RAPTOR_Router::GTFSParsing']]],
+  ['gtfscalendardate_9',['GTFSCalendarDate',['../class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_calendar_date.html',1,'RAPTOR_Router::GTFSParsing']]],
+  ['gtfsdateonlyconverter_10',['GTFSDateOnlyConverter',['../class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_date_only_converter.html',1,'RAPTOR_Router::GTFSParsing']]],
+  ['gtfsroute_11',['GTFSRoute',['../class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_route.html',1,'RAPTOR_Router::GTFSParsing']]],
+  ['gtfsstop_12',['GTFSStop',['../class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_stop.html',1,'RAPTOR_Router::GTFSParsing']]],
+  ['gtfsstoptime_13',['GTFSStopTime',['../class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_stop_time.html',1,'RAPTOR_Router::GTFSParsing']]],
+  ['gtfstimeonlyconverter_14',['GTFSTimeOnlyConverter',['../class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_time_only_converter.html',1,'RAPTOR_Router::GTFSParsing']]],
+  ['gtfstrip_15',['GTFSTrip',['../class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_trip.html',1,'RAPTOR_Router::GTFSParsing']]]
 ];

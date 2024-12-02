@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['transitmodel_0',['transitModel',['../class_r_a_p_t_o_r___router_1_1_route_finders_1_1_backward_route_finder.html#a74c6355a93123e54bb402680a776cff8',1,'RAPTOR_Router::RouteFinders::BackwardRouteFinder']]]
+  ['id_0',['Id',['../class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_trip.html#a69decc076c3c8b5be527b9becc77fcca',1,'RAPTOR_Router::Structures::Transit::Trip']]]
 ];

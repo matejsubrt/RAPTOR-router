@@ -100,24 +100,24 @@ Public Member Functions</h2></td></tr>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>StartUpdateTimer</b> ()</td></tr>
 <tr class="memdesc:a052be5b982c7f002d05e76727689c15f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the bike count for all stations and starts the timer to update the status of the stations periodically. <br /></td></tr>
 <tr class="separator:a052be5b982c7f002d05e76727689c15f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0586f9245f508a939e259282840e371b" id="r_a0586f9245f508a939e259282840e371b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0586f9245f508a939e259282840e371b">UpdateAllStationStatus</a> (object source, ElapsedEventArgs e)</td></tr>
-<tr class="memdesc:a0586f9245f508a939e259282840e371b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the status (bike count) of all stations in all data sources.  <br /></td></tr>
-<tr class="separator:a0586f9245f508a939e259282840e371b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc19c6d71b296238e19125c28c68a090" id="r_abc19c6d71b296238e19125c28c68a090"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abc19c6d71b296238e19125c28c68a090">UpdateAllStationStatus</a> (object? source, ElapsedEventArgs e)</td></tr>
+<tr class="memdesc:abc19c6d71b296238e19125c28c68a090"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the status (bike count) of all stations in all data sources.  <br /></td></tr>
+<tr class="separator:abc19c6d71b296238e19125c28c68a090"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae9987e12a5c1719eb0a2df421cd89ea4" id="r_ae9987e12a5c1719eb0a2df421cd89ea4"><td class="memItemLeft" align="right" valign="top">Dictionary&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_bike_station.html">BikeStation</a>, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae9987e12a5c1719eb0a2df421cd89ea4">GetDistancesFromStation</a> (<a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_bike_station.html">BikeStation</a> station)</td></tr>
 <tr class="memdesc:ae9987e12a5c1719eb0a2df421cd89ea4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the dictionary of distances from a given station to all other stations.  <br /></td></tr>
 <tr class="separator:ae9987e12a5c1719eb0a2df421cd89ea4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2cfb28134f86a8dee64824f96b7d5192" id="r_a2cfb28134f86a8dee64824f96b7d5192"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_bike_station.html">BikeStation</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2cfb28134f86a8dee64824f96b7d5192">GetNearStations</a> (double lat, double lon, int radius)</td></tr>
-<tr class="memdesc:a2cfb28134f86a8dee64824f96b7d5192"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets all the bike stations within the given radius of the given coordinates.  <br /></td></tr>
-<tr class="separator:a2cfb28134f86a8dee64824f96b7d5192"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3193a74a09711dfef61c415b44f94a07" id="r_a3193a74a09711dfef61c415b44f94a07"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3193a74a09711dfef61c415b44f94a07">GetDistanceBetweenStations</a> (<a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_bike_station.html">BikeStation</a> s1, <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_bike_station.html">BikeStation</a> s2)</td></tr>
+<tr class="memdesc:a3193a74a09711dfef61c415b44f94a07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the distance between the 2 bike stations in meters.  <br /></td></tr>
+<tr class="separator:a3193a74a09711dfef61c415b44f94a07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e4b2d0381d535f5d4d68390f01055d0" id="r_a3e4b2d0381d535f5d4d68390f01055d0"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_bike_station.html">BikeStation</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3e4b2d0381d535f5d4d68390f01055d0">GetNearStations</a> (<a class="el" href="struct_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_coordinates.html">Coordinates</a> coords, int radius)</td></tr>
+<tr class="memdesc:a3e4b2d0381d535f5d4d68390f01055d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets all the bike stations within the given radius of the given coordinates.  <br /></td></tr>
+<tr class="separator:a3e4b2d0381d535f5d4d68390f01055d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a52166b1ad1b24a1e513768f3cd902f64" id="r_a52166b1ad1b24a1e513768f3cd902f64"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_bike_station.html">BikeStation</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a52166b1ad1b24a1e513768f3cd902f64">GetNearStations</a> (<a class="el" href="interface_r_a_p_t_o_r___router_1_1_structures_1_1_interfaces_1_1_i_route_point.html">IRoutePoint</a> rp, int radius)</td></tr>
 <tr class="memdesc:a52166b1ad1b24a1e513768f3cd902f64"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets all the bike stations within the given radius of the given RoutePoint.  <br /></td></tr>
 <tr class="separator:a52166b1ad1b24a1e513768f3cd902f64"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab43bafc0946649921022a1697067f3d8" id="r_ab43bafc0946649921022a1697067f3d8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_bike_station.html">BikeStation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab43bafc0946649921022a1697067f3d8">ResolveCoordinates</a> (double lat, double lon, int radius)</td></tr>
-<tr class="memdesc:ab43bafc0946649921022a1697067f3d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the nearest bike station to the given coordinates.  <br /></td></tr>
-<tr class="separator:ab43bafc0946649921022a1697067f3d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad1b88a6fb7f6f9bf149c6105d4543003" id="r_ad1b88a6fb7f6f9bf149c6105d4543003"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad1b88a6fb7f6f9bf149c6105d4543003">NearStationExists</a> (double lat, double lon, int radius)</td></tr>
-<tr class="memdesc:ad1b88a6fb7f6f9bf149c6105d4543003"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds out whether a bike station exists within the given radius of the given coordinates.  <br /></td></tr>
-<tr class="separator:ad1b88a6fb7f6f9bf149c6105d4543003"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48717b3ddd2cccbc56bfb306ead0b203" id="r_a48717b3ddd2cccbc56bfb306ead0b203"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a48717b3ddd2cccbc56bfb306ead0b203">NearStationExists</a> (<a class="el" href="struct_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_coordinates.html">Coordinates</a> coords, int radius)</td></tr>
+<tr class="memdesc:a48717b3ddd2cccbc56bfb306ead0b203"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds out whether a bike station exists within the given radius of the given coordinates.  <br /></td></tr>
+<tr class="separator:a48717b3ddd2cccbc56bfb306ead0b203"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -160,13 +160,43 @@ Timer&#160;</td><td class="memItemRight" valign="bottom"><b>statusUpdateTimer</b
 </div><div class="memdoc">
 
 <p>Adds a new data source to the model, and merges its data with the existing data. </p>
-<p>The data source has to already be initialized</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">source</td><td></td></tr>
+    <tr><td class="paramname">source</td><td>The data source to add</td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a3193a74a09711dfef61c415b44f94a07" name="a3193a74a09711dfef61c415b44f94a07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3193a74a09711dfef61c415b44f94a07">&#9670;&#160;</a></span>GetDistanceBetweenStations()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int RAPTOR_Router.Models.Static.BikeModel.GetDistanceBetweenStations </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_bike_station.html">BikeStation</a></td>          <td class="paramname"><span class="paramname"><em>s1</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_bike_station.html">BikeStation</a></td>          <td class="paramname"><span class="paramname"><em>s2</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets the distance between the 2 bike stations in meters. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s1</td><td>The first station</td></tr>
+    <tr><td class="paramname">s2</td><td>The second station</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The distance in meters</dd></dl>
 
 </div>
 </div>
@@ -196,8 +226,8 @@ Timer&#160;</td><td class="memItemRight" valign="bottom"><b>statusUpdateTimer</b
 
 </div>
 </div>
-<a id="a2cfb28134f86a8dee64824f96b7d5192" name="a2cfb28134f86a8dee64824f96b7d5192"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2cfb28134f86a8dee64824f96b7d5192">&#9670;&#160;</a></span>GetNearStations() <span class="overload">[1/2]</span></h2>
+<a id="a3e4b2d0381d535f5d4d68390f01055d0" name="a3e4b2d0381d535f5d4d68390f01055d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e4b2d0381d535f5d4d68390f01055d0">&#9670;&#160;</a></span>GetNearStations() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -205,12 +235,7 @@ Timer&#160;</td><td class="memItemRight" valign="bottom"><b>statusUpdateTimer</b
         <tr>
           <td class="memname">List&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_bike_station.html">BikeStation</a> &gt; RAPTOR_Router.Models.Static.BikeModel.GetNearStations </td>
           <td>(</td>
-          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>lat</em>, </span></td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>lon</em>, </span></td>
+          <td class="paramtype"><a class="el" href="struct_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_coordinates.html">Coordinates</a></td>          <td class="paramname"><span class="paramname"><em>coords</em>, </span></td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -223,8 +248,7 @@ Timer&#160;</td><td class="memItemRight" valign="bottom"><b>statusUpdateTimer</b
 <p>Gets all the bike stations within the given radius of the given coordinates. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">lat</td><td>The latitude of the point</td></tr>
-    <tr><td class="paramname">lon</td><td>The longitude of the point</td></tr>
+    <tr><td class="paramname">coords</td><td>The coordinates at which to get the near stations</td></tr>
     <tr><td class="paramname">radius</td><td>The maximum distance of the found bike station from the coordinates</td></tr>
   </table>
   </dd>
@@ -264,8 +288,8 @@ Timer&#160;</td><td class="memItemRight" valign="bottom"><b>statusUpdateTimer</b
 
 </div>
 </div>
-<a id="ad1b88a6fb7f6f9bf149c6105d4543003" name="ad1b88a6fb7f6f9bf149c6105d4543003"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad1b88a6fb7f6f9bf149c6105d4543003">&#9670;&#160;</a></span>NearStationExists()</h2>
+<a id="a48717b3ddd2cccbc56bfb306ead0b203" name="a48717b3ddd2cccbc56bfb306ead0b203"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a48717b3ddd2cccbc56bfb306ead0b203">&#9670;&#160;</a></span>NearStationExists()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -273,12 +297,7 @@ Timer&#160;</td><td class="memItemRight" valign="bottom"><b>statusUpdateTimer</b
         <tr>
           <td class="memname">bool RAPTOR_Router.Models.Static.BikeModel.NearStationExists </td>
           <td>(</td>
-          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>lat</em>, </span></td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>lon</em>, </span></td>
+          <td class="paramtype"><a class="el" href="struct_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_coordinates.html">Coordinates</a></td>          <td class="paramname"><span class="paramname"><em>coords</em>, </span></td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -291,8 +310,7 @@ Timer&#160;</td><td class="memItemRight" valign="bottom"><b>statusUpdateTimer</b
 <p>Finds out whether a bike station exists within the given radius of the given coordinates. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">lat</td><td>The latitude of the point</td></tr>
-    <tr><td class="paramname">lon</td><td>The longitude of the point</td></tr>
+    <tr><td class="paramname">coords</td><td>The coordinates for which to find out whether a near station exists</td></tr>
     <tr><td class="paramname">radius</td><td>The maximum distance of the found bike station from the coordinates</td></tr>
   </table>
   </dd>
@@ -301,45 +319,8 @@ Timer&#160;</td><td class="memItemRight" valign="bottom"><b>statusUpdateTimer</b
 
 </div>
 </div>
-<a id="ab43bafc0946649921022a1697067f3d8" name="ab43bafc0946649921022a1697067f3d8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab43bafc0946649921022a1697067f3d8">&#9670;&#160;</a></span>ResolveCoordinates()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_bike_station.html">BikeStation</a> RAPTOR_Router.Models.Static.BikeModel.ResolveCoordinates </td>
-          <td>(</td>
-          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>lat</em>, </span></td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>lon</em>, </span></td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>radius</em></span>&#160;)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Gets the nearest bike station to the given coordinates. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">lat</td><td>The latitude of the point</td></tr>
-    <tr><td class="paramname">lon</td><td>The longitude of the point</td></tr>
-    <tr><td class="paramname">radius</td><td>The maximum distance of the found bike station from the coordinates</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The nearest bike station to the coordinates, null if none was found</dd></dl>
-
-</div>
-</div>
-<a id="a0586f9245f508a939e259282840e371b" name="a0586f9245f508a939e259282840e371b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0586f9245f508a939e259282840e371b">&#9670;&#160;</a></span>UpdateAllStationStatus()</h2>
+<a id="abc19c6d71b296238e19125c28c68a090" name="abc19c6d71b296238e19125c28c68a090"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc19c6d71b296238e19125c28c68a090">&#9670;&#160;</a></span>UpdateAllStationStatus()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -347,7 +328,7 @@ Timer&#160;</td><td class="memItemRight" valign="bottom"><b>statusUpdateTimer</b
         <tr>
           <td class="memname">void RAPTOR_Router.Models.Static.BikeModel.UpdateAllStationStatus </td>
           <td>(</td>
-          <td class="paramtype">object</td>          <td class="paramname"><span class="paramname"><em>source</em>, </span></td>
+          <td class="paramtype">object?</td>          <td class="paramname"><span class="paramname"><em>source</em>, </span></td>
         </tr>
         <tr>
           <td class="paramkey"></td>

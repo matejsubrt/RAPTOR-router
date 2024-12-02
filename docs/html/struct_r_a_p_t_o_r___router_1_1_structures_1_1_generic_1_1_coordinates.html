@@ -77,6 +77,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#properties">Properties</a> &#124;
 <a href="struct_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_coordinates-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">RAPTOR_Router.Structures.Generic.Coordinates Struct Reference</div></div>
@@ -91,6 +92,24 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a085ad30ce42001498b1690208ab2563a" id="r_a085ad30ce42001498b1690208ab2563a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a085ad30ce42001498b1690208ab2563a">Coordinates</a> (double lat, double lon)</td></tr>
 <tr class="memdesc:a085ad30ce42001498b1690208ab2563a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new Coordinates object.  <br /></td></tr>
 <tr class="separator:a085ad30ce42001498b1690208ab2563a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b58ea85ce10c428be2c750fc19d07de" id="r_a1b58ea85ce10c428be2c750fc19d07de"><td class="memItemLeft" align="right" valign="top">override bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1b58ea85ce10c428be2c750fc19d07de">Equals</a> (object? obj)</td></tr>
+<tr class="memdesc:a1b58ea85ce10c428be2c750fc19d07de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compares this coordinates object with another object for equality.  <br /></td></tr>
+<tr class="separator:a1b58ea85ce10c428be2c750fc19d07de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5328cc39fa822badb401e7b988fe96dd" id="r_a5328cc39fa822badb401e7b988fe96dd"><td class="memItemLeft" align="right" valign="top">override int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5328cc39fa822badb401e7b988fe96dd">GetHashCode</a> ()</td></tr>
+<tr class="memdesc:a5328cc39fa822badb401e7b988fe96dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a hash code for the coordinates object.  <br /></td></tr>
+<tr class="separator:a5328cc39fa822badb401e7b988fe96dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a871f6c6a65489b59c593985af5c3be01" id="r_a871f6c6a65489b59c593985af5c3be01"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a871f6c6a65489b59c593985af5c3be01">ValidateValue</a> ()</td></tr>
+<tr class="memdesc:a871f6c6a65489b59c593985af5c3be01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validates whether the coordinate values are correct.  <br /></td></tr>
+<tr class="separator:a871f6c6a65489b59c593985af5c3be01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a4e33e735ba1618ab2944f614ced1fd7c" id="r_a4e33e735ba1618ab2944f614ced1fd7c"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4e33e735ba1618ab2944f614ced1fd7c">operator==</a> (<a class="el" href="struct_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_coordinates.html">Coordinates</a> c1, <a class="el" href="struct_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_coordinates.html">Coordinates</a> c2)</td></tr>
+<tr class="memdesc:a4e33e735ba1618ab2944f614ced1fd7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compares two coordinates for equality.  <br /></td></tr>
+<tr class="separator:a4e33e735ba1618ab2944f614ced1fd7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af997e93ca336ca50225de81ecd241493" id="r_af997e93ca336ca50225de81ecd241493"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af997e93ca336ca50225de81ecd241493">operator!=</a> (<a class="el" href="struct_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_coordinates.html">Coordinates</a> c1, <a class="el" href="struct_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_coordinates.html">Coordinates</a> c2)</td></tr>
+<tr class="memdesc:af997e93ca336ca50225de81ecd241493"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compares two coordinates for inequality.  <br /></td></tr>
+<tr class="separator:af997e93ca336ca50225de81ecd241493"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -133,6 +152,151 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>Lon</b><code> [get]
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a1b58ea85ce10c428be2c750fc19d07de" name="a1b58ea85ce10c428be2c750fc19d07de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1b58ea85ce10c428be2c750fc19d07de">&#9670;&#160;</a></span>Equals()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">override bool RAPTOR_Router.Structures.Generic.Coordinates.Equals </td>
+          <td>(</td>
+          <td class="paramtype">object?</td>          <td class="paramname"><span class="paramname"><em>obj</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compares this coordinates object with another object for equality. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">obj</td><td>The other object</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether the other object is a coordinates object and is equal to this</dd></dl>
+
+</div>
+</div>
+<a id="a5328cc39fa822badb401e7b988fe96dd" name="a5328cc39fa822badb401e7b988fe96dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5328cc39fa822badb401e7b988fe96dd">&#9670;&#160;</a></span>GetHashCode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">override int RAPTOR_Router.Structures.Generic.Coordinates.GetHashCode </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets a hash code for the coordinates object. </p>
+<dl class="section return"><dt>Returns</dt><dd>The hash code</dd></dl>
+
+</div>
+</div>
+<a id="af997e93ca336ca50225de81ecd241493" name="af997e93ca336ca50225de81ecd241493"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af997e93ca336ca50225de81ecd241493">&#9670;&#160;</a></span>operator!=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool RAPTOR_Router.Structures.Generic.Coordinates.operator!= </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_coordinates.html">Coordinates</a></td>          <td class="paramname"><span class="paramname"><em>c1</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_coordinates.html">Coordinates</a></td>          <td class="paramname"><span class="paramname"><em>c2</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Compares two coordinates for inequality. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">c1</td><td>The first coordinates</td></tr>
+    <tr><td class="paramname">c2</td><td>The second coordinates</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether the 2 coordinates are non-equal</dd></dl>
+
+</div>
+</div>
+<a id="a4e33e735ba1618ab2944f614ced1fd7c" name="a4e33e735ba1618ab2944f614ced1fd7c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e33e735ba1618ab2944f614ced1fd7c">&#9670;&#160;</a></span>operator==()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool RAPTOR_Router.Structures.Generic.Coordinates.operator== </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_coordinates.html">Coordinates</a></td>          <td class="paramname"><span class="paramname"><em>c1</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_coordinates.html">Coordinates</a></td>          <td class="paramname"><span class="paramname"><em>c2</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Compares two coordinates for equality. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">c1</td><td>The first coordinates</td></tr>
+    <tr><td class="paramname">c2</td><td>The second coordinates</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether the 2 coordinates are identical</dd></dl>
+
+</div>
+</div>
+<a id="a871f6c6a65489b59c593985af5c3be01" name="a871f6c6a65489b59c593985af5c3be01"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a871f6c6a65489b59c593985af5c3be01">&#9670;&#160;</a></span>ValidateValue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool RAPTOR_Router.Structures.Generic.Coordinates.ValidateValue </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Validates whether the coordinate values are correct. </p>
+<dl class="section return"><dt>Returns</dt><dd>Whether the coordinate values are correct</dd></dl>
 
 </div>
 </div>

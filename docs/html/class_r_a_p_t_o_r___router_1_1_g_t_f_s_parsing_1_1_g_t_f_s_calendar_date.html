@@ -76,65 +76,33 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#properties">Properties</a> &#124;
 <a href="class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_calendar_date-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">RAPTOR_Router.GTFSParsing.GTFSCalendarDate Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p>Class representing the calendar dates information from the calendar_dates.txt gtfs file. The properties correspond to the entries in the file.  
+<p>Class representing the calendar dates information from the calendar_dates.txt GTFS file. The properties correspond to the entries in the file.  
  <a href="#details">More...</a></p>
-<div class="dynheader">
-Inheritance diagram for RAPTOR_Router.GTFSParsing.GTFSCalendarDate:</div>
-<div class="dyncontent">
- <div class="center">
-  <img src="class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_calendar_date.png" usemap="#RAPTOR_5FRouter.GTFSParsing.GTFSCalendarDate_map" alt=""/>
-  <map id="RAPTOR_5FRouter.GTFSParsing.GTFSCalendarDate_map" name="RAPTOR_5FRouter.GTFSParsing.GTFSCalendarDate_map">
-<area href="interface_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_i_identifiable.html" title="An Interface indicating, that the object has a unique string Id." alt="RAPTOR_Router.GTFSParsing.IIdentifiable" shape="rect" coords="0,0,299,24"/>
-  </map>
-</div></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
-Public Member Functions</h2></td></tr>
-<tr class="memitem:a1373cb2f84355972fad065d6b82916d8" id="r_a1373cb2f84355972fad065d6b82916d8"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1373cb2f84355972fad065d6b82916d8">GetId</a> ()</td></tr>
-<tr class="separator:a1373cb2f84355972fad065d6b82916d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
-<tr class="memitem:a201bd91c203d4b35d2def712f7039fbf" id="r_a201bd91c203d4b35d2def712f7039fbf"><td class="memItemLeft" align="right" valign="top"><a id="a201bd91c203d4b35d2def712f7039fbf" name="a201bd91c203d4b35d2def712f7039fbf"></a>
-string&#160;</td><td class="memItemRight" valign="bottom"><b>ServiceId</b><code> [get, set]</code></td></tr>
-<tr class="separator:a201bd91c203d4b35d2def712f7039fbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a59dd5ed394a348b04cc42fe648232b67" id="r_a59dd5ed394a348b04cc42fe648232b67"><td class="memItemLeft" align="right" valign="top"><a id="a59dd5ed394a348b04cc42fe648232b67" name="a59dd5ed394a348b04cc42fe648232b67"></a>
-DateOnly&#160;</td><td class="memItemRight" valign="bottom"><b>Date</b><code> [get, set]</code></td></tr>
-<tr class="separator:a59dd5ed394a348b04cc42fe648232b67"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac70baa2ad89165a16392aa03d39bec13" id="r_ac70baa2ad89165a16392aa03d39bec13"><td class="memItemLeft" align="right" valign="top"><a id="ac70baa2ad89165a16392aa03d39bec13" name="ac70baa2ad89165a16392aa03d39bec13"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>ExceptionType</b><code> [get, set]</code></td></tr>
-<tr class="separator:ac70baa2ad89165a16392aa03d39bec13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:accab32f4a9cba215a285c45d5aa7dee9" id="r_accab32f4a9cba215a285c45d5aa7dee9"><td class="memItemLeft" align="right" valign="top"><a id="accab32f4a9cba215a285c45d5aa7dee9" name="accab32f4a9cba215a285c45d5aa7dee9"></a>
+required string&#160;</td><td class="memItemRight" valign="bottom"><b>ServiceId</b><code> [get, set]</code></td></tr>
+<tr class="memdesc:accab32f4a9cba215a285c45d5aa7dee9"><td class="mdescLeft">&#160;</td><td class="mdescRight">The unique identifier for the service to which this calendar date entry belongs. <br /></td></tr>
+<tr class="separator:accab32f4a9cba215a285c45d5aa7dee9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac463b1cff8eb05d86e9b690170ec570b" id="r_ac463b1cff8eb05d86e9b690170ec570b"><td class="memItemLeft" align="right" valign="top"><a id="ac463b1cff8eb05d86e9b690170ec570b" name="ac463b1cff8eb05d86e9b690170ec570b"></a>
+required DateOnly&#160;</td><td class="memItemRight" valign="bottom"><b>Date</b><code> [get, set]</code></td></tr>
+<tr class="memdesc:ac463b1cff8eb05d86e9b690170ec570b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The specific date for which the exception is being defined, in YYYYMMDD format. <br /></td></tr>
+<tr class="separator:ac463b1cff8eb05d86e9b690170ec570b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8daefb0121fbd19365778b62c0cde946" id="r_a8daefb0121fbd19365778b62c0cde946"><td class="memItemLeft" align="right" valign="top"><a id="a8daefb0121fbd19365778b62c0cde946" name="a8daefb0121fbd19365778b62c0cde946"></a>
+required int&#160;</td><td class="memItemRight" valign="bottom"><b>ExceptionType</b><code> [get, set]</code></td></tr>
+<tr class="memdesc:a8daefb0121fbd19365778b62c0cde946"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type of exception for the specified date. A value of 1 indicates a service that operates on the given date despite being excluded from the regular calendar. A value of 2 indicates a service that does not operate on the given date despite being included in the regular calendar. <br /></td></tr>
+<tr class="separator:a8daefb0121fbd19365778b62c0cde946"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Class representing the calendar dates information from the calendar_dates.txt gtfs file. The properties correspond to the entries in the file. </p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a1373cb2f84355972fad065d6b82916d8" name="a1373cb2f84355972fad065d6b82916d8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1373cb2f84355972fad065d6b82916d8">&#9670;&#160;</a></span>GetId()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">string RAPTOR_Router.GTFSParsing.GTFSCalendarDate.GetId </td>
-          <td>(</td>
-          <td class="paramname"><span class="paramname"></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Implements <a class="el" href="interface_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_i_identifiable.html">RAPTOR_Router.GTFSParsing.IIdentifiable</a>.</p>
-
-</div>
-</div>
-<hr/>The documentation for this class was generated from the following file:<ul>
+<div class="textblock"><p>Class representing the calendar dates information from the calendar_dates.txt GTFS file. The properties correspond to the entries in the file. </p>
+</div><hr/>The documentation for this class was generated from the following file:<ul>
 <li>GTFSParsing/<b>GTFSCalendarDate.cs</b></li>
 </ul>
 </div><!-- contents -->

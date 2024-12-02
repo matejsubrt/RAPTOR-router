@@ -1,20 +1,7 @@
 var searchData=
 [
-  ['gbfsdata_0',['GBFSData',['../class_r_a_p_t_o_r___router_1_1_g_b_f_s_parsing_1_1_g_b_f_s_structures_1_1_g_b_f_s_data.html',1,'RAPTOR_Router::GBFSParsing::GBFSStructures']]],
-  ['gbfssinglestationstatus_1',['GBFSSingleStationStatus',['../class_r_a_p_t_o_r___router_1_1_g_b_f_s_parsing_1_1_g_b_f_s_structures_1_1_g_b_f_s_single_station_status.html',1,'RAPTOR_Router::GBFSParsing::GBFSStructures']]],
-  ['gbfsstation_2',['GBFSStation',['../class_r_a_p_t_o_r___router_1_1_g_b_f_s_parsing_1_1_g_b_f_s_structures_1_1_g_b_f_s_station.html',1,'RAPTOR_Router::GBFSParsing::GBFSStructures']]],
-  ['gbfsstationinfo_3',['GBFSStationInfo',['../class_r_a_p_t_o_r___router_1_1_g_b_f_s_parsing_1_1_g_b_f_s_structures_1_1_g_b_f_s_station_info.html',1,'RAPTOR_Router::GBFSParsing::GBFSStructures']]],
-  ['gbfsstationstatus_4',['GBFSStationStatus',['../class_r_a_p_t_o_r___router_1_1_g_b_f_s_parsing_1_1_g_b_f_s_structures_1_1_g_b_f_s_station_status.html',1,'RAPTOR_Router::GBFSParsing::GBFSStructures']]],
-  ['gbfsstatusdata_5',['GBFSStatusData',['../class_r_a_p_t_o_r___router_1_1_g_b_f_s_parsing_1_1_g_b_f_s_structures_1_1_g_b_f_s_status_data.html',1,'RAPTOR_Router::GBFSParsing::GBFSStructures']]],
-  ['gtfs_6',['GTFS',['../class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s.html',1,'RAPTOR_Router::GTFSParsing']]],
-  ['gtfsagency_7',['GTFSAgency',['../class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_agency.html',1,'RAPTOR_Router::GTFSParsing']]],
-  ['gtfscalendar_8',['GTFSCalendar',['../class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_calendar.html',1,'RAPTOR_Router::GTFSParsing']]],
-  ['gtfscalendardate_9',['GTFSCalendarDate',['../class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_calendar_date.html',1,'RAPTOR_Router::GTFSParsing']]],
-  ['gtfsdateonlyconverter_10',['GTFSDateOnlyConverter',['../class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_date_only_converter.html',1,'RAPTOR_Router::GTFSParsing']]],
-  ['gtfsdatetimeconverter_11',['GTFSDateTimeConverter',['../class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_date_time_converter.html',1,'RAPTOR_Router::GTFSParsing']]],
-  ['gtfsroute_12',['GTFSRoute',['../class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_route.html',1,'RAPTOR_Router::GTFSParsing']]],
-  ['gtfsstop_13',['GTFSStop',['../class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_stop.html',1,'RAPTOR_Router::GTFSParsing']]],
-  ['gtfsstoptime_14',['GTFSStopTime',['../class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_stop_time.html',1,'RAPTOR_Router::GTFSParsing']]],
-  ['gtfstimeonlyconverter_15',['GTFSTimeOnlyConverter',['../class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_time_only_converter.html',1,'RAPTOR_Router::GTFSParsing']]],
-  ['gtfstrip_16',['GTFSTrip',['../class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_trip.html',1,'RAPTOR_Router::GTFSParsing']]]
+  ['forbiddencrossingextensions_0',['ForbiddenCrossingExtensions',['../class_r_a_p_t_o_r___router_1_1_extensions_1_1_forbidden_crossing_extensions.html',1,'RAPTOR_Router::Extensions']]],
+  ['forbiddencrossingline_1',['ForbiddenCrossingLine',['../class_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_forbidden_crossing_line.html',1,'RAPTOR_Router::Structures::Generic']]],
+  ['forbiddencrossingpoint_2',['ForbiddenCrossingPoint',['../class_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_forbidden_crossing_point.html',1,'RAPTOR_Router::Structures::Generic']]],
+  ['frombiketransfer_3',['FromBikeTransfer',['../class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_from_bike_transfer.html',1,'RAPTOR_Router::Structures::Bike']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['vehicletype_0',['VehicleType',['../class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_route.html#a691db207061d6c901062522ce3087c5f',1,'RAPTOR_Router::Structures::Transit::Route']]]
+  ['transfertime_0',['TransferTime',['../namespace_r_a_p_t_o_r___router_1_1_structures_1_1_configuration.html#aea38283bf67b447b5e5488558e026ccd',1,'RAPTOR_Router::Structures::Configuration']]]
 ];

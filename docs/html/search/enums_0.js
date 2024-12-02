@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['biketripbuffer_0',['BikeTripBuffer',['../namespace_r_a_p_t_o_r___router_1_1_structures_1_1_configuration.html#aaf2d30d7e26f5c1648d7b2af2b998b56',1,'RAPTOR_Router::Structures::Configuration']]]
+  ['alternativessearcherror_0',['AlternativesSearchError',['../namespace_r_a_p_t_o_r___router_1_1_structures_1_1_requests.html#ab4b024e9eb37d311565b57676c3ba337',1,'RAPTOR_Router::Structures::Requests']]]
 ];

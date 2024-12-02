@@ -82,7 +82,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>Class for converting Times in gtfs text form to TimeOnly objects.  
+<p>Class for converting Times in GTFS text form (HH:MM:SS) to TimeOnly objects.  
  <a href="#details">More...</a></p>
 <div class="dynheader">
 Inheritance diagram for RAPTOR_Router.GTFSParsing.GTFSTimeOnlyConverter:</div>
@@ -94,11 +94,11 @@ Inheritance diagram for RAPTOR_Router.GTFSParsing.GTFSTimeOnlyConverter:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:af2ded4ffa282890746c6af5b41bcddb2" id="r_af2ded4ffa282890746c6af5b41bcddb2"><td class="memItemLeft" align="right" valign="top">override? object&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af2ded4ffa282890746c6af5b41bcddb2">ConvertFromString</a> (string? text, IReaderRow row, MemberMapData memberMapData)</td></tr>
-<tr class="memdesc:af2ded4ffa282890746c6af5b41bcddb2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts the provided Time string to a TimeOnly object.  <br /></td></tr>
+<tr class="memdesc:af2ded4ffa282890746c6af5b41bcddb2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts the provided Time string (HH:MM:SS) to a TimeOnly object.  <br /></td></tr>
 <tr class="separator:af2ded4ffa282890746c6af5b41bcddb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Class for converting Times in gtfs text form to TimeOnly objects. </p>
+<div class="textblock"><p>Class for converting Times in GTFS text form (HH:MM:SS) to TimeOnly objects. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="af2ded4ffa282890746c6af5b41bcddb2" name="af2ded4ffa282890746c6af5b41bcddb2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af2ded4ffa282890746c6af5b41bcddb2">&#9670;&#160;</a></span>ConvertFromString()</h2>
@@ -124,14 +124,16 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Converts the provided Time string to a TimeOnly object. </p>
+<p>Converts the provided Time string (HH:MM:SS) to a TimeOnly object. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">text</td><td>The time string to use</td></tr>
+    <tr><td class="paramname">text</td><td>The Time string in HH:MM:SS format to convert.</td></tr>
+    <tr><td class="paramname">row</td><td>The reader row being processed (not used in this implementation but required by the base method signature).</td></tr>
+    <tr><td class="paramname">memberMapData</td><td>The metadata for the current member being mapped (not used in this implementation but required by the base method signature).</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The new TimeOnly object</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The new TimeOnly object representing the provided time.</dd></dl>
 
 </div>
 </div>

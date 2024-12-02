@@ -91,7 +91,7 @@ Inheritance diagram for RAPTOR_Router.GBFSParsing.DataSources.IBikeDataSource:</
  <div class="center">
   <img src="interface_r_a_p_t_o_r___router_1_1_g_b_f_s_parsing_1_1_data_sources_1_1_i_bike_data_source.png" usemap="#RAPTOR_5FRouter.GBFSParsing.DataSources.IBikeDataSource_map" alt=""/>
   <map id="RAPTOR_5FRouter.GBFSParsing.DataSources.IBikeDataSource_map" name="RAPTOR_5FRouter.GBFSParsing.DataSources.IBikeDataSource_map">
-<area href="class_r_a_p_t_o_r___router_1_1_g_b_f_s_parsing_1_1_data_sources_1_1_nextbike_data_source.html" title="Data source for Nextbike bike sharing system." alt="RAPTOR_Router.GBFSParsing.DataSources.NextbikeDataSource" shape="rect" coords="0,56,382,80"/>
+<area href="class_r_a_p_t_o_r___router_1_1_g_b_f_s_parsing_1_1_data_sources_1_1_nextbike_data_source.html" title="Data source for the Nextbike bike sharing system." alt="RAPTOR_Router.GBFSParsing.DataSources.NextbikeDataSource" shape="rect" coords="0,56,382,80"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -100,8 +100,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a6a8b53146b07016fe6a4a70171339c78" id="r_a6a8b53146b07016fe6a4a70171339c78"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6a8b53146b07016fe6a4a70171339c78">LoadStations</a> ()</td></tr>
 <tr class="memdesc:a6a8b53146b07016fe6a4a70171339c78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads the static station information from the data source - i.e. the stations' locations and capacities.  <br /></td></tr>
 <tr class="separator:a6a8b53146b07016fe6a4a70171339c78"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a36dd495c6ca02114e7434fe6f74c7ce1" id="r_a36dd495c6ca02114e7434fe6f74c7ce1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a36dd495c6ca02114e7434fe6f74c7ce1">LoadStationDistances</a> ()</td></tr>
-<tr class="memdesc:a36dd495c6ca02114e7434fe6f74c7ce1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates and fills a matrix of real-world distances between all stations.  <br /></td></tr>
+<tr class="memitem:a36dd495c6ca02114e7434fe6f74c7ce1" id="r_a36dd495c6ca02114e7434fe6f74c7ce1"><td class="memItemLeft" align="right" valign="top"><a id="a36dd495c6ca02114e7434fe6f74c7ce1" name="a36dd495c6ca02114e7434fe6f74c7ce1"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>LoadStationDistances</b> ()</td></tr>
+<tr class="memdesc:a36dd495c6ca02114e7434fe6f74c7ce1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates and fills a matrix of real-world distances between all stations. <br /></td></tr>
 <tr class="separator:a36dd495c6ca02114e7434fe6f74c7ce1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a81238ee1c51c5b9bcaadabe23f4e8907" id="r_a81238ee1c51c5b9bcaadabe23f4e8907"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a81238ee1c51c5b9bcaadabe23f4e8907">UpdateStationStatus</a> ()</td></tr>
 <tr class="memdesc:a81238ee1c51c5b9bcaadabe23f4e8907"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads the dynamic station information from the data source - i.e. the number of available bikes at each station.  <br /></td></tr>
@@ -115,34 +116,16 @@ Properties</h2></td></tr>
 <tr class="memitem:a99812e089780d068a82e40fbf4dae8d3" id="r_a99812e089780d068a82e40fbf4dae8d3"><td class="memItemLeft" align="right" valign="top">Dictionary&lt; string, <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_bike_station.html">BikeStation</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a99812e089780d068a82e40fbf4dae8d3">StationsById</a><code> [get]</code></td></tr>
 <tr class="memdesc:a99812e089780d068a82e40fbf4dae8d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">The list of all bike stations in the system, indexed by their unique Id.  <br /></td></tr>
 <tr class="separator:a99812e089780d068a82e40fbf4dae8d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a36b9a682ffc885a051c2a0290a24d43a" id="r_a36b9a682ffc885a051c2a0290a24d43a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_r_a_p_t_o_r___router_1_1_g_b_f_s_parsing_1_1_distances_1_1_station_distance_matrix.html">StationDistanceMatrix</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a36b9a682ffc885a051c2a0290a24d43a">Distances</a><code> [get]</code></td></tr>
+<tr class="memitem:a36b9a682ffc885a051c2a0290a24d43a" id="r_a36b9a682ffc885a051c2a0290a24d43a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_r_a_p_t_o_r___router_1_1_g_b_f_s_parsing_1_1_distances_1_1_station_distance_matrix.html">StationDistanceMatrix</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a36b9a682ffc885a051c2a0290a24d43a">Distances</a><code> [get, protected set]</code></td></tr>
 <tr class="memdesc:a36b9a682ffc885a051c2a0290a24d43a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The matrix of real-world distances between all stations.  <br /></td></tr>
 <tr class="separator:a36b9a682ffc885a051c2a0290a24d43a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8fba136fee061c6d29e9bb5e96c2c2b" id="r_ab8fba136fee061c6d29e9bb5e96c2c2b"><td class="memItemLeft" align="right" valign="top">string?&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab8fba136fee061c6d29e9bb5e96c2c2b">DistancesDbFileLocation</a><code> [get, protected set]</code></td></tr>
+<tr class="memdesc:ab8fba136fee061c6d29e9bb5e96c2c2b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The location of this system's database file containing the distances between its bike stations.  <br /></td></tr>
+<tr class="separator:ab8fba136fee061c6d29e9bb5e96c2c2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Interface for a data source for one shared bikes system (i.e. nextbike/rekola/...) </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a36dd495c6ca02114e7434fe6f74c7ce1" name="a36dd495c6ca02114e7434fe6f74c7ce1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a36dd495c6ca02114e7434fe6f74c7ce1">&#9670;&#160;</a></span>LoadStationDistances()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void RAPTOR_Router.GBFSParsing.DataSources.IBikeDataSource.LoadStationDistances </td>
-          <td>(</td>
-          <td class="paramname"><span class="paramname"></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Creates and fills a matrix of real-world distances between all stations. </p>
-
-<p>Implemented in <a class="el" href="class_r_a_p_t_o_r___router_1_1_g_b_f_s_parsing_1_1_data_sources_1_1_nextbike_data_source.html#ad927f75a16d0343974ad33b49a9c900d">RAPTOR_Router.GBFSParsing.DataSources.NextbikeDataSource</a>.</p>
-
-</div>
-</div>
 <a id="a6a8b53146b07016fe6a4a70171339c78" name="a6a8b53146b07016fe6a4a70171339c78"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6a8b53146b07016fe6a4a70171339c78">&#9670;&#160;</a></span>LoadStations()</h2>
 
@@ -201,7 +184,7 @@ Properties</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">get</span></span>  </td>
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">protected set</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -209,6 +192,32 @@ Properties</h2></td></tr>
 <p>The matrix of real-world distances between all stations. </p>
 
 <p>Implemented in <a class="el" href="class_r_a_p_t_o_r___router_1_1_g_b_f_s_parsing_1_1_data_sources_1_1_nextbike_data_source.html#ae0f161e72ac2352aa394e02e3ce2da9e">RAPTOR_Router.GBFSParsing.DataSources.NextbikeDataSource</a>.</p>
+
+</div>
+</div>
+<a id="ab8fba136fee061c6d29e9bb5e96c2c2b" name="ab8fba136fee061c6d29e9bb5e96c2c2b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8fba136fee061c6d29e9bb5e96c2c2b">&#9670;&#160;</a></span>DistancesDbFileLocation</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string? RAPTOR_Router.GBFSParsing.DataSources.IBikeDataSource.DistancesDbFileLocation</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">protected set</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The location of this system's database file containing the distances between its bike stations. </p>
+
+<p>Implemented in <a class="el" href="class_r_a_p_t_o_r___router_1_1_g_b_f_s_parsing_1_1_data_sources_1_1_nextbike_data_source.html#abd6e58001cf06332e2fcd7cf79633bf9">RAPTOR_Router.GBFSParsing.DataSources.NextbikeDataSource</a>.</p>
 
 </div>
 </div>

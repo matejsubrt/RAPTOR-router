@@ -1,9 +1,8 @@
 var searchData=
 [
-  ['raptor_0',['raptor',['../class_r_a_p_t_o_r___router_1_1_web_1_1_a_p_i.html#a565067ad2c09f018d5fb8811b0e8ad1f',1,'RAPTOR_Router::Web::API']]],
-  ['raptormodel_1',['raptorModel',['../class_r_a_p_t_o_r___router_1_1_routers_1_1_route_finder_builder.html#a028b13bb6f03a88d0b457d3ede7a7c4c',1,'RAPTOR_Router::Routers::RouteFinderBuilder']]],
-  ['round_2',['round',['../class_r_a_p_t_o_r___router_1_1_routers_1_1_advanced_route_finder.html#a2a3d0a9407ae8346549987d3b75bfd8a',1,'RAPTOR_Router.Routers.AdvancedRouteFinder.round()'],['../class_r_a_p_t_o_r___router_1_1_routers_1_1_basic_route_finder.html#a933ae5ba7d7266b0a474dd18fc1285ff',1,'RAPTOR_Router.Routers.BasicRouteFinder.round()']]],
-  ['rounds_3',['ROUNDS',['../class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_settings.html#ad326bb8835e5bff0197bff6dad87331e',1,'RAPTOR_Router::RAPTORStructures::Settings']]],
-  ['route_4',['Route',['../class_r_a_p_t_o_r___router_1_1_r_a_p_t_o_r_structures_1_1_trip.html#a1b2f897704c67bd4f4caefce16262fd0',1,'RAPTOR_Router::RAPTORStructures::Trip']]],
-  ['routinginfo_5',['routingInfo',['../class_r_a_p_t_o_r___router_1_1_search_models_1_1_search_model.html#af43ef3b3e857c135cde342b06d1e695b',1,'RAPTOR_Router::SearchModels::SearchModel']]]
+  ['markedbikestations_0',['markedBikeStations',['../class_r_a_p_t_o_r___router_1_1_route_finders_1_1_basic_route_finder.html#ad6ab021db3f207a86743a666d7b66375',1,'RAPTOR_Router.RouteFinders.BasicRouteFinder.markedBikeStations'],['../class_r_a_p_t_o_r___router_1_1_route_finders_1_1_range_route_finder.html#aacf9e5aaf21236f0881f5d20e4809a57',1,'RAPTOR_Router.RouteFinders.RangeRouteFinder.markedBikeStations']]],
+  ['markedrouteswithreachedtrips_1',['markedRoutesWithReachedTrips',['../class_r_a_p_t_o_r___router_1_1_route_finders_1_1_basic_route_finder.html#a8c90ed2656c53833f22c52640dbca739',1,'RAPTOR_Router.RouteFinders.BasicRouteFinder.markedRoutesWithReachedTrips'],['../class_r_a_p_t_o_r___router_1_1_route_finders_1_1_range_route_finder.html#aec0fa5f59db9dc678e6d9f72ddf0b59f',1,'RAPTOR_Router.RouteFinders.RangeRouteFinder.markedRoutesWithReachedTrips']]],
+  ['markedstops_2',['markedStops',['../class_r_a_p_t_o_r___router_1_1_route_finders_1_1_basic_route_finder.html#aaa347290cde9fe4a323044ac73382703',1,'RAPTOR_Router.RouteFinders.BasicRouteFinder.markedStops'],['../class_r_a_p_t_o_r___router_1_1_route_finders_1_1_range_route_finder.html#ac718a41d66938cd26e1d756f0a346c66',1,'RAPTOR_Router.RouteFinders.RangeRouteFinder.markedStops']]],
+  ['max_5ftransfer_5fdistance_3',['MAX_TRANSFER_DISTANCE',['../class_r_a_p_t_o_r___router_1_1_models_1_1_static_1_1_transit_model.html#acf617a55bbe15f9472c060c597cc4be6',1,'RAPTOR_Router::Models::Static::TransitModel']]],
+  ['max_5ftrip_5flength_5fdays_4',['MAX_TRIP_LENGTH_DAYS',['../class_r_a_p_t_o_r___router_1_1_structures_1_1_configuration_1_1_settings.html#acd3678f9ef2359b3e47d4ac1f6307664',1,'RAPTOR_Router::Structures::Configuration::Settings']]]
 ];

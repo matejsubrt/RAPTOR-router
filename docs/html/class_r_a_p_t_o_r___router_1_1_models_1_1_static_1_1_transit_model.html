@@ -99,12 +99,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aee1ebba75ca79680bf978c6dcd8c084a" id="r_aee1ebba75ca79680bf978c6dcd8c084a"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_stop.html">Stop</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aee1ebba75ca79680bf978c6dcd8c084a">GetStopsByName</a> (string stopName)</td></tr>
 <tr class="memdesc:aee1ebba75ca79680bf978c6dcd8c084a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a list of Stops that have a specified name (i.e. all the individual stops in a node with the specified name)  <br /></td></tr>
 <tr class="separator:aee1ebba75ca79680bf978c6dcd8c084a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0845cea8c4024d5cab85153eccb436c6" id="r_a0845cea8c4024d5cab85153eccb436c6"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_stop.html">Stop</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0845cea8c4024d5cab85153eccb436c6">GetStopsByLocation</a> (double lat, double lon, int radius)</td></tr>
-<tr class="memdesc:a0845cea8c4024d5cab85153eccb436c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets all the stops within the given radius of the given coordinates.  <br /></td></tr>
-<tr class="separator:a0845cea8c4024d5cab85153eccb436c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b7da8ac9504858c5a5fd22f1023a542" id="r_a3b7da8ac9504858c5a5fd22f1023a542"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3b7da8ac9504858c5a5fd22f1023a542">NearStopExists</a> (double lat, double lon, int radius)</td></tr>
-<tr class="memdesc:a3b7da8ac9504858c5a5fd22f1023a542"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds out whether a stop exists within the given radius of the given coordinates.  <br /></td></tr>
-<tr class="separator:a3b7da8ac9504858c5a5fd22f1023a542"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3aa5bf02fc78896b4c85f408338f2c26" id="r_a3aa5bf02fc78896b4c85f408338f2c26"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_stop.html">Stop</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3aa5bf02fc78896b4c85f408338f2c26">GetStopsByLocation</a> (<a class="el" href="struct_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_coordinates.html">Coordinates</a> coords, int radius)</td></tr>
+<tr class="memdesc:a3aa5bf02fc78896b4c85f408338f2c26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets all the stops within the given radius of the given coordinates.  <br /></td></tr>
+<tr class="separator:a3aa5bf02fc78896b4c85f408338f2c26"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad173aefb80e6362cdbac58cbb2f49caa" id="r_ad173aefb80e6362cdbac58cbb2f49caa"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad173aefb80e6362cdbac58cbb2f49caa">NearStopExists</a> (<a class="el" href="struct_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_coordinates.html">Coordinates</a> coords, int radius)</td></tr>
+<tr class="memdesc:ad173aefb80e6362cdbac58cbb2f49caa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds out whether a stop exists within the given radius of the given coordinates.  <br /></td></tr>
+<tr class="separator:ad173aefb80e6362cdbac58cbb2f49caa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -166,6 +166,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>LoadStopRoutes</b> ()
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">gtfs</td><td>The GTFS object containing the timetable GTFS data to be used for routing</td></tr>
+    <tr><td class="paramname">forbiddenCrossings</td><td>The list of forbidden crossing lines to take into account when loading transfers</td></tr>
   </table>
   </dd>
 </dl>
@@ -173,8 +174,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>LoadStopRoutes</b> ()
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a0845cea8c4024d5cab85153eccb436c6" name="a0845cea8c4024d5cab85153eccb436c6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0845cea8c4024d5cab85153eccb436c6">&#9670;&#160;</a></span>GetStopsByLocation()</h2>
+<a id="a3aa5bf02fc78896b4c85f408338f2c26" name="a3aa5bf02fc78896b4c85f408338f2c26"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3aa5bf02fc78896b4c85f408338f2c26">&#9670;&#160;</a></span>GetStopsByLocation()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -182,12 +183,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>LoadStopRoutes</b> ()
         <tr>
           <td class="memname">List&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_stop.html">Stop</a> &gt; RAPTOR_Router.Models.Static.TransitModel.GetStopsByLocation </td>
           <td>(</td>
-          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>lat</em>, </span></td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>lon</em>, </span></td>
+          <td class="paramtype"><a class="el" href="struct_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_coordinates.html">Coordinates</a></td>          <td class="paramname"><span class="paramname"><em>coords</em>, </span></td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -200,8 +196,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>LoadStopRoutes</b> ()
 <p>Gets all the stops within the given radius of the given coordinates. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">lat</td><td>The latitude of the point</td></tr>
-    <tr><td class="paramname">lon</td><td>The longitude of the point</td></tr>
+    <tr><td class="paramname">coords</td><td>The coordinates at which to look for the stops</td></tr>
     <tr><td class="paramname">radius</td><td>The maximum distance of a near stop from the coordinates</td></tr>
   </table>
   </dd>
@@ -259,6 +254,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>LoadStopRoutes</b> ()
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">gtfs</td><td>The raw GTFS data to process</td></tr>
+    <tr><td class="paramname">forbiddenCrossings</td><td>The list of forbidden crossing lines to take into account when loading transfers</td></tr>
   </table>
   </dd>
 </dl>
@@ -364,8 +360,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>LoadStopRoutes</b> ()
 
 </div>
 </div>
-<a id="a3b7da8ac9504858c5a5fd22f1023a542" name="a3b7da8ac9504858c5a5fd22f1023a542"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3b7da8ac9504858c5a5fd22f1023a542">&#9670;&#160;</a></span>NearStopExists()</h2>
+<a id="ad173aefb80e6362cdbac58cbb2f49caa" name="ad173aefb80e6362cdbac58cbb2f49caa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad173aefb80e6362cdbac58cbb2f49caa">&#9670;&#160;</a></span>NearStopExists()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -373,12 +369,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>LoadStopRoutes</b> ()
         <tr>
           <td class="memname">bool RAPTOR_Router.Models.Static.TransitModel.NearStopExists </td>
           <td>(</td>
-          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>lat</em>, </span></td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>lon</em>, </span></td>
+          <td class="paramtype"><a class="el" href="struct_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_coordinates.html">Coordinates</a></td>          <td class="paramname"><span class="paramname"><em>coords</em>, </span></td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -391,8 +382,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>LoadStopRoutes</b> ()
 <p>Finds out whether a stop exists within the given radius of the given coordinates. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">lat</td><td>The latitude of the point</td></tr>
-    <tr><td class="paramname">lon</td><td>The longitude of the point</td></tr>
+    <tr><td class="paramname">coords</td><td>The coordinates at which to find out whether a near stop exists</td></tr>
     <tr><td class="paramname">radius</td><td>The maximum distance of a near stop from the coordinates</td></tr>
   </table>
   </dd>

@@ -82,7 +82,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>Class for converting Dates in gtfs text form to DateOnly objects.  
+<p>Class for converting Dates in GTFS text form (YYYYMMDD) to DateOnly objects.  
  <a href="#details">More...</a></p>
 <div class="dynheader">
 Inheritance diagram for RAPTOR_Router.GTFSParsing.GTFSDateOnlyConverter:</div>
@@ -94,11 +94,11 @@ Inheritance diagram for RAPTOR_Router.GTFSParsing.GTFSDateOnlyConverter:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a7dab38f03b93366c57892f9f538f3378" id="r_a7dab38f03b93366c57892f9f538f3378"><td class="memItemLeft" align="right" valign="top">override? object&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7dab38f03b93366c57892f9f538f3378">ConvertFromString</a> (string? text, IReaderRow row, MemberMapData memberMapData)</td></tr>
-<tr class="memdesc:a7dab38f03b93366c57892f9f538f3378"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts the provided Date string to a DateOnly object.  <br /></td></tr>
+<tr class="memdesc:a7dab38f03b93366c57892f9f538f3378"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts the provided Date string (YYYYMMDD) to a DateOnly object.  <br /></td></tr>
 <tr class="separator:a7dab38f03b93366c57892f9f538f3378"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Class for converting Dates in gtfs text form to DateOnly objects. </p>
+<div class="textblock"><p>Class for converting Dates in GTFS text form (YYYYMMDD) to DateOnly objects. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a7dab38f03b93366c57892f9f538f3378" name="a7dab38f03b93366c57892f9f538f3378"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7dab38f03b93366c57892f9f538f3378">&#9670;&#160;</a></span>ConvertFromString()</h2>
@@ -124,14 +124,16 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Converts the provided Date string to a DateOnly object. </p>
+<p>Converts the provided Date string (YYYYMMDD) to a DateOnly object. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">text</td><td>The date string to use</td></tr>
+    <tr><td class="paramname">text</td><td>The Date string in YYYYMMDD format to convert.</td></tr>
+    <tr><td class="paramname">row</td><td>The reader row being processed (not used in this implementation but required by the base method signature).</td></tr>
+    <tr><td class="paramname">memberMapData</td><td>The metadata for the current member being mapped (not used in this implementation but required by the base method signature).</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The new DateOnly object</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The new DateOnly object representing the provided date.</dd></dl>
 
 </div>
 </div>

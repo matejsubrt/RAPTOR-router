@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['transfertime_0',['TransferTime',['../namespace_r_a_p_t_o_r___router_1_1_structures_1_1_configuration.html#aea38283bf67b447b5e5488558e026ccd',1,'RAPTOR_Router::Structures::Configuration']]]
+  ['segmenttype_0',['SegmentType',['../class_r_a_p_t_o_r___router_1_1_models_1_1_results_1_1_search_result.html#ab573db5e101013735db326538a93287b',1,'RAPTOR_Router::Models::Results::SearchResult']]]
 ];

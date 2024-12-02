@@ -97,7 +97,7 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:aea38283bf67b447b5e5488558e026ccd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum representing the transfer risk value of the user.  <a href="#aea38283bf67b447b5e5488558e026ccd">More...</a><br /></td></tr>
 <tr class="separator:aea38283bf67b447b5e5488558e026ccd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a82520fc90f52c1e9df79a97efed6ad8e" id="r_a82520fc90f52c1e9df79a97efed6ad8e"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a82520fc90f52c1e9df79a97efed6ad8e">ComfortBalance</a> { <b>ShortestTimeAbsolute</b> = 0
+<tr class="memitem:a82520fc90f52c1e9df79a97efed6ad8e" id="r_a82520fc90f52c1e9df79a97efed6ad8e"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a82520fc90f52c1e9df79a97efed6ad8e">ComfortBalance</a> { <a class="el" href="#a82520fc90f52c1e9df79a97efed6ad8ea1a8b36f92413a31b4d54f6c552dac4e9">ShortestTimeAbsolute</a> = 0
 , <a class="el" href="#a82520fc90f52c1e9df79a97efed6ad8ea4c62ab69feb58531a453ba7c20f3f8b0">ShortestTime</a> = 1
 , <a class="el" href="#a82520fc90f52c1e9df79a97efed6ad8eac6589f5236c0c434d0c63dc5f9a856f2">Balanced</a> = 2
 , <a class="el" href="#a82520fc90f52c1e9df79a97efed6ad8eaa189f1e9877391f7edffb6e48efa86ce">LeastTransfers</a> = 3
@@ -159,11 +159,13 @@ Enumerations</h2></td></tr>
 
 <p>enum representing the comfort balance of the user </p>
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a82520fc90f52c1e9df79a97efed6ad8ea4c62ab69feb58531a453ba7c20f3f8b0" name="a82520fc90f52c1e9df79a97efed6ad8ea4c62ab69feb58531a453ba7c20f3f8b0"></a>ShortestTime&#160;</td><td class="fielddoc"><p>Prefer shortest travel time only. </p>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a82520fc90f52c1e9df79a97efed6ad8ea1a8b36f92413a31b4d54f6c552dac4e9" name="a82520fc90f52c1e9df79a97efed6ad8ea1a8b36f92413a31b4d54f6c552dac4e9"></a>ShortestTimeAbsolute&#160;</td><td class="fielddoc"><p>Prefer absolute shortest time -&gt; no transfer penalty. </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a82520fc90f52c1e9df79a97efed6ad8eac6589f5236c0c434d0c63dc5f9a856f2" name="a82520fc90f52c1e9df79a97efed6ad8eac6589f5236c0c434d0c63dc5f9a856f2"></a>Balanced&#160;</td><td class="fielddoc"><p>Normal mode -&gt; each transfer adds a 2 min penalty to the connection during comparison. </p>
+<tr><td class="fieldname"><a id="a82520fc90f52c1e9df79a97efed6ad8ea4c62ab69feb58531a453ba7c20f3f8b0" name="a82520fc90f52c1e9df79a97efed6ad8ea4c62ab69feb58531a453ba7c20f3f8b0"></a>ShortestTime&#160;</td><td class="fielddoc"><p>Prefer the shortest time -&gt; 2 min penalty for each transfer when comparing connections. </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a82520fc90f52c1e9df79a97efed6ad8eaa189f1e9877391f7edffb6e48efa86ce" name="a82520fc90f52c1e9df79a97efed6ad8eaa189f1e9877391f7edffb6e48efa86ce"></a>LeastTransfers&#160;</td><td class="fielddoc"><p>Prefer less transfers -&gt; each transfer adds a 10 min penalty to the connection used during comparison. </p>
+<tr><td class="fieldname"><a id="a82520fc90f52c1e9df79a97efed6ad8eac6589f5236c0c434d0c63dc5f9a856f2" name="a82520fc90f52c1e9df79a97efed6ad8eac6589f5236c0c434d0c63dc5f9a856f2"></a>Balanced&#160;</td><td class="fielddoc"><p>Normal mode -&gt; 4 min penalty for each transfer when comparing connections. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a82520fc90f52c1e9df79a97efed6ad8eaa189f1e9877391f7edffb6e48efa86ce" name="a82520fc90f52c1e9df79a97efed6ad8eaa189f1e9877391f7edffb6e48efa86ce"></a>LeastTransfers&#160;</td><td class="fielddoc"><p>Prefer less transfers -&gt; 10 min penalty for each transfer when comparing connections. </p>
 </td></tr>
 </table>
 

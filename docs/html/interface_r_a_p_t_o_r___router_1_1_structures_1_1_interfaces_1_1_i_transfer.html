@@ -91,13 +91,11 @@ Inheritance diagram for RAPTOR_Router.Structures.Interfaces.ITransfer:</div>
  <div class="center">
   <img src="interface_r_a_p_t_o_r___router_1_1_structures_1_1_interfaces_1_1_i_transfer.png" usemap="#RAPTOR_5FRouter.Structures.Interfaces.ITransfer_map" alt=""/>
   <map id="RAPTOR_5FRouter.Structures.Interfaces.ITransfer_map" name="RAPTOR_5FRouter.Structures.Interfaces.ITransfer_map">
-<area href="class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_bike_transfer.html" title="Base class for a bike transfer." alt="RAPTOR_Router.Structures.Bike.BikeTransfer" shape="rect" coords="172,56,507,80"/>
-<area href="class_r_a_p_t_o_r___router_1_1_structures_1_1_custom_1_1_custom_transfer.html" alt="RAPTOR_Router.Structures.Custom.CustomTransfer" shape="rect" coords="862,56,1197,80"/>
-<area href="class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_transfer.html" title="Class representing a foot transfer between two stops." alt="RAPTOR_Router.Structures.Transit.Transfer" shape="rect" coords="1207,56,1542,80"/>
-<area href="class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_from_bike_transfer.html" title="Class representing a transfer from a bike station to a stop." alt="RAPTOR_Router.Structures.Bike.FromBikeTransfer" shape="rect" coords="0,112,335,136"/>
-<area href="class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_to_bike_transfer.html" title="Class representing a transfer from a stop to a bike station." alt="RAPTOR_Router.Structures.Bike.ToBikeTransfer" shape="rect" coords="345,112,680,136"/>
-<area href="class_r_a_p_t_o_r___router_1_1_structures_1_1_custom_1_1_from_custom_transfer.html" alt="RAPTOR_Router.Structures.Custom.FromCustomTransfer" shape="rect" coords="690,112,1025,136"/>
-<area href="class_r_a_p_t_o_r___router_1_1_structures_1_1_custom_1_1_to_custom_transfer.html" alt="RAPTOR_Router.Structures.Custom.ToCustomTransfer" shape="rect" coords="1035,112,1370,136"/>
+<area href="class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_bike_transfer.html" title="Base class for a bike transfer." alt="RAPTOR_Router.Structures.Bike.BikeTransfer" shape="rect" coords="158,56,464,80"/>
+<area href="class_r_a_p_t_o_r___router_1_1_structures_1_1_custom_1_1_custom_transfer.html" title="Class representing a transfer to/from a custom route point." alt="RAPTOR_Router.Structures.Custom.CustomTransfer" shape="rect" coords="474,56,780,80"/>
+<area href="class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_transfer.html" title="Class representing a foot transfer between two stops." alt="RAPTOR_Router.Structures.Transit.Transfer" shape="rect" coords="790,56,1096,80"/>
+<area href="class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_from_bike_transfer.html" title="Class representing a transfer from a bike station to a stop." alt="RAPTOR_Router.Structures.Bike.FromBikeTransfer" shape="rect" coords="0,112,306,136"/>
+<area href="class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_to_bike_transfer.html" title="Class representing a transfer from a stop to a bike station." alt="RAPTOR_Router.Structures.Bike.ToBikeTransfer" shape="rect" coords="316,112,622,136"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -109,9 +107,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:adcf2b24b3638733589b02b42d560b8f0" id="r_adcf2b24b3638733589b02b42d560b8f0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interface_r_a_p_t_o_r___router_1_1_structures_1_1_interfaces_1_1_i_route_point.html">IRoutePoint</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adcf2b24b3638733589b02b42d560b8f0">GetDestRoutePoint</a> ()</td></tr>
 <tr class="memdesc:adcf2b24b3638733589b02b42d560b8f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the destination point of the transfer.  <br /></td></tr>
 <tr class="separator:adcf2b24b3638733589b02b42d560b8f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a281b64c375f1600d3d95d2505d932631" id="r_a281b64c375f1600d3d95d2505d932631"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a281b64c375f1600d3d95d2505d932631">GetTransferTime</a> (int walkingPace)</td></tr>
-<tr class="memdesc:a281b64c375f1600d3d95d2505d932631"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the time it takes to walk the transfer at the given walking pace.  <br /></td></tr>
-<tr class="separator:a281b64c375f1600d3d95d2505d932631"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -140,7 +135,7 @@ Properties</h2></td></tr>
 <p>Gets the destination point of the transfer. </p>
 <dl class="section return"><dt>Returns</dt><dd>The destination point</dd></dl>
 
-<p>Implemented in <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_bike_transfer.html#a0a227c6c9d3405910cf9043380df53e9">RAPTOR_Router.Structures.Bike.BikeTransfer</a>, <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_from_bike_transfer.html#a777e2fe8f901760884f310659fba9d65">RAPTOR_Router.Structures.Bike.FromBikeTransfer</a>, <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_to_bike_transfer.html#a3bf3743d07bd2b0ffaebe619b5c3a72c">RAPTOR_Router.Structures.Bike.ToBikeTransfer</a>, <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_custom_1_1_custom_transfer.html#aa3c97f552e876997d79d61d331589227">RAPTOR_Router.Structures.Custom.CustomTransfer</a>, <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_custom_1_1_from_custom_transfer.html#a179a0aa6ea9cd4006e521938aa0b8e6b">RAPTOR_Router.Structures.Custom.FromCustomTransfer</a>, <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_custom_1_1_to_custom_transfer.html#a8cc30c3b848ec741187e73bd4f4d4e6e">RAPTOR_Router.Structures.Custom.ToCustomTransfer</a>, and <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_transfer.html#a1fcd879ae9ed52f15196862345928db4">RAPTOR_Router.Structures.Transit.Transfer</a>.</p>
+<p>Implemented in <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_bike_transfer.html#a0a227c6c9d3405910cf9043380df53e9">RAPTOR_Router.Structures.Bike.BikeTransfer</a>, <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_from_bike_transfer.html#a777e2fe8f901760884f310659fba9d65">RAPTOR_Router.Structures.Bike.FromBikeTransfer</a>, <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_to_bike_transfer.html#a3bf3743d07bd2b0ffaebe619b5c3a72c">RAPTOR_Router.Structures.Bike.ToBikeTransfer</a>, <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_custom_1_1_custom_transfer.html#aa3c97f552e876997d79d61d331589227">RAPTOR_Router.Structures.Custom.CustomTransfer</a>, and <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_transfer.html#a1fcd879ae9ed52f15196862345928db4">RAPTOR_Router.Structures.Transit.Transfer</a>.</p>
 
 </div>
 </div>
@@ -162,35 +157,7 @@ Properties</h2></td></tr>
 <p>Gets the source point of the transfer. </p>
 <dl class="section return"><dt>Returns</dt><dd>The source point</dd></dl>
 
-<p>Implemented in <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_bike_transfer.html#ae0432b2a7d6438bd3f1cba854aef39d9">RAPTOR_Router.Structures.Bike.BikeTransfer</a>, <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_from_bike_transfer.html#ad9db665d7513f641a7a64fab3e224bac">RAPTOR_Router.Structures.Bike.FromBikeTransfer</a>, <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_to_bike_transfer.html#af8094f3c27f06106b0719de4396d4b0f">RAPTOR_Router.Structures.Bike.ToBikeTransfer</a>, <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_custom_1_1_custom_transfer.html#a18027df95d475da08baaac4ccd74fcbc">RAPTOR_Router.Structures.Custom.CustomTransfer</a>, <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_custom_1_1_from_custom_transfer.html#a09d44b0b2cc8e191335dd2cc0fb4fcc9">RAPTOR_Router.Structures.Custom.FromCustomTransfer</a>, <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_custom_1_1_to_custom_transfer.html#afb9a691e072d408a427d99421e95042e">RAPTOR_Router.Structures.Custom.ToCustomTransfer</a>, and <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_transfer.html#afaed43f7d9693e9ab6312798fee20c4d">RAPTOR_Router.Structures.Transit.Transfer</a>.</p>
-
-</div>
-</div>
-<a id="a281b64c375f1600d3d95d2505d932631" name="a281b64c375f1600d3d95d2505d932631"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a281b64c375f1600d3d95d2505d932631">&#9670;&#160;</a></span>GetTransferTime()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int RAPTOR_Router.Structures.Interfaces.ITransfer.GetTransferTime </td>
-          <td>(</td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>walkingPace</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Gets the time it takes to walk the transfer at the given walking pace. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">walkingPace</td><td>The wlaking pace to use</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The time it takes to walk the transfer in seconds</dd></dl>
-
-<p>Implemented in <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_bike_transfer.html#adafaa38f4d749e1816d6a547fd1c442b">RAPTOR_Router.Structures.Bike.BikeTransfer</a>, <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_custom_1_1_custom_transfer.html#a7895546457d845a5f7aed5066f187b29">RAPTOR_Router.Structures.Custom.CustomTransfer</a>, <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_custom_1_1_from_custom_transfer.html#a233c7615678b282437850af795a04936">RAPTOR_Router.Structures.Custom.FromCustomTransfer</a>, <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_custom_1_1_to_custom_transfer.html#aa31a3c0b3a037f36c8451c99afc6a62e">RAPTOR_Router.Structures.Custom.ToCustomTransfer</a>, and <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_transfer.html#afe07f663ab99b39d2a58eb41d8264da3">RAPTOR_Router.Structures.Transit.Transfer</a>.</p>
+<p>Implemented in <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_bike_transfer.html#ae0432b2a7d6438bd3f1cba854aef39d9">RAPTOR_Router.Structures.Bike.BikeTransfer</a>, <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_from_bike_transfer.html#ad9db665d7513f641a7a64fab3e224bac">RAPTOR_Router.Structures.Bike.FromBikeTransfer</a>, <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_to_bike_transfer.html#af8094f3c27f06106b0719de4396d4b0f">RAPTOR_Router.Structures.Bike.ToBikeTransfer</a>, <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_custom_1_1_custom_transfer.html#a18027df95d475da08baaac4ccd74fcbc">RAPTOR_Router.Structures.Custom.CustomTransfer</a>, and <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_transfer.html#afaed43f7d9693e9ab6312798fee20c4d">RAPTOR_Router.Structures.Transit.Transfer</a>.</p>
 
 </div>
 </div>

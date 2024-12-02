@@ -1,15 +1,12 @@
 var searchData=
 [
-  ['timeonlyextensions_0',['TimeOnlyExtensions',['../class_r_a_p_t_o_r___router_1_1_extensions_1_1_time_only_extensions.html',1,'RAPTOR_Router::Extensions']]],
-  ['tobiketransfer_1',['ToBikeTransfer',['../class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_to_bike_transfer.html',1,'RAPTOR_Router::Structures::Bike']]],
-  ['tocustomtransfer_2',['ToCustomTransfer',['../class_r_a_p_t_o_r___router_1_1_structures_1_1_custom_1_1_to_custom_transfer.html',1,'RAPTOR_Router::Structures::Custom']]],
-  ['transfer_3',['Transfer',['../class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_transfer.html',1,'RAPTOR_Router::Structures::Transit']]],
-  ['transferarrival_4',['TransferArrival',['../class_r_a_p_t_o_r___router_1_1_models_1_1_dynamic_1_1_stop_routing_info_base_1_1_transfer_arrival.html',1,'RAPTOR_Router::Models::Dynamic::StopRoutingInfoBase']]],
-  ['transferdeparture_5',['TransferDeparture',['../class_r_a_p_t_o_r___router_1_1_models_1_1_dynamic_1_1_stop_routing_info_base_1_1_transfer_departure.html',1,'RAPTOR_Router::Models::Dynamic::StopRoutingInfoBase']]],
-  ['transferentry_6',['TransferEntry',['../class_r_a_p_t_o_r___router_1_1_models_1_1_dynamic_1_1_stop_routing_info_base_1_1_transfer_entry.html',1,'RAPTOR_Router::Models::Dynamic::StopRoutingInfoBase']]],
-  ['transitmodel_7',['TransitModel',['../class_r_a_p_t_o_r___router_1_1_models_1_1_static_1_1_transit_model.html',1,'RAPTOR_Router::Models::Static']]],
-  ['trip_8',['Trip',['../class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_trip.html',1,'RAPTOR_Router::Structures::Transit']]],
-  ['triparrival_9',['TripArrival',['../class_r_a_p_t_o_r___router_1_1_models_1_1_dynamic_1_1_stop_routing_info_base_1_1_trip_arrival.html',1,'RAPTOR_Router::Models::Dynamic::StopRoutingInfoBase']]],
-  ['tripdeparture_10',['TripDeparture',['../class_r_a_p_t_o_r___router_1_1_models_1_1_dynamic_1_1_stop_routing_info_base_1_1_trip_departure.html',1,'RAPTOR_Router::Models::Dynamic::StopRoutingInfoBase']]],
-  ['tripentry_11',['TripEntry',['../class_r_a_p_t_o_r___router_1_1_models_1_1_dynamic_1_1_stop_routing_info_base_1_1_trip_entry.html',1,'RAPTOR_Router::Models::Dynamic::StopRoutingInfoBase']]]
+  ['searcherrorextensions_0',['SearchErrorExtensions',['../class_r_a_p_t_o_r___router_1_1_structures_1_1_requests_1_1_search_error_extensions.html',1,'RAPTOR_Router::Structures::Requests']]],
+  ['searchmodel_1',['SearchModel',['../class_r_a_p_t_o_r___router_1_1_models_1_1_dynamic_1_1_search_model.html',1,'RAPTOR_Router::Models::Dynamic']]],
+  ['searchresult_2',['SearchResult',['../class_r_a_p_t_o_r___router_1_1_models_1_1_results_1_1_search_result.html',1,'RAPTOR_Router::Models::Results']]],
+  ['settings_3',['Settings',['../class_r_a_p_t_o_r___router_1_1_structures_1_1_configuration_1_1_settings.html',1,'RAPTOR_Router::Structures::Configuration']]],
+  ['stationdistancematrix_4',['StationDistanceMatrix',['../class_r_a_p_t_o_r___router_1_1_g_b_f_s_parsing_1_1_distances_1_1_station_distance_matrix.html',1,'RAPTOR_Router::GBFSParsing::Distances']]],
+  ['stop_5',['Stop',['../class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_stop.html',1,'RAPTOR_Router::Structures::Transit']]],
+  ['stoppass_6',['StopPass',['../class_r_a_p_t_o_r___router_1_1_models_1_1_results_1_1_search_result_1_1_stop_pass.html',1,'RAPTOR_Router::Models::Results::SearchResult']]],
+  ['stoproutinginfo_7',['StopRoutingInfo',['../class_r_a_p_t_o_r___router_1_1_models_1_1_dynamic_1_1_stop_routing_info.html',1,'RAPTOR_Router::Models::Dynamic']]],
+  ['stoptime_8',['StopTime',['../struct_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_stop_time.html',1,'RAPTOR_Router::Structures::Transit']]]
 ];

@@ -79,31 +79,35 @@ $(function() {
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#properties">Properties</a> &#124;
 <a href="class_r_a_p_t_o_r___router_1_1_structures_1_1_custom_1_1_custom_transfer-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">RAPTOR_Router.Structures.Custom.CustomTransfer Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div></div>
+  <div class="headertitle"><div class="title">RAPTOR_Router.Structures.Custom.CustomTransfer Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Class representing a transfer to/from a custom route point.  
+ <a href="#details">More...</a></p>
 <div class="dynheader">
 Inheritance diagram for RAPTOR_Router.Structures.Custom.CustomTransfer:</div>
 <div class="dyncontent">
  <div class="center">
   <img src="class_r_a_p_t_o_r___router_1_1_structures_1_1_custom_1_1_custom_transfer.png" usemap="#RAPTOR_5FRouter.Structures.Custom.CustomTransfer_map" alt=""/>
   <map id="RAPTOR_5FRouter.Structures.Custom.CustomTransfer_map" name="RAPTOR_5FRouter.Structures.Custom.CustomTransfer_map">
-<area href="interface_r_a_p_t_o_r___router_1_1_structures_1_1_interfaces_1_1_i_transfer.html" title="An interface for a transfer between two route points." alt="RAPTOR_Router.Structures.Interfaces.ITransfer" shape="rect" coords="172,0,507,24"/>
-<area href="class_r_a_p_t_o_r___router_1_1_structures_1_1_custom_1_1_from_custom_transfer.html" alt="RAPTOR_Router.Structures.Custom.FromCustomTransfer" shape="rect" coords="0,112,335,136"/>
-<area href="class_r_a_p_t_o_r___router_1_1_structures_1_1_custom_1_1_to_custom_transfer.html" alt="RAPTOR_Router.Structures.Custom.ToCustomTransfer" shape="rect" coords="345,112,680,136"/>
+<area href="interface_r_a_p_t_o_r___router_1_1_structures_1_1_interfaces_1_1_i_transfer.html" title="An interface for a transfer between two route points." alt="RAPTOR_Router.Structures.Interfaces.ITransfer" shape="rect" coords="0,0,306,24"/>
   </map>
 </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a7895546457d845a5f7aed5066f187b29" id="r_a7895546457d845a5f7aed5066f187b29"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7895546457d845a5f7aed5066f187b29">GetTransferTime</a> (int walkingPace)</td></tr>
-<tr class="memdesc:a7895546457d845a5f7aed5066f187b29"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the time it takes to walk the transfer at the given walking pace.  <br /></td></tr>
-<tr class="separator:a7895546457d845a5f7aed5066f187b29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4b8210f9c29dceaf67090fbcf67d3ed" id="r_af4b8210f9c29dceaf67090fbcf67d3ed"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af4b8210f9c29dceaf67090fbcf67d3ed">CustomTransfer</a> (<a class="el" href="interface_r_a_p_t_o_r___router_1_1_structures_1_1_interfaces_1_1_i_route_point.html">IRoutePoint</a> srcRP, <a class="el" href="interface_r_a_p_t_o_r___router_1_1_structures_1_1_interfaces_1_1_i_route_point.html">IRoutePoint</a> destRP, int dist)</td></tr>
+<tr class="memdesc:af4b8210f9c29dceaf67090fbcf67d3ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new CustomTransfer object.  <br /></td></tr>
+<tr class="separator:af4b8210f9c29dceaf67090fbcf67d3ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d52ad711a8f2e6e79a4a7ccd9c4d560" id="r_a1d52ad711a8f2e6e79a4a7ccd9c4d560"><td class="memItemLeft" align="right" valign="top">override string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1d52ad711a8f2e6e79a4a7ccd9c4d560">ToString</a> ()</td></tr>
+<tr class="memdesc:a1d52ad711a8f2e6e79a4a7ccd9c4d560"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a string representation of the transfer.  <br /></td></tr>
+<tr class="separator:a1d52ad711a8f2e6e79a4a7ccd9c4d560"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a18027df95d475da08baaac4ccd74fcbc" id="r_a18027df95d475da08baaac4ccd74fcbc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interface_r_a_p_t_o_r___router_1_1_structures_1_1_interfaces_1_1_i_route_point.html">IRoutePoint</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a18027df95d475da08baaac4ccd74fcbc">GetSrcRoutePoint</a> ()</td></tr>
-<tr class="memdesc:a18027df95d475da08baaac4ccd74fcbc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the source point of the transfer.  <br /></td></tr>
+<tr class="memdesc:a18027df95d475da08baaac4ccd74fcbc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the source route point of the transfer.  <br /></td></tr>
 <tr class="separator:a18027df95d475da08baaac4ccd74fcbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa3c97f552e876997d79d61d331589227" id="r_aa3c97f552e876997d79d61d331589227"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interface_r_a_p_t_o_r___router_1_1_structures_1_1_interfaces_1_1_i_route_point.html">IRoutePoint</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa3c97f552e876997d79d61d331589227">GetDestRoutePoint</a> ()</td></tr>
-<tr class="memdesc:aa3c97f552e876997d79d61d331589227"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the destination point of the transfer.  <br /></td></tr>
+<tr class="memdesc:aa3c97f552e876997d79d61d331589227"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the destination route point of the transfer.  <br /></td></tr>
 <tr class="separator:aa3c97f552e876997d79d61d331589227"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
@@ -111,17 +115,61 @@ Properties</h2></td></tr>
 <tr class="memitem:aa65ab502a7ec5321120933e3fb0b21ba" id="r_aa65ab502a7ec5321120933e3fb0b21ba"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa65ab502a7ec5321120933e3fb0b21ba">Distance</a><code> [get, protected set]</code></td></tr>
 <tr class="memdesc:aa65ab502a7ec5321120933e3fb0b21ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">The length of the transfer in meters.  <br /></td></tr>
 <tr class="separator:aa65ab502a7ec5321120933e3fb0b21ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f128295661bf21f515cff2369bb07c0" id="r_a1f128295661bf21f515cff2369bb07c0"><td class="memItemLeft" align="right" valign="top"><a id="a1f128295661bf21f515cff2369bb07c0" name="a1f128295661bf21f515cff2369bb07c0"></a>
+<a class="el" href="interface_r_a_p_t_o_r___router_1_1_structures_1_1_interfaces_1_1_i_route_point.html">IRoutePoint</a>&#160;</td><td class="memItemRight" valign="bottom"><b>From</b><code> [get]</code></td></tr>
+<tr class="memdesc:a1f128295661bf21f515cff2369bb07c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">The source route point. <br /></td></tr>
+<tr class="separator:a1f128295661bf21f515cff2369bb07c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa76947e8d15c90201a46ad7b2c6a3ba0" id="r_aa76947e8d15c90201a46ad7b2c6a3ba0"><td class="memItemLeft" align="right" valign="top"><a id="aa76947e8d15c90201a46ad7b2c6a3ba0" name="aa76947e8d15c90201a46ad7b2c6a3ba0"></a>
+<a class="el" href="interface_r_a_p_t_o_r___router_1_1_structures_1_1_interfaces_1_1_i_route_point.html">IRoutePoint</a>&#160;</td><td class="memItemRight" valign="bottom"><b>To</b><code> [get]</code></td></tr>
+<tr class="memdesc:aa76947e8d15c90201a46ad7b2c6a3ba0"><td class="mdescLeft">&#160;</td><td class="mdescRight">The destination route point. <br /></td></tr>
+<tr class="separator:aa76947e8d15c90201a46ad7b2c6a3ba0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header properties_interface_r_a_p_t_o_r___router_1_1_structures_1_1_interfaces_1_1_i_transfer"><td colspan="2" onclick="javascript:dynsection.toggleInherit('properties_interface_r_a_p_t_o_r___router_1_1_structures_1_1_interfaces_1_1_i_transfer')"><img src="closed.png" alt="-"/>&#160;Properties inherited from <a class="el" href="interface_r_a_p_t_o_r___router_1_1_structures_1_1_interfaces_1_1_i_transfer.html">RAPTOR_Router.Structures.Interfaces.ITransfer</a></td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Class representing a transfer to/from a custom route point. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="af4b8210f9c29dceaf67090fbcf67d3ed" name="af4b8210f9c29dceaf67090fbcf67d3ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af4b8210f9c29dceaf67090fbcf67d3ed">&#9670;&#160;</a></span>CustomTransfer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RAPTOR_Router.Structures.Custom.CustomTransfer.CustomTransfer </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interface_r_a_p_t_o_r___router_1_1_structures_1_1_interfaces_1_1_i_route_point.html">IRoutePoint</a></td>          <td class="paramname"><span class="paramname"><em>srcRP</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="interface_r_a_p_t_o_r___router_1_1_structures_1_1_interfaces_1_1_i_route_point.html">IRoutePoint</a></td>          <td class="paramname"><span class="paramname"><em>destRP</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>dist</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates a new CustomTransfer object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">srcRP</td><td>The source route point</td></tr>
+    <tr><td class="paramname">destRP</td><td>The destination route point</td></tr>
+    <tr><td class="paramname">dist</td><td>The distance of the transfer</td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="aa3c97f552e876997d79d61d331589227" name="aa3c97f552e876997d79d61d331589227"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa3c97f552e876997d79d61d331589227">&#9670;&#160;</a></span>GetDestRoutePoint()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="interface_r_a_p_t_o_r___router_1_1_structures_1_1_interfaces_1_1_i_route_point.html">IRoutePoint</a> RAPTOR_Router.Structures.Custom.CustomTransfer.GetDestRoutePoint </td>
@@ -130,15 +178,10 @@ Properties</h2></td></tr>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">abstract</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p>Gets the destination point of the transfer. </p>
-<dl class="section return"><dt>Returns</dt><dd>The destination point</dd></dl>
+<p>Gets the destination route point of the transfer. </p>
+<dl class="section return"><dt>Returns</dt><dd>The destination route point</dd></dl>
 
 <p>Implements <a class="el" href="interface_r_a_p_t_o_r___router_1_1_structures_1_1_interfaces_1_1_i_transfer.html#adcf2b24b3638733589b02b42d560b8f0">RAPTOR_Router.Structures.Interfaces.ITransfer</a>.</p>
 
@@ -149,9 +192,6 @@ Properties</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="interface_r_a_p_t_o_r___router_1_1_structures_1_1_interfaces_1_1_i_route_point.html">IRoutePoint</a> RAPTOR_Router.Structures.Custom.CustomTransfer.GetSrcRoutePoint </td>
@@ -160,53 +200,32 @@ Properties</h2></td></tr>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">abstract</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p>Gets the source point of the transfer. </p>
-<dl class="section return"><dt>Returns</dt><dd>The source point</dd></dl>
+<p>Gets the source route point of the transfer. </p>
+<dl class="section return"><dt>Returns</dt><dd>The source route point</dd></dl>
 
 <p>Implements <a class="el" href="interface_r_a_p_t_o_r___router_1_1_structures_1_1_interfaces_1_1_i_transfer.html#a1993a8843d290b1eee9836f529be5ed7">RAPTOR_Router.Structures.Interfaces.ITransfer</a>.</p>
 
 </div>
 </div>
-<a id="a7895546457d845a5f7aed5066f187b29" name="a7895546457d845a5f7aed5066f187b29"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7895546457d845a5f7aed5066f187b29">&#9670;&#160;</a></span>GetTransferTime()</h2>
+<a id="a1d52ad711a8f2e6e79a4a7ccd9c4d560" name="a1d52ad711a8f2e6e79a4a7ccd9c4d560"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d52ad711a8f2e6e79a4a7ccd9c4d560">&#9670;&#160;</a></span>ToString()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int RAPTOR_Router.Structures.Custom.CustomTransfer.GetTransferTime </td>
+          <td class="memname">override string RAPTOR_Router.Structures.Custom.CustomTransfer.ToString </td>
           <td>(</td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>walkingPace</em></span></td><td>)</td>
+          <td class="paramname"><span class="paramname"></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">abstract</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p>Gets the time it takes to walk the transfer at the given walking pace. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">walkingPace</td><td>The wlaking pace to use</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The time it takes to walk the transfer in seconds</dd></dl>
-
-<p>Implements <a class="el" href="interface_r_a_p_t_o_r___router_1_1_structures_1_1_interfaces_1_1_i_transfer.html#a281b64c375f1600d3d95d2505d932631">RAPTOR_Router.Structures.Interfaces.ITransfer</a>.</p>
+<p>Creates a string representation of the transfer. </p>
+<dl class="section return"><dt>Returns</dt><dd>The string representation</dd></dl>
 
 </div>
 </div>

@@ -88,12 +88,18 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a7ed75f05b4c9838959db8272f9657f0b" id="r_a7ed75f05b4c9838959db8272f9657f0b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7ed75f05b4c9838959db8272f9657f0b">StopTime</a> (TimeOnly arrivalTime, TimeOnly departureTime)</td></tr>
-<tr class="memdesc:a7ed75f05b4c9838959db8272f9657f0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new StopTime object.  <br /></td></tr>
-<tr class="separator:a7ed75f05b4c9838959db8272f9657f0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a49dd7324cd552821eb75cf9e8ce85cbf" id="r_a49dd7324cd552821eb75cf9e8ce85cbf"><td class="memItemLeft" align="right" valign="top"><a id="a49dd7324cd552821eb75cf9e8ce85cbf" name="a49dd7324cd552821eb75cf9e8ce85cbf"></a>
-override string&#160;</td><td class="memItemRight" valign="bottom"><b>ToString</b> ()</td></tr>
+<tr class="memitem:a323bcb13378fa1bcd973413ded9f1e3a" id="r_a323bcb13378fa1bcd973413ded9f1e3a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a323bcb13378fa1bcd973413ded9f1e3a">StopTime</a> (TimeOnly arrivalTime, TimeOnly departureTime, byte daysAfterTripStartArrival, byte daysAfterTripStartDeparture)</td></tr>
+<tr class="memdesc:a323bcb13378fa1bcd973413ded9f1e3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new StopTime object.  <br /></td></tr>
+<tr class="separator:a323bcb13378fa1bcd973413ded9f1e3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49dd7324cd552821eb75cf9e8ce85cbf" id="r_a49dd7324cd552821eb75cf9e8ce85cbf"><td class="memItemLeft" align="right" valign="top">override string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a49dd7324cd552821eb75cf9e8ce85cbf">ToString</a> ()</td></tr>
+<tr class="memdesc:a49dd7324cd552821eb75cf9e8ce85cbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a string representation of the stop time.  <br /></td></tr>
 <tr class="separator:a49dd7324cd552821eb75cf9e8ce85cbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3b8be04b557bc041df504ac7eb953b2" id="r_aa3b8be04b557bc041df504ac7eb953b2"><td class="memItemLeft" align="right" valign="top">DateTime&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa3b8be04b557bc041df504ac7eb953b2">GetArrivalDateTime</a> (DateOnly tripStartDate)</td></tr>
+<tr class="memdesc:aa3b8be04b557bc041df504ac7eb953b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the arrival dateTime of the stop time.  <br /></td></tr>
+<tr class="separator:aa3b8be04b557bc041df504ac7eb953b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49c94ad8781aa73f825b4cfa421f44c1" id="r_a49c94ad8781aa73f825b4cfa421f44c1"><td class="memItemLeft" align="right" valign="top">DateTime&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a49c94ad8781aa73f825b4cfa421f44c1">GetDepartureDateTime</a> (DateOnly tripStartDate)</td></tr>
+<tr class="memdesc:a49c94ad8781aa73f825b4cfa421f44c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the departure dateTime of the stop time.  <br /></td></tr>
+<tr class="separator:a49c94ad8781aa73f825b4cfa421f44c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -105,12 +111,20 @@ TimeOnly&#160;</td><td class="memItemRight" valign="bottom"><b>ArrivalTime</b><c
 TimeOnly&#160;</td><td class="memItemRight" valign="bottom"><b>DepartureTime</b><code> [get, set]</code></td></tr>
 <tr class="memdesc:ac5dec14862d426f0fe06f6d754a18866"><td class="mdescLeft">&#160;</td><td class="mdescRight">The time, at which the trip departs from the stop. <br /></td></tr>
 <tr class="separator:ac5dec14862d426f0fe06f6d754a18866"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6731531be58ef4fd02d57e997a464e9a" id="r_a6731531be58ef4fd02d57e997a464e9a"><td class="memItemLeft" align="right" valign="top"><a id="a6731531be58ef4fd02d57e997a464e9a" name="a6731531be58ef4fd02d57e997a464e9a"></a>
+byte&#160;</td><td class="memItemRight" valign="bottom"><b>DaysAfterTripStartArrival</b><code> [get, set]</code></td></tr>
+<tr class="memdesc:a6731531be58ef4fd02d57e997a464e9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies how many days we need to add to the trip's start date to get the date of the arrival. <br /></td></tr>
+<tr class="separator:a6731531be58ef4fd02d57e997a464e9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1bde28c10c0b81162462d7c62cd65c6" id="r_af1bde28c10c0b81162462d7c62cd65c6"><td class="memItemLeft" align="right" valign="top"><a id="af1bde28c10c0b81162462d7c62cd65c6" name="af1bde28c10c0b81162462d7c62cd65c6"></a>
+byte&#160;</td><td class="memItemRight" valign="bottom"><b>DaysAfterTripStartDeparture</b><code> [get, set]</code></td></tr>
+<tr class="memdesc:af1bde28c10c0b81162462d7c62cd65c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies how many days we need to add to the trip's start date to get the date of the departure. <br /></td></tr>
+<tr class="separator:af1bde28c10c0b81162462d7c62cd65c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Struct representing a stop time of a single trip in a single stop. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a7ed75f05b4c9838959db8272f9657f0b" name="a7ed75f05b4c9838959db8272f9657f0b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7ed75f05b4c9838959db8272f9657f0b">&#9670;&#160;</a></span>StopTime()</h2>
+<a id="a323bcb13378fa1bcd973413ded9f1e3a" name="a323bcb13378fa1bcd973413ded9f1e3a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a323bcb13378fa1bcd973413ded9f1e3a">&#9670;&#160;</a></span>StopTime()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -123,7 +137,17 @@ TimeOnly&#160;</td><td class="memItemRight" valign="bottom"><b>DepartureTime</b>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">TimeOnly</td>          <td class="paramname"><span class="paramname"><em>departureTime</em></span>&#160;)</td>
+          <td class="paramtype">TimeOnly</td>          <td class="paramname"><span class="paramname"><em>departureTime</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">byte</td>          <td class="paramname"><span class="paramname"><em>daysAfterTripStartArrival</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">byte</td>          <td class="paramname"><span class="paramname"><em>daysAfterTripStartDeparture</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -133,9 +157,84 @@ TimeOnly&#160;</td><td class="memItemRight" valign="bottom"><b>DepartureTime</b>
   <table class="params">
     <tr><td class="paramname">arrivalTime</td><td>The arrival time</td></tr>
     <tr><td class="paramname">departureTime</td><td>The departure time</td></tr>
+    <tr><td class="paramname">daysAfterTripStartArrival</td><td>The number of days after the trip start for the arrival</td></tr>
+    <tr><td class="paramname">daysAfterTripStartDeparture</td><td>The number of days after the trip start for the departure</td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="aa3b8be04b557bc041df504ac7eb953b2" name="aa3b8be04b557bc041df504ac7eb953b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa3b8be04b557bc041df504ac7eb953b2">&#9670;&#160;</a></span>GetArrivalDateTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">DateTime RAPTOR_Router.Structures.Transit.StopTime.GetArrivalDateTime </td>
+          <td>(</td>
+          <td class="paramtype">DateOnly</td>          <td class="paramname"><span class="paramname"><em>tripStartDate</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets the arrival dateTime of the stop time. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tripStartDate</td><td>The date at which the trip started</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The arrival dateTime</dd></dl>
+
+</div>
+</div>
+<a id="a49c94ad8781aa73f825b4cfa421f44c1" name="a49c94ad8781aa73f825b4cfa421f44c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49c94ad8781aa73f825b4cfa421f44c1">&#9670;&#160;</a></span>GetDepartureDateTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">DateTime RAPTOR_Router.Structures.Transit.StopTime.GetDepartureDateTime </td>
+          <td>(</td>
+          <td class="paramtype">DateOnly</td>          <td class="paramname"><span class="paramname"><em>tripStartDate</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets the departure dateTime of the stop time. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tripStartDate</td><td>The date at which the trip started</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The departure dateTime</dd></dl>
+
+</div>
+</div>
+<a id="a49dd7324cd552821eb75cf9e8ce85cbf" name="a49dd7324cd552821eb75cf9e8ce85cbf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49dd7324cd552821eb75cf9e8ce85cbf">&#9670;&#160;</a></span>ToString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">override string RAPTOR_Router.Structures.Transit.StopTime.ToString </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a string representation of the stop time. </p>
+<dl class="section return"><dt>Returns</dt><dd>The string representation</dd></dl>
 
 </div>
 </div>

@@ -82,43 +82,52 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>Class representing a single GBFS station.  
+<p>Class representing a single bike station in the GBFS feed.  
  <a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
-<tr class="memitem:afe18a943f14e383ec2f85ebda1af4b82" id="r_afe18a943f14e383ec2f85ebda1af4b82"><td class="memItemLeft" align="right" valign="top"><a id="afe18a943f14e383ec2f85ebda1af4b82" name="afe18a943f14e383ec2f85ebda1af4b82"></a>
-string&#160;</td><td class="memItemRight" valign="bottom"><b>StationId</b><code> [get, set]</code></td></tr>
-<tr class="separator:afe18a943f14e383ec2f85ebda1af4b82"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad6ff4737b774f88ea42ec5f0b6e52f11" id="r_ad6ff4737b774f88ea42ec5f0b6e52f11"><td class="memItemLeft" align="right" valign="top"><a id="ad6ff4737b774f88ea42ec5f0b6e52f11" name="ad6ff4737b774f88ea42ec5f0b6e52f11"></a>
-string&#160;</td><td class="memItemRight" valign="bottom"><b>Name</b><code> [get, set]</code></td></tr>
-<tr class="separator:ad6ff4737b774f88ea42ec5f0b6e52f11"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7cf46de42dd72d19c075a132687f57c4" id="r_a7cf46de42dd72d19c075a132687f57c4"><td class="memItemLeft" align="right" valign="top"><a id="a7cf46de42dd72d19c075a132687f57c4" name="a7cf46de42dd72d19c075a132687f57c4"></a>
-string&#160;</td><td class="memItemRight" valign="bottom"><b>ShortName</b><code> [get, set]</code></td></tr>
-<tr class="separator:a7cf46de42dd72d19c075a132687f57c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84f96febe95a963e310cca27ab6f6211" id="r_a84f96febe95a963e310cca27ab6f6211"><td class="memItemLeft" align="right" valign="top"><a id="a84f96febe95a963e310cca27ab6f6211" name="a84f96febe95a963e310cca27ab6f6211"></a>
+required string&#160;</td><td class="memItemRight" valign="bottom"><b>StationId</b><code> [get, set]</code></td></tr>
+<tr class="memdesc:a84f96febe95a963e310cca27ab6f6211"><td class="mdescLeft">&#160;</td><td class="mdescRight">The unique identifier for the station. <br /></td></tr>
+<tr class="separator:a84f96febe95a963e310cca27ab6f6211"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19cfb9d814c70a9ef62b77e80465c216" id="r_a19cfb9d814c70a9ef62b77e80465c216"><td class="memItemLeft" align="right" valign="top"><a id="a19cfb9d814c70a9ef62b77e80465c216" name="a19cfb9d814c70a9ef62b77e80465c216"></a>
+required string&#160;</td><td class="memItemRight" valign="bottom"><b>Name</b><code> [get, set]</code></td></tr>
+<tr class="memdesc:a19cfb9d814c70a9ef62b77e80465c216"><td class="mdescLeft">&#160;</td><td class="mdescRight">The name of the station (e.g., "Main Street Station"). <br /></td></tr>
+<tr class="separator:a19cfb9d814c70a9ef62b77e80465c216"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c6cae70e292437beb3ca41438759ebd" id="r_a9c6cae70e292437beb3ca41438759ebd"><td class="memItemLeft" align="right" valign="top"><a id="a9c6cae70e292437beb3ca41438759ebd" name="a9c6cae70e292437beb3ca41438759ebd"></a>
+required string&#160;</td><td class="memItemRight" valign="bottom"><b>ShortName</b><code> [get, set]</code></td></tr>
+<tr class="memdesc:a9c6cae70e292437beb3ca41438759ebd"><td class="mdescLeft">&#160;</td><td class="mdescRight">A short or abbreviated name for the station (e.g., "Main St."). <br /></td></tr>
+<tr class="separator:a9c6cae70e292437beb3ca41438759ebd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a20de910e6f2411367db81971f58cdbe3" id="r_a20de910e6f2411367db81971f58cdbe3"><td class="memItemLeft" align="right" valign="top"><a id="a20de910e6f2411367db81971f58cdbe3" name="a20de910e6f2411367db81971f58cdbe3"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>Lat</b><code> [get, set]</code></td></tr>
+<tr class="memdesc:a20de910e6f2411367db81971f58cdbe3"><td class="mdescLeft">&#160;</td><td class="mdescRight">The latitude of the station in decimal degrees. <br /></td></tr>
 <tr class="separator:a20de910e6f2411367db81971f58cdbe3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a23e602c5cac22d4e4c9fd376220fdd35" id="r_a23e602c5cac22d4e4c9fd376220fdd35"><td class="memItemLeft" align="right" valign="top"><a id="a23e602c5cac22d4e4c9fd376220fdd35" name="a23e602c5cac22d4e4c9fd376220fdd35"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>Lon</b><code> [get, set]</code></td></tr>
+<tr class="memdesc:a23e602c5cac22d4e4c9fd376220fdd35"><td class="mdescLeft">&#160;</td><td class="mdescRight">The longitude of the station in decimal degrees. <br /></td></tr>
 <tr class="separator:a23e602c5cac22d4e4c9fd376220fdd35"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0348e568c632ceb7384906290be6e272" id="r_a0348e568c632ceb7384906290be6e272"><td class="memItemLeft" align="right" valign="top"><a id="a0348e568c632ceb7384906290be6e272" name="a0348e568c632ceb7384906290be6e272"></a>
-string&#160;</td><td class="memItemRight" valign="bottom"><b>RegionId</b><code> [get, set]</code></td></tr>
-<tr class="separator:a0348e568c632ceb7384906290be6e272"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5eafcbf05d49bc70307854686f7ea4e6" id="r_a5eafcbf05d49bc70307854686f7ea4e6"><td class="memItemLeft" align="right" valign="top"><a id="a5eafcbf05d49bc70307854686f7ea4e6" name="a5eafcbf05d49bc70307854686f7ea4e6"></a>
-<a class="el" href="class_r_a_p_t_o_r___router_1_1_g_b_f_s_parsing_1_1_g_b_f_s_structures_1_1_rental_uris.html">RentalUris</a>&#160;</td><td class="memItemRight" valign="bottom"><b>RentalUris</b><code> [get, set]</code></td></tr>
-<tr class="separator:a5eafcbf05d49bc70307854686f7ea4e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0abcb71f6e0d7728f3da2d0615610a5" id="r_af0abcb71f6e0d7728f3da2d0615610a5"><td class="memItemLeft" align="right" valign="top"><a id="af0abcb71f6e0d7728f3da2d0615610a5" name="af0abcb71f6e0d7728f3da2d0615610a5"></a>
+required string&#160;</td><td class="memItemRight" valign="bottom"><b>RegionId</b><code> [get, set]</code></td></tr>
+<tr class="memdesc:af0abcb71f6e0d7728f3da2d0615610a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">The identifier for the region in which the station is located. <br /></td></tr>
+<tr class="separator:af0abcb71f6e0d7728f3da2d0615610a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a596b071950778bd8798dbf36367d5399" id="r_a596b071950778bd8798dbf36367d5399"><td class="memItemLeft" align="right" valign="top"><a id="a596b071950778bd8798dbf36367d5399" name="a596b071950778bd8798dbf36367d5399"></a>
+required <a class="el" href="class_r_a_p_t_o_r___router_1_1_g_b_f_s_parsing_1_1_g_b_f_s_structures_1_1_rental_uris.html">RentalUris</a>&#160;</td><td class="memItemRight" valign="bottom"><b>RentalUris</b><code> [get, set]</code></td></tr>
+<tr class="memdesc:a596b071950778bd8798dbf36367d5399"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contains the URIs (URLs) related to rental services and interfaces for the station. <br /></td></tr>
+<tr class="separator:a596b071950778bd8798dbf36367d5399"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8c800ef8623a255378c129de58f94ff7" id="r_a8c800ef8623a255378c129de58f94ff7"><td class="memItemLeft" align="right" valign="top"><a id="a8c800ef8623a255378c129de58f94ff7" name="a8c800ef8623a255378c129de58f94ff7"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>IsVirtualStation</b><code> [get, set]</code></td></tr>
+<tr class="memdesc:a8c800ef8623a255378c129de58f94ff7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates whether the station is a virtual station. Virtual stations may not have a physical location. <br /></td></tr>
 <tr class="separator:a8c800ef8623a255378c129de58f94ff7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8291c7fa5b23e8ddfb7e1027b19fa397" id="r_a8291c7fa5b23e8ddfb7e1027b19fa397"><td class="memItemLeft" align="right" valign="top"><a id="a8291c7fa5b23e8ddfb7e1027b19fa397" name="a8291c7fa5b23e8ddfb7e1027b19fa397"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>Capacity</b><code> [get, set]</code></td></tr>
+<tr class="memdesc:a8291c7fa5b23e8ddfb7e1027b19fa397"><td class="mdescLeft">&#160;</td><td class="mdescRight">The total capacity of the station, which could refer to the number of bikes or docking spaces available. <br /></td></tr>
 <tr class="separator:a8291c7fa5b23e8ddfb7e1027b19fa397"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Class representing a single GBFS station. </p>
+<div class="textblock"><p>Class representing a single bike station in the GBFS feed. </p>
 </div><hr/>The documentation for this class was generated from the following file:<ul>
-<li>GBFSParsing/GBFSStructures/<b>GBFSStationInfo.cs</b></li>
+<li>GBFSParsing/GBFSStructures/<b>GBFSRoot.cs</b></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
