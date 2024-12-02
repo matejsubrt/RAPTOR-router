@@ -50,6 +50,11 @@ namespace RAPTOR_Router.Structures.Transit
             //Lon = lon;
             Coords = new Coordinates(lat, lon);
         }
+
+        /// <summary>
+        /// Returns a string representation of the stop
+        /// </summary>
+        /// <returns>The string representation</returns>
         public override string ToString()
         {
             return Name + "  " + Id;

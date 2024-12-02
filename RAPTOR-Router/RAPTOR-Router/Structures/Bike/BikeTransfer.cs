@@ -34,7 +34,7 @@ namespace RAPTOR_Router.Structures.Bike
         /// <summary>
         /// A reference to the same transfer in the opposite direction
         /// </summary>
-        public BikeTransfer OppositeTransfer { get; set; }
+        public BikeTransfer? OppositeTransfer { get; set; }
     }
 
     /// <summary>
@@ -116,6 +116,11 @@ namespace RAPTOR_Router.Structures.Bike
             To = bikeStation;
             Distance = dist;
         }
+
+        /// <summary>
+        /// Returns a string representation of the bike transfer
+        /// </summary>
+        /// <returns>The string representation of the bike transfer</returns>
         public override string ToString()
         {
             return "Transfer from " + From.Name + " to " + To.Name;

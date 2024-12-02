@@ -290,7 +290,7 @@ namespace RAPTOR_Router.RouteFinders
                 foreach (Route route in stop.StopRoutes)
                 {
                     var routeTripTimes = route.GetTripTimesAtStopWithinRange(stop, searchBeginRangeStart,
-                        searchBeginRangeEnd, delayModel, forward);
+                        searchBeginRangeEnd, forward);
                     if (routeTripTimes is not null)
                     {
                         foreach (var tripTime in routeTripTimes)

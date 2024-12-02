@@ -2,22 +2,66 @@
 
 namespace RAPTOR_Router.Structures.Generic
 {
+    /// <summary>
+    /// Class representing a forbidden crossing point. These points are used to create lines that no transfer can cross
+    /// </summary>
     public class ForbiddenCrossingPoint
     {
+        /// <summary>
+        /// The coordinates of the point
+        /// </summary>
         public Coordinates Coords { get; }
+
+        /// <summary>
+        /// The id of the point
+        /// </summary>
         public int Id { get; }
+
+        /// <summary>
+        /// Creates a new ForbiddenCrossingPoint object
+        /// </summary>
+        /// <param name="coords">The coordinates of the point</param>
+        /// <param name="id">The id of the point</param>
         public ForbiddenCrossingPoint(Coordinates coords, int id)
         {
             Coords = coords;
             Id = id;
         }
     }
+
+    /// <summary>
+    /// Class representing a forbidden crossing line, that no transfer can cross
+    /// </summary>
+    /// <remarks>Used in places, where there are pairs of stops which are close to each other, but there is no way of transfering (i.e. over rivers, railways, highways, ...)</remarks>
     public class ForbiddenCrossingLine
     {
+        /// <summary>
+        /// The first point of the line segment
+        /// </summary>
         public ForbiddenCrossingPoint P1 { get; }
+
+        /// <summary>
+        /// The second point of the line segment
+        /// </summary>
         public ForbiddenCrossingPoint P2 { get; }
+
+        /// <summary>
+        /// A comment describing the reason for the line existing
+        /// </summary>
         public string Comment { get; }
+
+        /// <summary>
+        /// An id of the line
+        /// </summary>
         public int Id { get; }
+
+        /// <summary>
+        /// Creates a new ForbiddenCrossingLine object
+        /// </summary>
+        /// <param name="p1">The first point</param>
+        /// <param name="p2">The second point</param>
+        /// <param name="id">The id of the line</param>
+        /// <param name="comment">A comment describing the line</param>
         public ForbiddenCrossingLine(ForbiddenCrossingPoint p1, ForbiddenCrossingPoint p2, int id, string comment)
         {
             P1 = p1;
@@ -26,11 +70,18 @@ namespace RAPTOR_Router.Structures.Generic
             Comment = comment;
         }
 
+        /// <summary>
+        /// For a pair of route points, checks if the line segment between them crosses this forbidden line
+        /// </summary>
+        /// <param name="rp1">The first route point</param>
+        /// <param name="rp2">The second route point</param>
+        /// <returns>Whether crossing between the 2 route points is forbidden due to crossing this line</returns>
         public bool IsCrossingForbidden(IRoutePoint rp1, IRoutePoint rp2)
         {
             return DoLinesIntersect(P1.Coords, P2.Coords, rp1.Coords, rp2.Coords);
         }
 
+        // Given three points, p, q, r, the function checks if they are collinear (0), clockwise (1) or counterclockwise (2) in th order
         private int Orientation(Coordinates p, Coordinates q, Coordinates r)
         {
             double val = (q.Lon - p.Lon) * (r.Lat - q.Lat) - (q.Lat - p.Lat) * (r.Lon - q.Lon);

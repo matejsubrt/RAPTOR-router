@@ -56,7 +56,7 @@ namespace RAPTOR_Router.Structures.Custom
         public void AddTransferToRoutePoint(IRoutePoint rp)
         {
             int distance = DistanceExtensions.DistanceBetween(this, rp);
-            possibleTransfers.Add(new FromCustomTransfer(this, rp, distance));
+            possibleTransfers.Add(new CustomTransfer(this, rp, distance));
 
             if (!transferDistances.ContainsKey(rp))
             {
@@ -70,7 +70,7 @@ namespace RAPTOR_Router.Structures.Custom
         public void AddTransferFromRoutePoint(IRoutePoint rp)
         {
             int distance = DistanceExtensions.DistanceBetween(rp, this);
-            possibleTransfers.Add(new ToCustomTransfer(rp, this, distance));
+            possibleTransfers.Add(new CustomTransfer(rp, this, distance));
 
             if (!transferDistances.ContainsKey(rp))
             {

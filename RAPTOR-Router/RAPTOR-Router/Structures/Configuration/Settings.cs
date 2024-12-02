@@ -207,28 +207,34 @@
             return (int)(distance / 1000.0 * CyclingPace * 60);
         }
 
+        /// <summary>
+        /// Gets the time that will be billed to the user performing the bike trip -> Time between finally unlocking the bike and locking it again (i.e. does not include the unlock time)
+        /// </summary>
+        /// <param name="distance">The length of the bike trip in meters</param>
+        /// <returns>The billed bike trip time in seconds</returns>
         public int GetBilledBikeTripTime(int distance)
         {
             return (int)((distance / 1000.0) * CyclingPace * 60 * GetBikeTripLengthMultiplier()) + BikeLockTime;
         }
 
+        /// <summary>
+        /// Gets the full time of a bike trip including the unlock and lock times (i.e. time between reaching the source station and being able to leave the destination station)
+        /// </summary>
+        /// <param name="distance">The length of the bike trip in meters</param>
+        /// <returns>The full adjusted bike trip time in seconds, including unlock and lock times</returns>
         public int GetAdjustedBikeTripTime(int distance)
         {
             return (int)((distance / 1000.0) * CyclingPace * 60 * GetBikeTripLengthMultiplier()) + BikeUnlockTime + BikeLockTime;
         }
 
+        /// <summary>
+        /// Gets the time it takes to perform a walking transfer of the given distance according to the settings
+        /// </summary>
+        /// <param name="distance">The length of the transfer in meters</param>
+        /// <returns>The time it takes to perform the transfer in seconds</returns>
         public int GetAdjustedWalkingTransferTime(int distance)
         {
             return (int)((distance / 1000.0) * WalkingPace * 60 * GetMovingTransferLengthMultiplier());
-        }
-        /// <summary>
-        /// Gets the time it takes to perform a transfer of the given distance
-        /// </summary>
-        /// <param name="distance">The distance of the transfer in meters</param>
-        /// <returns>The time it takes to perform the transfer in seconds</returns>
-        public int GetWalkingTransferTime(int distance)
-        {
-            return (int)(distance / 1000.0 * WalkingPace * 60);
         }
     }
 
@@ -260,17 +266,23 @@
     /// </summary>
     public enum ComfortBalance
     {
-        ShortestTimeAbsolute = 0,
         /// <summary>
-        /// Prefer shortest travel time only
+        /// Prefer absolute shortest time -> no transfer penalty
+        /// </summary>
+        ShortestTimeAbsolute = 0,
+
+        /// <summary>
+        /// Prefer the shortest time -> 2 min penalty for each transfer when comparing connections
         /// </summary>
         ShortestTime = 1,
+
         /// <summary>
-        /// Normal mode -> each transfer adds a 2 min penalty to the connection during comparison
+        /// Normal mode -> 4 min penalty for each transfer when comparing connections
         /// </summary>
         Balanced = 2,
+
         /// <summary>
-        /// Prefer less transfers -> each transfer adds a 10 min penalty to the connection used during comparison
+        /// Prefer less transfers -> 10 min penalty for each transfer when comparing connections
         /// </summary>
         LeastTransfers = 3
     }

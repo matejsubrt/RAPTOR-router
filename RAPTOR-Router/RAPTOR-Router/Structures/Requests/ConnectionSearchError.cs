@@ -6,36 +6,129 @@ using System.Threading.Tasks;
 
 namespace RAPTOR_Router.Structures.Requests
 {
+    /// <summary>
+    /// An enum representing an error due to which a connection request failed.
+    /// </summary>
     public enum ConnectionSearchError
     {
+        /// <summary>
+        /// Indicates that no error occurred.
+        /// </summary>
         NoError,
+
+        /// <summary>
+        /// The provided date and time are invalid.
+        /// </summary>
         InvalidDateTime,
+
+        /// <summary>
+        /// The settings provided for the connection search are invalid.
+        /// </summary>
         InvalidSettings,
+
+        /// <summary>
+        /// The source coordinates are invalid.
+        /// </summary>
         InvalidSrcCoordinates,
+
+        /// <summary>
+        /// The destination coordinates are invalid.
+        /// </summary>
         InvalidDestCoordinates,
+
+        /// <summary>
+        /// Both source and destination coordinates are invalid.
+        /// </summary>
         InvalidBothCoordinates,
+
+        /// <summary>
+        /// No stops were found near the source coordinates.
+        /// </summary>
         NoStopsNearSrcCoords,
+
+        /// <summary>
+        /// No stops were found near the destination coordinates.
+        /// </summary>
         NoStopsNearDestCoords,
+
+        /// <summary>
+        /// No stops were found near either the source or destination coordinates.
+        /// </summary>
         NoStopsNearBothCoords,
+
+        /// <summary>
+        /// The source stop name is invalid.
+        /// </summary>
         InvalidSrcStopName,
+
+        /// <summary>
+        /// The destination stop name is invalid.
+        /// </summary>
         InvalidDestStopName,
+
+        /// <summary>
+        /// Both source and destination stop names are invalid.
+        /// </summary>
         InvalidBothStopNames,
+
+        /// <summary>
+        /// No connection was found between the source and destination.
+        /// </summary>
         NoConnectionFound,
     }
 
+
+    /// <summary>
+    /// An enum representing an error due to which an alternatives search request failed.
+    /// </summary>
     public enum AlternativesSearchError
     {
+        /// <summary>
+        /// Indicates that no error occurred.
+        /// </summary>
         NoError,
+
+        /// <summary>
+        /// The provided date and time are invalid.
+        /// </summary>
         InvalidDateTime,
+
+        /// <summary>
+        /// The source stop ID does not exist.
+        /// </summary>
         NonExistentSrcStopId,
+
+        /// <summary>
+        /// The destination stop ID does not exist.
+        /// </summary>
         NonExistentDestStopId,
+
+        /// <summary>
+        /// Both the source and destination stop IDs do not exist.
+        /// </summary>
         NonExistentBothStopIds,
+
+        /// <summary>
+        /// The requested result count for the search is invalid.
+        /// </summary>
         InvalidCount,
+
+        /// <summary>
+        /// No trips were found for the given search criteria.
+        /// </summary>
         NoTripsFound
     }
 
+    /// <summary>
+    /// Class providing extension methods for the ConnectionSearchError enum. Used to convert the enum values to human-readable error messages.
+    /// </summary>
     public static class SearchErrorExtensions
     {
+        /// <summary>
+        /// Converts a ConnectionSearchError enum value to a human-readable error message.
+        /// </summary>
+        /// <param name="error">The error value</param>
+        /// <returns>The error message for the value</returns>
         public static string ToMessage(this ConnectionSearchError error)
         {
             return error switch
@@ -58,8 +151,16 @@ namespace RAPTOR_Router.Structures.Requests
         }
     }
 
+    /// <summary>
+    /// Class providing extension methods for the AlternativesSearchError enum. Used to convert the enum values to human-readable error messages.
+    /// </summary>
     public static class AlternativesSearchErrorExtensions
     {
+        /// <summary>
+        /// Converts an AlternativesSearchError enum value to a human-readable error message.
+        /// </summary>
+        /// <param name="error">The error value</param>
+        /// <returns>The error message for the value</returns>
         public static string ToMessage(this AlternativesSearchError error)
         {
             return error switch

@@ -350,7 +350,7 @@ namespace RAPTOR_Router.RouteFinders
                     Stop srcStop1 = route.RouteStops[srcIndex];
 
                     //TODO: check if the trip should be included in the result or not - probably yes unless it is the one we are searching for alternatives for
-                    Trip? firstTripDepartingAfterTime = route.GetEarliestTripDepartingAfterTimeAtStop(srcStop1, request.dateTime, delayModel, out DateOnly tripDate);
+                    Trip? firstTripDepartingAfterTime = route.GetFirstTransferableTripAtStopByReachTime(true, srcStop1, request.dateTime, delayModel, out DateOnly tripDate);
                     if (firstTripDepartingAfterTime is null)
                     {
                         continue;

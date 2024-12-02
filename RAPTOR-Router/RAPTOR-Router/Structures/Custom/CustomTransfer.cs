@@ -8,64 +8,62 @@ using System.Threading.Tasks;
 
 namespace RAPTOR_Router.Structures.Custom
 {
-    public abstract class CustomTransfer : ITransfer
+    /// <summary>
+    /// Class representing a transfer to/from a custom route point
+    /// </summary>
+    public class CustomTransfer : ITransfer
     {
+        /// <summary>
+        /// The length of the transfer in meters
+        /// </summary>
         public int Distance { get; protected set; }
-        public abstract int GetTransferTime(int walkingPace);
-        public abstract IRoutePoint GetSrcRoutePoint();
-        public abstract IRoutePoint GetDestRoutePoint();
-    }
-    public class FromCustomTransfer : CustomTransfer
-    {
+
+        /// <summary>
+        /// The source route point
+        /// </summary>
         public IRoutePoint From { get; }
+
+        /// <summary>
+        /// The destination route point
+        /// </summary>
         public IRoutePoint To { get; }
 
-        public FromCustomTransfer(IRoutePoint customRP, IRoutePoint normalRP, int dist)
+        /// <summary>
+        /// Creates a new CustomTransfer object
+        /// </summary>
+        /// <param name="srcRP">The source route point</param>
+        /// <param name="destRP">The destination route point</param>
+        /// <param name="dist">The distance of the transfer</param>
+        public CustomTransfer(IRoutePoint srcRP, IRoutePoint destRP, int dist)
         {
-            From = customRP;
-            To = normalRP;
+            From = srcRP;
+            To = destRP;
             Distance = dist;
         }
+
+        /// <summary>
+        /// Creates a string representation of the transfer
+        /// </summary>
+        /// <returns>The string representation</returns>
         public override string ToString()
         {
             return "Transfer from " + From.Name + " to " + To.Name;
         }
-        public override int GetTransferTime(int walkingPace)
-        {
-            return (int)(Distance / 1000.0 * walkingPace * 60);
-        }
-        public override IRoutePoint GetSrcRoutePoint()
-        {
-            return From;
-        }
-        public override IRoutePoint GetDestRoutePoint()
-        {
-            return To;
-        }
-    }
-    public class ToCustomTransfer : CustomTransfer
-    {
-        public IRoutePoint From { get; }
-        public IRoutePoint To { get; }
-        public ToCustomTransfer(IRoutePoint normalRP, IRoutePoint customRP, int dist)
-        {
-            From = normalRP;
-            To = customRP;
-            Distance = dist;
-        }
-        public override string ToString()
-        {
-            return "Transfer from " + From.Name + " to " + To.Name;
-        }
-        public override int GetTransferTime(int walkingPace)
-        {
-            return (int)(Distance / 1000.0 * walkingPace * 60);
-        }
-        public override IRoutePoint GetSrcRoutePoint()
+
+        /// <summary>
+        /// Gets the source route point of the transfer
+        /// </summary>
+        /// <returns>The source route point</returns>
+        public IRoutePoint GetSrcRoutePoint()
         {
             return From;
         }
-        public override IRoutePoint GetDestRoutePoint()
+
+        /// <summary>
+        /// Gets the destination route point of the transfer
+        /// </summary>
+        /// <returns>The destination route point</returns>
+        public IRoutePoint GetDestRoutePoint()
         {
             return To;
         }

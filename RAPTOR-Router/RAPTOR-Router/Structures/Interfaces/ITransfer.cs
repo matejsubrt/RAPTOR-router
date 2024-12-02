@@ -16,12 +16,6 @@
         /// <returns>The destination point</returns>
         public IRoutePoint GetDestRoutePoint();
         /// <summary>
-        /// Gets the time it takes to walk the transfer at the given walking pace
-        /// </summary>
-        /// <param name="walkingPace">The wlaking pace to use</param>
-        /// <returns>The time it takes to walk the transfer in seconds</returns>
-        public int GetTransferTime(int walkingPace);
-        /// <summary>
         /// The length of the transfer in meters
         /// </summary>
         public int Distance { get; }

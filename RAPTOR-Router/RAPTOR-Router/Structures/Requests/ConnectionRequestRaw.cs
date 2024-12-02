@@ -9,22 +9,78 @@ using RAPTOR_Router.Structures.Generic;
 
 namespace RAPTOR_Router.Structures.Requests
 {
+    /// <summary>
+    /// Class representing a request for connection(s) between two stops or coordinates
+    /// </summary>
     public class ConnectionRequest
     {
+        /// <summary>
+        /// Specifies whether the source is given by coordinates or by the name of a stop
+        /// </summary>
+        public bool srcByCoords { get; set; }
+        /// <summary>
+        /// The name of the source stop
+        /// </summary>
+        /// <remarks>Valid only if srcByCoords is false</remarks>
         public string? srcStopName { get; set; }
+        /// <summary>
+        /// The latitude of the source coordinates
+        /// </summary>
+        /// <remarks>Valid only if srcByCoords is true</remarks>
         public double srcLat { get; set; }
+        /// <summary>
+        /// The longitude of the source coordinates
+        /// </summary>
+        /// <remarks>Valid only if srcByCoords is true</remarks>
         public double srcLon { get; set; }
+
+
+        /// <summary>
+        /// Specifies whether the destination is given by coordinates or by the name of a stop
+        /// </summary>
+        public bool destByCoords { get; set; }
+        /// <summary>
+        /// The name of the destination stop
+        /// </summary>
+        /// <remarks>Valid only if destByCoords is false</remarks>
         public string? destStopName { get; set; }
+        /// <summary>
+        /// The latitude of the destination coordinates
+        /// </summary>
+        /// <remarks>Valid only if destByCoords is true</remarks>
         public double destLat { get; set; }
+        /// <summary>
+        /// The longitude of the destination coordinates
+        /// </summary>
+        /// <remarks>Valid only if destByCoords is true</remarks>
         public double destLon { get; set; }
+
+
+        /// <summary>
+        /// The date and time of the search begin
+        /// </summary>
+        /// <remarks>If byEarliestDeparture is true, the earliest possible departure from source, otherwise the latest possible arrival at destination</remarks>
         public DateTime? dateTime { get; set; }
+
+        /// <summary>
+        /// Specifies whether to find the best connections within a time range, or only for a single search begin time
+        /// </summary>
+        public bool range { get; set; }
+
+        /// <summary>
+        /// The length of the time range.
+        /// </summary>
+        /// <remarks>Valid only if range is true</remarks>
         public int rangeLength { get; set; }
 
+        /// <summary>
+        /// Specifies whether to search for connections by the earliest departure time or the latest arrival time (i.e. the search direction)
+        /// </summary>
         public bool byEarliestDeparture { get; set; }
-        public bool range { get; set; }
-        public bool srcByCoords { get; set; }
-        public bool destByCoords { get; set; }
 
+        /// <summary>
+        /// The settings to be used for the search
+        /// </summary>
         public Settings? settings { get; set; }
 
 
@@ -60,6 +116,12 @@ namespace RAPTOR_Router.Structures.Requests
             return stopName is not null && transitModel.GetStopsByName(stopName).Count != 0;
         }
 
+        /// <summary>
+        /// Validates the request parameters
+        /// </summary>
+        /// <param name="transitModel">The transit model used for searches</param>
+        /// <param name="bikeModel">The bike model used for searches</param>
+        /// <returns>The resulting connection search error object</returns>
         public ConnectionSearchError Validate(TransitModel transitModel, BikeModel bikeModel)
         {
             if (dateTime is null)
@@ -84,7 +146,7 @@ namespace RAPTOR_Router.Structures.Requests
             if (srcByCoords)
             {
                 Coordinates srcCoords = new Coordinates(srcLat, srcLon);
-                if (srcCoords.ValidateValue())
+                if (!srcCoords.ValidateValue())
                 {
                     srcCoordsValid = false;
                 }
@@ -105,7 +167,7 @@ namespace RAPTOR_Router.Structures.Requests
             if (destByCoords)
             {
                 Coordinates destCoords = new Coordinates(destLat, destLon);
-                if (destCoords.ValidateValue())
+                if (!destCoords.ValidateValue())
                 {
                     destCoordsValid = false;
                 }

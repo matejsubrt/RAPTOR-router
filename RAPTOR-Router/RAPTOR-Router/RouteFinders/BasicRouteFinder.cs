@@ -280,7 +280,7 @@ namespace RAPTOR_Router.RouteFinders
 
                 DateOnly tripDate;
 
-                Trip? trip = route.GetFirstTransferableTripAtStopByReachTimeBeta(
+                Trip? trip = route.GetFirstTransferableTripAtStopByReachTime(
                     forward,
                     markedStop,
                     bestReachTimeAtTraverseFromStopLastRound,
@@ -429,7 +429,7 @@ namespace RAPTOR_Router.RouteFinders
 
 
                         DateOnly newTripDate;
-                        Trip? newTrip = route.GetFirstTransferableTripAtStopByReachTimeBeta(
+                        Trip? newTrip = route.GetFirstTransferableTripAtStopByReachTime(
                             forward,
                             currStop,
                             bestReachTimeLastRound,
@@ -635,7 +635,7 @@ namespace RAPTOR_Router.RouteFinders
                 {
                     foreach (BikeTransfer bikeTransfer in stop.BikeTransfers)
                     {
-                        BikeTransfer realBikeTransfer = forward ? bikeTransfer : bikeTransfer.OppositeTransfer;
+                        BikeTransfer realBikeTransfer = forward ? bikeTransfer : bikeTransfer.OppositeTransfer!;
                         // Improve by Stop-to-BikeStation transfers
                         bool improved = searchModel.TryImproveReachTimeByTransfer(realBikeTransfer, true, round, DoNotImproveToRoutePoint);
                         if (improved)
@@ -650,7 +650,7 @@ namespace RAPTOR_Router.RouteFinders
             {
                 foreach (BikeTransfer bikeTransfer in bikeStation.Transfers)
                 {
-                    BikeTransfer realBikeTransfer = forward ? bikeTransfer : bikeTransfer.OppositeTransfer;
+                    BikeTransfer realBikeTransfer = forward ? bikeTransfer : bikeTransfer.OppositeTransfer!;
                     // Improve by BikeStation-to-Stop transfers
                     bool improved = searchModel.TryImproveReachTimeByTransfer(realBikeTransfer, false, round, DoNotImproveToRoutePoint);
                     if (improved)
@@ -661,21 +661,10 @@ namespace RAPTOR_Router.RouteFinders
             }
         }
 
-
-        //public Tuple<List<Stop>, List<BikeStation>> GetNearRoutePoints(double lat, double lon)
-        //{
-        //    List<Stop> nearStops = transitModel.GetStopsByLocation(lat, lon, settings.GetMaxTransferDistance());
-        //    List<BikeStation> nearBikeStations = bikeModel.GetNearStations(lat, lon, settings.GetMaxTransferDistance());
-        //    return new Tuple<List<Stop>, List<BikeStation>>(nearStops, nearBikeStations);
-        //}
-
-        //public Tuple<List<Stop>, List<BikeStation>> GetNearRoutePoints(string stopName)
-        //{
-        //    List<Stop> stops = transitModel.GetStopsByName(stopName);
-        //    List<BikeStation> bikeStations = new List<BikeStation>();
-        //    return new Tuple<List<Stop>, List<BikeStation>>(stops, bikeStations);
-        //}
-
+        /// <summary>
+        /// Runs the actual connection search algorithm
+        /// </summary>
+        /// <returns>Whether the search was correctly performed</returns>
         private bool RunRAPTOR(List<Stop> srcStops, List<BikeStation> srcBikeStations, List<Stop> destStops,
             List<BikeStation> destBikeStations, DateTime searchBeginTime, bool srcByCoord, bool destByCoord,
             Coordinates srcCoords = default, Coordinates destCoords = default)
@@ -687,8 +676,6 @@ namespace RAPTOR_Router.RouteFinders
             {
                 return false;
             }
-
-
 
 
             // Search variables setup

@@ -36,6 +36,11 @@ namespace RAPTOR_Router.Structures.Transit
             To = to;
             Distance = dist;
         }
+
+        /// <summary>
+        /// Returns a string representation of the transfer
+        /// </summary>
+        /// <returns>The string representation</returns>
         public override string ToString()
         {
             return "Transfer from " + From.Name + " to " + To.Name;

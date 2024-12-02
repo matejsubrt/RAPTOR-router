@@ -16,35 +16,43 @@ namespace RAPTOR_Router.Structures.Transit
         /// The Id of this unique route - combination of the GTFSId and the stop Id's of the unique route. Is unique for every Route object.
         /// </summary>
         public string Id { get; }
+
         /// <summary>
         /// The GTFS Id of the GTFS Route entry associated with the unique route. 
         /// Is NOT unique for every Route object - for example a single tram line (single GTFS Route) can have multiple unique Routes associated with it (trams returning to depot/coming out of it, shortened trips, ...)
         /// </summary>
         public string GTFSId { get; }
+
         /// <summary>
         /// The short name of the associated GTFS Route
         /// </summary>
         public string ShortName { get; }
+
         /// <summary>
         /// The long name of the associated GTFS Route
         /// </summary>
         public string LongName { get; }
+
         /// <summary>
         /// The type of the vehicle that serves the route (i.e. bus/tram/metro/...)
         /// </summary>
         public VehicleType Type { get; }
+
         /// <summary>
         /// The color that should be used for the route
         /// </summary>
         public Color Color { get; }
+
         /// <summary>
         /// The list of all stops on the route in correct order on the route
         /// </summary>
         public List<Stop> RouteStops { get; set; } = new();
+
         /// <summary>
         /// A dictionary, which for every date when the Route has at least one operating trip contains the list of trips that operate on the day. This is necessary, as a trip does NOT contain information about the day, only about time.
         /// </summary>
         public Dictionary<DateOnly, List<Trip>> RouteTrips { get; set; } = new();
+
         /// <summary>
         /// Creates a new Route object
         /// </summary>
@@ -74,6 +82,7 @@ namespace RAPTOR_Router.Structures.Transit
             Type = (VehicleType)gtfsRoute.Type;
             Color = new Color(gtfsRoute.Color);
         }
+
         /// <summary>
         /// Finds the first index of a specified stop in the route's list of stops
         /// </summary>
@@ -89,6 +98,7 @@ namespace RAPTOR_Router.Structures.Transit
             }
             return res;
         }
+
         /// <summary>
         /// Finds the last index of a specified stop in the route's list of stops
         /// </summary>
@@ -105,8 +115,16 @@ namespace RAPTOR_Router.Structures.Transit
             return res;
         }
 
-        public List<DateTime> GetTripTimesAtStopWithinRange(Stop stop, DateTime rangeStart, DateTime rangeEnd,
-            DelayModel delayModel, bool forward)
+        /// <summary>
+        /// For the given stop and a time range, finds all regular departure/arrival times of trips at the stop within the range
+        /// </summary>
+        /// <param name="stop">The stop</param>
+        /// <param name="rangeStart">The start of the time range</param>
+        /// <param name="rangeEnd">The end of the time range</param>
+        /// <param name="forward">Whether the search is performed forward (-> departure times) or backward (->arrival times)</param>
+        /// <returns>List of all times within the time range at which a trip departs/arrives at the stop</returns>
+        /// <exception cref="ArgumentException">Thrown if the range is invalid or too long</exception>
+        public List<DateTime> GetTripTimesAtStopWithinRange(Stop stop, DateTime rangeStart, DateTime rangeEnd, bool forward)
         {
             if (rangeStart >= rangeEnd)
             {
@@ -157,13 +175,14 @@ namespace RAPTOR_Router.Structures.Transit
                     tripTimes.Add(tripTime);
                 }
             }
+            //TODO: code repetition
 
             return tripTimes;
         }
 
 
         
-        public Trip? GetEarliestTripDepartingAfterTimeAtStop(Stop stop, DateTime dateTime, DelayModel delayModel, out DateOnly tripStartDate)
+        private Trip? GetEarliestTripDepartingAfterTimeAtStop(Stop stop, DateTime dateTime, DelayModel delayModel, out DateOnly tripStartDate)
         {
             var stopIndex = GetFirstStopIndex(stop);
 
@@ -232,7 +251,7 @@ namespace RAPTOR_Router.Structures.Transit
             }
         }
 
-        public Trip? GetLatestTripArrivingBeforeTimeAtStop(Stop stop, DateTime dateTime, DelayModel delayModel, out DateOnly tripStartDate)
+        private Trip? GetLatestTripArrivingBeforeTimeAtStop(Stop stop, DateTime dateTime, DelayModel delayModel, out DateOnly tripStartDate)
         {
             
             var stopIndex = GetLastStopIndex(stop);
@@ -283,13 +302,27 @@ namespace RAPTOR_Router.Structures.Transit
             }
         }
 
-        public Trip? GetFirstTransferableTripAtStopByReachTimeBeta(bool forward, Stop stop, DateTime dateTime, DelayModel delayModel, out DateOnly tripStartDate)
+
+        /// <summary>
+        /// For the given direction, stop and time, finds the first trip that can be transferred to/from at the stop at the given time
+        /// </summary>
+        /// <param name="forward">Whether the search runs forward</param>
+        /// <param name="stop">The stop</param>
+        /// <param name="dateTime">The time</param>
+        /// <param name="delayModel">The delay model</param>
+        /// <param name="tripStartDate">The start date of the trip, if a trip was found</param>
+        /// <returns>The first transferable trip, null if none exists</returns>
+        public Trip? GetFirstTransferableTripAtStopByReachTime(bool forward, Stop stop, DateTime dateTime, DelayModel delayModel, out DateOnly tripStartDate)
         {
             return forward ?
                 GetEarliestTripDepartingAfterTimeAtStop(stop, dateTime, delayModel, out tripStartDate) :
                 GetLatestTripArrivingBeforeTimeAtStop(stop, dateTime, delayModel, out tripStartDate);
         }
 
+        /// <summary>
+        /// Creates a string representation of the route object
+        /// </summary>
+        /// <returns>The string representation</returns>
         public override string ToString()
         {
             return ShortName + ": From " + RouteStops[0] + " to " + RouteStops[^1];
