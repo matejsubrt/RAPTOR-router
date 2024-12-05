@@ -482,8 +482,8 @@ namespace RAPTOR_Router.RouteFinders
 
 
                     /*(stopsPasses, srcIndex, destIndex,
-                        trip.Route.ShortName, trip.Route.Color, trip.Route.Type, hasDelayData, srcDepDelay, currDelay, trip.Id);
-                    result.Add(usedTrip);*/
+                        trip.Route.ShortName, trip.Route.Color, trip.Route.Type, hasDelayData, srcDepDelay, currDelay, trip.Id);*/
+                    result.Add(usedTrip);
                 }
 
                 return result;
