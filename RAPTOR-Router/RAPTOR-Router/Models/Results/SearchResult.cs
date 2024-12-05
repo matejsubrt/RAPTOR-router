@@ -57,38 +57,38 @@ namespace RAPTOR_Router.Models.Results
         /// The public transit trips used during the best found connection
         /// </summary>
         /// <remarks>To be used for simpler client-side handling that does not support alternatives</remarks>
-        public List<UsedTrip> UsedTrips { get; private set; } = new List<UsedTrip>();
+        public List<UsedTrip> UsedTrips { get; set; } = new List<UsedTrip>();
         /// <summary>
         /// The public transit trips used during the best found connection, with their alternatives
         /// </summary>
         /// <remarks>To be used in client-side apps that do support trip alternatives. It is initialized with only the one best trip,
         /// with the expectation that the user will expand this via the alternative trips API</remarks>
-        public List<TripAlternatives> UsedTripAlternatives { get; private set; } = new();
+        public List<TripAlternatives> UsedTripAlternatives { get; set; } = new();
         /// <summary>
         /// The transfers used during the best found connection
         /// </summary>
-        public List<UsedTransfer> UsedTransfers { get; private set; } = new List<UsedTransfer>();
+        public List<UsedTransfer> UsedTransfers { get; set; } = new List<UsedTransfer>();
         /// <summary>
         /// The bike trips used during the best found connection
         /// </summary>
-        public List<UsedBikeTrip> UsedBikeTrips { get; private set; } = new List<UsedBikeTrip>();
+        public List<UsedBikeTrip> UsedBikeTrips { get; set; } = new List<UsedBikeTrip>();
 
         /// <summary>
         /// The list of segment types used in the connection -> used to determine the order of the segments and make deserialization easier
         /// </summary>
-        public List<SegmentType> UsedSegmentTypes { get; private set; } = new List<SegmentType>();
+        public List<SegmentType> UsedSegmentTypes { get; set; } = new List<SegmentType>();
         /// <summary>
         /// The number of used transfers in the connection
         /// </summary>
-        public int TransferCount { get; private set; }
+        public int TransferCount { get; set; }
         /// <summary>
         /// The number of used public transit trips in the connection
         /// </summary>
-        public int TripCount { get; private set; }
+        public int TripCount { get; set; }
         /// <summary>
         /// The number of used bike trips in the connection
         /// </summary>
-        public int BikeTripCount { get; private set; }
+        public int BikeTripCount { get; set; }
 
 
         /// <summary>

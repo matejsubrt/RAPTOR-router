@@ -262,14 +262,14 @@ namespace RAPTOR_Router.Structures.Transit
             var trip = ProcessDate(baseDate);
             if (trip is not null)
             {
-                tripStartDate = prevDate;
+                tripStartDate = baseDate;
                 return trip;
             }
 
             trip = ProcessDate(prevDate);
             if (trip is not null)
             {
-                tripStartDate = baseDate;
+                tripStartDate = prevDate;
                 return trip;
             }
 
