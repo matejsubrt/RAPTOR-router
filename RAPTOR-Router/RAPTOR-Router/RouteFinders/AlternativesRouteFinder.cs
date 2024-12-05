@@ -416,13 +416,33 @@ namespace RAPTOR_Router.RouteFinders
 
                     for (int j = i + 1; j < entries.Count; j++)
                     {
+                        if (i == 1)
+                        {
+                            Console.WriteLine();
+                        }
                         var entryB = entries[j];
 
-                        if (entryA.altTrip.StopTimes[entryA.srcIndex].DepartureTime < entryB.altTrip.StopTimes[entryB.srcIndex].DepartureTime &&
-                            entryA.altTrip.StopTimes[entryA.destIndex].ArrivalTime >= entryB.altTrip.StopTimes[entryB.destIndex].ArrivalTime)
+                        var boardTimeA = entryA.altTrip.GetDepartureDateTime(entryA.srcIndex, entryA.tripDate);
+                        var boardTimeB = entryB.altTrip.GetDepartureDateTime(entryB.srcIndex, entryB.tripDate);
+
+                        var disembarkTimeA = entryA.altTrip.GetArrivalDateTime(entryA.destIndex, entryA.tripDate);
+                        var disembarkTimeB = entryB.altTrip.GetArrivalDateTime(entryB.destIndex, entryB.tripDate);
+
+                        if (entryA.altTrip.Route.ShortName == "20" && entryB.altTrip.Route.ShortName == "A")
                         {
-                            sortedTrips.Remove(entryA);
+                            Console.WriteLine();
                         }
+
+                        if(boardTimeA > boardTimeB && disembarkTimeA <= disembarkTimeB)
+                        {
+                            sortedTrips.Remove(entryB);
+                        }
+
+                        //if (entryA.altTrip.StopTimes[entryA.srcIndex].DepartureTime < entryB.altTrip.StopTimes[entryB.srcIndex].DepartureTime &&
+                        //    entryA.altTrip.StopTimes[entryA.destIndex].ArrivalTime >= entryB.altTrip.StopTimes[entryB.destIndex].ArrivalTime)
+                        //{
+                        //    sortedTrips.Remove(entryA);
+                        //}
                     }
                 }
             }
