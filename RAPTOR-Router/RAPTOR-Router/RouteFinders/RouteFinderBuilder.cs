@@ -12,7 +12,11 @@ using ProtoBuf;
 using System.Net;
 using TransitRealtime;
 using System.Runtime.InteropServices;
+using System.Timers;
 using RAPTOR_Router.Configuration;
+using Timer = System.Threading.Timer;
+using Quartz;
+using Quartz.Impl;
 
 
 namespace RAPTOR_Router.RouteFinders
@@ -22,6 +26,33 @@ namespace RAPTOR_Router.RouteFinders
     /// </summary>
     public static class RouteFinderBuilder
     {
+        private class DailyGtfsJob : IJob
+        {
+            public Task Execute(IJobExecutionContext context)
+            {
+                Console.WriteLine("CALLED");
+                string gtfsZipArchiveLocation = Config.DefaultGTFSPath;
+                if (gtfsZipArchiveLocation is null)
+                {
+                    throw new ApplicationException("GTFS Zip archive location must be set");
+                }
+                LoadGtfsData(gtfsZipArchiveLocation, forbiddenCrossingLines);
+                Console.WriteLine("GTFS data reloaded at " + DateTime.Now);
+                return Task.CompletedTask;
+            }
+        }
+
+        private class PeriodicDelayUpdateJob : IJob
+        {
+            public Task Execute(IJobExecutionContext context)
+            {
+                UpdateDelayModelAsync().GetAwaiter().GetResult();
+                return Task.CompletedTask;
+            }
+        }
+
+
+
         /// <summary>
         /// The transit model that the routers should use
         /// </summary>
@@ -34,23 +65,74 @@ namespace RAPTOR_Router.RouteFinders
 
         private static DelayModel? delayModel;
 
-        private static Timer? _timer;
+        private static List<ForbiddenCrossingLine> forbiddenCrossingLines;
 
-        
+        //private static Timer? _delayTimer;
+
+        private static IScheduler? _scheduler;
+
+        private static async Task InitializeScheduler()
+        {
+            StdSchedulerFactory factory = new StdSchedulerFactory();
+            _scheduler = await factory.GetScheduler();
+            await _scheduler.Start();
+
+
+
+            IJobDetail dailyGtfsJob = JobBuilder.Create<DailyGtfsJob>()
+                .WithIdentity("dailyGtfsJob", "group1")
+                .Build();
+
+            ITrigger dailyTrigger = TriggerBuilder.Create()
+                .WithIdentity("dailyGtfsTrigger", "group1")
+                .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(3, 00)) // Executes at 3:00 AM every day
+                .StartNow()
+                .Build();
+
+
+
+            IJobDetail periodicDelayUpdateJob = JobBuilder.Create<PeriodicDelayUpdateJob>()
+                .WithIdentity("periodicDelayUpdateJob", "group1")
+                .Build();
+
+            ITrigger periodic20SecTrigger = TriggerBuilder.Create()
+                .WithIdentity("periodicDelayUpdateTrigger", "group1")
+                .WithSimpleSchedule(x => x
+                     .WithIntervalInSeconds(20)
+                     .RepeatForever()) // Executes every 20 seconds
+                .StartNow()
+                .Build();
+
+
+
+            await _scheduler.ScheduleJob(dailyGtfsJob, dailyTrigger);
+            await _scheduler.ScheduleJob(periodicDelayUpdateJob, periodic20SecTrigger);
+            //Console.WriteLine("Scheduler set up");
+        }
+
+
+
+
         private static void UpdateDelayModel(object? state)
         {
             UpdateDelayModelAsync().GetAwaiter().GetResult();
         }
+
+
+
+
 
         private static async Task UpdateDelayModelAsync()
         {
             DelayModel newDelayModel = new();
             using HttpClient client = new();
 
+            string apiUrl = Config.GtfsRealtimeTripUpdatesApiUrl!;
+
             try
             {
                 // Fetch the GTFS Realtime feed asynchronously
-                HttpResponseMessage response = await client.GetAsync("https://api.golemio.cz/v2/vehiclepositions/gtfsrt/trip_updates.pb");
+                HttpResponseMessage response = await client.GetAsync(apiUrl);
                 response.EnsureSuccessStatusCode();
 
                 // Deserialize the feed from the response stream
@@ -124,8 +206,10 @@ namespace RAPTOR_Router.RouteFinders
 
 
             // Start the timer that periodically updates the delay model
-            _timer = new Timer(UpdateDelayModel, null, 0, 20000);
+            //_delayTimer = new Timer(UpdateDelayModel, null, 0, 20000);
 
+
+            InitializeScheduler().GetAwaiter().GetResult();
 
             void ValidateConfiguration()
             {
@@ -153,10 +237,12 @@ namespace RAPTOR_Router.RouteFinders
         /// <param name="forbiddenCrossings">The list of lines forbidden to cross via a transfer</param>
         private static void LoadGtfsData(string gtfsZipArchiveLocation, List<ForbiddenCrossingLine> forbiddenCrossings)
         {
+            forbiddenCrossingLines = forbiddenCrossings;
+
             TransitModel raptor;
 
             // Load the GTFS data and parse them into a TransitModel
-            using (GTFS gtfs = GTFS.ParseZipFile(gtfsZipArchiveLocation))
+            using (GTFS gtfs = GTFS.DownloadAndParseZipFile(gtfsZipArchiveLocation))
             {
                 raptor = new TransitModel(gtfs, forbiddenCrossings);
             }

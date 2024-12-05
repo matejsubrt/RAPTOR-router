@@ -1,6 +1,8 @@
 ﻿using CsvHelper;
 using System.Globalization;
 using System.IO.Compression;
+using RAPTOR_Router.Configuration;
+using System;
 
 namespace RAPTOR_Router.GTFSParsing
 {
@@ -37,6 +39,37 @@ namespace RAPTOR_Router.GTFSParsing
         /// A dictionary of all GTFS trips within the GTFS data, indexed by their id
         /// </summary>
         public Dictionary<string, GTFSTrip> Trips { get; private set; } = new();
+
+
+        private static async Task DownloadZipFile(string url, string filePath)
+        {
+            if(url is null || filePath is null)
+            {
+                throw new ApplicationException("An api url and a path to the gtfs zip archive location need to be specified in the config.json file.");
+            }
+
+            using HttpClient client = new();
+            try
+            {
+                Console.WriteLine("Downloading file...");
+                byte[] fileBytes = await client.GetByteArrayAsync(url);
+
+                string directory = Path.GetDirectoryName(filePath);
+                if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
+                    Directory.CreateDirectory(directory);
+
+                await File.WriteAllBytesAsync(filePath, fileBytes);
+
+                Console.WriteLine($"Zip archive file downloaded and saved to {filePath}");
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException($"Error downloading zip archive: {ex.Message}");
+            }
+        }
+
+
+
 
         /// <summary>
         /// Loads the agencies info from the agencies.txt GTFS file
@@ -204,6 +237,9 @@ namespace RAPTOR_Router.GTFSParsing
                 }
             }
         }
+
+
+
         /// <summary>
         /// Loads all the necessary GTFS data from the specified zip archive into strongly typed objects in memory
         /// </summary>
@@ -222,6 +258,43 @@ namespace RAPTOR_Router.GTFSParsing
                 gtfs.LoadStopTimes(archive);
                 gtfs.LoadTrips(archive);
             }
+            return gtfs;
+        }
+
+
+        public static GTFS DownloadAndParseZipFile(string pathToZipFile)
+        {
+            GTFS gtfs = new GTFS();
+
+            bool needToDownloadNewFile = true;
+
+            if (File.Exists(pathToZipFile))
+            {
+                DateTime fileCreationTime = File.GetLastWriteTime(pathToZipFile);
+
+                if(fileCreationTime.Date == DateTime.Now.Date)
+                {
+                    needToDownloadNewFile = false;
+                }
+            }
+
+
+            if (needToDownloadNewFile)
+            {
+                string gtfsArchiveUrl = Config.GtfsStaticZipFileUrl;
+
+                try
+                {
+                    DownloadZipFile(gtfsArchiveUrl, pathToZipFile).GetAwaiter().GetResult();
+                }
+                catch (ApplicationException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            
+            gtfs = ParseZipFile(pathToZipFile);
+
             return gtfs;
         }
         /// <summary>

@@ -20,6 +20,7 @@
     <PackageReference Include="Itinero.IO.Osm" Version="1.5.1" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.0" />
     <PackageReference Include="protobuf-net" Version="2.4.0" />
+    <PackageReference Include="Quartz" Version="3.13.1" />
   </ItemGroup>
 	
   <ItemGroup>

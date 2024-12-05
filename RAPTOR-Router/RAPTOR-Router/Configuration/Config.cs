@@ -83,5 +83,14 @@ namespace RAPTOR_Router.Configuration
         /// The location of the test request data file used for testing
         /// </summary>
         public static string? TestDataFilePath => _config?["testDataFilePath"];
+
+        /// <summary>
+        /// The location of the file containing the API key for the Golemio API
+        /// </summary>
+        public static string? GolemioAPIKeyPath => _config?["golemioApiKeyPath"];
+
+        public static string? GtfsRealtimeTripUpdatesApiUrl => _config?["gtfsRealtimeTripUpdatesApiUrl"];
+
+        public static string? GtfsStaticZipFileUrl => _config?["gtfsStaticZipFileUrl"];
     }
 }
