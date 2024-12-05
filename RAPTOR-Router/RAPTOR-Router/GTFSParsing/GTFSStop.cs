@@ -12,13 +12,13 @@ namespace RAPTOR_Router.GTFSParsing
         /// The unique identifier for the stop.
         /// </summary>
         [Name("stop_id")]
-        public string Id { get; set; }
+        public required string Id { get; set; }
 
         /// <summary>
         /// The name of the stop, typically used in public-facing contexts.
         /// </summary>
         [Name("stop_name")]
-        public string Name { get; set; }
+        public required string Name { get; set; }
 
         /// <summary>
         /// The latitude of the stop's location in decimal degrees.
@@ -36,7 +36,7 @@ namespace RAPTOR_Router.GTFSParsing
         /// The zone ID associated with the stop. Used for fare calculation.
         /// </summary>
         [Name("zone_id")]
-        public string ZoneId { get; set; }
+        public required string ZoneId { get; set; }
 
         /*
         /// <summary>

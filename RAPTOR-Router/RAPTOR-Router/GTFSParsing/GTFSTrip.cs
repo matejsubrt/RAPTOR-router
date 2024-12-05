@@ -12,19 +12,19 @@ namespace RAPTOR_Router.GTFSParsing
         /// The unique identifier for the route associated with this trip.
         /// </summary>
         [Name("route_id")]
-        public string RouteId { get; set; }
+        public required string RouteId { get; set; }
 
         /// <summary>
         /// The service ID associated with this trip, indicating the calendar service pattern.
         /// </summary>
         [Name("service_id")]
-        public string ServiceId { get; set; }
+        public required string ServiceId { get; set; }
 
         /// <summary>
         /// The unique identifier for the trip.
         /// </summary>
         [Name("trip_id")]
-        public string Id { get; set; }
+        public required string Id { get; set; }
 
         /*
         /// <summary>

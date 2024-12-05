@@ -12,7 +12,7 @@ namespace RAPTOR_Router.GTFSParsing
         /// The unique identifier for the route.
         /// </summary>
         [Name("route_id")]
-        public string Id { get; set; }
+        public required string Id { get; set; }
 
         /*
         /// <summary>
@@ -26,13 +26,13 @@ namespace RAPTOR_Router.GTFSParsing
         /// The short name of the route, typically a route number or code.
         /// </summary>
         [Name("route_short_name")]
-        public string ShortName { get; set; }
+        public required string ShortName { get; set; }
 
         /// <summary>
         /// The long name of the route, typically a descriptive name.
         /// </summary>
         [Name("route_long_name")]
-        public string LongName { get; set; }
+        public required string LongName { get; set; }
 
         /// <summary>
         /// The type of transportation used on the route.
@@ -65,7 +65,7 @@ namespace RAPTOR_Router.GTFSParsing
         /// The color used to represent the route in a visual display.
         /// </summary>
         [Name("route_color")]
-        public string Color { get; set; }
+        public required string Color { get; set; }
 
         /*
         /// <summary>
