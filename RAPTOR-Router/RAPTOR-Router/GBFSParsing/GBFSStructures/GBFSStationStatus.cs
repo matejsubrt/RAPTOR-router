@@ -25,14 +25,14 @@ namespace RAPTOR_Router.GBFSParsing.GBFSStructures
         /// </summary>
 
         [JsonPropertyName("data")]
-        public GBFSStatusData Data { get; set; }
+        public required GBFSStatusData Data { get; set; }
 
         /// <summary>
         /// The GBFS version
         /// </summary>
 
         [JsonPropertyName("version")]
-        public string Version { get; set; }
+        public required string Version { get; set; }
     }
 
     /// <summary>
@@ -44,7 +44,7 @@ namespace RAPTOR_Router.GBFSParsing.GBFSStructures
         /// The list of statuses for all stations
         /// </summary>
         [JsonPropertyName("stations")]
-        public List<GBFSSingleStationStatus> Stations { get; set; }
+        public required List<GBFSSingleStationStatus> Stations { get; set; }
     }
 
     /// <summary>
@@ -56,7 +56,7 @@ namespace RAPTOR_Router.GBFSParsing.GBFSStructures
         /// The id of the station
         /// </summary>
         [JsonPropertyName("station_id")]
-        public string StationId { get; set; }
+        public required string StationId { get; set; }
 
         /// <summary>
         /// The number of bikes available at the station
