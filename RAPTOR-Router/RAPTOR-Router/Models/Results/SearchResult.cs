@@ -100,6 +100,10 @@ namespace RAPTOR_Router.Models.Results
         /// </summary>
         public DateTime ArrivalDateTime { get; set; }
 
+        public int SecondsAfterLastTrip { get; set; }
+
+        public int SecondsBeforeFirstTrip { get; set; }
+
 
         /// <summary>
         /// Creates a new SearchResult object
@@ -434,6 +438,10 @@ namespace RAPTOR_Router.Models.Results
         /// <remarks>To be used for forward searches</remarks>
         public void SetDepartureAndArrivalTimesByEarliestDeparture(DateTime originalEarliestDepartureTime)
         {
+            SecondsAfterLastTrip = GetTotalSecondsAfterLastTrip();
+            SecondsBeforeFirstTrip = GetTotalSecondsBeforeFirstTrip();
+
+
             DateTime firstTripGetOnTime = UsedTrips.Count > 0 ? UsedTrips[0].stopPasses[UsedTrips[0].getOnStopIndex].DepartureTime : DateTime.MaxValue;
             DateTime lastTripGetOffTime = UsedTrips.Count > 0 ? UsedTrips[^1].stopPasses[UsedTrips[^1].getOffStopIndex].ArrivalTime : DateTime.MinValue;
             switch (UsedSegmentTypes[0])
@@ -448,17 +456,17 @@ namespace RAPTOR_Router.Models.Results
                     else if (!UsedSegmentTypes.Contains(SegmentType.Trip))
                     {
                         DepartureDateTime = originalEarliestDepartureTime;
-                        ArrivalDateTime = DepartureDateTime.AddSeconds(GetTotalSecondsBeforeFirstTrip());
+                        ArrivalDateTime = DepartureDateTime.AddSeconds(SecondsBeforeFirstTrip);
                     }
                     else
                     {
-                        DepartureDateTime = firstTripGetOnTime.AddSeconds(-GetTotalSecondsBeforeFirstTrip()).AddSeconds(UsedTrips[0].delayWhenBoarded);
-                        ArrivalDateTime = lastTripGetOffTime.AddSeconds(UsedTrips[^1].currentDelay).AddSeconds(GetTotalSecondsAfterLastTrip());
+                        DepartureDateTime = firstTripGetOnTime.AddSeconds(-SecondsBeforeFirstTrip).AddSeconds(UsedTrips[0].delayWhenBoarded);
+                        ArrivalDateTime = lastTripGetOffTime.AddSeconds(UsedTrips[^1].currentDelay).AddSeconds(SecondsAfterLastTrip);
                     }
                     break;
                 case SegmentType.Trip:
                     DepartureDateTime = firstTripGetOnTime.AddSeconds(UsedTrips[0].delayWhenBoarded);
-                    ArrivalDateTime = lastTripGetOffTime.AddSeconds(UsedTrips[^1].currentDelay).AddSeconds(GetTotalSecondsAfterLastTrip());
+                    ArrivalDateTime = lastTripGetOffTime.AddSeconds(UsedTrips[^1].currentDelay).AddSeconds(SecondsAfterLastTrip);
                     break;
                 case SegmentType.Bike:
                     if (UsedSegmentTypes.Count == 1)
@@ -470,12 +478,12 @@ namespace RAPTOR_Router.Models.Results
                     else if (!UsedSegmentTypes.Contains(SegmentType.Trip))
                     {
                         DepartureDateTime = originalEarliestDepartureTime;
-                        ArrivalDateTime = DepartureDateTime.AddSeconds(GetTotalSecondsBeforeFirstTrip());
+                        ArrivalDateTime = DepartureDateTime.AddSeconds(SecondsBeforeFirstTrip);
                     }
                     else
                     {
-                        DepartureDateTime = firstTripGetOnTime.AddSeconds(UsedTrips[0].delayWhenBoarded).AddSeconds(-GetTotalSecondsBeforeFirstTrip());
-                        ArrivalDateTime = lastTripGetOffTime.AddSeconds(UsedTrips[^1].currentDelay).AddSeconds(GetTotalSecondsAfterLastTrip());
+                        DepartureDateTime = firstTripGetOnTime.AddSeconds(UsedTrips[0].delayWhenBoarded).AddSeconds(-SecondsBeforeFirstTrip);
+                        ArrivalDateTime = lastTripGetOffTime.AddSeconds(UsedTrips[^1].currentDelay).AddSeconds(SecondsAfterLastTrip);
                     }
                     break;
                 default:
@@ -491,6 +499,9 @@ namespace RAPTOR_Router.Models.Results
         /// <param name="originalLatestArrivalTime">The original latest possible arrival time used for finding the result</param>
         public void SetDepartureAndArrivalTimesByLatestArrival(DateTime originalLatestArrivalTime)
         {
+            SecondsAfterLastTrip = GetTotalSecondsAfterLastTrip();
+            SecondsBeforeFirstTrip = GetTotalSecondsBeforeFirstTrip();
+
             DateTime firstTripGetOnTime = UsedTrips.Count > 0 ? UsedTrips[0].stopPasses[UsedTrips[0].getOnStopIndex].DepartureTime : DateTime.MaxValue;
             DateTime lastTripGetOffTime = UsedTrips.Count > 0 ? UsedTrips[^1].stopPasses[UsedTrips[^1].getOffStopIndex].ArrivalTime : DateTime.MinValue;
             switch (UsedSegmentTypes[^1])
@@ -504,18 +515,18 @@ namespace RAPTOR_Router.Models.Results
                     }
                     else if (!UsedSegmentTypes.Contains(SegmentType.Trip))
                     {
-                        DepartureDateTime = originalLatestArrivalTime.AddSeconds(-GetTotalSecondsAfterLastTrip());
+                        DepartureDateTime = originalLatestArrivalTime.AddSeconds(-SecondsAfterLastTrip);
                         ArrivalDateTime = originalLatestArrivalTime;
                     }
                     else
                     {
-                        DepartureDateTime = firstTripGetOnTime.AddSeconds(-GetTotalSecondsBeforeFirstTrip());
-                        ArrivalDateTime = lastTripGetOffTime.AddSeconds(GetTotalSecondsAfterLastTrip());
+                        DepartureDateTime = firstTripGetOnTime.AddSeconds(-SecondsBeforeFirstTrip);
+                        ArrivalDateTime = lastTripGetOffTime.AddSeconds(SecondsAfterLastTrip);
                     }
                     break;
                 case SegmentType.Trip:
                     DepartureDateTime = firstTripGetOnTime;
-                    ArrivalDateTime = lastTripGetOffTime.AddSeconds(GetTotalSecondsAfterLastTrip());
+                    ArrivalDateTime = lastTripGetOffTime.AddSeconds(SecondsAfterLastTrip);
                     break;
                 case SegmentType.Bike:
                     if (UsedSegmentTypes.Count == 1)
@@ -526,13 +537,13 @@ namespace RAPTOR_Router.Models.Results
                     }
                     else if (!UsedSegmentTypes.Contains(SegmentType.Trip))
                     {
-                        DepartureDateTime = originalLatestArrivalTime.AddSeconds(-GetTotalSecondsBeforeFirstTrip());
+                        DepartureDateTime = originalLatestArrivalTime.AddSeconds(-SecondsBeforeFirstTrip);
                         ArrivalDateTime = originalLatestArrivalTime;
                     }
                     else
                     {
-                        DepartureDateTime = firstTripGetOnTime.AddSeconds(-GetTotalSecondsBeforeFirstTrip());
-                        ArrivalDateTime = lastTripGetOffTime.AddSeconds(GetTotalSecondsAfterLastTrip());
+                        DepartureDateTime = firstTripGetOnTime.AddSeconds(-SecondsBeforeFirstTrip);
+                        ArrivalDateTime = lastTripGetOffTime.AddSeconds(SecondsAfterLastTrip);
                     }
                     break;
                 default:
