@@ -26,14 +26,19 @@ namespace RAPTOR_Router.Models.Results
             /// <summary>
             /// The index of the currently selected trip
             /// </summary>
+            [JsonPropertyName("currIndex")]
             public int CurrIndex { get; set; }
+
             /// <summary>
             /// The list of trip alternatives
             /// </summary>
+            [JsonPropertyName("alternatives")]
             public List<UsedTrip> Alternatives { get; set; } = new();
+
             /// <summary>
             /// The count of trip alternatives
             /// </summary>
+            [JsonPropertyName("count")]
             public int Count { get; set; }
 
             /// <summary>
@@ -53,58 +58,79 @@ namespace RAPTOR_Router.Models.Results
         /// The settings used for the search
         /// </summary>
         private Settings usedSettings;
+
         /// <summary>
         /// The public transit trips used during the best found connection
         /// </summary>
-        /// <remarks>To be used for simpler client-side handling that does not support alternatives</remarks>
-        public List<UsedTrip> UsedTrips { get; set; } = new List<UsedTrip>();
+        /// <remarks>
+        /// To be used for simpler client-side handling that does not support alternatives
+        /// </remarks>
+        [JsonPropertyName("usedTrips")]
+        public List<UsedTrip> UsedTrips { get; set; } = new();
+
         /// <summary>
         /// The public transit trips used during the best found connection, with their alternatives
         /// </summary>
-        /// <remarks>To be used in client-side apps that do support trip alternatives. It is initialized with only the one best trip,
-        /// with the expectation that the user will expand this via the alternative trips API</remarks>
+        /// <remarks>
+        /// To be used in client-side apps that do support trip alternatives. It is initialized with only the one best trip,
+        /// with the expectation that the user will expand this via the alternative trips API
+        /// </remarks>
+        [JsonPropertyName("usedTripAlternatives")]
         public List<TripAlternatives> UsedTripAlternatives { get; set; } = new();
+
         /// <summary>
         /// The transfers used during the best found connection
         /// </summary>
-        public List<UsedTransfer> UsedTransfers { get; set; } = new List<UsedTransfer>();
+        [JsonPropertyName("usedTransfers")]
+        public List<UsedTransfer> UsedTransfers { get; set; } = new();
+
         /// <summary>
         /// The bike trips used during the best found connection
         /// </summary>
-        public List<UsedBikeTrip> UsedBikeTrips { get; set; } = new List<UsedBikeTrip>();
+        [JsonPropertyName("usedBikeTrips")]
+        public List<UsedBikeTrip> UsedBikeTrips { get; set; } = new();
 
         /// <summary>
         /// The list of segment types used in the connection -> used to determine the order of the segments and make deserialization easier
         /// </summary>
-        public List<SegmentType> UsedSegmentTypes { get; set; } = new List<SegmentType>();
+        [JsonPropertyName("usedSegmentTypes")]
+        public List<SegmentType> UsedSegmentTypes { get; set; } = new();
+
         /// <summary>
         /// The number of used transfers in the connection
         /// </summary>
+        [JsonPropertyName("transferCount")]
         public int TransferCount { get; set; }
+
         /// <summary>
         /// The number of used public transit trips in the connection
         /// </summary>
+        [JsonPropertyName("tripCount")]
         public int TripCount { get; set; }
+
         /// <summary>
         /// The number of used bike trips in the connection
         /// </summary>
+        [JsonPropertyName("bikeTripCount")]
         public int BikeTripCount { get; set; }
-
 
         /// <summary>
         /// The source departure time of the connection
         /// </summary>
+        [JsonPropertyName("departureDateTime")]
         public DateTime DepartureDateTime { get; set; }
+
         /// <summary>
         /// The destination arrival time of the connection
         /// </summary>
+        [JsonPropertyName("arrivalDateTime")]
         public DateTime ArrivalDateTime { get; set; }
 
+        [JsonPropertyName("secondsAfterLastTrip")]
         public int SecondsAfterLastTrip { get; set; }
 
+        [JsonPropertyName("secondsBeforeFirstTrip")]
         public int SecondsBeforeFirstTrip { get; set; }
-
-
         /// <summary>
         /// Creates a new SearchResult object
         /// </summary>
@@ -112,6 +138,11 @@ namespace RAPTOR_Router.Models.Results
         internal SearchResult(Settings settings)
         {
             usedSettings = settings;
+        }
+
+        // Parameterless constructor
+        public SearchResult()
+        {
         }
 
         /// <summary>
