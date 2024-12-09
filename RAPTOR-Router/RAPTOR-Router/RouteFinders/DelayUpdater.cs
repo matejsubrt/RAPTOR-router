@@ -23,28 +23,18 @@ namespace RAPTOR_Router.RouteFinders
             this.delayModel = delayModel;
         }
 
-
-        public struct DelayData
-        {
-            public bool hasDelayData { get; set; }
-            public int delayWhenBoarded { get; set; }
-            public int currentDelay { get; set; }
-        }
-
         /// <summary>
         /// Updates the delays of the trips in the search results.
         /// </summary>
         /// <param name="results">The search results to update delay data for</param>
-        public Dictionary<string, DelayData> UpdateDelays(List<SearchResult> results)
+        public void UpdateDelays(List<SearchResult> results)
         {
-            var tripDelays = new Dictionary<string, DelayData>();
             foreach (var result in results)
             {
                 foreach (var alternatives in result.UsedTripAlternatives)
                 {
                     foreach (var trip in alternatives.Alternatives)
                     {
-                        DelayData newDelayData = new();
                         DateOnly tripStartDate = DateOnly.FromDateTime(trip.stopPasses[0].DepartureTime);
                         bool tripHasDelayData =
                             delayModel.TripHasDelayData(tripStartDate, trip.tripId);
@@ -70,33 +60,20 @@ namespace RAPTOR_Router.RouteFinders
                                 if (hasGetOffDelay)
                                 {
                                     // Delay info is only valid if we have both get on and get off delay
-                                    //trip.hasDelayInfo = true;
-                                    //trip.delayWhenBoarded = getOnDepartureDelay;
-                                    //trip.currentDelay = getOffArrivalDelay;
-                                    newDelayData.hasDelayData = true;
-                                    newDelayData.delayWhenBoarded = getOnDepartureDelay;
-                                    newDelayData.currentDelay = getOffArrivalDelay;
-
-                                    tripDelays.Add(trip.tripId, newDelayData);
+                                    trip.hasDelayInfo = true;
+                                    trip.delayWhenBoarded = getOnDepartureDelay;
+                                    trip.currentDelay = getOffArrivalDelay;
                                     continue;
                                 }
                             }
                         }
 
-                        //trip.hasDelayInfo = false;
-                        //trip.delayWhenBoarded = 0;
-                        //trip.currentDelay = 0;
-
-                        newDelayData.hasDelayData = false;
-                        newDelayData.delayWhenBoarded = 0;
-                        newDelayData.currentDelay = 0;
-
-                        tripDelays.Add(trip.tripId, newDelayData);
+                        trip.hasDelayInfo = false;
+                        trip.delayWhenBoarded = 0;
+                        trip.currentDelay = 0;
                     }
                 }
             }
-
-            return tripDelays;
         }
     }
 }

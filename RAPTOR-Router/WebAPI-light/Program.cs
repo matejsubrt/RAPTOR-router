@@ -131,11 +131,9 @@ namespace WebAPI_light
             string resultsJson = JsonSerializer.Serialize(results, options);
             Console.WriteLine(resultsJson);
             var delayUpdater = RouteFinderBuilder.CreateDelayUpdater();
-            var delays = delayUpdater.UpdateDelays(results);
+            delayUpdater.UpdateDelays(results);
 
-            
-
-            return Results.Ok(delays);
+            return Results.Ok(results);
         }
     }
 }
