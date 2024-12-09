@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using RAPTOR_Router.Models.Results;
 using RAPTOR_Router.Structures.Requests;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace WebAPI_light
 {
@@ -122,6 +123,13 @@ namespace WebAPI_light
 
         static IResult HandleUpdateDelaysRequest(List<SearchResult> results)
         {
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true // Makes the output more readable with indentation
+            };
+
+            string resultsJson = JsonSerializer.Serialize(results, options);
+            Console.WriteLine(resultsJson);
             var delayUpdater = RouteFinderBuilder.CreateDelayUpdater();
             delayUpdater.UpdateDelays(results);
 
