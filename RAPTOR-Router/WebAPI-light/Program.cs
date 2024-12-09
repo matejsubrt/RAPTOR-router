@@ -128,12 +128,34 @@ namespace WebAPI_light
                 WriteIndented = true // Makes the output more readable with indentation
             };
 
-            string resultsJson = JsonSerializer.Serialize(results, options);
-            Console.WriteLine(resultsJson);
-            var delayUpdater = RouteFinderBuilder.CreateDelayUpdater();
-            delayUpdater.UpdateDelays(results);
+            foreach(var result in results)
+            {
+                foreach(var alternative in result.UsedTripAlternatives)
+                {
+                    foreach(var trip in alternative.Alternatives)
+                    {
+                        Console.WriteLine("HasDelay: " + trip.hasDelayInfo + ", departureDelay: " + trip.delayWhenBoarded + ", currDelay: " + trip.currentDelay);
+                    }
+                }
+            }
 
-            return Results.Ok(results);
+            Console.WriteLine("--------------------------------------------------------------------------");
+            var delayUpdater = RouteFinderBuilder.CreateDelayUpdater();
+            var newResults = delayUpdater.UpdateDelays(results);
+
+            foreach (var result in newResults)
+            {
+                foreach (var alternative in result.UsedTripAlternatives)
+                {
+                    foreach (var trip in alternative.Alternatives)
+                    {
+                        Console.WriteLine("HasDelay: " + trip.hasDelayInfo + ", departureDelay: " + trip.delayWhenBoarded + ", currDelay: " + trip.currentDelay);
+                    }
+                }
+            }
+
+
+            return Results.Ok(newResults);
         }
     }
 }

@@ -52,6 +52,11 @@ namespace RAPTOR_Router.Models.Results
                 Alternatives = alternatives;
                 Count = alternatives.Count;
             }
+
+            public TripAlternatives()
+            {
+
+            }
         }
 
         /// <summary>
@@ -738,7 +743,7 @@ namespace RAPTOR_Router.Models.Results
             /// means the trip is en-route, or will be in the soon future)
             /// </summary>
             [JsonInclude]
-            public required bool hasDelayInfo { get; set; }
+            public bool hasDelayInfo { get; set; }
 
             /// <summary>
             /// The delay of the trip at the getOnStop - this can either mean the expected delay 
@@ -746,7 +751,7 @@ namespace RAPTOR_Router.Models.Results
             /// (if the trip has already been there)
             /// </summary>
             [JsonInclude]
-            public required int delayWhenBoarded { get; set; }
+            public int delayWhenBoarded { get; set; }
 
             /// <summary>
             /// The delay of the trip at the moment of the search. This can be different from 
@@ -756,7 +761,7 @@ namespace RAPTOR_Router.Models.Results
             /// the client will update this value as time progresses using the TODO: API delay update endpoint
             /// </summary>
             [JsonInclude]
-            public required int currentDelay { get; set; }
+            public int currentDelay { get; set; }
 
             /// <summary>
             /// The trip Id of the associated trip

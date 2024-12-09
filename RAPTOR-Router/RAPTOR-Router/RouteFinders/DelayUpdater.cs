@@ -27,14 +27,45 @@ namespace RAPTOR_Router.RouteFinders
         /// Updates the delays of the trips in the search results.
         /// </summary>
         /// <param name="results">The search results to update delay data for</param>
-        public void UpdateDelays(List<SearchResult> results)
+        public List<SearchResult> UpdateDelays(List<SearchResult> results)
         {
+            List<SearchResult> newResults = new();
             foreach (var result in results)
             {
+                SearchResult newResult = new();
+                newResult.SecondsBeforeFirstTrip = result.SecondsBeforeFirstTrip;
+                newResult.SecondsAfterLastTrip = result.SecondsAfterLastTrip;
+                newResult.ArrivalDateTime = result.ArrivalDateTime;
+                newResult.DepartureDateTime = result.DepartureDateTime;
+                newResult.BikeTripCount = result.BikeTripCount;
+                newResult.TransferCount = result.TransferCount;
+                newResult.TripCount = result.TripCount;
+                newResult.UsedBikeTrips = result.UsedBikeTrips;
+                newResult.UsedSegmentTypes = result.UsedSegmentTypes;
+                newResult.UsedTransfers = result.UsedTransfers;
+                newResult.UsedTrips = result.UsedTrips;
+                newResult.UsedTripAlternatives = new();
+
                 foreach (var alternatives in result.UsedTripAlternatives)
                 {
+                    SearchResult.TripAlternatives newAlternatives = new();
+                    newAlternatives.Count = alternatives.Count;
+                    newAlternatives.CurrIndex = alternatives.CurrIndex;
+                    newAlternatives.Alternatives = new();
+
                     foreach (var trip in alternatives.Alternatives)
                     {
+                        SearchResult.UsedTrip newTrip = new SearchResult.UsedTrip
+                        {
+                            routeName = trip.routeName,
+                            color = trip.color,
+                            getOffStopIndex = trip.getOffStopIndex,
+                            getOnStopIndex = trip.getOnStopIndex,
+                            stopPasses = trip.stopPasses,
+                            tripId = trip.tripId,
+                            vehicleType = trip.vehicleType
+                        };
+
                         DateOnly tripStartDate = DateOnly.FromDateTime(trip.stopPasses[0].DepartureTime);
                         bool tripHasDelayData =
                             delayModel.TripHasDelayData(tripStartDate, trip.tripId);
@@ -60,20 +91,30 @@ namespace RAPTOR_Router.RouteFinders
                                 if (hasGetOffDelay)
                                 {
                                     // Delay info is only valid if we have both get on and get off delay
-                                    trip.hasDelayInfo = true;
-                                    trip.delayWhenBoarded = getOnDepartureDelay;
-                                    trip.currentDelay = getOffArrivalDelay;
+                                    newTrip.hasDelayInfo = true;
+                                    newTrip.delayWhenBoarded = getOnDepartureDelay;
+                                    newTrip.currentDelay = getOffArrivalDelay;
+
+                                    
+                                    newAlternatives.Alternatives.Add(newTrip);
                                     continue;
                                 }
                             }
                         }
 
-                        trip.hasDelayInfo = false;
-                        trip.delayWhenBoarded = 0;
-                        trip.currentDelay = 0;
+                        newTrip.hasDelayInfo = false;
+                        newTrip.delayWhenBoarded = 0;
+                        newTrip.currentDelay = 0;
+
+                        newAlternatives.Alternatives.Add(newTrip);
                     }
+
+                    newResult.UsedTripAlternatives.Add(newAlternatives);
                 }
+                newResults.Add(newResult);
             }
+
+            return newResults;
         }
     }
 }
