@@ -148,9 +148,22 @@ namespace RAPTOR_Router.RouteFinders
                     {
                         if (update.Departure != null)
                         {
+                            bool doIncludeDelay = true;
                             int arrivalDelay = update.Arrival.Delay;
                             int departureDelay = update.Departure.Delay;
-                            newDelayModel.AddDelay(tripStartDate, tripId, arrivalDelay, departureDelay);
+
+                            // This is necessary due to frequent bugs in PID's GTFS realtime feed
+                            if (arrivalDelay < -120 || departureDelay < -120)
+                            {
+                                //arrivalDelay = 0;
+                                //departureDelay = 0;
+                                doIncludeDelay = false;
+                            }
+
+                            if (doIncludeDelay)
+                            {
+                                newDelayModel.AddDelay(tripStartDate, tripId, arrivalDelay, departureDelay);
+                            }
                         }
                     }
                 }
