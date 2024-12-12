@@ -469,7 +469,7 @@ namespace RAPTOR_Router.RouteFinders
                     if (res1.DepartureDateTime == res2.DepartureDateTime)
                     {
                         results.RemoveAt(i + 1);
-
+                        i--;
                     }
                 }
             }
