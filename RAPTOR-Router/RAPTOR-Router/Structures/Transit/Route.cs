@@ -115,6 +115,86 @@ namespace RAPTOR_Router.Structures.Transit
             return res;
         }
 
+
+        public List<DateTime> GetFirstNTripTimesAtStop(Stop stop, DateTime dateTime, int dateTimeOffsetSeconds, int count, bool forward)
+        {
+            DateOnly date = DateOnly.FromDateTime(dateTime);
+            DateOnly prevDate = date.AddDays(-1);
+            DateOnly nextDate = date.AddDays(1);
+
+            List<Trip> tripsOnDate = RouteTrips.ContainsKey(date) ? RouteTrips[date] : new();
+            List<Trip> tripsOnPrevDate = RouteTrips.ContainsKey(prevDate) ? RouteTrips[prevDate] : new();
+            List<Trip> tripsOnNextDate = RouteTrips.ContainsKey(nextDate) ? RouteTrips[nextDate] : new();
+
+
+            int stopIndex = forward ? GetFirstStopIndex(stop) : GetLastStopIndex(stop);
+
+            List<DateTime> tripTimes = new();
+
+            if (forward)
+            {
+                IEnumerable<Trip> allTrips = TripsOnAllDatesInOrder(new[] { tripsOnPrevDate, tripsOnDate, tripsOnNextDate });
+                foreach (Trip trip in allTrips)
+                {
+                    DateTime tripTime = trip.GetDepartureDateTime(stopIndex, date).AddSeconds(-dateTimeOffsetSeconds);
+
+                    if (tripTime > dateTime)
+                    {
+                        tripTimes.Add(tripTime);
+                    }
+
+                    if (tripTimes.Count >= count)
+                    {
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                IEnumerable<Trip> allTrips = TripsOnAllDatesInReverseOrder(new[] { tripsOnPrevDate, tripsOnDate });
+                foreach (Trip trip in allTrips)
+                {
+                    DateTime tripTime = trip.GetArrivalDateTime(stopIndex, date).AddSeconds(dateTimeOffsetSeconds);
+
+                    if (tripTime < dateTime)
+                    {
+                        tripTimes.Add(tripTime);
+                    }
+
+                    if (tripTimes.Count >= count)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            return tripTimes;
+
+
+
+            IEnumerable<Trip> TripsOnAllDatesInOrder(IList<Trip>[] tripsOnDates)
+            {
+                foreach (var tripsOnDate in tripsOnDates)
+                {
+                    foreach(Trip trip in tripsOnDate)
+                    {
+                        yield return trip;
+                    }
+                }
+            }
+            IEnumerable<Trip> TripsOnAllDatesInReverseOrder(IList<Trip>[] tripsOnDates)
+            {
+                for (int i = tripsOnDates.Length - 1; i >= 0; i--)
+                {
+                    foreach (Trip trip in tripsOnDates[i].Reverse())
+                    {
+                        yield return trip;
+                    }
+                }
+            }
+        }
+
+
         /// <summary>
         /// For the given stop and a time range, finds all regular departure/arrival times of trips at the stop within the range
         /// </summary>

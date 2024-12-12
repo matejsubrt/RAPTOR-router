@@ -63,17 +63,6 @@ namespace RAPTOR_Router.Structures.Requests
         public DateTime? dateTime { get; set; }
 
         /// <summary>
-        /// Specifies whether to find the best connections within a time range, or only for a single search begin time
-        /// </summary>
-        public bool range { get; set; }
-
-        /// <summary>
-        /// The length of the time range.
-        /// </summary>
-        /// <remarks>Valid only if range is true</remarks>
-        public int rangeLength { get; set; }
-
-        /// <summary>
         /// Specifies whether to search for connections by the earliest departure time or the latest arrival time (i.e. the search direction)
         /// </summary>
         public bool byEarliestDeparture { get; set; }
@@ -83,10 +72,16 @@ namespace RAPTOR_Router.Structures.Requests
         /// </summary>
         public Settings? settings { get; set; }
 
+        /// <summary>
+        /// Specifies whether to find the best connections within a time range, or only for a single search begin time
+        /// </summary>
+        public bool range { get; set; }
 
-
-
-
+        /// <summary>
+        /// The length of the time range.
+        /// </summary>
+        /// <remarks>Valid only if range is true</remarks>
+        //public int rangeLength { get; set; }
 
         private bool ValidateStopsNearCoords(Coordinates coords, bool useSharedBikes, TransitModel transitModel, BikeModel bikeModel)
         {

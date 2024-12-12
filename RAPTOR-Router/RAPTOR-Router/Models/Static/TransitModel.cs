@@ -293,6 +293,21 @@ namespace RAPTOR_Router.Models.Static
             return result;
         }
 
+        public Dictionary<Stop, int> GetStopsWithDistancesByLocation(Coordinates coords, int radius)
+        {
+            Dictionary<Stop, int> result = new();
+            foreach (Stop stop in stops.Values)
+            {
+                int distance = DistanceExtensions.SimplifiedDistanceBetween(stop.Coords, coords);
+                if (distance < radius)
+                {
+                    result.TryAdd(stop, distance);
+                }
+            }
+
+            return result;
+        }
+
         /// <summary>
         /// Finds out whether a stop exists within the given radius of the given coordinates
         /// </summary>
