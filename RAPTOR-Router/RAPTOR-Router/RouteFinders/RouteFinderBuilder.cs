@@ -169,7 +169,6 @@ namespace RAPTOR_Router.RouteFinders
                 }
 
                 delayModel = newDelayModel;
-                Console.WriteLine("Successfully updated delay data");
             }
             catch (Exception ex)
             {

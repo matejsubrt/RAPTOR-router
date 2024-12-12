@@ -418,19 +418,62 @@ namespace RAPTOR_Router.RouteFinders
             await Task.WhenAll(tasks);
 #endif
 
-            results = results.OrderBy(r => r.ArrivalDateTime).ThenBy(r => r.DepartureDateTime).ToList();
-
-            for (int i = 0; i < results.Count - 1; i++)
+            if (forward)
             {
-                SearchResult res1 = results[i];
-                SearchResult res2 = results[i + 1];
+                results = results.OrderBy(r => r.ArrivalDateTime).ThenBy(r => r.DepartureDateTime).ToList();
 
-                if (res1.ArrivalDateTime >= res2.ArrivalDateTime)
+                for (int i = 0; i < results.Count - 1; i++)
                 {
-                    results.RemoveAt(i);
-                    i--;
+                    SearchResult res1 = results[i];
+                    SearchResult res2 = results[i + 1];
+
+                    // As the results are ordered first by arrival and then by departure, if 2 results have the
+                    // same arrival time, the one with the earlier departure time is removed. This ensures that
+                    // dominated trips are removed, while still keeping intentionally included dominated trips.
+                    // 
+                    // -> If running search forward, for each start time, we may get multiple different results
+                    // with a different number of trips if they are comparable in terms of arrival time.
+                    // Obviously, one of these is the "best" one, while the other ones are dominated by it.
+                    // However, in this case, we want to keep the dominated ones, as they are structurally
+                    // different from the best one and provide alternatives. These dominated ones will have the
+                    // same departure time as the best one, but a later arrival time.
+
+                    // As opposed to this, we will also get results with certain departure time, which may
+                    // have the same arrival time as another result with a later departure time. In this case,
+                    // we want to remove the one with the earlier departure time, as it is dominated by the
+                    // other one and does NOT necessarily provide a reasonable alternative
+
+                    // This means, that we want to erase results dominated due to having later departure but
+                    // same arrival and do NOT want to erase results dominated due to having same departure but
+                    // later arrival.
+                    if (res1.ArrivalDateTime == res2.ArrivalDateTime)
+                    {
+                        results.RemoveAt(i);
+                        i--;
+                    }
                 }
             }
+            else
+            {
+                results = results.OrderBy(r => r.DepartureDateTime).ThenBy(r => r.ArrivalDateTime).ToList();
+
+                for (int i = 0; i < results.Count - 1; i++)
+                {
+                    SearchResult res1 = results[i];
+                    SearchResult res2 = results[i + 1];
+
+
+                    // The above comment applies here as well, but in the opposite way. We want to erase the
+                    // results dominated due to having later arrival but same departure and do NOT want to erase
+                    // results dominated due to having same arrival but earlier departure.
+                    if (res1.DepartureDateTime == res2.DepartureDateTime)
+                    {
+                        results.RemoveAt(i + 1);
+
+                    }
+                }
+            }
+            
 
             // sort by departure time for final result list
             results = results.OrderBy(r => r.DepartureDateTime).ToList();
