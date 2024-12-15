@@ -397,6 +397,72 @@ namespace RAPTOR_Router.RouteFinders
                     }
                 }
             }
+
+            DateTime bestEndReachTime = forward ? DateTime.MaxValue : DateTime.MinValue;
+            foreach (var result in results)
+            {
+                if (forward)
+                {
+                    if (result.ArrivalDateTime < bestEndReachTime)
+                    {
+                        bestEndReachTime = result.ArrivalDateTime;
+                    }
+                }
+                else
+                {
+                    if (result.DepartureDateTime > bestEndReachTime)
+                    {
+                        bestEndReachTime = result.DepartureDateTime;
+                    }
+                }
+            }
+
+            for (int i = 0; i < results.Count; i++)
+            {
+                if (results[i].HasLongWaiting())
+                {
+                    results.RemoveAt(i);
+                }
+            }
+
+            if (results.Count == 0)
+            {
+                ISimpleRoutingProvider router = RouteFinderBuilder.CreateRoutingProvider(!forward, settings);
+                List<SearchResult> newResults = new();
+                if (request.srcByCoords)
+                {
+                    Coordinates srcCoords = new Coordinates(request.srcLat, request.srcLon);
+                    if (request.destByCoords)
+                    {
+                        Coordinates destCoords = new Coordinates(request.destLat, request.destLon);
+                        newResults = router.FindConnection(srcCoords, destCoords, bestEndReachTime, true);
+                    }
+                    else
+                    {
+                        newResults = router.FindConnection(srcCoords, request.destStopName!, bestEndReachTime, true);
+                    }
+                }
+                else
+                {
+                    if (request.destByCoords)
+                    {
+                        Coordinates destCoords = new Coordinates(request.destLat, request.destLon);
+                        newResults = router.FindConnection(request.srcStopName!, destCoords, bestEndReachTime, true);
+                    }
+                    else
+                    {
+                        newResults = router.FindConnection(request.srcStopName!, request.destStopName!, bestEndReachTime, true);
+                    }
+                }
+
+                foreach (var newResult in newResults)
+                {
+                    if (newResult is not null)
+                    {
+                        results.Add(newResult);
+                    }
+                }
+            }
             
 
             // sort by departure time for final result list
