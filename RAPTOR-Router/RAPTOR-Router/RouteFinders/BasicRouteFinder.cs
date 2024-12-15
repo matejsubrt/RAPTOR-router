@@ -892,6 +892,14 @@ namespace RAPTOR_Router.RouteFinders
             }
         }
 
+
+        /// <summary>
+        /// Finds the shortest connection between the source and destination stops
+        /// </summary>
+        /// <remarks>This method solves the issue with the algorith fasting the earliest arriving connection,
+        /// but always selects the earliest possible trip, sometimes leaving long gaps. This method checks if
+        /// there are any long gaps, and if so, it runs the algorithm again in reverse to get rid of them.</remarks>
+        /// <returns>The result of the search</returns>
         private List<SearchResult>? FindShortestConnection(
             List<Stop> srcStops, List<BikeStation> srcBikeStations,
             List<Stop> destStops, List<BikeStation> destBikeStations,
@@ -911,6 +919,10 @@ namespace RAPTOR_Router.RouteFinders
             }
             else
             {
+                markedBikeStations = new();
+                markedStops = new();
+                markedRoutesWithReachedTrips = new();
+
                 if (forward)
                 {
                     var arrivalTime = normalResult.ArrivalDateTime;
@@ -921,9 +933,7 @@ namespace RAPTOR_Router.RouteFinders
                     indexComp = new IndexComparator(forward);
                     timeComp = new TimeComparator(forward);
                     timeMpl = forward ? 1 : -1;
-                    markedBikeStations = new();
-                    markedStops = new();
-                    markedRoutesWithReachedTrips = new();
+                    
                     return FindConnection(srcStops, srcBikeStations, destStops, destBikeStations, arrivalTime,
                                                destByCoord, srcByCoord, destCoords, srcCoords, allowViableAlternatives);
                 }
@@ -937,9 +947,6 @@ namespace RAPTOR_Router.RouteFinders
                     indexComp = new IndexComparator(forward);
                     timeComp = new TimeComparator(forward);
                     timeMpl = forward ? 1 : -1;
-                    markedBikeStations = new();
-                    markedStops = new();
-                    markedRoutesWithReachedTrips = new();
                     
                     return FindConnection(srcStops, srcBikeStations, destStops, destBikeStations, departureTime,
                                                                       srcByCoord, destByCoord, srcCoords, destCoords, allowViableAlternatives);
