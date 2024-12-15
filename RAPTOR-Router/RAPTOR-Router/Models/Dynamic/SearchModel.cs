@@ -650,8 +650,8 @@ namespace RAPTOR_Router.Models.Dynamic
         /// <returns>The search end stops with the best reach times for each round</returns>
         private Stop?[] GetSearchEndStopsWithBestReachTimesByRounds()
         {
-            Stop?[] bestSearchEndStops = new Stop[Settings.ROUNDS];
-            for (int round = 0; round < Settings.ROUNDS; round++)
+            Stop?[] bestSearchEndStops = new Stop[Settings.ROUNDS + 1];
+            for (int round = 0; round <= Settings.ROUNDS; round++)
             {
                 bestSearchEndStops[round] = GetSearchEndStopWithBestReachTimeInRound(round);
             }
@@ -688,8 +688,8 @@ namespace RAPTOR_Router.Models.Dynamic
         /// <returns>Search results with the best reach time for every round</returns>
         private SearchResult?[] CreateResultsFromBestStops(Stop?[] bestSearchEndStops, BikeModel bikeModel)
         {
-            SearchResult?[] resultsRounds = new SearchResult[Settings.ROUNDS];
-            for (int round = 0; round < Settings.ROUNDS; round++)
+            SearchResult?[] resultsRounds = new SearchResult[Settings.ROUNDS + 1];
+            for (int round = 0; round < Settings.ROUNDS + 1; round++)
             {
                 resultsRounds[round] = CreateResultFromStopInRound(bestSearchEndStops[round], round, bikeModel);
             }
@@ -718,7 +718,7 @@ namespace RAPTOR_Router.Models.Dynamic
             {
                 int bestRound = -1;
                 DateTime bestArrivalTime = worstBound;
-                DateTime[] adjustedArrivalTimes = new DateTime[Settings.ROUNDS];
+                DateTime[] adjustedArrivalTimes = new DateTime[Settings.ROUNDS + 1];
                 for (int round = 0; round < results.Length; round++)
                 {
                     if (earliestDestStops[round] is not null)
@@ -760,9 +760,8 @@ namespace RAPTOR_Router.Models.Dynamic
 
                 List<SearchResult> bestResults = new();
 
-                for(int i = 0; i < Settings.ROUNDS; i++)
+                for(int i = 0; i < Settings.ROUNDS + 1; i++)
                 {
-                    //TODO: change 5 from constant to variable
                     DateTime adjustedArrivalTime = adjustedArrivalTimes[i];
                     if (comp.ImprovesTime(adjustedArrivalTime, bestArrivalTime.AddMinutes(timeMpl * 5)))//adjustedArrivalTime <= bestArrivalTime.AddMinutes(5))
                     {

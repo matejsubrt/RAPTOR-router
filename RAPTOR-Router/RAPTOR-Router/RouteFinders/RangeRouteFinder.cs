@@ -417,10 +417,12 @@ namespace RAPTOR_Router.RouteFinders
                 }
             }
 
+            List<SearchResult> removedResults = new();
             for (int i = 0; i < results.Count; i++)
             {
                 if (results[i].HasLongWaiting())
                 {
+                    removedResults.Add(results[i]);
                     results.RemoveAt(i);
                 }
             }
@@ -455,12 +457,20 @@ namespace RAPTOR_Router.RouteFinders
                     }
                 }
 
-                foreach (var newResult in newResults)
+                if(newResults is not null)
                 {
-                    if (newResult is not null)
+                    foreach (var newResult in newResults)
                     {
-                        results.Add(newResult);
+                        if (newResult is not null && newResult.DepartureDateTime > dateTime)
+                        {
+                            results.Add(newResult);
+                        }
                     }
+                }
+
+                if (results.Count == 0)
+                {
+                    results = removedResults;
                 }
             }
             
