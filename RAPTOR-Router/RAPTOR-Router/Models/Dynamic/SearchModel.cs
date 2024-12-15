@@ -460,97 +460,101 @@ namespace RAPTOR_Router.Models.Dynamic
             //    }
             //}
 
-            if (result.UsedTrips.Count >= 2)
-            {
-                var altRouteFinder = RouteFinderBuilder.CreateDirectRouteFinder();
-                DateTime tripTime = forward
-                    ? result.UsedTrips[^1].stopPasses[result.UsedTrips[^1].getOnStopIndex].DepartureTime
-                        .AddSeconds(result.UsedTrips[^1].delayWhenBoarded)
-                    : result.UsedTrips[0].stopPasses[result.UsedTrips[0].getOffStopIndex].ArrivalTime
-                        .AddSeconds(result.UsedTrips[0].delayWhenBoarded);
 
-                int currIndex = forward ? result.UsedSegmentTypes.Count - 1 : 0;
-                int tripIndex = forward ? result.UsedTrips.Count - 1 : 0;
-                int transferIndex = forward ? result.UsedTransfers.Count - 1 : 0;
-                int bikeIndex = forward ? result.UsedBikeTrips.Count - 1 : 0;
 
-                int timeBuffer = 0;
-                bool firstOrLast = true;
 
-                while (forward ? currIndex >= 0 : currIndex < result.UsedSegmentTypes.Count)
-                {
-                    var segmentType = result.UsedSegmentTypes[currIndex];
 
-                    switch (segmentType)
-                    {
-                        case SearchResult.SegmentType.Transfer:
-                            timeBuffer += result.UsedTransfers[transferIndex].time;
-                            transferIndex += forward ? -1 : 1;
-                            break;
-                        case SearchResult.SegmentType.Bike:
-                            timeBuffer += result.UsedBikeTrips[bikeIndex].time;
-                            bikeIndex += forward ? -1 : 1;
-                            break;
-                        case SearchResult.SegmentType.Trip:
-                            var usedTrip = result.UsedTrips[tripIndex];
-                            if (firstOrLast)
-                            {
-                                firstOrLast = false;
-                            }
-                            else
-                            {
-                                var srcStop = usedTrip.stopPasses[usedTrip.getOnStopIndex];
-                                var destStop = usedTrip.stopPasses[usedTrip.getOffStopIndex];
-                                var tripBoundaryTime = forward
-                                    ? tripTime.AddSeconds(-timeBuffer)
-                                    : tripTime.AddSeconds(timeBuffer);
+            //if (result.UsedTrips.Count >= 2)
+            //{
+            //    var altRouteFinder = RouteFinderBuilder.CreateDirectRouteFinder();
+            //    DateTime tripTime = forward
+            //        ? result.UsedTrips[^1].stopPasses[result.UsedTrips[^1].getOnStopIndex].DepartureTime
+            //            .AddSeconds(result.UsedTrips[^1].delayWhenBoarded)
+            //        : result.UsedTrips[0].stopPasses[result.UsedTrips[0].getOffStopIndex].ArrivalTime
+            //            .AddSeconds(result.UsedTrips[0].delayWhenBoarded);
 
-                                var altTripsRequest = new AlternativeTripsRequest
-                                {
-                                    srcStopId = srcStop.Id,
-                                    destStopId = destStop.Id,
-                                    dateTime = srcStop.DepartureTime.AddSeconds(usedTrip.delayWhenBoarded),
-                                    count = 10,
-                                    previous = !forward,
-                                    tripId = usedTrip.tripId
-                                };
+            //    int currIndex = forward ? result.UsedSegmentTypes.Count - 1 : 0;
+            //    int tripIndex = forward ? result.UsedTrips.Count - 1 : 0;
+            //    int transferIndex = forward ? result.UsedTransfers.Count - 1 : 0;
+            //    int bikeIndex = forward ? result.UsedBikeTrips.Count - 1 : 0;
 
-                                var altTripsResponse = altRouteFinder.GetAlternativeTrips(altTripsRequest);
+            //    int timeBuffer = 0;
+            //    bool firstOrLast = true;
 
-                                if (altTripsResponse.Error == AlternativesSearchError.NoError)
-                                {
-                                    var alternatives = altTripsResponse.Alternatives;
-                                    for (int i = forward ? alternatives.Count - 1 : 0;
-                                        forward ? i >= 0 : i < alternatives.Count;
-                                        i += forward ? -1 : 1)
-                                    {
-                                        var altTrip = alternatives[i];
-                                        var altTripTime = forward
-                                            ? altTrip.stopPasses[altTrip.getOffStopIndex].ArrivalTime
-                                            : altTrip.stopPasses[altTrip.getOnStopIndex].DepartureTime;
+            //    while (forward ? currIndex >= 0 : currIndex < result.UsedSegmentTypes.Count)
+            //    {
+            //        var segmentType = result.UsedSegmentTypes[currIndex];
 
-                                        if ((forward && altTripTime < tripBoundaryTime) ||
-                                            (!forward && altTripTime > tripBoundaryTime))
-                                        {
-                                            result.UsedTrips[tripIndex] = altTrip;
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
+            //        switch (segmentType)
+            //        {
+            //            case SearchResult.SegmentType.Transfer:
+            //                timeBuffer += result.UsedTransfers[transferIndex].time;
+            //                transferIndex += forward ? -1 : 1;
+            //                break;
+            //            case SearchResult.SegmentType.Bike:
+            //                timeBuffer += result.UsedBikeTrips[bikeIndex].time;
+            //                bikeIndex += forward ? -1 : 1;
+            //                break;
+            //            case SearchResult.SegmentType.Trip:
+            //                var usedTrip = result.UsedTrips[tripIndex];
+            //                if (firstOrLast)
+            //                {
+            //                    firstOrLast = false;
+            //                }
+            //                else
+            //                {
+            //                    var srcStop = usedTrip.stopPasses[usedTrip.getOnStopIndex];
+            //                    var destStop = usedTrip.stopPasses[usedTrip.getOffStopIndex];
+            //                    var tripBoundaryTime = forward
+            //                        ? tripTime.AddSeconds(-timeBuffer)
+            //                        : tripTime.AddSeconds(timeBuffer);
 
-                            tripTime = forward
-                                ? usedTrip.stopPasses[usedTrip.getOnStopIndex].DepartureTime.AddSeconds(usedTrip.delayWhenBoarded)
-                                : usedTrip.stopPasses[usedTrip.getOffStopIndex].ArrivalTime.AddSeconds(usedTrip.delayWhenBoarded);
+            //                    var altTripsRequest = new AlternativeTripsRequest
+            //                    {
+            //                        srcStopId = srcStop.Id,
+            //                        destStopId = destStop.Id,
+            //                        dateTime = srcStop.DepartureTime.AddSeconds(usedTrip.delayWhenBoarded),
+            //                        count = 10,
+            //                        previous = !forward,
+            //                        tripId = usedTrip.tripId
+            //                    };
 
-                            timeBuffer = 0;
-                            tripIndex += forward ? -1 : 1;
-                            break;
-                    }
+            //                    var altTripsResponse = altRouteFinder.GetAlternativeTrips(altTripsRequest);
 
-                    currIndex += forward ? -1 : 1;
-                }
-            }
+            //                    if (altTripsResponse.Error == AlternativesSearchError.NoError)
+            //                    {
+            //                        var alternatives = altTripsResponse.Alternatives;
+            //                        for (int i = forward ? alternatives.Count - 1 : 0;
+            //                            forward ? i >= 0 : i < alternatives.Count;
+            //                            i += forward ? -1 : 1)
+            //                        {
+            //                            var altTrip = alternatives[i];
+            //                            var altTripTime = forward
+            //                                ? altTrip.stopPasses[altTrip.getOffStopIndex].ArrivalTime
+            //                                : altTrip.stopPasses[altTrip.getOnStopIndex].DepartureTime;
+
+            //                            if ((forward && altTripTime < tripBoundaryTime) ||
+            //                                (!forward && altTripTime > tripBoundaryTime))
+            //                            {
+            //                                result.UsedTrips[tripIndex] = altTrip;
+            //                                break;
+            //                            }
+            //                        }
+            //                    }
+            //                }
+
+            //                tripTime = forward
+            //                    ? usedTrip.stopPasses[usedTrip.getOnStopIndex].DepartureTime.AddSeconds(usedTrip.delayWhenBoarded)
+            //                    : usedTrip.stopPasses[usedTrip.getOffStopIndex].ArrivalTime.AddSeconds(usedTrip.delayWhenBoarded);
+
+            //                timeBuffer = 0;
+            //                tripIndex += forward ? -1 : 1;
+            //                break;
+            //        }
+
+            //        currIndex += forward ? -1 : 1;
+            //    }
+            //}
 
 
 

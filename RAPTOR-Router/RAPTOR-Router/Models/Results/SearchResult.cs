@@ -587,6 +587,123 @@ namespace RAPTOR_Router.Models.Results
             }
         }
 
+        private int GetTotalSecondsOfTravelBetweenTrips(int tripSegTypeIndex1, int tripSegTypeIndex2)
+        {
+            if (tripSegTypeIndex1 >= UsedSegmentTypes.Count || tripSegTypeIndex2 >= UsedSegmentTypes.Count)
+            {
+                throw new ArgumentOutOfRangeException("The provided indices are out of range");
+            }
+
+            if (tripSegTypeIndex1 > tripSegTypeIndex2)
+            {
+                throw new ArgumentException("The first index must be smaller than the second index");
+            }
+
+            if (tripSegTypeIndex1 == tripSegTypeIndex2)
+            {
+                return 0;
+            }
+
+            int secondsTotal = 0;
+
+            for (int i = tripSegTypeIndex1 + 1; i < tripSegTypeIndex2; i++)
+            {
+                var segType = UsedSegmentTypes[i];
+
+                switch (segType)
+                {
+                    case SegmentType.Transfer:
+                        var transferIndex = GetTypeIndex(i);
+                        secondsTotal += UsedTransfers[transferIndex].time;
+                        break;
+                    case SegmentType.Bike:
+                        var bikeTripIndex = GetTypeIndex(i);
+                        secondsTotal += UsedBikeTrips[bikeTripIndex].time;
+                        break;
+                    case SegmentType.Trip:
+                        throw new ArgumentException("There may not be another trip between the 2 trips");
+                    default:
+                        throw new ArgumentException("Invalid segment type");
+                }
+            }
+
+            return secondsTotal;
+        }
+
+        private int GetTypeIndex(int segTypeIndex)
+        {
+            if (segTypeIndex >= UsedSegmentTypes.Count)
+            {
+                throw new ArgumentOutOfRangeException("The provided index is out of range");
+            }
+
+            var segType = UsedSegmentTypes[segTypeIndex];
+
+            var count = 0;
+            for (int i = 0; i < segTypeIndex; i++)
+            {
+                if (UsedSegmentTypes[i] == segType)
+                {
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
+
+
+        public bool HasLongWaiting()
+        {
+            if (UsedTrips.Count < 2)
+            {
+                return false;
+            }
+
+            for (int tripIndex = 0; tripIndex < UsedSegmentTypes.Count; tripIndex++)
+            {
+                if (UsedSegmentTypes[tripIndex] == SegmentType.Trip)
+                {
+                    var nextTripIndex = GetNextTripIndex(tripIndex + 1);
+
+                    if (nextTripIndex != -1)
+                    {
+                        var secondsTravelBetweenTrips = GetTotalSecondsOfTravelBetweenTrips(tripIndex, nextTripIndex);
+                        var usedTripsIndex1 = GetTypeIndex(tripIndex);
+                        var usedTripsIndex2 = GetTypeIndex(nextTripIndex);
+                        var trip1 = UsedTrips[usedTripsIndex1];
+                        var trip2 = UsedTrips[usedTripsIndex2];
+
+                        var trip1GetOffTime = trip1.stopPasses[trip1.getOffStopIndex].ArrivalTime.AddSeconds(trip1.currentDelay);
+                        var trip2GetOnTime = trip2.stopPasses[trip2.getOnStopIndex].DepartureTime.AddSeconds(trip2.delayWhenBoarded);
+
+                        var secondsBetween = (trip2GetOnTime - trip1GetOffTime).TotalSeconds;
+
+                        var secondsWaiting = secondsBetween - secondsTravelBetweenTrips;
+
+                        if (secondsWaiting > 5 * 60)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+
+            int GetNextTripIndex(int startIndex)
+            {
+                for (int i = startIndex; i < UsedSegmentTypes.Count; i++)
+                {
+                    if (UsedSegmentTypes[i] == SegmentType.Trip)
+                    {
+                        return i;
+                    }
+                }
+                return -1;
+            }
+        }
+
         /// <summary>
         /// Enum representing the segment type
         /// </summary>
