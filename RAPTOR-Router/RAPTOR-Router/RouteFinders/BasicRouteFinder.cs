@@ -924,7 +924,7 @@ namespace RAPTOR_Router.RouteFinders
                     markedBikeStations = new();
                     markedStops = new();
                     markedRoutesWithReachedTrips = new();
-                    return FindConnection(destStops, destBikeStations, srcStops, srcBikeStations, arrivalTime,
+                    return FindConnection(srcStops, srcBikeStations, destStops, destBikeStations, arrivalTime,
                                                destByCoord, srcByCoord, destCoords, srcCoords, allowViableAlternatives);
                 }
                 else
