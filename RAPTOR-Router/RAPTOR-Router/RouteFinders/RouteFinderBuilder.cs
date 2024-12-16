@@ -31,7 +31,6 @@ namespace RAPTOR_Router.RouteFinders
         {
             public Task Execute(IJobExecutionContext context)
             {
-                Console.WriteLine("CALLED");
                 string? gtfsZipArchiveLocation = Config.DefaultGTFSPath;
                 if (gtfsZipArchiveLocation is null)
                 {

@@ -208,16 +208,17 @@ namespace RAPTOR_Router.RouteFinders
         }
 
         // Removes dominated results
-        private void CleanupResults(List<SearchResult> results)
+        private List<SearchResult> CleanupResults(List<SearchResult> results)
         {
+            var newResults = new List<SearchResult>(results);
             if (forward)
             {
-                results = results.OrderBy(r => r.ArrivalDateTime).ThenBy(r => r.DepartureDateTime).ToList();
+                newResults = newResults.OrderBy(r => r.ArrivalDateTime).ThenBy(r => r.DepartureDateTime).ToList();
 
-                for (int i = 0; i < results.Count - 1; i++)
+                for (int i = 0; i < newResults.Count - 1; i++)
                 {
-                    SearchResult res1 = results[i];
-                    SearchResult res2 = results[i + 1];
+                    SearchResult res1 = newResults[i];
+                    SearchResult res2 = newResults[i + 1];
 
                     // As the results are ordered first by arrival and then by departure, if 2 results have the
                     // same arrival time, the one with the earlier departure time is removed. This ensures that
@@ -240,19 +241,19 @@ namespace RAPTOR_Router.RouteFinders
                     // later arrival.
                     if (res1.ArrivalDateTime == res2.ArrivalDateTime)
                     {
-                        results.RemoveAt(i);
+                        newResults.RemoveAt(i);
                         i--;
                     }
                 }
             }
             else
             {
-                results = results.OrderBy(r => r.DepartureDateTime).ThenBy(r => r.ArrivalDateTime).ToList();
+                newResults = newResults.OrderBy(r => r.DepartureDateTime).ThenBy(r => r.ArrivalDateTime).ToList();
 
-                for (int i = 0; i < results.Count - 1; i++)
+                for (int i = 0; i < newResults.Count - 1; i++)
                 {
-                    SearchResult res1 = results[i];
-                    SearchResult res2 = results[i + 1];
+                    SearchResult res1 = newResults[i];
+                    SearchResult res2 = newResults[i + 1];
 
 
                     // The above comment applies here as well, but in the opposite way. We want to erase the
@@ -260,11 +261,13 @@ namespace RAPTOR_Router.RouteFinders
                     // results dominated due to having same arrival but earlier departure.
                     if (res1.DepartureDateTime == res2.DepartureDateTime)
                     {
-                        results.RemoveAt(i + 1);
+                        newResults.RemoveAt(i + 1);
                         i--;
                     }
                 }
             }
+
+            return newResults;
         }
 
         // Gets the best reach time from the results
@@ -431,7 +434,7 @@ namespace RAPTOR_Router.RouteFinders
 
 
             // Remove dominated results
-            CleanupResults(results);
+            results = CleanupResults(results);
 
             // Get the best reach time (there may be multiple results with different number of trips)
             DateTime bestEndReachTime = GetBestReachTime(results);

@@ -910,10 +910,6 @@ namespace RAPTOR_Router.Models.Dynamic
         /// <returns>Whether the reach time was improved</returns>
         public bool TryImproveReachTimeByTrip(Stop stop, DateTime reachTime, Trip trip, DateOnly tripDate, Stop reachedFromStop, int round)
         {
-            if (stop.Id == "U9367Z301")
-            {
-                Console.WriteLine();
-            }
             bool improves = ReachTimeImprovesCurrBest(reachTime, stop);
 
             if (improves)
@@ -1163,10 +1159,6 @@ namespace RAPTOR_Router.Models.Dynamic
         public void SetTripReachInRound(Stop stop, Trip trip, DateOnly tripDate, Stop otherEndStop, DateTime reachTime, int round)
         {
             StopRoutingInfo.TripReach tripReach = new StopRoutingInfo.TripReach(trip, otherEndStop, reachTime, tripDate);
-            if (round == 6)
-            {
-                Console.WriteLine();
-            }
             GetRoutingInfo(stop).Reaches[round] = tripReach;
         }
 
