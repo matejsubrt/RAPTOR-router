@@ -301,10 +301,11 @@ namespace RAPTOR_Router.RouteFinders
             bool srcByCoords, bool destByCoords,
             double srcLat, double srcLon, double destLat, double destLon,
             string srcStopName, string destStopName,
-            DateTime dateTime
+            DateTime dateTime, bool reverseDirection = false
             )
         {
-            ISimpleRoutingProvider router = RouteFinderBuilder.CreateRoutingProvider(forward, settings);
+            bool runForward = reverseDirection ? !forward : forward;
+            ISimpleRoutingProvider router = RouteFinderBuilder.CreateRoutingProvider(runForward, settings);
 
             List<SearchResult>? searchResults;
 
@@ -462,7 +463,7 @@ namespace RAPTOR_Router.RouteFinders
                     request.srcByCoords, request.destByCoords,
                     request.srcLat, request.srcLon, request.destLat, request.destLon,
                     request.srcStopName!, request.destStopName!,
-                    bestEndReachTime
+                    bestEndReachTime, true
                     );
 
                 if(newResults is not null)
