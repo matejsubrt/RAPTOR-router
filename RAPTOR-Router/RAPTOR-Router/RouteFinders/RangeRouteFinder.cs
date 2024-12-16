@@ -480,6 +480,11 @@ namespace RAPTOR_Router.RouteFinders
                         }
                     }
                 }
+
+                if (results.Count == 0)
+                {
+                    results = removedResults;
+                }
             }
             
 
