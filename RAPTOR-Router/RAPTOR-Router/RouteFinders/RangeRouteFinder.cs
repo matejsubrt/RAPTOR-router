@@ -470,9 +470,13 @@ namespace RAPTOR_Router.RouteFinders
                 {
                     foreach (var newResult in newResults)
                     {
-                        if (newResult is not null && newResult.DepartureDateTime > dateTime)
+                        if (newResult is not null)
                         {
-                            results.Add(newResult);
+                            if ((forward && newResult.DepartureDateTime > dateTime) ||
+                                (!forward && newResult.ArrivalDateTime < dateTime))
+                            {
+                                results.Add(newResult);
+                            }
                         }
                     }
                 }
