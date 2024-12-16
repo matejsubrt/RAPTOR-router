@@ -456,7 +456,7 @@ namespace RAPTOR_Router.RouteFinders
             // In case we removed all the connections due to long waiting times, we try to find new connections in the opposite direction
             // -> For that we use the best end reach time as the new start time -> we find the shortest connection, not just those that arrive
             // at the destination earliest, as there may be many of such connections
-            if (results.Count == 0 && removedResults.Count > 0)
+            if (removedResults.Count != 0 && removedResults.Count >= results.Count)
             {
                 List<SearchResult>? newResults = FindConnections(
                     request.srcByCoords, request.destByCoords,
