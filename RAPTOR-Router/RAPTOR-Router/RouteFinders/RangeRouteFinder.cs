@@ -424,6 +424,7 @@ namespace RAPTOR_Router.RouteFinders
                 {
                     removedResults.Add(results[i]);
                     results.RemoveAt(i);
+                    i--;
                 }
             }
 
@@ -468,10 +469,10 @@ namespace RAPTOR_Router.RouteFinders
                     }
                 }
 
-                if (results.Count == 0)
-                {
-                    results = removedResults;
-                }
+                //if (results.Count == 0)
+                //{
+                //    results = removedResults;
+                //}
             }
             
 
