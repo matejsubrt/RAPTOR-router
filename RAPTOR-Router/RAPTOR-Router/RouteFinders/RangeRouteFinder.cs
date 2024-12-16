@@ -470,7 +470,7 @@ namespace RAPTOR_Router.RouteFinders
                 {
                     foreach (var newResult in newResults)
                     {
-                        if (newResult is not null)
+                        if (newResult is not null && results.FindIndex(res => res.DepartureDateTime == newResult.DepartureDateTime && res.ArrivalDateTime == newResult.ArrivalDateTime) == -1)
                         {
                             if ((forward && newResult.DepartureDateTime > dateTime) ||
                                 (!forward && newResult.ArrivalDateTime < dateTime))
