@@ -245,8 +245,16 @@ namespace RAPTOR_Router.RouteFinders
 
             foreach (Stop markedStop in markedStops)
             {
+                if (markedStop.Id == "U9367Z301")
+                {
+                    Console.WriteLine();
+                }
                 foreach (Route route in markedStop.StopRoutes)
                 {
+                    if (route.ShortName == "S20")
+                    {
+                        Console.WriteLine();
+                    }
                     int markedStopIndex = forward ? route.GetFirstStopIndex(markedStop) : route.GetLastStopIndex(markedStop);
 
                     if (markedRoutesWithReachedTrips.TryGetValue(route, out ReachedTrip? existingReachedTrip))
@@ -280,6 +288,11 @@ namespace RAPTOR_Router.RouteFinders
 
                 DateOnly tripDate;
 
+                if (route.ShortName == "S18")
+                {
+                    Console.WriteLine();
+                }
+
                 Trip? trip = route.GetFirstTransferableTripAtStopByReachTime(
                     forward,
                     markedStop,
@@ -287,6 +300,11 @@ namespace RAPTOR_Router.RouteFinders
                     delayModel,
                     out tripDate
                 );
+
+                if (tripDate.Day == 14)
+                {
+                    Console.WriteLine();
+                }
 
                 if (trip is not null)
                 {
@@ -316,6 +334,10 @@ namespace RAPTOR_Router.RouteFinders
 
             foreach(KeyValuePair<Route, ReachedTrip> pair in markedRoutesWithReachedTrips)
             {
+                if (pair.Key.ShortName == "S20")
+                {
+                    Console.WriteLine();
+                }
                 Route route = pair.Key;
                 ReachedTrip reachedTrip = pair.Value;
 
@@ -385,15 +407,19 @@ namespace RAPTOR_Router.RouteFinders
                     }
 
 
-                    DateOnly realDate;
-                    if (TripGoesOverMidnight(currTrip, firstStopIndexInDirOfSearch, i))
-                        realDate = currTripDate.AddDays(daysToAddWhenOverMidnight);
-                    else
-                        realDate = currTripDate;
+                    //DateOnly realDate;
+                    //if (TripGoesOverMidnight(currTrip, firstStopIndexInDirOfSearch, i))
+                    //    realDate = currTripDate.AddDays(daysToAddWhenOverMidnight);
+                    //else
+                    //    realDate = currTripDate;
 
 
-                    DateTime regularArrivalTime = DateTimeExtensions.FromDateAndTime(realDate, stopTime.ArrivalTime);
-                    DateTime regularDepartureTime = DateTimeExtensions.FromDateAndTime(realDate, stopTime.DepartureTime);
+                    //DateTime regularArrivalTime = DateTimeExtensions.FromDateAndTime(currTripDate, stopTime.ArrivalTime);
+                    //DateTime regularDepartureTime = DateTimeExtensions.FromDateAndTime(currTripDate, stopTime.DepartureTime);
+                    DateTime regularArrivalTime =
+                        currTrip.GetArrivalDateTime(i, currTripDate);
+                    DateTime regularDepartureTime =
+                        currTrip.GetDepartureDateTime(i, currTripDate);
 
                     DateTime actualArrivalTime = stopHasDelayData ? regularArrivalTime.AddSeconds(arrivalDelay) : regularArrivalTime;
                     DateTime actualDepartureTime = stopHasDelayData ? regularDepartureTime.AddSeconds(departureDelay) : regularDepartureTime;
@@ -716,7 +742,7 @@ namespace RAPTOR_Router.RouteFinders
 
             InitiateSearch();
 
-            while (round <= Settings.ROUNDS - 1)
+            while (round < Settings.ROUNDS)
             {
                 round++;
                 AccumulateRoutes();
