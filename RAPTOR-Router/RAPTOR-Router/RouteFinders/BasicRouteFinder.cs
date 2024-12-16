@@ -100,9 +100,25 @@ namespace RAPTOR_Router.RouteFinders
         /// </summary>
         private int round = 0;
 
+
+        /// <summary>
+        /// The time comparator used for comparing times during the search
+        /// </summary>
         private TimeComparator timeComp;
+
+        /// <summary>
+        /// The index comparator used for comparing indices during the search
+        /// </summary>
         private IndexComparator indexComp;
+
+        /// <summary>
+        /// Whether the search is forward or backward
+        /// </summary>
         private bool forward;
+
+        /// <summary>
+        /// The time multiplier used for the search
+        /// </summary>
         private int timeMpl;
 
         /// <summary>
@@ -484,14 +500,6 @@ namespace RAPTOR_Router.RouteFinders
                     }
                 }
 
-                //TODO: check for delays
-                bool TripGoesOverMidnight(Trip trip, int traverseFromStopIndex, int currStopIndex)
-                {
-                    return forward ?
-                        trip.StopTimes[0].DepartureTime > trip.StopTimes[currStopIndex].ArrivalTime :
-                        trip.StopTimes[^1].ArrivalTime < trip.StopTimes[currStopIndex].DepartureTime;
-                }
-
                 bool SearchLeaveTimeIsTransferableFromLastRoundReach(Stop stop, DateTime searchLeaveTime)
                 {
                     return timeComp.ImprovesTime(searchModel.GetBestReachTimeInRound(stop, round - 1), searchLeaveTime);
@@ -695,9 +703,7 @@ namespace RAPTOR_Router.RouteFinders
             List<BikeStation> destBikeStations, DateTime searchBeginTime, bool srcByCoord, bool destByCoord,
             Coordinates srcCoords = default, Coordinates destCoords = default)
         {
-            Stopwatch sw = Stopwatch.StartNew();
             // Sanity check
-
             if (StopListsAreIncorrect())
             {
                 return false;
@@ -705,11 +711,11 @@ namespace RAPTOR_Router.RouteFinders
 
 
             // Search variables setup
-
             List<Stop> searchBeginStops, searchEndStops;
             List<BikeStation> searchBeginBikeStations, searchEndBikeStations;
 
 
+            // the parameters of this function are in real-world order, but the search may be in the opposite direction
             AssignStopsAndStationsByDirection();
 
 
@@ -721,15 +727,15 @@ namespace RAPTOR_Router.RouteFinders
             searchEndRoutePoints.UnionWith(searchEndStops);
             searchEndRoutePoints.UnionWith(searchEndBikeStations);
 
+
+
+            // If source or destination are custom route points, set them up
             CustomRoutePoint realSrcRoutePoint = new CustomRoutePoint("srcId", "Source", srcCoords);
             CustomRoutePoint realDestRoutePoint = new CustomRoutePoint("destId", "Destination", destCoords);
-
-
             if (srcByCoord)
             {
                 SetupCustomSrcRP();
             }
-
             if (destByCoord)
             {
                 SetupCustomDestRP();
@@ -759,11 +765,8 @@ namespace RAPTOR_Router.RouteFinders
 
 
             // Return the result
-
             markedStops.Clear();
             markedRoutesWithReachedTrips.Clear();
-
-            sw.Stop();
             return true;
 
 
@@ -917,69 +920,6 @@ namespace RAPTOR_Router.RouteFinders
                 return null;
             }
         }
-
-
-        /// <summary>
-        /// Finds the shortest connection between the source and destination stops
-        /// </summary>
-        /// <remarks>This method solves the issue with the algorith fasting the earliest arriving connection,
-        /// but always selects the earliest possible trip, sometimes leaving long gaps. This method checks if
-        /// there are any long gaps, and if so, it runs the algorithm again in reverse to get rid of them.</remarks>
-        /// <returns>The result of the search</returns>
-        //private List<SearchResult>? FindShortestConnection(
-        //    List<Stop> srcStops, List<BikeStation> srcBikeStations,
-        //    List<Stop> destStops, List<BikeStation> destBikeStations,
-        //    DateTime searchBeginTime, bool srcByCoord, bool destByCoord,
-        //    Coordinates srcCoords, Coordinates destCoords,
-        //    bool allowViableAlternatives
-        //)
-        //{
-        //    var normalResults = FindConnection(srcStops, srcBikeStations, destStops, destBikeStations, searchBeginTime,
-        //        srcByCoord, destByCoord, srcCoords, destCoords, false);
-
-        //    var normalResult = normalResults?.FirstOrDefault();
-
-        //    if (normalResult is null || normalResult.UsedTrips.Count < 2 || !normalResult.HasLongWaiting())
-        //    {
-        //        return normalResults;
-        //    }
-        //    else
-        //    {
-        //        markedBikeStations = new();
-        //        markedStops = new();
-        //        markedRoutesWithReachedTrips = new();
-
-        //        if (forward)
-        //        {
-        //            var arrivalTime = normalResult.ArrivalDateTime;
-        //            forward = false;
-        //            searchModel  = new SearchModel(forward, srcStops, destStops, srcBikeStations, destBikeStations,
-        //                searchBeginTime, settings, delayModel);
-        //            round = 0;
-        //            indexComp = new IndexComparator(forward);
-        //            timeComp = new TimeComparator(forward);
-        //            timeMpl = forward ? 1 : -1;
-                    
-        //            return FindConnection(srcStops, srcBikeStations, destStops, destBikeStations, arrivalTime,
-        //                                       destByCoord, srcByCoord, destCoords, srcCoords, allowViableAlternatives);
-        //        }
-        //        else
-        //        {
-        //            var departureTime = normalResult.DepartureDateTime;
-        //            forward = true;
-        //            searchModel = new SearchModel(forward, destStops, srcStops, destBikeStations, srcBikeStations,
-        //                                       searchBeginTime, settings, delayModel);
-        //            round = 0;
-        //            indexComp = new IndexComparator(forward);
-        //            timeComp = new TimeComparator(forward);
-        //            timeMpl = forward ? 1 : -1;
-                    
-        //            return FindConnection(srcStops, srcBikeStations, destStops, destBikeStations, departureTime,
-        //                                                              srcByCoord, destByCoord, srcCoords, destCoords, allowViableAlternatives);
-        //        }
-        //    }
-        //}
-
 
 
 

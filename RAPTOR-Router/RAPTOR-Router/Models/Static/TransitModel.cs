@@ -293,6 +293,12 @@ namespace RAPTOR_Router.Models.Static
             return result;
         }
 
+        /// <summary>
+        /// Gets all the stops within the given radius of the given coordinates and the distances of the stops from the coordinates
+        /// </summary>
+        /// <param name="coords">The coordinates at which to look for the stops</param>
+        /// <param name="radius">The maximum distance of a near stop from the coordinates</param>
+        /// <returns>Dictionary indexed by the near stops with the distance to each of them</returns>
         public Dictionary<Stop, int> GetStopsWithDistancesByLocation(Coordinates coords, int radius)
         {
             Dictionary<Stop, int> result = new();

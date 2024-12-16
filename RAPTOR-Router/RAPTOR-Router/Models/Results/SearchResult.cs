@@ -145,9 +145,10 @@ namespace RAPTOR_Router.Models.Results
             usedSettings = settings;
         }
 
-        // Parameterless constructor
+        // Parameterless constructor - necessary
         public SearchResult()
         {
+            usedSettings = Settings.GetDefaultSettings();
         }
 
         /// <summary>

@@ -32,19 +32,21 @@ namespace RAPTOR_Router.RouteFinders
             List<SearchResult> newResults = new();
             foreach (var result in results)
             {
-                SearchResult newResult = new();
-                newResult.SecondsBeforeFirstTrip = result.SecondsBeforeFirstTrip;
-                newResult.SecondsAfterLastTrip = result.SecondsAfterLastTrip;
-                newResult.ArrivalDateTime = result.ArrivalDateTime;
-                newResult.DepartureDateTime = result.DepartureDateTime;
-                newResult.BikeTripCount = result.BikeTripCount;
-                newResult.TransferCount = result.TransferCount;
-                newResult.TripCount = result.TripCount;
-                newResult.UsedBikeTrips = result.UsedBikeTrips;
-                newResult.UsedSegmentTypes = result.UsedSegmentTypes;
-                newResult.UsedTransfers = result.UsedTransfers;
-                newResult.UsedTrips = result.UsedTrips;
-                newResult.UsedTripAlternatives = new();
+                SearchResult newResult = new SearchResult
+                {
+                    SecondsBeforeFirstTrip = result.SecondsBeforeFirstTrip,
+                    SecondsAfterLastTrip = result.SecondsAfterLastTrip,
+                    ArrivalDateTime = result.ArrivalDateTime,
+                    DepartureDateTime = result.DepartureDateTime,
+                    BikeTripCount = result.BikeTripCount,
+                    TransferCount = result.TransferCount,
+                    TripCount = result.TripCount,
+                    UsedBikeTrips = result.UsedBikeTrips,
+                    UsedSegmentTypes = result.UsedSegmentTypes,
+                    UsedTransfers = result.UsedTransfers,
+                    UsedTrips = result.UsedTrips,
+                    UsedTripAlternatives = new()
+                };
 
                 foreach (var alternatives in result.UsedTripAlternatives)
                 {

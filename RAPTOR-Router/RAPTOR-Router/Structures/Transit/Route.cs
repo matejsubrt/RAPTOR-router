@@ -115,8 +115,16 @@ namespace RAPTOR_Router.Structures.Transit
             return res;
         }
 
-
-        public List<DateTime> GetFirstNTripTimesAtStop(Stop stop, DateTime dateTime, int dateTimeOffsetSeconds, int count, bool forward)
+        /// <summary>
+        /// Gets the first n trip times at a stop reachable at the specified time
+        /// </summary>
+        /// <param name="stop">The stop</param>
+        /// <param name="dateTime">The time</param>
+        /// <param name="count">The number of trip times to get</param>
+        /// <param name="forward">Whether the search is run forward</param>
+        /// <param name="dateTimeOffsetSeconds">The offset of the time (used when we reach the stop by a transfer)</param>
+        /// <returns>The list of dateTimes of trip departures/arrivals after/before the specified time</returns>
+        public List<DateTime> GetFirstNTripTimesAtStop(Stop stop, DateTime dateTime, int count, bool forward, int dateTimeOffsetSeconds = 0)
         {
             DateOnly date = DateOnly.FromDateTime(dateTime);
             DateOnly prevDate = date.AddDays(-1);

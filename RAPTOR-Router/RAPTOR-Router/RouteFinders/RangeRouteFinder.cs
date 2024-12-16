@@ -2,20 +2,11 @@
 
 
 using RAPTOR_Router.Extensions;
-using RAPTOR_Router.Models.Dynamic;
 using RAPTOR_Router.Models.Results;
 using RAPTOR_Router.Models.Static;
 using RAPTOR_Router.Structures.Bike;
 using RAPTOR_Router.Structures.Configuration;
-using RAPTOR_Router.Structures.Custom;
 using RAPTOR_Router.Structures.Generic;
-using RAPTOR_Router.Structures.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using RAPTOR_Router.Structures.Requests;
 using RAPTOR_Router.Structures.Transit;
 
@@ -37,7 +28,13 @@ namespace RAPTOR_Router.RouteFinders
         /// The transit model holding all the static information about the transit network
         /// </summary>
         private TransitModel transitModel;
+        /// <summary>
+        /// The bike model holding the bike data
+        /// </summary>
         private BikeModel bikeModel;
+        /// <summary>
+        /// The delay model holding the current delay information
+        /// </summary>
         private DelayModel delayModel;
 
 
@@ -50,10 +47,8 @@ namespace RAPTOR_Router.RouteFinders
         /// </summary>
         private HashSet<BikeStation> markedBikeStations = new();
         /// <summary>
-        /// A dictionary storing for every currently marked route the stop at which it first can be boarded - i.e. the first marked stop it passes through
+        /// A dictionary holding for each marked route the reached trip on it
         /// </summary>
-        //private Dictionary<Route, Stop> markedRoutesWithReachedStops = new();
-
         private Dictionary<Route, ReachedTrip> markedRoutesWithReachedTrips = new();
 
 
@@ -88,35 +83,9 @@ namespace RAPTOR_Router.RouteFinders
             this.delayModel = delayModel;
         }
 
-        
-        /// <summary>
-        /// Finds the best connections within a given time range
-        /// </summary>
-        /// <param name="request">The connection request object</param>
-        /// <returns>The connection request response, including the error data if there was an error</returns>
-        public async Task<ConnectionApiResponseResult> FindConnectionsAsync(
-            ConnectionRequest request
-        )
+        // Gets the stops that are reachable from the source/destination together with their walking distance
+        private Dictionary<Stop, int> GetSearchBeginStopsWithTransferTimes(ConnectionRequest request)
         {
-            ConnectionApiResponseResult apiResponseResult = new();
-
-            var error = request.Validate(transitModel, bikeModel);
-
-            if(error != ConnectionSearchError.NoError)
-            {
-                apiResponseResult.Error = error;
-                return apiResponseResult;
-            }
-
-            DateTime dateTime = request.dateTime!.Value;
-
-            //DateTime searchBeginRangeStart = startRequest.byEarliestDeparture ? dateTime : dateTime.AddMinutes(-startRequest.rangeLength);
-            //DateTime searchBeginRangeEnd = startRequest.byEarliestDeparture ? dateTime.AddMinutes(startRequest.rangeLength) : dateTime;
-
-            List<SearchResult> results = new();
-
-            //List<Stop> searchBeginStops;
-
             Dictionary<Stop, int> searchBeginStopsWithTransferTimes = new();
             if (request.byEarliestDeparture)
             {
@@ -139,12 +108,12 @@ namespace RAPTOR_Router.RouteFinders
                         {
                             searchBeginStopsWithTransferTimes.Add(stop, 0);
                         }
-                        
+
 
                         foreach (var transfer in stop.Transfers)
                         {
                             var transferStop = transfer.To;
-                            if(!searchBeginStopsWithTransferTimes.ContainsKey(transferStop))
+                            if (!searchBeginStopsWithTransferTimes.ContainsKey(transferStop))
                             {
                                 searchBeginStopsWithTransferTimes.Add(transferStop, settings.GetAdjustedWalkingTransferTime(transfer.Distance));
                             }
@@ -194,7 +163,12 @@ namespace RAPTOR_Router.RouteFinders
                 }
             }
 
+            return searchBeginStopsWithTransferTimes;
+        }
 
+        // Gets the first N ordered trip times at the source stop
+        private List<DateTime> GetNOrderedTripTimes(Dictionary<Stop, int> searchBeginStopsWithTransferTimes, DateTime dateTime, bool byEarliestDeparture)
+        {
             HashSet<DateTime> tripTimes = new();
             foreach (KeyValuePair<Stop, int> stopWithTransferDistance in searchBeginStopsWithTransferTimes)
             {
@@ -203,7 +177,7 @@ namespace RAPTOR_Router.RouteFinders
 
                 foreach (Route route in stop.StopRoutes)
                 {
-                    var routeTripTimes = route.GetFirstNTripTimesAtStop(stop, dateTime, transferTime, startTimeCount, forward);
+                    var routeTripTimes = route.GetFirstNTripTimesAtStop(stop, dateTime, startTimeCount, forward, transferTime);
                     if (routeTripTimes is not null)
                     {
                         foreach (var tripTime in routeTripTimes)
@@ -211,7 +185,7 @@ namespace RAPTOR_Router.RouteFinders
                             var adjustedTripTime = tripTime;
                             // Round the time down (earliest departure) or up (latest arrival) to the nearest minute
                             // This is to partly reduce the number of calls to the search algorithm
-                            int secondsToAdd = request.byEarliestDeparture ? (-adjustedTripTime.Second) : (60 - adjustedTripTime.Second);
+                            int secondsToAdd = byEarliestDeparture ? (-adjustedTripTime.Second) : (60 - adjustedTripTime.Second);
                             var newTripTime = adjustedTripTime.AddSeconds(secondsToAdd);
                             tripTimes.Add(newTripTime);
                         }
@@ -230,118 +204,12 @@ namespace RAPTOR_Router.RouteFinders
                 orderedTripTimes = tripTimes.OrderByDescending(t => t).Take(startTimeCount).ToList();
             }
 
-            var tasks = new List<Task>();
-            int numberOfCalls = orderedTripTimes.Count;
+            return orderedTripTimes;
+        }
 
-#if SEQUENTIAL
-// This is the sequential version of the code. It is used for debugging and testing purposes.
-            for (int i = 0; i < numberOfCalls; i++)
-            {
-                var departureTime = orderedTripTimes[i];
-
-                ISimpleRoutingProvider router = RouteFinderBuilder.CreateRoutingProvider(forward, settings);
-                List<SearchResult>? searchResults;
-
-                if (request.srcByCoords)
-                {
-                    Coordinates srcCoords = new Coordinates(request.srcLat, request.srcLon);
-                    if (request.destByCoords)
-                    {
-                        Coordinates destCoords = new Coordinates(request.destLat, request.destLon);
-                        searchResults = router.FindConnection(srcCoords, destCoords, departureTime, true);
-                    }
-                    else
-                    {
-                        searchResults = router.FindConnection(srcCoords, request.destStopName!, departureTime, true);
-                    }
-                }
-                else
-                {
-                    if (request.destByCoords)
-                    {
-                        Coordinates destCoords = new Coordinates(request.destLat, request.destLon);
-                        searchResults = router.FindConnection(request.srcStopName!, destCoords, departureTime, true);
-                    }
-                    else
-                    {
-                        searchResults = router.FindConnection(request.srcStopName!, request.destStopName!, departureTime, true);
-                    }
-                }
-
-                if (searchResults is not null)
-                {
-                    lock (results)
-                    {
-                        foreach (var searchResult in searchResults)
-                        {
-                            // TODO: shouldnt this not be necessary?
-                            if (searchResult is not null)
-                            {
-                                results.Add(searchResult);
-                            }
-                        }
-                    }
-                }
-            }
-#else
-            for (int i = 0; i < numberOfCalls; i++)
-            {
-                var departureTime = orderedTripTimes[i];
-
-                tasks.Add(Task.Run(() =>
-                {
-                    ISimpleRoutingProvider router = RouteFinderBuilder.CreateRoutingProvider(forward, settings);
-
-                    List<SearchResult>? searchResults;
-
-                    if (request.srcByCoords)
-                    {
-                        Coordinates srcCoords = new Coordinates(request.srcLat, request.srcLon);
-                        if (request.destByCoords)
-                        {
-                            Coordinates destCoords = new Coordinates(request.destLat, request.destLon);
-                            searchResults = router.FindConnection(srcCoords, destCoords, departureTime, true);
-                        }
-                        else
-                        {
-                            searchResults = router.FindConnection(srcCoords, request.destStopName!, departureTime, true);
-                        }
-                    }
-                    else
-                    {
-                        if (request.destByCoords)
-                        {
-                            Coordinates destCoords = new Coordinates(request.destLat, request.destLon);
-                            searchResults = router.FindConnection(request.srcStopName!, destCoords, departureTime, true);
-                        }
-                        else
-                        {
-                            searchResults = router.FindConnection(request.srcStopName!, request.destStopName!, departureTime, true);
-                        }
-                    }
-
-                    //var searchResults = router.FindConnectionWithAlternatives(srcStopName, destStopName, departureTime);
-
-                    if (searchResults is not null)
-                    {
-                        lock (results)
-                        {
-                            foreach (var result in searchResults)
-                            {
-                                // TODO: shouldnt this not be necessary?
-                                if (result is not null)
-                                {
-                                    results.Add(result);
-                                }
-                            }
-                        }
-                    }
-                }));
-            }
-
-            await Task.WhenAll(tasks);
-#endif
-
+        // Removes dominated results
+        private void CleanupResults(List<SearchResult> results)
+        {
             if (forward)
             {
                 results = results.OrderBy(r => r.ArrivalDateTime).ThenBy(r => r.DepartureDateTime).ToList();
@@ -397,7 +265,11 @@ namespace RAPTOR_Router.RouteFinders
                     }
                 }
             }
+        }
 
+        // Gets the best reach time from the results
+        private DateTime GetBestReachTime(List<SearchResult> results)
+        {
             DateTime bestEndReachTime = forward ? DateTime.MaxValue : DateTime.MinValue;
             foreach (var result in results)
             {
@@ -417,6 +289,155 @@ namespace RAPTOR_Router.RouteFinders
                 }
             }
 
+            return bestEndReachTime;
+        }
+
+
+        // Creates the router and dispatches the search to the appropriate search method
+        private List<SearchResult>? FindConnections(
+            bool srcByCoords, bool destByCoords,
+            double srcLat, double srcLon, double destLat, double destLon,
+            string srcStopName, string destStopName,
+            DateTime dateTime
+            )
+        {
+            ISimpleRoutingProvider router = RouteFinderBuilder.CreateRoutingProvider(forward, settings);
+
+            List<SearchResult>? searchResults;
+
+            if (srcByCoords)
+            {
+                Coordinates srcCoords = new Coordinates(srcLat, srcLon);
+                if (destByCoords)
+                {
+                    Coordinates destCoords = new Coordinates(srcLat, destLon);
+                    searchResults = router.FindConnection(srcCoords, destCoords, dateTime, true);
+                }
+                else
+                {
+                    searchResults = router.FindConnection(srcCoords, destStopName!, dateTime, true);
+                }
+            }
+            else
+            {
+                if (destByCoords)
+                {
+                    Coordinates destCoords = new Coordinates(srcLat, destLon);
+                    searchResults = router.FindConnection(srcStopName!, destCoords, dateTime, true);
+                }
+                else
+                {
+                    searchResults = router.FindConnection(srcStopName!, destStopName!, dateTime, true);
+                }
+            }
+
+            return searchResults;
+        }
+
+        
+        /// <summary>
+        /// Finds the best connections within a given time range
+        /// </summary>
+        /// <param name="request">The connection request object</param>
+        /// <returns>The connection request response, including the error data if there was an error</returns>
+        public async Task<ConnectionApiResponseResult> FindConnectionsAsync(
+            ConnectionRequest request
+        )
+        {
+            ConnectionApiResponseResult apiResponseResult = new();
+
+            var error = request.Validate(transitModel, bikeModel);
+            if(error != ConnectionSearchError.NoError)
+            {
+                apiResponseResult.Error = error;
+                return apiResponseResult;
+            }
+            DateTime dateTime = request.dateTime!.Value;
+            
+
+
+
+            // Get the stops that are reachable from the source/destination with their walking distance
+            Dictionary<Stop, int> searchBeginStopsWithTransferTimes = GetSearchBeginStopsWithTransferTimes(request);
+
+            // Get the first N dateTimes (rounded to the lower whole minute) at which one can leave the source stop to get to a trip departing
+            List<DateTime> orderedTripTimes = GetNOrderedTripTimes(searchBeginStopsWithTransferTimes, dateTime, request.byEarliestDeparture);
+
+
+
+            List<SearchResult> results = new();
+            var tasks = new List<Task>();
+            int numberOfCalls = orderedTripTimes.Count;
+
+
+            // For each of the N departure times, find the best connections
+#if SEQUENTIAL
+// This is the sequential version of the code. It is used for debugging and testing purposes.
+            for (int i = 0; i < numberOfCalls; i++)
+            {
+                var departureTime = orderedTripTimes[i];
+
+                List<SearchResult>? searchResults = FindConnections(
+                    request.srcByCoords, request.destByCoords,
+                    request.srcLat, request.srcLon, request.destLat, request.destLon,
+                    request.srcStopName!, request.destStopName!,
+                    departureTime
+                    );
+
+                if (searchResults is not null)
+                {
+                    foreach (var searchResult in searchResults)
+                    {
+                        if (searchResult is not null)
+                        {
+                            results.Add(searchResult);
+                        }
+                    }
+                }
+            }
+#else
+            for (int i = 0; i < numberOfCalls; i++)
+            {
+                var departureTime = orderedTripTimes[i];
+
+                tasks.Add(Task.Run(() =>
+                {
+                    List<SearchResult>? searchResults = FindConnections(
+                        request.srcByCoords, request.destByCoords,
+                        request.srcLat, request.srcLon, request.destLat, request.destLon,
+                        request.srcStopName!, request.destStopName!,
+                        departureTime
+                        );
+
+                    if (searchResults is not null)
+                    {
+                        lock (results)
+                        {
+                            foreach (var result in searchResults)
+                            {
+                                // TODO: shouldnt this not be necessary?
+                                if (result is not null)
+                                {
+                                    results.Add(result);
+                                }
+                            }
+                        }
+                    }
+                }));
+            }
+
+            await Task.WhenAll(tasks);
+#endif
+
+
+            // Remove dominated results
+            CleanupResults(results);
+
+            // Get the best reach time (there may be multiple results with different number of trips)
+            DateTime bestEndReachTime = GetBestReachTime(results);
+            
+
+            // Remove results with long waiting times - they are not useful.
             List<SearchResult> removedResults = new();
             for (int i = 0; i < results.Count; i++)
             {
@@ -428,35 +449,18 @@ namespace RAPTOR_Router.RouteFinders
                 }
             }
 
-            if (results.Count == 0)
+
+            // In case we removed all the connections due to long waiting times, we try to find new connections in the opposite direction
+            // -> For that we use the best end reach time as the new start time -> we find the shortest connection, not just those that arrive
+            // at the destination earliest, as there may be many of such connections
+            if (results.Count == 0 && removedResults.Count > 0)
             {
-                ISimpleRoutingProvider router = RouteFinderBuilder.CreateRoutingProvider(!forward, settings);
-                List<SearchResult> newResults = new();
-                if (request.srcByCoords)
-                {
-                    Coordinates srcCoords = new Coordinates(request.srcLat, request.srcLon);
-                    if (request.destByCoords)
-                    {
-                        Coordinates destCoords = new Coordinates(request.destLat, request.destLon);
-                        newResults = router.FindConnection(srcCoords, destCoords, bestEndReachTime, true);
-                    }
-                    else
-                    {
-                        newResults = router.FindConnection(srcCoords, request.destStopName!, bestEndReachTime, true);
-                    }
-                }
-                else
-                {
-                    if (request.destByCoords)
-                    {
-                        Coordinates destCoords = new Coordinates(request.destLat, request.destLon);
-                        newResults = router.FindConnection(request.srcStopName!, destCoords, bestEndReachTime, true);
-                    }
-                    else
-                    {
-                        newResults = router.FindConnection(request.srcStopName!, request.destStopName!, bestEndReachTime, true);
-                    }
-                }
+                List<SearchResult>? newResults = FindConnections(
+                    request.srcByCoords, request.destByCoords,
+                    request.srcLat, request.srcLon, request.destLat, request.destLon,
+                    request.srcStopName!, request.destStopName!,
+                    bestEndReachTime
+                    );
 
                 if(newResults is not null)
                 {
@@ -468,11 +472,6 @@ namespace RAPTOR_Router.RouteFinders
                         }
                     }
                 }
-
-                //if (results.Count == 0)
-                //{
-                //    results = removedResults;
-                //}
             }
             
 

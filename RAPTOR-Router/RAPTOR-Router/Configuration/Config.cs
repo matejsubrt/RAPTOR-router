@@ -89,8 +89,14 @@ namespace RAPTOR_Router.Configuration
         /// </summary>
         public static string? GolemioAPIKeyPath => _config?["golemioApiKeyPath"];
 
+        /// <summary>
+        /// The URL of the API used to retrieve real-time trip updates
+        /// </summary>
         public static string? GtfsRealtimeTripUpdatesApiUrl => _config?["gtfsRealtimeTripUpdatesApiUrl"];
 
+        /// <summary>
+        /// The URL from which to download the GTFS static zip file
+        /// </summary>
         public static string? GtfsStaticZipFileUrl => _config?["gtfsStaticZipFileUrl"];
     }
 }

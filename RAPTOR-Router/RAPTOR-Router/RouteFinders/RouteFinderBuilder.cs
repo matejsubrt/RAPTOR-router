@@ -26,15 +26,20 @@ namespace RAPTOR_Router.RouteFinders
     /// </summary>
     public static class RouteFinderBuilder
     {
+        // Job for reloading GTFS data every day
         private class DailyGtfsJob : IJob
         {
             public Task Execute(IJobExecutionContext context)
             {
                 Console.WriteLine("CALLED");
-                string gtfsZipArchiveLocation = Config.DefaultGTFSPath;
+                string? gtfsZipArchiveLocation = Config.DefaultGTFSPath;
                 if (gtfsZipArchiveLocation is null)
                 {
                     throw new ApplicationException("GTFS Zip archive location must be set");
+                }
+                else if (forbiddenCrossingLines is null)
+                {
+                    throw new ApplicationException("Forbidden crossing lines must be set");
                 }
                 LoadGtfsData(gtfsZipArchiveLocation, forbiddenCrossingLines);
                 Console.WriteLine("GTFS data reloaded at " + DateTime.Now);
@@ -42,6 +47,7 @@ namespace RAPTOR_Router.RouteFinders
             }
         }
 
+        // Job for updating delay model every 20 seconds
         private class PeriodicDelayUpdateJob : IJob
         {
             public Task Execute(IJobExecutionContext context)
@@ -63,12 +69,19 @@ namespace RAPTOR_Router.RouteFinders
         /// </summary>
         private static BikeModel? bikeModel;
 
+        /// <summary>
+        /// The delay model that the routers should use
+        /// </summary>
         private static DelayModel? delayModel;
 
-        private static List<ForbiddenCrossingLine> forbiddenCrossingLines;
-
-        //private static Timer? _delayTimer;
-
+        /// <summary>
+        /// The list of lines forbidden to cross via a transfer
+        /// </summary>
+        private static List<ForbiddenCrossingLine>? forbiddenCrossingLines;
+        
+        /// <summary>
+        /// The timer that periodically updates the delay model
+        /// </summary>
         private static IScheduler? _scheduler;
 
         private static async Task InitializeScheduler()
@@ -107,7 +120,6 @@ namespace RAPTOR_Router.RouteFinders
 
             await _scheduler.ScheduleJob(dailyGtfsJob, dailyTrigger);
             await _scheduler.ScheduleJob(periodicDelayUpdateJob, periodic20SecTrigger);
-            //Console.WriteLine("Scheduler set up");
         }
 
 
@@ -217,10 +229,7 @@ namespace RAPTOR_Router.RouteFinders
             ConnectModelsThroughTransfers(forbiddenCrossings);
 
 
-            // Start the timer that periodically updates the delay model
-            //_delayTimer = new Timer(UpdateDelayModel, null, 0, 20000);
-
-
+            // Start the timer that periodically updates the delay and transit models
             InitializeScheduler().GetAwaiter().GetResult();
 
             void ValidateConfiguration()

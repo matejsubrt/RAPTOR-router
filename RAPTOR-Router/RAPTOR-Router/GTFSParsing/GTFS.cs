@@ -54,7 +54,7 @@ namespace RAPTOR_Router.GTFSParsing
                 Console.WriteLine("Downloading file...");
                 byte[] fileBytes = await client.GetByteArrayAsync(url);
 
-                string directory = Path.GetDirectoryName(filePath);
+                string? directory = Path.GetDirectoryName(filePath);
                 if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
                     Directory.CreateDirectory(directory);
 
@@ -261,7 +261,11 @@ namespace RAPTOR_Router.GTFSParsing
             return gtfs;
         }
 
-
+        /// <summary>
+        /// Downloads and parses the GTFS data from the specified zip archive file
+        /// </summary>
+        /// <param name="pathToZipFile">The path to the zip file that should be overwritten with the new downloaded one</param>
+        /// <returns>The parsed GTFS object</returns>
         public static GTFS DownloadAndParseZipFile(string pathToZipFile)
         {
             GTFS gtfs = new GTFS();
@@ -281,11 +285,11 @@ namespace RAPTOR_Router.GTFSParsing
 
             if (needToDownloadNewFile)
             {
-                string gtfsArchiveUrl = Config.GtfsStaticZipFileUrl;
+                string? gtfsArchiveUrl = Config.GtfsStaticZipFileUrl;
 
                 try
                 {
-                    DownloadZipFile(gtfsArchiveUrl, pathToZipFile).GetAwaiter().GetResult();
+                    DownloadZipFile(gtfsArchiveUrl!, pathToZipFile).GetAwaiter().GetResult();
                 }
                 catch (ApplicationException ex)
                 {
@@ -297,6 +301,7 @@ namespace RAPTOR_Router.GTFSParsing
 
             return gtfs;
         }
+
         /// <summary>
         /// Removes all the pointers to the GTFS data - to be used after the GTFS data is used for creating the RAPTOR routing data and is no longer needed, so that memory can be freed.
         /// </summary>
