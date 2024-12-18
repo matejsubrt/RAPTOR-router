@@ -1,0 +1,13 @@
+{
+    "gtfsArchivePath":                "",
+    "testGtfsArchivePath":            "",
+    "osmFilePath":                    "",
+    "routerDbFilePath":               "",
+    "testDataFilePath":               "",
+    "nextbikeDbPath":                 "",
+    "forbiddenCrossingPointsPath":    "",
+    "forbiddenCrossingLinesPath":     "",
+    "golemioApiKeyPath":              "",
+    "gtfsRealtimeTripUpdatesApiUrl":  "https://api.golemio.cz/v2/vehiclepositions/gtfsrt/trip_updates.pb",
+    "gtfsStaticZipFileUrl":           "https://data.pid.cz/PID_GTFS.zip"
+  }
