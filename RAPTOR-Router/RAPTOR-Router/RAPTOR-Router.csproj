@@ -11,6 +11,12 @@
 	  <NoWarn>NU1701</NoWarn>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Documentation\**" />
+    <EmbeddedResource Remove="Documentation\**" />
+    <None Remove="Documentation\**" />
+  </ItemGroup>
+
   <!--<ItemGroup>    <Compile Remove="Documentation\**" />    <EmbeddedResource Remove="Documentation\**" />    <None Remove="Documentation\**" />  </ItemGroup>-->
 
   <ItemGroup>
@@ -30,10 +36,6 @@
   <ItemGroup>
     <Folder Include="data\" />
   </ItemGroup>
-
-	<ItemGroup>
-		<Folder Include="Documentation\" />
-	</ItemGroup>
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
 		<!--<Exec Command="doxygen ..\..\docs\doxyfile.doxygen" />-->
 	</Target>
