@@ -92,13 +92,13 @@
 /src/GUI/obj/Debug/net7.0-windows
 /src/GUI/obj
 
-# Ignore OSMRouter build artifacts and data
-/src/OSMRouter/bin
-/src/OSMRouter/obj
-/src/OSMRouter/data
 
 # Ignore other data files
-/src/data
+/src/data/api_keys
+/src/data/osm_routing/cz.routerdb
+/src/data/osm_routing/czech-republic-latest.osm.pbf
+/src/data/bike_distances/bike_distances_old.Debug
+/src/data/bike_distances/distances.csv
 /src/src/.vs
 /src/Visual Studio 2022/Visualizers
 
@@ -109,3 +109,6 @@
 /src/WebAPI/WebAPI.http
 /src/src/data/golemio_api_key.txt
 /src/config.json
+/src/RAPTOR-Router/data/golemio_api_key.txt
+/src/RAPTOR-Router/obj
+/src/RAPTOR-Router/bin/Debug/net7.0
