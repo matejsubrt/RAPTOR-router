@@ -1,0 +1,13 @@
+{
+    "gtfsArchivePath":                "../example-gtfs/PID_GTFS.zip",
+    "testGtfsArchivePath":            "../example-gtfs/PID_GTFS.zip",
+    "osmFilePath":                    "data/osm_routing/czech-republic-latest.osm",
+    "routerDbFilePath":               "data/osm_routing/cz.routerdb",
+    "testDataFilePath":               "ConnectionSearchTests/TestData/Data.csv",
+    "nextbikeDbPath":                 "data/bike_distances/bike_distances.db",
+    "forbiddenCrossingPointsPath":    "data/forbidden_lines/forbidden_transfer_points.csv",
+    "forbiddenCrossingLinesPath":     "data/forbidden_lines/forbidden_transfer_lines.csv",
+    "golemioApiKeyPath":              "data/api_keys/golemio_api_key.txt",
+    "gtfsRealtimeTripUpdatesApiUrl":  "https://api.golemio.cz/v2/vehiclepositions/gtfsrt/trip_updates.pb",
+    "gtfsStaticZipFileUrl":           "https://data.pid.cz/PID_GTFS.zip"
+  }

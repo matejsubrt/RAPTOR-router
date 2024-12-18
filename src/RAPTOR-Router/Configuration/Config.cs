@@ -15,13 +15,15 @@ namespace RAPTOR_Router.Configuration
     {
         private static IConfigurationRoot? _config;
 
+        private static string basePath;
+
         /// <summary>
         /// Constructs the configuration object
         /// </summary>
         /// <exception cref="FileNotFoundException">Thrown if the config.json file was not found in its location</exception>
         static Config()
         {
-            var basePath = Directory.GetCurrentDirectory();
+            basePath = Directory.GetCurrentDirectory();
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
@@ -46,48 +48,62 @@ namespace RAPTOR_Router.Configuration
             }
         }
 
+        static string GetFullPath(string key)
+        {
+            var relativePath = _config?[key];
+
+            if (relativePath is null)
+            {
+                return null;
+            }
+
+            var fullPath = Path.GetFullPath(Path.Combine(basePath, relativePath));
+
+            return fullPath;
+        }
+
         /// <summary>
         /// The location of the main GTFS zip archive used for transit routing
         /// </summary>
-        public static string? DefaultGTFSPath => _config?["gtfsArchivePath"];
+        public static string? DefaultGTFSPath => GetFullPath("gtfsArchivePath");//_config?["gtfsArchivePath"];
         /// <summary>
         /// The location of the test GTFS zip archive used for testing
         /// </summary>
-        public static string? TestGTFSArchivePath => _config?["testGtfsArchivePath"];
+        public static string? TestGTFSArchivePath => GetFullPath("testGtfsArchivePath");//_config?["testGtfsArchivePath"];
 
         /// <summary>
         /// The location of the OSM file used for bike routing
         /// </summary>
-        public static string? OsmFilePath => _config?["osmFilePath"];
+        public static string? OsmFilePath => GetFullPath("osmFilePath");//_config?["osmFilePath"];
         /// <summary>
         /// The location of the routerdb file used for bike routing
         /// </summary>
         /// <remarks>This file can be created using the osm file. This value is not mandatory</remarks>
-        public static string? RouterDbFilePath => _config?["routerDbFilePath"];
+        public static string? RouterDbFilePath => GetFullPath("routerDbFilePath");//_config?["routerDbFilePath"];
 
         /// <summary>
         /// The location of the nextbike database file used for bike routing
         /// </summary>
-        public static string? NextbikeDbPath => _config?["nextbikeDbPath"];
+        public static string? NextbikeDbPath => GetFullPath("nextbikeDbPath");//_config?["nextbikeDbPath"];
 
         /// <summary>
         /// The location of the forbidden crossing points csv file
         /// </summary>
-        public static string? ForbiddenCrossingPointsPath => _config?["forbiddenCrossingPointsPath"];
+        public static string? ForbiddenCrossingPointsPath => GetFullPath("forbiddenCrossingPointsPath");//_config?["forbiddenCrossingPointsPath"];
         /// <summary>
         /// The location of the forbidden crossing lines csv file
         /// </summary>
-        public static string? ForbiddenCrossingLinesPath => _config?["forbiddenCrossingLinesPath"];
+        public static string? ForbiddenCrossingLinesPath => GetFullPath("forbiddenCrossingLinesPath");//_config?["forbiddenCrossingLinesPath"];
 
         /// <summary>
         /// The location of the test request data file used for testing
         /// </summary>
-        public static string? TestDataFilePath => _config?["testDataFilePath"];
+        public static string? TestDataFilePath => GetFullPath("testDataFilePath");//_config?["testDataFilePath"];
 
         /// <summary>
         /// The location of the file containing the API key for the Golemio API
         /// </summary>
-        public static string? GolemioAPIKeyPath => _config?["golemioApiKeyPath"];
+        public static string? GolemioAPIKeyPath => GetFullPath("golemioApiKeyPath");//_config?["golemioApiKeyPath"];
 
         /// <summary>
         /// The URL of the API used to retrieve real-time trip updates

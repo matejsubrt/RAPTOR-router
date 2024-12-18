@@ -108,7 +108,6 @@
 # Ignore miscellaneous files
 /src/WebAPI/WebAPI.http
 /src/src/data/golemio_api_key.txt
-/src/config.json
 /src/RAPTOR-Router/data/golemio_api_key.txt
 /src/RAPTOR-Router/obj
 /src/RAPTOR-Router/bin/Debug/net7.0
