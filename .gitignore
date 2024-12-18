@@ -45,3 +45,67 @@
 /RAPTOR-Router/WebAPI/WebAPI.http
 /RAPTOR-Router/RAPTOR-Router/data/golemio_api_key.txt
 /RAPTOR-Router/config.json
+
+# Ignore Visual Studio and solution-specific files
+/src/.vs
+/.vs/src/FileContentIndex
+/.vs/src/v17/TestStore/0
+/.vs/slnx.sqlite
+/.vs/VSWorkspaceState.json
+
+# Ignore example GTFS files
+/example-gtfs
+
+# Ignore build artifacts and temporary files
+/src/src/bin/Debug/net7.0
+/src/src/obj/Debug/net7.0/ref
+/src/src/obj/Debug/net7.0/refint
+/src/src/obj
+/src/src/bin/Release/net7.0
+/src/src/Properties/launchSettings.json
+
+# Ignore CLIApp build artifacts
+/src/CLIApp/bin/Debug/net7.0
+/src/CLIApp/obj
+/src/CLIApp/bin/Release/net7.0
+
+# Ignore WebAPI build artifacts
+/src/WebAPI/bin/Debug/net7.0
+/src/WebAPI/obj/Debug/net7.0
+/src/WebAPI/obj
+/src/WebAPI/bin/Release/net7.0
+/src/WebAPI-light/bin
+/src/WebAPI-light/obj
+/src/WebAPI-light/Properties/PublishProfiles
+/src/WebAPI-light/publish
+
+# Ignore ConnectionSearchTests build artifacts
+/src/ConnectionSearchTests/bin/Debug/net7.0
+/src/ConnectionSearchTests/obj/Debug/net7.0
+/src/ConnectionSearchTests/bin/Release/net7.0
+/src/ConnectionSearchTests/obj/Release/net7.0
+/src/ConnectionSearchTests/obj
+
+# Ignore GUI build artifacts
+/src/GUI/bin/Debug/net7.0-windows
+/src/GUI/bin/Release/net7.0-windows
+/src/GUI/obj/Debug/net7.0-windows
+/src/GUI/obj
+
+# Ignore OSMRouter build artifacts and data
+/src/OSMRouter/bin
+/src/OSMRouter/obj
+/src/OSMRouter/data
+
+# Ignore other data files
+/src/data
+/src/src/.vs
+/src/Visual Studio 2022/Visualizers
+
+# Ignore user-specific settings
+/src/src.sln.DotSettings.user
+
+# Ignore miscellaneous files
+/src/WebAPI/WebAPI.http
+/src/src/data/golemio_api_key.txt
+/src/config.json
