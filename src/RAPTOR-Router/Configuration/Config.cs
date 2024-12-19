@@ -24,15 +24,16 @@ namespace RAPTOR_Router.Configuration
         static Config()
         {
             basePath = Directory.GetCurrentDirectory();
+            basePath = Path.GetFullPath(Path.Combine(basePath, ".."));
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                basePath = Path.GetFullPath(Path.Combine(basePath, "..", "..", "..", ".."));
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                basePath = Path.GetFullPath(Path.Combine(basePath, ".."));
-            }
+            //if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            //{
+            //    basePath = Path.GetFullPath(Path.Combine(basePath, "..", "..", "..", ".."));
+            //}
+            //else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            //{
+            //    basePath = Path.GetFullPath(Path.Combine(basePath, ".."));
+            //}
 
 
             _config = new ConfigurationBuilder()
