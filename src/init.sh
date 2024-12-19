@@ -52,5 +52,6 @@ if [ "$LAUNCH" = true ]; then
         dotnet run -c Release
     fi
 else
-    echo "Launch flag not provided. Skipping Web-API launch."
+    echo "Launch flag not provided. Skipping Web-API launch. (Use -l/--launch to launch the application after initialization)"
+    echo "(Alternatively, you can launch the app by running \"dotnet run -c Release\" in the WebAPI or WebAPI-light directory)"
 fi
