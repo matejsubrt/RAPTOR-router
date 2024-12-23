@@ -33,6 +33,11 @@
         /// <param name="daysAfterTripStartDeparture">The number of days after the trip start for the departure</param>
         public StopTime(TimeOnly arrivalTime, TimeOnly departureTime, byte daysAfterTripStartArrival, byte daysAfterTripStartDeparture)
         {
+            if (daysAfterTripStartDeparture < DaysAfterTripStartArrival)
+            {
+                throw new ArgumentException("The departure date from the stop must be after the arrival date at the stop");
+            }
+
             ArrivalTime = arrivalTime;
             DepartureTime = departureTime;
             DaysAfterTripStartArrival = daysAfterTripStartArrival;

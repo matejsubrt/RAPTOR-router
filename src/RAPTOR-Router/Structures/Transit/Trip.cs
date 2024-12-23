@@ -35,7 +35,7 @@ namespace RAPTOR_Router.Structures.Transit
             Id = id;
 
             byte daysSinceTripStart = 0;
-            var lastStopTime = gtfsTripStopTimes[0].DepartureTime;
+            var lastStopTime = gtfsTripStopTimes[0].ArrivalTime; // TODO: CHECK change here
             foreach (GTFSStopTime gtfsTripStopTime in gtfsTripStopTimes)
             {
                 byte daysAfterTripStartArrival;

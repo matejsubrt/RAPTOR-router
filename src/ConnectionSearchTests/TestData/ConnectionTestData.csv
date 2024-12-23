@@ -1,0 +1,78 @@
+// Standard connections
+Větrník;Chodov
+Pelc Tyrolka;Bílá Hora
+Gercenova;Malostranské náměstí
+Červeňanského;Donovalská
+Geologická;Hulická
+Podhajská pole;Podhoří
+Škola Štěrboholy;Dědina
+Biskupcova;Modrá škola
+Ohrada;Nemocnice Motol
+Chodov;Motol
+Větrník;Ohrada
+Bílá Hora;Nemocnice Motol
+Bílá Hora;Gercenova
+Větrník;Černý Most
+Anděl;Kněžská luka
+Sídliště Barrandov;Biskupcova
+Dvorce;Ládví
+
+// Non-frequent source connections
+Cholupický hřbitov;Chvaly
+Trutnovská;Spojovací
+Vraný;Chodov
+
+// Non-frequent destination connections
+Malostranské náměstí;Kutná Hora,Šipší,Sběrná
+Gercenova;Neveklov
+Sibiřské náměstí;Dobříš,Statek
+
+// Non-frequent both ends connections
+Kutná Hora,Šipší,Sběrná;Soběhrdy
+Kouřim,škola;Struhařov,Habr
+Neveklov;Bystřice,nám.
+
+// Long connections
+Straky;Zbečno
+Mnichovice;Medonosy
+Neveklov;Bezno
+
+// Likely single trip connections
+Malostranské náměstí;Národní divadlo
+Větrník;Vltavská
+Petřiny;Skalka
+
+// Likely single bike connections
+Křižíkova;Holešovická tržnice
+Kuchyňka;Palmovka
+Sibiřské náměstí;Zoo Praha - Troja
+
+// Likely bike start connections
+Kuchyňka;Ohrada
+Kuchyňka;Sibiřské náměstí
+Na Santince;Vypich
+
+// Likely bike end connections
+Ohrada;Kuchyňka
+Kuchyňka;Sibiřské náměstí
+Vypich;Na Santince
+
+// Likely single transfer connections
+Větrník;Nádraží Veleslavín
+Baterie;Hládkov
+Mikulova;Šperlova
+
+// Likely transfer start connections
+U Prdlavky;Ohrada
+Čakovická;Chodov
+Domov seniorů Ďáblice;Lužiny
+
+// Likely transfer end connections
+Dejvická;U Prdlavky
+Malostranská;Na Mlýnku
+Černý Most;Petýrkova
+
+// Connections testingforbidden transfer lines (river, ...)
+Belárie;Dostihová
+V Podbabě;Podhoří
+Smíchovské nádraží;Správa sociálního zabezpečení

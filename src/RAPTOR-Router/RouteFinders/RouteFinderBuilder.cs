@@ -10,11 +10,11 @@ using Microsoft.Extensions.Configuration;
 using System.Globalization;
 using ProtoBuf;
 using System.Net;
+using System.Runtime.CompilerServices;
 using TransitRealtime;
 using System.Runtime.InteropServices;
 using System.Timers;
 using RAPTOR_Router.Configuration;
-using Timer = System.Threading.Timer;
 using Quartz;
 using Quartz.Impl;
 
@@ -71,7 +71,7 @@ namespace RAPTOR_Router.RouteFinders
         /// <summary>
         /// The delay model that the routers should use
         /// </summary>
-        private static DelayModel? delayModel;
+        private static IDelayModel? delayModel;
 
         /// <summary>
         /// The list of lines forbidden to cross via a transfer
@@ -187,18 +187,22 @@ namespace RAPTOR_Router.RouteFinders
             }
         }
 
+        public static void SetDelayModel(IDelayModel delayModel)
+        {
+            RouteFinderBuilder.delayModel = delayModel;
+        }
 
         /// <summary>
         /// Loads all the GTFS, GBFS and forbidden crossing data from the locations provided in the config file and bike data sources
         /// </summary>
         /// <exception cref="Exception">The configuration is wrong</exception>
-        public static void LoadAllData(string? alternativeGtfsArchiveLocation = null)
+        public static void LoadAllData(string? alternativeGtfsArchiveLocation = null, bool useMocks = false)
         {
             // Retrieve configuration values
             string? gtfsZipArchiveLocation = Config.DefaultGTFSPath;
             string? forbiddenPointsLocation = Config.ForbiddenCrossingPointsPath;
             string? forbiddenLinesLocation = Config.ForbiddenCrossingLinesPath;
-            string? nextbikeDbLocation = Config.NextbikeDbPath;
+            string? nextbikeDbLocation = useMocks ? Config.NextbikeDbTestPath : Config.NextbikeDbPath;
 
             if (alternativeGtfsArchiveLocation != null)
             {
@@ -217,19 +221,22 @@ namespace RAPTOR_Router.RouteFinders
 
 
             // Load the public transit GTFS data
-            LoadGtfsData(gtfsZipArchiveLocation!, forbiddenCrossings);
+            LoadGtfsData(gtfsZipArchiveLocation!, forbiddenCrossings, !useMocks);
 
 
             // Load the bike providers GBFS data
-            LoadGbfsData(nextbikeDbLocation!);
+            LoadGbfsData(nextbikeDbLocation!, useMocks);
 
 
             // Connect the transit and bike models through transfers
             ConnectModelsThroughTransfers(forbiddenCrossings);
 
+            if (!useMocks)
+            {
+                // Start the timer that periodically updates the delay and transit models
+                InitializeScheduler().GetAwaiter().GetResult();
+            }
 
-            // Start the timer that periodically updates the delay and transit models
-            InitializeScheduler().GetAwaiter().GetResult();
 
             void ValidateConfiguration()
             {
@@ -255,14 +262,14 @@ namespace RAPTOR_Router.RouteFinders
         /// </summary>
         /// <param name="gtfsZipArchiveLocation">The location of the zip gtfs archive</param>
         /// <param name="forbiddenCrossings">The list of lines forbidden to cross via a transfer</param>
-        private static void LoadGtfsData(string gtfsZipArchiveLocation, List<ForbiddenCrossingLine> forbiddenCrossings)
+        private static void LoadGtfsData(string gtfsZipArchiveLocation, List<ForbiddenCrossingLine> forbiddenCrossings, bool downloadNewIfFileOld = true)
         {
             forbiddenCrossingLines = forbiddenCrossings;
 
             TransitModel raptor;
 
             // Load the GTFS data and parse them into a TransitModel
-            using (GTFS gtfs = GTFS.DownloadAndParseZipFile(gtfsZipArchiveLocation))
+            using (GTFS gtfs = GTFS.DownloadAndParseZipFile(gtfsZipArchiveLocation, downloadNewIfFileOld))
             {
                 raptor = new TransitModel(gtfs, forbiddenCrossings);
             }
@@ -279,7 +286,7 @@ namespace RAPTOR_Router.RouteFinders
         /// <summary>
         /// Loads the data from the bike data sources and creates a data model for the connection searches to use
         /// </summary>
-        private static void LoadGbfsData(string nextbikeDbFileLocation)
+        private static void LoadGbfsData(string nextbikeDbFileLocation, bool useMocks = false)
         {
             // Create a bike model
             bikeModel = new BikeModel();
@@ -293,8 +300,15 @@ namespace RAPTOR_Router.RouteFinders
             bikeModel.AddDataSource(nextbike);
 
 
-            // Start the timer that periodically updates the bike counts
-            bikeModel.StartUpdateTimer();
+            if (!useMocks)
+            {
+                // Start the timer that periodically updates the bike counts
+                bikeModel.StartUpdateTimer();
+            }
+            else
+            {
+                bikeModel.MockStationStatus();
+            }
         }
 
         /// <summary>

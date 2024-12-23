@@ -6,7 +6,7 @@ namespace RAPTOR_Router.Extensions
     /// <summary>
     /// Class with tools for calculating distances between GPS coordinates
     /// </summary>
-    internal static class DistanceExtensions
+    public static class DistanceExtensions
     {
         const double latConst = 111113.9; //distance between latitudes of 1 degree
         const double lonConst50N = 71583; //distance between 2 longitude lines at 50 degrees north
@@ -45,7 +45,7 @@ namespace RAPTOR_Router.Extensions
         /// </summary>
         /// <remarks>Does NOT take the curvature of the earth into account. ONLY works well for coordinates near the 50th parallel. Simpler and faster to compute than the real earth-surface distance. For exact distances, see {@link DistanceBetween}</remarks>
         /// <returns>The approximate distance between the two points in meters.</returns>
-        private static int SimplifiedDistanceBetween(double lat1, double lon1, double lat2, double lon2)
+        public static int SimplifiedDistanceBetween(double lat1, double lon1, double lat2, double lon2)
         {
 
             var lat1m = lat1 * latConst;
@@ -84,7 +84,7 @@ namespace RAPTOR_Router.Extensions
         /// <param name="lon2">The longitude of the second point</param>
         /// <param name="maxMeters">The maximal number of meters to not be too far apart.</param>
         /// <returns>Bool specifying whether the two points are further apart than maxMeters</returns>
-        private static bool TooFarInOneDirection(double lat1, double lon1, double lat2, double lon2, int maxMeters)
+        public static bool TooFarInOneDirection(double lat1, double lon1, double lat2, double lon2, int maxMeters)
         {
             var latDiffMeters = Math.Abs(lat1 - lat2) * latConst;
             var lonDiffMeters = Math.Abs(lon1 - lon2) * lonConst50N;

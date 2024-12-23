@@ -266,7 +266,7 @@ namespace RAPTOR_Router.GTFSParsing
         /// </summary>
         /// <param name="pathToZipFile">The path to the zip file that should be overwritten with the new downloaded one</param>
         /// <returns>The parsed GTFS object</returns>
-        public static GTFS DownloadAndParseZipFile(string pathToZipFile)
+        public static GTFS DownloadAndParseZipFile(string pathToZipFile, bool downloadNewIfFileOld = true)
         {
             GTFS gtfs = new GTFS();
 
@@ -283,7 +283,7 @@ namespace RAPTOR_Router.GTFSParsing
             }
 
 
-            if (needToDownloadNewFile)
+            if (needToDownloadNewFile && downloadNewIfFileOld)
             {
                 string? gtfsArchiveUrl = Config.GtfsStaticZipFileUrl;
 

@@ -4,7 +4,7 @@ using RAPTOR_Router.Structures.Interfaces;
 
 namespace RAPTOR_Router.Extensions
 {
-    internal static class ListExtensions
+    public static class ListExtensions
     {
         /// <summary>
         /// Extracts the list of stop ids from the specified list of GTFSStopTimes
@@ -24,7 +24,7 @@ namespace RAPTOR_Router.Extensions
     
 
     
-    internal static class ForbiddenCrossingExtensions
+    public static class ForbiddenCrossingExtensions
     {
         /// <summary>
         /// Finds out, whether the line between the two RoutePoints is forbidden to cross - i.e. the list of forbidden lines contains a line, that intersects the line between the two points

@@ -9,7 +9,7 @@ namespace RAPTOR_Router.Extensions
     /// <summary>
     /// Class used for comparing two times during a connection search based on the search direction.
     /// </summary>
-    internal class TimeComparator
+    public class TimeComparator
     {
         private readonly Func<DateTime, DateTime, bool> _improvesTime;
 
@@ -53,7 +53,7 @@ namespace RAPTOR_Router.Extensions
     /// <summary>
     /// Class used for comparing two indices during a connection search based on the search direction.
     /// </summary>
-    internal class IndexComparator
+    public class IndexComparator
     {
         private readonly Func<int, int, bool> _precedesInSearchDirection;
 

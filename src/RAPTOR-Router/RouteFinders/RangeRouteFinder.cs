@@ -35,7 +35,7 @@ namespace RAPTOR_Router.RouteFinders
         /// <summary>
         /// The delay model holding the current delay information
         /// </summary>
-        private DelayModel delayModel;
+        private IDelayModel delayModel;
 
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace RAPTOR_Router.RouteFinders
         /// <param name="transitModel">The transit model holding all the static information about the transit network</param>
         /// <param name="bikeModel">The bike model holding the bike data</param>
         /// <param name="delayModel">The delay model holding the current delay information</param>
-        internal RangeRouteFinder(bool forward, Settings settings, TransitModel transitModel, BikeModel bikeModel, DelayModel delayModel)
+        internal RangeRouteFinder(bool forward, Settings settings, TransitModel transitModel, BikeModel bikeModel, IDelayModel delayModel)
         {
             this.settings = settings;
             this.transitModel = transitModel;

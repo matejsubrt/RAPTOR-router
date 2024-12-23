@@ -8,7 +8,7 @@ using RAPTOR_Router.GBFSParsing.Distances;
 using RAPTOR_Router.Models.Static;
 using RAPTOR_Router.Structures.Bike;
 
-namespace ConnectionSearchTests
+namespace UnitTests
 {
     [TestClass]
     public class BikeTests

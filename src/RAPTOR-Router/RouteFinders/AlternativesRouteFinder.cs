@@ -91,14 +91,14 @@ namespace RAPTOR_Router.RouteFinders
         /// <summary>
         /// The delay model holding the delay data for the transit network
         /// </summary>
-        private readonly DelayModel delayModel;
+        private readonly IDelayModel delayModel;
 
         /// <summary>
         /// Creates a new AlternativesRouteFinder object
         /// </summary>
         /// <param name="transitModel">The transit model to use for the search</param>
         /// <param name="delayModel">The delay model to use for the search</param>
-        internal AlternativesRouteFinder(TransitModel transitModel, DelayModel delayModel)
+        internal AlternativesRouteFinder(TransitModel transitModel, IDelayModel delayModel)
         {
             this.transitModel = transitModel;
             this.delayModel = delayModel;
@@ -378,7 +378,8 @@ namespace RAPTOR_Router.RouteFinders
                             srcDepartureDelay,
                             currTripDelay
                         );
-                        sortedTrips.Add(alternativeEntry);
+                        if(alternativeEntry.altTrip.Id != request.tripId)
+                            sortedTrips.Add(alternativeEntry);
                     }
                 }
 

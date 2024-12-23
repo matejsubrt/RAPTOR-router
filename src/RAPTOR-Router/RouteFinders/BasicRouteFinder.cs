@@ -73,7 +73,7 @@ namespace RAPTOR_Router.RouteFinders
         /// <summary>
         /// The delay model holding all the current delay data for all active trips
         /// </summary>
-        private readonly DelayModel delayModel;
+        private readonly IDelayModel delayModel;
 
 
         /// <summary>
@@ -149,7 +149,7 @@ namespace RAPTOR_Router.RouteFinders
         /// <param name="transitModel">The transit model holding all the static information about the transit network</param>
         /// <param name="bikeModel">The bike model holding all the information about the shared bike systems and their stations</param>
         /// <param name="delayModel">The delay model holding all the current delay data for all active trips</param>
-        internal BasicRouteFinder(bool forward, Settings settings, TransitModel transitModel, BikeModel bikeModel, DelayModel delayModel)
+        internal BasicRouteFinder(bool forward, Settings settings, TransitModel transitModel, BikeModel bikeModel, IDelayModel delayModel)
         {
             this.settings = settings;
             this.transitModel = transitModel;
@@ -605,8 +605,12 @@ namespace RAPTOR_Router.RouteFinders
             HashSet<Stop> newMarkedStops = new();
             HashSet<BikeStation> newMarkedBikeStations = new();
 
+            var orderedMarkedStops = forward ?
+                markedStops.ToList().OrderBy(stop => searchModel.GetBestReachTimeInRound(stop, round)):
+                markedStops.ToList().OrderByDescending(stop => searchModel.GetBestReachTimeInRound(stop, round));
+
             // Improve from all marked stops
-            foreach (Stop markedStop in markedStops)
+            foreach (Stop markedStop in orderedMarkedStops)
             {
                 TryImproveAllTransfersFromStop(markedStop);
             }
@@ -631,8 +635,13 @@ namespace RAPTOR_Router.RouteFinders
 
             void TryImproveAllTransfersFromStop(Stop stop)
             {
+                
                 foreach (Transfer transfer in stop.Transfers)
                 {
+                    if (transfer.From.Name == "Byšice" && transfer.To.Name == "Byšice")
+                    {
+                        Console.WriteLine();
+                    }
                     Transfer realTransfer = forward ? transfer : transfer.OppositeTransfer!;
 
                     // Improve by Stop-to-Stop transfers

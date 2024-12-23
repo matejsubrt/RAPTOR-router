@@ -21,9 +21,9 @@ namespace WebAPI_light
             appBuilder.Services.AddSwaggerGen();
 
             var app = appBuilder.Build();
-            app.UseSwagger();
-            app.UseSwaggerUI();
-            app.MapSwagger();
+            //app.UseSwagger();
+            //app.UseSwaggerUI();
+            //app.MapSwagger();
             app.UseHttpsRedirection();
             app.UseExceptionHandler(exceptionHandlerApp
                 => exceptionHandlerApp.Run(async context

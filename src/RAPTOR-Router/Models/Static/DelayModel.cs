@@ -6,6 +6,19 @@ using System.Threading.Tasks;
 
 namespace RAPTOR_Router.Models.Static
 {
+    public interface IDelayModel
+    {
+        public void AddDelay(DateOnly tripStartDate, string tripId, int arrivalDelay, int departureDelay);
+
+        public bool TryGetDelay(DateOnly tripStartDate, string tripId, int stopIndex, out int arrivalDelay, out int departureDelay);
+
+        public bool TripHasDelayData(DateOnly tripStartDate, string tripId);
+
+        public TripStopDelays GetTripStopDelaysUnsafe(DateOnly tripStartDate, string tripId);
+    }
+
+
+
     /// <summary>
     /// Class representing the delays for a single trip
     /// </summary>
@@ -78,7 +91,7 @@ namespace RAPTOR_Router.Models.Static
     /// <summary>
     /// Class holding all the current delay data for all active trips
     /// </summary>
-    public class DelayModel
+    public class DelayModel : IDelayModel
     {
         private Dictionary<DateOnly, Dictionary<string, TripStopDelays>> delays = new();
 

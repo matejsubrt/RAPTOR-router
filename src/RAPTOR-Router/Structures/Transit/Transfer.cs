@@ -45,15 +45,6 @@ namespace RAPTOR_Router.Structures.Transit
         {
             return "Transfer from " + From.Name + " to " + To.Name;
         }
-        /// <summary>
-        /// Gets the time it takes to make the transfer at the given walking pace
-        /// </summary>
-        /// <param name="walkingPace">The pace to use in min/km</param>
-        /// <returns>The time in seconds</returns>
-        public int GetTransferTime(int walkingPace)
-        {
-            return (int)(Distance / 1000.0 * walkingPace * 60);
-        }
 
         /// <summary>
         /// Gets the source point of the transfer

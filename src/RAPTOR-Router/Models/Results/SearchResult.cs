@@ -140,7 +140,7 @@ namespace RAPTOR_Router.Models.Results
         /// Creates a new SearchResult object
         /// </summary>
         /// <param name="settings">The settings that were used for the search</param>
-        internal SearchResult(Settings settings)
+        public SearchResult(Settings settings)
         {
             usedSettings = settings;
         }
@@ -148,7 +148,7 @@ namespace RAPTOR_Router.Models.Results
         // Parameterless constructor - necessary
         public SearchResult()
         {
-            usedSettings = Settings.GetDefaultSettings();
+            usedSettings = Settings.DEFAULT;
         }
 
         /// <summary>
@@ -166,7 +166,7 @@ namespace RAPTOR_Router.Models.Results
         ///     toEnd = true means the connection is being reconstructed from start to end -> backward search was used
         ///     toEnd = false means the connection is being reconstructed from end to start -> forward search was used
         /// </remarks>
-        internal void AddUsedTrip(Trip trip, DateOnly tripStartDate, Stop realGetOnStop, Stop realGetOffStop, bool hasDelayInfo, int delayWhenBoarded, int currentDelay, bool toEnd)
+        public void AddUsedTrip(Trip trip, DateOnly tripStartDate, Stop realGetOnStop, Stop realGetOffStop, bool hasDelayInfo, int delayWhenBoarded, int currentDelay, bool toEnd)
         {
             var routeStops = trip.Route.RouteStops;
 
@@ -226,7 +226,7 @@ namespace RAPTOR_Router.Models.Results
         /// <summary>
         /// Initializes the alternatives list for each used trip - puts one trip in each list
         /// </summary>
-        internal void InitializeAlternatives()
+        public void InitializeAlternatives()
         {
             foreach (UsedTrip usedTrip in UsedTrips)
             {
@@ -244,7 +244,7 @@ namespace RAPTOR_Router.Models.Results
         ///     toEnd = true means the connection is being reconstructed from start to end -> backward search was used
         ///     toEnd = false means the connection is being reconstructed from end to start -> forward search was used
         /// </remarks>
-        internal void AddUsedTransfer(Transfer transfer, bool toEnd)
+        public void AddUsedTransfer(Transfer transfer, bool toEnd)
         {
             var realSrc = transfer.From;
             var realDest = transfer.To;
@@ -253,7 +253,7 @@ namespace RAPTOR_Router.Models.Results
             UsedTransfer usedTransfer = new UsedTransfer(
                 srcStopInfo,
                 destStopInfo,
-                usedSettings.GetAdjustedWalkingTransferTime(transfer.Distance),
+                usedSettings.GetTransferTime(transfer.Distance),
                 transfer.Distance
             );
             if (toEnd)
@@ -281,7 +281,7 @@ namespace RAPTOR_Router.Models.Results
         ///     toEnd = true means the connection is being reconstructed from start to end -> backward search was used
         ///     toEnd = false means the connection is being reconstructed from end to start -> forward search was used
         /// </remarks>
-        internal void AddUsedBikeTrip(BikeStation from, BikeStation to, int distance, bool toEnd)
+        public void AddUsedBikeTrip(BikeStation from, BikeStation to, int distance, bool toEnd)
         {
             RoutePointInfo srcStopInfo = new(from.Name, from.Id, from.Coords.Lat, from.Coords.Lon);
             RoutePointInfo destStopInfo = new(to.Name, to.Id, to.Coords.Lat, to.Coords.Lon);
@@ -316,7 +316,7 @@ namespace RAPTOR_Router.Models.Results
         ///     toEnd = false means the connection is being reconstructed from end to start -> forward search was used
         /// </remarks>
         /// <param name="transfer">The transfer to add</param>
-        internal void AddUsedTransfer(BikeTransfer transfer, bool toEnd)
+        public void AddUsedTransfer(BikeTransfer transfer, bool toEnd)
         {
             var realSrc = transfer.GetSrcRoutePoint();
             var realDest = transfer.GetDestRoutePoint();
@@ -325,7 +325,7 @@ namespace RAPTOR_Router.Models.Results
             UsedTransfer usedTransfer = new UsedTransfer(
                 srcStopInfo,
                 destStopInfo,
-                usedSettings.GetAdjustedWalkingTransferTime(transfer.Distance),
+                usedSettings.GetTransferTime(transfer.Distance),
                 transfer.Distance
             );
             if (toEnd)
@@ -350,14 +350,14 @@ namespace RAPTOR_Router.Models.Results
         ///     toEnd = false means the connection is being reconstructed from end to start -> forward search was used
         /// </remarks>
         /// <param name="transfer">The transfer to add</param>
-        internal void AddUsedTransfer(CustomTransfer transfer, bool toEnd)
+        public void AddUsedTransfer(CustomTransfer transfer, bool toEnd)
         {
             RoutePointInfo srcStopInfo = new(transfer.GetSrcRoutePoint().Name, transfer.GetSrcRoutePoint().Id, transfer.GetSrcRoutePoint().Coords.Lat, transfer.GetSrcRoutePoint().Coords.Lon);
             RoutePointInfo destStopInfo = new(transfer.GetDestRoutePoint().Name, transfer.GetDestRoutePoint().Id, transfer.GetDestRoutePoint().Coords.Lat, transfer.GetDestRoutePoint().Coords.Lon);
             UsedTransfer usedTransfer = new UsedTransfer(
                 srcStopInfo,
                 destStopInfo,
-                usedSettings.GetAdjustedWalkingTransferTime(transfer.Distance),
+                usedSettings.GetTransferTime(transfer.Distance),
                 transfer.Distance
             );
             if (toEnd)
@@ -417,7 +417,7 @@ namespace RAPTOR_Router.Models.Results
         /// Gets the total number of seconds it takes from the beginning of the connection until boarding the first trip
         /// </summary>
         /// <returns>The number of seconds before first trip</returns>
-        int GetTotalSecondsBeforeFirstTrip()
+        public int GetTotalSecondsBeforeFirstTrip()
         {
             int segmentIndex = 0;
             int transferIndex = 0;
@@ -444,7 +444,7 @@ namespace RAPTOR_Router.Models.Results
         /// Gets the total number of seconds it takes from the deboarding of the last trip until the destination is reached
         /// </summary>
         /// <returns>The number of seconds after last trip</returns>
-        int GetTotalSecondsAfterLastTrip()
+        public int GetTotalSecondsAfterLastTrip()
         {
             int segmentIndex = UsedSegmentTypes.Count - 1;
             int transferIndex = UsedTransfers.Count - 1;
@@ -502,7 +502,7 @@ namespace RAPTOR_Router.Models.Results
                     }
                     break;
                 case SegmentType.Trip:
-                    DepartureDateTime = firstTripGetOnTime.AddSeconds(UsedTrips[0].delayWhenBoarded);
+                    DepartureDateTime = firstTripGetOnTime.AddSeconds(UsedTrips[0].delayWhenBoarded).AddSeconds(-SecondsBeforeFirstTrip);
                     ArrivalDateTime = lastTripGetOffTime.AddSeconds(UsedTrips[^1].currentDelay).AddSeconds(SecondsAfterLastTrip);
                     break;
                 case SegmentType.Bike:
@@ -557,13 +557,13 @@ namespace RAPTOR_Router.Models.Results
                     }
                     else
                     {
-                        DepartureDateTime = firstTripGetOnTime.AddSeconds(-SecondsBeforeFirstTrip);
-                        ArrivalDateTime = lastTripGetOffTime.AddSeconds(SecondsAfterLastTrip);
+                        DepartureDateTime = firstTripGetOnTime.AddSeconds(-SecondsBeforeFirstTrip).AddSeconds(UsedTrips[0].delayWhenBoarded);
+                        ArrivalDateTime = lastTripGetOffTime.AddSeconds(SecondsAfterLastTrip).AddSeconds(UsedTrips[^1].currentDelay);
                     }
                     break;
                 case SegmentType.Trip:
-                    DepartureDateTime = firstTripGetOnTime;
-                    ArrivalDateTime = lastTripGetOffTime.AddSeconds(SecondsAfterLastTrip);
+                    DepartureDateTime = firstTripGetOnTime.AddSeconds(UsedTrips[0].delayWhenBoarded).AddSeconds(-SecondsBeforeFirstTrip);
+                    ArrivalDateTime = lastTripGetOffTime.AddSeconds(SecondsAfterLastTrip).AddSeconds(UsedTrips[^1].currentDelay);
                     break;
                 case SegmentType.Bike:
                     if (UsedSegmentTypes.Count == 1)
@@ -579,8 +579,8 @@ namespace RAPTOR_Router.Models.Results
                     }
                     else
                     {
-                        DepartureDateTime = firstTripGetOnTime.AddSeconds(-SecondsBeforeFirstTrip);
-                        ArrivalDateTime = lastTripGetOffTime.AddSeconds(SecondsAfterLastTrip);
+                        DepartureDateTime = firstTripGetOnTime.AddSeconds(-SecondsBeforeFirstTrip).AddSeconds(UsedTrips[0].delayWhenBoarded);
+                        ArrivalDateTime = lastTripGetOffTime.AddSeconds(SecondsAfterLastTrip).AddSeconds(UsedTrips[^1].currentDelay);
                     }
                     break;
                 default:
@@ -631,7 +631,7 @@ namespace RAPTOR_Router.Models.Results
             return secondsTotal;
         }
 
-        private int GetTypeIndex(int segTypeIndex)
+        public int GetTypeIndex(int segTypeIndex)
         {
             if (segTypeIndex >= UsedSegmentTypes.Count)
             {

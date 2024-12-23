@@ -26,4 +26,8 @@
     <Folder Include="TestData\" />
   </ItemGroup>
 
+	<PropertyGroup>
+		<TestWorkingDirectory>$(ProjectDir)</TestWorkingDirectory>
+	</PropertyGroup>
+
 </Project>

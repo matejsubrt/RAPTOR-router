@@ -1,10 +1,40 @@
-﻿namespace RAPTOR_Router.Structures.Configuration
+﻿
+
+namespace RAPTOR_Router.Structures.Configuration
 {
+    
     /// <summary>
     /// Class representing the settings to use for the connection search
     /// </summary>
     public class Settings
     {
+        // public for easy testing access.
+        public const int MAX_WALK_DISTANCE_LOW = 250;
+        public const int MAX_WALK_DISTANCE_NORMAL = 400;
+        public const int MAX_WALK_DISTANCE_HIGH = 750;
+
+        public const double MOVING_TRANSFER_MPL_NONE = 1.0;
+        public const double MOVING_TRANSFER_MPL_SHORT = 1.0;
+        public const double MOVING_TRANSFER_MPL_NORMAL = 1.25;
+        public const double MOVING_TRANSFER_MPL_LONG = 1.5;
+
+        public const int STATIONARY_TRANSFER_MIN_NONE = 0;
+        public const int STATIONARY_TRANSFER_MIN_SHORT = 30;
+        public const int STATIONARY_TRANSFER_MIN_NORMAL = 60;
+        public const int STATIONARY_TRANSFER_MIN_LONG = 60;
+
+        public const double BIKE_TRIP_MPL_NONE = 1.0;
+        public const double BIKE_TRIP_MPL_SHORT = 1.1;
+        public const double BIKE_TRIP_MPL_NORMAL = 1.25;
+        public const double BIKE_TRIP_MPL_LONG = 1.5;
+
+        public const int TRANSFER_PENALTY_SHORTESTABSOLUTE = 0;
+        public const int TRANSFER_PENALTY_SHORTEST = 2 * 60;
+        public const int TRANSFER_PENALTY_BALANCED = 4 * 60;
+        public const int TRANSFER_PENALTY_LEASTTRANSFERS = 10 * 60;
+
+
+
         /// <summary>
         /// The maximum number of trips to be used for the searched connection
         /// </summary>
@@ -46,7 +76,7 @@
         /// <summary>
         /// Specifies the selected transfer length to use in the connection search - i.e. how aggressive and risky the transfers can be
         /// </summary>
-        public TransferTime TransferTime { get; set; } = TransferTime.Normal;
+        public TransferBuffer TransferBuffer { get; set; } = TransferBuffer.Normal;
         /// <summary>
         /// Specifies the comfort balance to be used in the connection search - i.e. how strongly less transfers should be preferred over shortest time
         /// </summary>
@@ -63,9 +93,9 @@
         /// <summary>
         /// The default settings to use if none were provided
         /// </summary>
-        public static Settings GetDefaultSettings()
+        public static Settings DEFAULT
         {
-            return new Settings();
+            get => new Settings();
         }
 
         /// <summary>
@@ -78,7 +108,7 @@
 
             correct &= Enum.IsDefined(typeof(ComfortBalance), ComfortBalance);
             correct &= Enum.IsDefined(typeof(WalkingPreference), WalkingPreference);
-            correct &= Enum.IsDefined(typeof(TransferTime), TransferTime);
+            correct &= Enum.IsDefined(typeof(TransferBuffer), TransferBuffer);
             correct &= Enum.IsDefined(typeof(BikeTripBuffer), BikeTripBuffer);
 
             correct &= WalkingPace >= 2 && WalkingPace <= 60;
@@ -98,16 +128,16 @@
         /// <exception cref="InvalidDataException">Thrown when the TransferLength property is set to an invalid value</exception>
         public double GetMovingTransferLengthMultiplier()
         {
-            switch (TransferTime)
+            switch (TransferBuffer)
             {
-                case TransferTime.UltraShort:
-                    return 1.0;
-                case TransferTime.Short:
-                    return 1.0;
-                case TransferTime.Normal:
-                    return 1.25;
-                case TransferTime.Long:
-                    return 1.5;
+                case TransferBuffer.None:
+                    return MOVING_TRANSFER_MPL_NONE;
+                case TransferBuffer.Short:
+                    return MOVING_TRANSFER_MPL_SHORT;
+                case TransferBuffer.Normal:
+                    return MOVING_TRANSFER_MPL_NORMAL;
+                case TransferBuffer.Long:
+                    return MOVING_TRANSFER_MPL_LONG;
                 default:
                     throw new InvalidDataException("Invalid value of enum TransferLength");
             }
@@ -122,13 +152,13 @@
             switch (BikeTripBuffer)
             {
                 case BikeTripBuffer.None:
-                    return 1.0;
+                    return BIKE_TRIP_MPL_NONE;
                 case BikeTripBuffer.Short:
-                    return 1.1;
+                    return BIKE_TRIP_MPL_SHORT;
                 case BikeTripBuffer.Medium:
-                    return 1.25;
+                    return BIKE_TRIP_MPL_NORMAL;
                 case BikeTripBuffer.Long:
-                    return 1.5;
+                    return BIKE_TRIP_MPL_LONG;
                 default:
                     throw new InvalidDataException("Invalid value of enum BikeTripBuffer");
             }
@@ -140,16 +170,16 @@
         /// <exception cref="InvalidDataException">Thrown when the TransferLength property is set to an invalid value</exception>
         public int GetStationaryTransferMinimumSeconds()
         {
-            switch (TransferTime)
+            switch (TransferBuffer)
             {
-                case TransferTime.UltraShort:
-                    return 0;
-                case TransferTime.Short:
-                    return 30;
-                case TransferTime.Normal:
-                    return 60;
-                case TransferTime.Long:
-                    return 60;
+                case TransferBuffer.None:
+                    return STATIONARY_TRANSFER_MIN_NONE;
+                case TransferBuffer.Short:
+                    return STATIONARY_TRANSFER_MIN_SHORT;
+                case TransferBuffer.Normal:
+                    return STATIONARY_TRANSFER_MIN_NORMAL;
+                case TransferBuffer.Long:
+                    return STATIONARY_TRANSFER_MIN_LONG;
                 default:
                     throw new InvalidDataException("Invalid value of enum TransferLength");
             }
@@ -165,13 +195,13 @@
             switch (ComfortBalance)
             {
                 case ComfortBalance.ShortestTimeAbsolute:
-                    return 0;
+                    return TRANSFER_PENALTY_SHORTESTABSOLUTE;
                 case ComfortBalance.ShortestTime:
-                    return 2 * 60;
+                    return TRANSFER_PENALTY_SHORTEST;
                 case ComfortBalance.Balanced:
-                    return 4 * 60;
+                    return TRANSFER_PENALTY_BALANCED;
                 case ComfortBalance.LeastTransfers:
-                    return 10 * 60;
+                    return TRANSFER_PENALTY_LEASTTRANSFERS;
                 default:
                     throw new InvalidDataException("Invalid value of enum ComfortBalance");
             }
@@ -187,11 +217,11 @@
             switch (WalkingPreference)
             {
                 case WalkingPreference.High:
-                    return 750;
+                    return MAX_WALK_DISTANCE_HIGH;
                 case WalkingPreference.Normal:
-                    return 400;
+                    return MAX_WALK_DISTANCE_NORMAL;
                 case WalkingPreference.Low:
-                    return 200;
+                    return MAX_WALK_DISTANCE_LOW;
                 default:
                     throw new InvalidDataException("Invalid value of enum WalkingPreference");
             }
@@ -236,18 +266,26 @@
         {
             return (int)((distance / 1000.0) * WalkingPace * 60 * GetMovingTransferLengthMultiplier());
         }
+
+        public int GetTransferTime(int distance)
+        {
+            var walkingTime = GetAdjustedWalkingTransferTime(distance);
+            var stationaryTime = GetStationaryTransferMinimumSeconds();
+
+            return Math.Max(walkingTime, stationaryTime);
+        }
     }
 
     /// <summary>
     /// Enum representing the transfer risk value of the user
     /// 
     /// </summary>
-    public enum TransferTime
+    public enum TransferBuffer
     {
         /// <summary>
         /// Moving transfer: calculated time, stationary transfer: 0 minutes allowed
         /// </summary>
-        UltraShort = 0,
+        None = 0,
         /// <summary>
         /// Moving transfer: calculated time, stationary transfer: minimum 30 seconds
         /// </summary>

@@ -80,6 +80,14 @@ namespace RAPTOR_Router.Models.Static
             statusUpdateTimer.Start();
         }
 
+        public void MockStationStatus()
+        {
+            foreach (var bikeStation in Stations)
+            {
+                bikeStation.BikeCount = 1;
+            }
+        }
+
         /// <summary>
         /// Updates the status (bike count) of all stations in all data sources.
         /// </summary>

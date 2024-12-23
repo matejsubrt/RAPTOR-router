@@ -17,7 +17,7 @@ namespace RAPTOR_Router.Models.Dynamic
     /// A class holding all the dynamic data of a single connection search. The BasicRouteFinder uses this class to store and access the data of a single search.
     /// </summary>
     /// <remarks>Can be used for both search directions.</remarks>
-    internal class SearchModel
+    public class SearchModel
     {
         /// <summary>
         /// The time at which the search begins - earliest departure time for forward search, latest arrival time for backward search
@@ -70,7 +70,7 @@ namespace RAPTOR_Router.Models.Dynamic
         /// <summary>
         /// The delay model holding current delay information about the trips
         /// </summary>
-        private readonly DelayModel delayModel;
+        private readonly IDelayModel delayModel;
 
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace RAPTOR_Router.Models.Dynamic
         /// <param name="searchBeginTime">The start time of the search (earliest departure for forward searches, latest arrival for backward searches)</param>
         /// <param name="settingsUsed">The settings used for the search</param>
         /// <param name="delayModel"></param>
-        public SearchModel(bool forward, List<Stop> searchBeginStops, List<Stop> searchEndStops, List<BikeStation> searchBeginBikeStations, List<BikeStation> searchEndBikeStations, DateTime searchBeginTime, Settings settingsUsed, DelayModel delayModel)
+        public SearchModel(bool forward, List<Stop> searchBeginStops, List<Stop> searchEndStops, List<BikeStation> searchBeginBikeStations, List<BikeStation> searchEndBikeStations, DateTime searchBeginTime, Settings settingsUsed, IDelayModel delayModel)
         {
             this.searchBeginStops = searchBeginStops;
             this.searchEndStops = searchEndStops;

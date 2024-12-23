@@ -141,11 +141,67 @@ namespace RAPTOR_Router.Structures.Transit
 
             if (forward)
             {
-                IEnumerable<Trip> allTrips = TripsOnAllDatesInOrder(new[] { tripsOnPrevDate, tripsOnDate, tripsOnNextDate });
-                foreach (Trip trip in allTrips)
+                ProcessTripsForward(tripsOnPrevDate, prevDate, false);
+
+                if (tripTimes.Count < count)
+                {
+                    ProcessTripsForward(tripsOnDate, date, false);
+                }
+
+                if (tripTimes.Count < count)
+                {
+                    ProcessTripsForward(tripsOnNextDate, nextDate, false);
+                }
+                //IEnumerable<Trip> allTrips = TripsOnAllDatesInOrder(new[] { tripsOnPrevDate, tripsOnDate, tripsOnNextDate });
+                //foreach (Trip trip in allTrips)
+                //{
+                //    DateTime tripTime = trip.GetDepartureDateTime(stopIndex, date).AddSeconds(-dateTimeOffsetSeconds);
+
+                //    if (tripTime > dateTime)
+                //    {
+                //        tripTimes.Add(tripTime);
+                //    }
+
+                //    if (tripTimes.Count >= count)
+                //    {
+                //        break;
+                //    }
+                //}
+            }
+            else
+            {
+                ProcessTripsBackward(tripsOnDate, date, true);
+
+                if (tripTimes.Count < count)
+                {
+                    ProcessTripsBackward(tripsOnPrevDate, prevDate, true);
+                }
+                //IEnumerable<Trip> allTrips = TripsOnAllDatesInReverseOrder(new[] { tripsOnPrevDate, tripsOnDate });
+                //foreach (Trip trip in allTrips)
+                //{
+                //    DateTime tripTime = trip.GetArrivalDateTime(stopIndex, date).AddSeconds(dateTimeOffsetSeconds);
+
+                //    if (tripTime < dateTime)
+                //    {
+                //        tripTimes.Add(tripTime);
+                //    }
+
+                //    if (tripTimes.Count >= count)
+                //    {
+                //        break;
+                //    }
+                //}
+            }
+
+            return tripTimes;
+
+            void ProcessTripsForward(List<Trip> trips, DateOnly date, bool reverse)
+            {
+                foreach (Trip trip in trips)
                 {
                     DateTime tripTime = trip.GetDepartureDateTime(stopIndex, date).AddSeconds(-dateTimeOffsetSeconds);
 
+                    
                     if (tripTime > dateTime)
                     {
                         tripTimes.Add(tripTime);
@@ -157,10 +213,10 @@ namespace RAPTOR_Router.Structures.Transit
                     }
                 }
             }
-            else
+            void ProcessTripsBackward(List<Trip> trips, DateOnly date, bool reverse)
             {
-                IEnumerable<Trip> allTrips = TripsOnAllDatesInReverseOrder(new[] { tripsOnPrevDate, tripsOnDate });
-                foreach (Trip trip in allTrips)
+                var reverseList = trips.AsEnumerable().Reverse();
+                foreach (Trip trip in reverseList)
                 {
                     DateTime tripTime = trip.GetArrivalDateTime(stopIndex, date).AddSeconds(dateTimeOffsetSeconds);
 
@@ -176,30 +232,26 @@ namespace RAPTOR_Router.Structures.Transit
                 }
             }
 
-            return tripTimes;
-
-
-
-            IEnumerable<Trip> TripsOnAllDatesInOrder(IList<Trip>[] tripsOnDates)
-            {
-                foreach (var tripsOnDate in tripsOnDates)
-                {
-                    foreach(Trip trip in tripsOnDate)
-                    {
-                        yield return trip;
-                    }
-                }
-            }
-            IEnumerable<Trip> TripsOnAllDatesInReverseOrder(IList<Trip>[] tripsOnDates)
-            {
-                for (int i = tripsOnDates.Length - 1; i >= 0; i--)
-                {
-                    foreach (Trip trip in tripsOnDates[i].Reverse())
-                    {
-                        yield return trip;
-                    }
-                }
-            }
+            //IEnumerable<Trip> TripsOnAllDatesInOrder(IList<Trip>[] tripsOnDates)
+            //{
+            //    foreach (var tripsOnDate in tripsOnDates)
+            //    {
+            //        foreach(Trip trip in tripsOnDate)
+            //        {
+            //            yield return trip;
+            //        }
+            //    }
+            //}
+            //IEnumerable<Trip> TripsOnAllDatesInReverseOrder(IList<Trip>[] tripsOnDates)
+            //{
+            //    for (int i = tripsOnDates.Length - 1; i >= 0; i--)
+            //    {
+            //        foreach (Trip trip in tripsOnDates[i].Reverse())
+            //        {
+            //            yield return trip;
+            //        }
+            //    }
+            //}
         }
 
 
@@ -270,7 +322,7 @@ namespace RAPTOR_Router.Structures.Transit
 
 
         
-        private Trip? GetEarliestTripDepartingAfterTimeAtStop(Stop stop, DateTime dateTime, DelayModel delayModel, out DateOnly tripStartDate)
+        private Trip? GetEarliestTripDepartingAfterTimeAtStop(Stop stop, DateTime dateTime, IDelayModel delayModel, out DateOnly tripStartDate)
         {
             var stopIndex = GetFirstStopIndex(stop);
 
@@ -339,7 +391,7 @@ namespace RAPTOR_Router.Structures.Transit
             }
         }
 
-        private Trip? GetLatestTripArrivingBeforeTimeAtStop(Stop stop, DateTime dateTime, DelayModel delayModel, out DateOnly tripStartDate)
+        private Trip? GetLatestTripArrivingBeforeTimeAtStop(Stop stop, DateTime dateTime, IDelayModel delayModel, out DateOnly tripStartDate)
         {
             
             var stopIndex = GetLastStopIndex(stop);
@@ -400,7 +452,7 @@ namespace RAPTOR_Router.Structures.Transit
         /// <param name="delayModel">The delay model</param>
         /// <param name="tripStartDate">The start date of the trip, if a trip was found</param>
         /// <returns>The first transferable trip, null if none exists</returns>
-        public Trip? GetFirstTransferableTripAtStopByReachTime(bool forward, Stop stop, DateTime dateTime, DelayModel delayModel, out DateOnly tripStartDate)
+        public Trip? GetFirstTransferableTripAtStopByReachTime(bool forward, Stop stop, DateTime dateTime, IDelayModel delayModel, out DateOnly tripStartDate)
         {
             return forward ?
                 GetEarliestTripDepartingAfterTimeAtStop(stop, dateTime, delayModel, out tripStartDate) :

@@ -1,20 +1,6 @@
 ﻿namespace RAPTOR_Router.Extensions
 {
-    internal static class DateTimeExtensions
-    {
-        /// <summary>
-        /// Creates a DateTime object by combining a DateOnly object with a TimeOnly object
-        /// </summary>
-        /// <param name="date">The date</param>
-        /// <param name="time">The time</param>
-        /// <returns>The combined DateTime</returns>
-        public static DateTime FromDateAndTime(DateOnly date, TimeOnly time)
-        {
-            return new DateTime(date.Year, date.Month, date.Day, time.Hour, time.Minute, time.Second);
-        }
-    }
-
-    internal static class TimeOnlyExtensions
+    public static class TimeOnlyExtensions
     {
         /// <summary>
         /// Adds a number of seconds to a TimeOnly object.

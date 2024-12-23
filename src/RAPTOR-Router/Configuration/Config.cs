@@ -87,6 +87,8 @@ namespace RAPTOR_Router.Configuration
         /// </summary>
         public static string? NextbikeDbPath => GetFullPath("nextbikeDbPath");//_config?["nextbikeDbPath"];
 
+        public static string? NextbikeDbTestPath => GetFullPath("nextbikeDbTestPath");//_config?["nextbikeTestDbPath"];
+
         /// <summary>
         /// The location of the forbidden crossing points csv file
         /// </summary>
@@ -99,7 +101,9 @@ namespace RAPTOR_Router.Configuration
         /// <summary>
         /// The location of the test request data file used for testing
         /// </summary>
-        public static string? TestDataFilePath => GetFullPath("testDataFilePath");//_config?["testDataFilePath"];
+        public static string? ConnectionTestDataFilePath => GetFullPath("connectionTestDataFilePath");//_config?["testDataFilePath"];
+
+        public static string? AltTripTestDataFilePath => GetFullPath("altTripTestDataFilePath");//_config?["altTripTestDataFilePath"];
 
         /// <summary>
         /// The location of the file containing the API key for the Golemio API
