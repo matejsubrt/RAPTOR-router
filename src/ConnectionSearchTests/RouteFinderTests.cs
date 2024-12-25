@@ -364,10 +364,6 @@ namespace ConnectionSearchTests
         [StopsDataSource]
         public void ResultIntegrityDayForwardTest(string srcStopName, string destStopName)
         {
-            if (srcStopName == "Mikulova" && destStopName == "Šperlova")
-            {
-                Console.WriteLine();
-            }
             Settings settings = Settings.DEFAULT;
 
             var dateTime = new DateTime(2024, 12, 22, 07, 07, 00);
@@ -550,10 +546,6 @@ namespace ConnectionSearchTests
         [StopsDataSource]
         public void WalkingPreferenceTest(string srcStopName, string destStopName)
         {
-            if (srcStopName == "Neveklov" && destStopName == "Bezno")
-            {
-                Console.WriteLine();
-            }
             var walkingPreferenceValues = new List<WalkingPreference>
             {
                 WalkingPreference.High,
@@ -1159,10 +1151,6 @@ namespace ConnectionSearchTests
         [AltTripsDataSource]
         public void EarlierAlternativeTripsTest(string srcStopId, string destStopId, string tripId)
         {
-            if (srcStopId == "U628Z5P" && destStopId == "U486Z2P")
-            {
-                Console.WriteLine();
-            }
             var dateTime = new DateTime(2024, 12, 22, 07, 07, 00);
 
             var request = new AlternativeTripsRequest

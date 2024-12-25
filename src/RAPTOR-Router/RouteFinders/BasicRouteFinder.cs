@@ -638,10 +638,6 @@ namespace RAPTOR_Router.RouteFinders
                 
                 foreach (Transfer transfer in stop.Transfers)
                 {
-                    if (transfer.From.Name == "Byšice" && transfer.To.Name == "Byšice")
-                    {
-                        Console.WriteLine();
-                    }
                     Transfer realTransfer = forward ? transfer : transfer.OppositeTransfer!;
 
                     // Improve by Stop-to-Stop transfers
