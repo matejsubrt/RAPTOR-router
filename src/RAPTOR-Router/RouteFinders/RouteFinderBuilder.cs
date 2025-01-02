@@ -242,10 +242,12 @@ namespace RAPTOR_Router.RouteFinders
             var forbiddenCrossings = LoadForbiddenCrossings(forbiddenPointsLocation!, forbiddenLinesLocation!);
 
 
+            Console.WriteLine("Loading GTFS data...");
             // Load the public transit GTFS data
             LoadGtfsData(gtfsZipArchiveLocation!, forbiddenCrossings, !useMocks);
 
 
+            Console.WriteLine("Loading GBFS data...");
             // Load the bike providers GBFS data
             LoadGbfsData(nextbikeDbLocation!, useMocks);
 

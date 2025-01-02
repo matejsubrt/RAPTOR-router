@@ -45,13 +45,13 @@ namespace RAPTOR_Router.GTFSParsing
         {
             if(url is null || filePath is null)
             {
-                throw new ApplicationException("An api url and a path to the gtfs zip archive location need to be specified in the config.json file.");
+                throw new ApplicationException("An api url and a path to the gtfs zip archive location need to be specified.");
             }
 
             using HttpClient client = new();
             try
             {
-                Console.WriteLine("Downloading file...");
+                Console.WriteLine("Downloading latest GTFS archive release...");
                 byte[] fileBytes = await client.GetByteArrayAsync(url);
 
                 string? directory = Path.GetDirectoryName(filePath);
@@ -60,7 +60,7 @@ namespace RAPTOR_Router.GTFSParsing
 
                 await File.WriteAllBytesAsync(filePath, fileBytes);
 
-                Console.WriteLine($"Zip archive file downloaded and saved to {filePath}");
+                Console.WriteLine($"GTFS archive successfully downloaded and saved to {filePath}");
             }
             catch (Exception ex)
             {
