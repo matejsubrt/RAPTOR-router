@@ -24,7 +24,7 @@ namespace RAPTOR_Router.Models.Static
         private Dictionary<string, BikeStation> StationsById;
         private StationDistanceMatrix Distances;
         private List<IBikeDataSource> bikeDataSources;
-        private Timer statusUpdateTimer;
+        //private Timer statusUpdateTimer;
 
         /// <summary>
         /// Creates a new BikeModel, initiates its status update timer and sets up the data structures.
@@ -37,10 +37,10 @@ namespace RAPTOR_Router.Models.Static
             bikeDataSources = new();
 
 
-            statusUpdateTimer = new Timer(60000);
-            statusUpdateTimer.Elapsed += UpdateAllStationStatus;
-            statusUpdateTimer.AutoReset = true;
-            statusUpdateTimer.Enabled = true;
+            //statusUpdateTimer = new Timer(60000);
+            //statusUpdateTimer.Elapsed += UpdateAllStationStatus;
+            //statusUpdateTimer.AutoReset = true;
+            //statusUpdateTimer.Enabled = true;
         }
 
         /// <summary>
@@ -68,17 +68,17 @@ namespace RAPTOR_Router.Models.Static
             bikeDataSources.Add(source);
         }
 
-        /// <summary>
-        /// Sets the bike count for all stations and starts the timer to update the status of the stations periodically.
-        /// </summary>
-        public void StartUpdateTimer()
-        {
-            foreach (IBikeDataSource dataSource in bikeDataSources)
-            {
-                dataSource.UpdateStationStatus();
-            }
-            statusUpdateTimer.Start();
-        }
+        ///// <summary>
+        ///// Sets the bike count for all stations and starts the timer to update the status of the stations periodically.
+        ///// </summary>
+        //public void StartUpdateTimer()
+        //{
+        //    foreach (IBikeDataSource dataSource in bikeDataSources)
+        //    {
+        //        dataSource.UpdateStationStatus();
+        //    }
+        //    //statusUpdateTimer.Start();
+        //}
 
         public void MockStationStatus()
         {
@@ -92,7 +92,7 @@ namespace RAPTOR_Router.Models.Static
         /// Updates the status (bike count) of all stations in all data sources.
         /// </summary>
         /// <remarks>Called by the status update timer</remarks>
-        public void UpdateAllStationStatus(object? source, ElapsedEventArgs e)
+        public void UpdateAllStationStatus()
         {
             foreach (IBikeDataSource dataSource in bikeDataSources)
             {

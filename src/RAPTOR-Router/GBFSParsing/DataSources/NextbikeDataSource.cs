@@ -100,7 +100,11 @@ namespace RAPTOR_Router.GBFSParsing.DataSources
                         }
                         BikeStation s = StationsById[station.StationId];
                         s.BikeCount = station.NumBikesAvailable;
+
+                        Console.WriteLine("Updated station info for id " + station.StationId + ": " + StationsById[station.StationId].BikeCount + " bikes");
                     }
+
+                    Console.WriteLine("----------------------------------------------------------------------------------------");
                 }
                 catch (HttpRequestException e)
                 {

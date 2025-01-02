@@ -56,6 +56,15 @@ namespace RAPTOR_Router.RouteFinders
             }
         }
 
+        private class PeriodicBikeStationStatusUpdateJob : IJob
+        {
+            public Task Execute(IJobExecutionContext context)
+            {
+                bikeModel!.UpdateAllStationStatus();
+                return Task.CompletedTask;
+            }
+        }
+
 
 
         /// <summary>
@@ -115,10 +124,23 @@ namespace RAPTOR_Router.RouteFinders
                 .StartNow()
                 .Build();
 
+            IJobDetail periodicBikeStationStatusUpdateJob = JobBuilder.Create<PeriodicBikeStationStatusUpdateJob>()
+                .WithIdentity("periodicBikeStationStatusUpdateJob", "group1")
+                .Build();
+
+            ITrigger periodicBikeStationStatusUpdateTrigger = TriggerBuilder.Create()
+                .WithIdentity("periodicBikeStationStatusUpdateTrigger", "group1")
+                .WithSimpleSchedule(x => x
+                     .WithIntervalInSeconds(60)
+                     .RepeatForever()) // Executes every 60 seconds
+                .StartNow()
+                .Build();
+
 
 
             await _scheduler.ScheduleJob(dailyGtfsJob, dailyTrigger);
             await _scheduler.ScheduleJob(periodicDelayUpdateJob, periodic20SecTrigger);
+            await _scheduler.ScheduleJob(periodicBikeStationStatusUpdateJob, periodicBikeStationStatusUpdateTrigger);
         }
 
 
@@ -303,7 +325,8 @@ namespace RAPTOR_Router.RouteFinders
             if (!useMocks)
             {
                 // Start the timer that periodically updates the bike counts
-                bikeModel.StartUpdateTimer();
+                //bikeModel.StartUpdateTimer();
+                //bikeModel.UpdateAllStationStatus();
             }
             else
             {
