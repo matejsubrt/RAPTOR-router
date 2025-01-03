@@ -359,14 +359,14 @@ namespace RAPTOR_Router.RouteFinders
 
                 if (forward)
                 {
-                    for (int i = route.GetFirstStopIndex(traverseFromStop); i < route.RouteStops.Count; i++)
+                    for (int i = route.GetFirstStopIndex(traverseFromStop) + 1; i < route.RouteStops.Count; i++)
                     {
                         ProcessStopAtIndex(i);
                     }
                 }
                 else
                 {
-                    for (int i = route.GetLastStopIndex(traverseFromStop); i >= 0; i--)
+                    for (int i = route.GetLastStopIndex(traverseFromStop) - 1; i >= 0; i--)
                     {
                         ProcessStopAtIndex(i);
                     }
