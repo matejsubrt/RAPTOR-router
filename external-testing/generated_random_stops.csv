@@ -1,0 +1,1001 @@
+"srcStopName","destStopName","dateTime","forward","walkingPace","cyclingPace","bikeUnlockTime","bikeLockTime","useSharedBikes","bikeMax15Min","transferBuffer","comfortBalance","transferLength","bikeTripBuffer"
+"Bořislavka","Dolní Beřkovice,Vliněves","13:19:50",True,12,5,45,51,False,True,1,2,1,1
+"Slabce,u Reformy","Libošovice,Dobšice","11:25:31",True,13,4,13,47,False,True,1,3,1,2
+"Borotín,škola","Blatiny","18:43:12",False,15,4,37,48,False,True,1,0,2,0
+"Jesenická","Český Brod,Jungmannova","16:39:09",False,10,4,6,13,False,False,0,1,0,1
+"Horčičkova","Horní Maršov,most","14:03:25",True,14,5,11,56,True,True,0,1,0,0
+"Touchovice u Loun","Modřovice,rozc.","04:45:47",True,17,14,54,11,False,True,2,2,2,1
+"Chvatěruby","Nymburk,Drahelice,Přívoz","16:44:20",False,17,5,36,8,True,False,0,2,1,0
+"Mirošovice u Prahy","Chyňava,škola","05:28:03",True,12,12,47,51,True,False,3,3,1,3
+"Slibovice","Řehenice,Křiváček","09:16:10",True,15,13,37,6,False,False,2,1,2,0
+"Planá n.Luž.,nám.","Jankovcova","16:30:08",False,14,13,25,23,False,False,0,3,0,1
+"Zahrádky","Podnikatelská","03:00:33",True,18,6,35,27,False,False,0,2,0,2
+"Tehov,rozc.Nemíž","Jíkev,u Křivánků","14:11:55",False,18,12,6,24,False,True,0,1,2,1
+"Michelangelova","Březina,Žabakor","11:23:59",True,17,9,33,59,False,False,0,0,2,2
+"Dobrovíz,Obecní úřad","Dobrovítov,Dědice","10:23:42",True,18,3,46,50,False,True,3,0,0,3
+"Mělník,Rožkovo údolí","Vlkančice,U Králů","11:40:51",False,12,5,37,28,True,False,2,2,2,1
+"Pečky,Hynkův mlýn","Načeradec,rozc.Pravětice","19:11:42",True,14,5,40,54,False,False,3,2,1,1
+"Libice n.Cidl.,u sokolovny","Skovice","03:37:23",True,11,5,1,57,True,True,3,1,2,1
+"Plaňany,Náměstí","Libčice nad Vltavou","17:56:26",True,20,11,20,36,True,True,0,3,2,1
+"Vojkov,rozc.","Veltruby","12:35:15",True,19,10,40,26,False,True,3,2,2,3
+"Čistá,hřiště","Mezno,Lažany","15:58:13",False,11,4,12,37,False,False,0,3,1,2
+"Věšín,Buková","Tábor,Zavadilská","00:46:00",False,11,9,58,7,False,True,3,3,2,2
+"Lysá nad Labem-Dvorce","Krhanice,Lom","05:58:36",True,11,7,59,14,False,True,3,3,0,0
+"Kutná Hora,Kamenný dům","Úvaly,Radlická čtvrť","04:14:53",False,8,5,21,56,True,True,1,0,1,2
+"U Matěje","Na Pastvinách","00:48:01",True,16,13,8,45,True,False,0,2,2,3
+"Křepenice,Rozc.","Trutnovská","18:51:15",False,13,11,54,45,False,True,2,3,2,3
+"Káraný,Vodárna","Milín","15:39:47",True,13,8,42,10,True,False,3,0,2,0
+"Dolní Ostrovec","Dětenice,Brodek","17:40:10",True,19,10,11,28,True,True,2,3,2,1
+"Blatce,rozc.","Neveklov,Spolí","13:06:39",False,17,12,12,58,False,True,3,1,2,2
+"Benešov,Baba","Hořešovice","14:05:36",False,13,6,51,39,True,False,0,1,0,2
+"Safírová","Mšeno,Skramouš,rozc.","14:15:14",False,11,7,46,18,True,False,0,0,0,1
+"Hluboký Důl","Sadská,Hálkova","13:31:49",False,11,5,1,34,True,False,2,1,0,1
+"Nádraží Jinonice","Sázava,škola","15:42:15",False,12,5,24,0,True,True,3,1,0,2
+"U Školy","Šestajovice,U Školy","18:06:26",True,14,12,52,4,True,False,1,0,1,2
+"Psáře,Veselka","Jakobiho","19:32:19",False,14,8,16,11,True,True,1,0,2,0
+"Vlašim,Obora","Hořovice","11:17:29",True,13,7,5,50,False,False,3,3,0,1
+"Libeňská","Lomnická","01:39:00",False,10,4,19,56,False,True,2,1,1,1
+"Horka nad Sázavou","Praha-Vysočany","16:31:43",False,17,8,6,35,False,False,0,2,1,3
+"Kostelec n.Č.l.,Komenského","Klášter Hradiště n.Jiz.,Ptýrovec","04:49:56",True,11,8,17,27,True,False,3,2,1,0
+"Kolodějská obora","Hostomice,Lštěň","01:57:24",False,15,12,46,45,False,False,1,1,0,3
+"Skuhrov,Hatě","Černošice,Masopustní náměstí","23:54:22",True,10,13,8,20,False,True,0,3,0,1
+"Zákolany","Jestřabí Lhota","22:04:24",True,11,6,2,10,True,False,1,0,0,2
+"Zlatníky-Hodkovice,Slunečná","Vlkančice","03:40:10",False,15,15,18,57,True,True,0,1,2,0
+"Chorušice","Heřmaničky,Velké Heřmanice","15:39:40",True,14,11,57,16,True,True,3,0,1,1
+"Budiměřice,Rašovice","Ktová","08:30:44",False,8,7,50,43,True,True,0,1,2,1
+"Barchovice,Hryzely","Březí,Podskalí","14:42:23",False,14,5,0,26,True,False,0,0,1,0
+"Mšeno,Sedlec","Hradištko,Pikovice,Most","18:15:13",False,9,7,21,28,False,True,0,1,2,2
+"Chyňava,Libečov,náves","Krupá,Dvůr Chrást","15:16:05",False,13,8,55,59,False,True,0,1,2,1
+"Olšanská","Benátky n.Jiz.,Vaněčkova","03:47:53",True,15,6,35,26,True,False,0,1,0,1
+"Formanská","Bystřice,Strženec","23:57:54",True,15,6,58,21,True,False,1,0,2,3
+"Beroun,Školní náměstí","Lochovice,traktorka","12:25:24",False,11,11,44,31,True,False,0,3,0,3
+"Obora Hvězda","Nová Telib,dvůr","17:09:05",False,9,12,16,44,False,True,3,2,0,1
+"Spiritka","Stará Huť","17:33:17",False,16,13,13,31,False,False,0,0,2,2
+"Sedlec-Prčice,rozc.Přestavlky","Beroun,U Zelených","16:01:06",True,17,9,37,21,False,False,3,2,2,2
+"Zdiby,U Parku","Žatec,sokolovna","03:37:30",False,11,6,6,31,True,True,1,2,0,0
+"Rokycanova","Kunice,Všešímy,SŠŘ","21:30:28",False,18,11,44,29,False,True,2,3,0,2
+"Vitice,Močedník","Kněžnice","03:42:44",False,20,8,6,12,False,False,1,1,2,3
+"Šebířov,Popovice","Rokytá,Dolní Rokytá,ObÚ","05:04:49",False,16,15,35,9,False,False,1,3,1,1
+"Příbram,Orlov","Hradištko,Rajchardov","07:24:34",True,18,10,13,20,False,False,0,1,1,1
+"Podbrdy","Hlubyně,dolní","10:17:25",True,8,15,38,0,False,False,1,1,1,1
+"Tatce,žel.zast.","Jenerálka","01:15:35",True,17,9,27,54,False,True,2,3,1,2
+"U Nemocnice","Humpolec,strojírny","04:10:19",False,11,6,37,30,False,False,3,2,0,2
+"Říčany,Nemocnice","Petroupim,Sembratec","23:01:31",False,15,5,4,34,False,True,2,1,0,3
+"Na Křečku","Sulice,Nechánice","02:32:37",True,20,8,53,10,False,False,2,2,0,1
+"Sedlec-Prčice,nám.","Neumětely,žel.zast.","12:37:33",True,11,10,40,30,False,False,3,2,1,2
+"Horka I,Borek","Stehelčeves,u brůdku","03:09:30",True,12,11,34,35,True,False,1,3,0,2
+"Příbram,Svatá Hora areál","Zalešany","22:45:52",True,9,5,54,5,False,False,1,1,2,2
+"Rostoklaty,Nová Ves II","Říčany,Rychta","03:29:18",False,20,13,32,15,False,True,1,2,2,2
+"Naskové","Dobřejovice,Jesenická","04:05:28",True,17,12,58,10,True,True,3,0,2,1
+"Čáslav,Za Rybníkem","Jinočany,Logport","12:12:08",False,17,9,15,45,False,False,1,0,0,1
+"Komárov,Buzuluk","Hrdlořezy","03:07:13",True,20,15,58,22,True,False,2,1,1,0
+"Zákolany,Kováry,žel.zast.","Přístav Radotín","05:39:23",False,9,14,46,41,True,True,0,2,2,0
+"Nový Knín,Kozí Hory","Hvožďany,Roželov,Mýta","12:13:10",True,10,6,3,10,False,True,3,1,0,0
+"Hobšovice,II","Praha-Klánovice","05:21:26",True,10,15,50,2,False,False,1,3,0,3
+"Šmukýřka","Mezno,hl.silnice","01:18:53",False,9,4,25,0,False,False,1,1,2,3
+"Hlízov","Lužec n.Vlt.","12:23:30",False,10,5,17,30,False,True,2,1,1,2
+"Úherce","Říčany,Podhradí","15:58:55",False,19,15,23,7,True,False,3,0,1,1
+"Svatý Jan","Na Groši","04:51:27",True,12,3,26,10,True,False,0,0,2,2
+"Říčany,Podhradí","Roudnice n.L.,Čihadla","08:38:45",False,14,14,53,7,True,True,0,3,1,2
+"Střemy","Okna","15:03:00",True,10,9,56,43,True,False,2,1,1,0
+"Načeradec,Dolní Lhota","Tehov,Lada","18:55:07",True,16,15,55,41,False,False,2,3,1,3
+"Příbram,Plzeňská","Louňovice p.Blaníkem,Olešná","01:08:54",True,8,15,44,33,False,True,1,3,0,2
+"Kolín,Tatradomy","U Kunratického lesa","15:46:55",True,18,6,34,24,True,True,1,1,1,1
+"Pertoltice,Machovice","Staňkovice,Smilovice,rozc.","08:36:01",False,12,5,13,30,False,True,1,2,0,2
+"Manětín,nám.","Vysoké n.Jiz.,nám.","06:50:38",True,9,8,39,14,True,False,0,1,2,2
+"U Památníku","Rakovník,sídl.gen.Kholla","04:58:53",True,13,15,20,1,True,True,3,0,1,2
+"Horní Lysolaje","Rabí,Bojanovice","01:47:01",False,20,14,32,35,True,False,0,3,0,0
+"Březno,Dolánky","Svárov,Rymáň","00:43:58",False,15,15,51,5,False,True,0,3,2,2
+"Český Dub,host.","Krty","13:09:42",False,15,8,52,7,False,False,0,1,1,2
+"Radnice Řepy","Kovářov","12:22:29",False,15,15,32,23,False,True,1,3,1,0
+"Zásadská","Verušičky,Budov,rozc.","03:10:31",False,18,11,52,5,True,False,2,0,2,0
+"Milovice,Tyršova","Paceřice,Rohanka","23:10:28",False,17,13,27,29,True,True,3,0,2,3
+"Pod Lipkami","Jilemnice,pod žel.st.","16:57:42",True,18,5,5,43,False,False,3,0,1,0
+"Žatec,žel.st.","Andělská Hora,horní obec","12:08:47",True,14,9,59,50,False,True,1,0,0,1
+"Lužná,Lišanská","Nárožní","07:17:41",False,14,8,9,30,False,True,2,1,2,2
+"Nymburk,Lipová","Středokluky,U Školy","02:57:23",True,14,12,6,10,False,False,0,3,1,0
+"Newtonova","Nádraží Klánovice-sever","21:15:46",False,15,9,28,12,True,True,2,0,2,3
+"Sedlec-Prčice,rozc.Mrákotice","Čestín,Kasanice,rozc.","11:28:23",True,10,5,42,28,True,True,2,3,0,0
+"Všelibice,Borek","Běchary","19:47:21",True,11,12,53,8,True,True,2,1,0,0
+"Zápy,Tesco Brandýs n.L.","Bohutín,Vysoká Pec,zahrádky","03:30:04",False,16,6,27,52,True,False,1,1,2,0
+"Právnická fakulta","Bludov","20:06:30",True,8,4,53,12,True,False,0,0,0,0
+"Stříbrná Skalice,Vozlín","Čestín,Kněž","09:35:04",True,16,12,8,23,False,False,2,2,0,0
+"Chýně,Háje","Boseň,pod Valečovem","22:45:02",False,20,8,0,37,True,True,0,3,0,0
+"Polepy","Nový Vestec","11:53:45",True,10,9,30,44,True,False,0,0,1,2
+"Vodranty","Vrchotovy Janovice,u sokolovny","03:18:34",False,11,7,45,17,True,True,3,2,2,3
+"Katusice,Valovice,křiž.","Vrchovany","15:31:06",False,16,9,43,59,True,False,2,1,1,1
+"Černíky","Chlístovice,Žandov","17:50:09",True,12,12,34,31,False,True,3,1,0,0
+"Nový Bor,Egermannova","Vinařice,Na Horce","05:13:12",False,13,3,19,1,True,False,3,0,2,0
+"Benešov,Červený Dvůr","Kamberk,Předbořice","17:17:14",False,13,12,15,23,True,True,1,1,1,2
+"Pražského povstání","Jirny,Rozc.","21:31:37",False,17,10,30,4,False,True,2,1,1,1
+"Příbram,Školní","Neratovice,III.ZŠ","21:54:44",True,12,6,8,56,True,True,2,2,0,0
+"Dobrovíz,Komerční zóna","Čestín,Kněž","16:17:18",True,19,3,1,34,True,False,0,1,1,2
+"Charvatce,na pile","Soběslav,Zimní stadion","23:50:09",False,19,6,8,21,True,True,3,2,2,3
+"Bečváry,Červený Hrádek","Pševes","10:01:50",False,14,5,25,57,True,False,3,2,1,3
+"Brandýs n.L.-St.Bol.,Proboštská jezera","Bakov n.Jiz.,Chudoplesy","20:29:47",True,12,10,35,13,False,True,1,0,0,1
+"Milín,Kamenná","Orionka","15:34:56",True,19,5,4,8,True,True,2,3,0,0
+"Průmyslová","Kutná Hora,Žižkov,Kouřimská","00:44:08",True,15,10,18,54,True,False,1,3,0,1
+"Slapy,Motorest","Sedlice,nám.","19:51:09",False,17,13,35,41,False,False,0,0,1,1
+"Jahodnice","Louňovice p.Blaníkem,U Mostu","09:51:14",False,17,10,47,19,True,True,1,3,2,1
+"Lysá n.L.,sídl.","Vilémovice","14:48:13",True,17,12,40,25,True,True,2,3,1,2
+"Mnichovice,Závěrka","Libomyšl,Želkovice","01:27:49",True,16,7,53,57,False,True,1,0,1,3
+"Chocnějovice","Klenovice","06:24:46",True,9,9,34,8,False,True,2,3,0,0
+"Vojenská nemocnice","Žehušice,škola","08:24:05",False,11,4,20,41,False,True,3,3,1,2
+"Jíkev,u Křivánků","Zásmuky,Sobočice","23:38:16",False,10,8,46,1,True,False,3,3,1,0
+"Xaverovský háj","Praha-Smíchov","08:37:50",True,10,13,4,0,True,True,2,1,0,2
+"Poštovská","Šťáhlavy,žel.zast.","03:25:27",True,16,7,22,55,True,False,0,2,1,0
+"Úvaly","Tehov,Lada","02:56:07",False,14,15,27,42,False,False,0,1,0,2
+"Kladno,OAZA","Netvořice,Dunávice","00:57:51",True,19,7,4,14,True,False,2,3,1,0
+"Myslín","Louňovice p.Blaníkem,rozc.Světlá","01:54:57",False,12,9,31,33,False,True,3,2,0,0
+"Čachovice,Struhy,Hostinec","Bystřice,Líšno","14:51:24",False,19,7,42,32,True,True,3,1,0,3
+"Bezděz","Hradiště","12:03:01",False,14,11,38,18,False,True,1,0,0,1
+"Praha-Kačerov","Příbram,Bytíz","04:59:31",False,8,8,32,27,True,False,1,3,2,0
+"Písek","Jemníky,na Mašině","09:05:14",True,19,8,38,23,False,True,3,0,2,3
+"Slavínského","Poříčany","15:40:30",False,14,13,28,6,False,True,2,3,2,3
+"Kralupy n.Vlt.,Mikovice","Chotilsko,Křeničná","21:18:50",True,18,3,8,56,False,True,3,0,2,1
+"Mladá Vožice,Noskov,rybník","Rokoska","06:05:45",False,16,4,4,53,False,True,1,3,2,1
+"Krnsko,Vystrkov","Vlkančice,Komorce","20:14:56",False,10,14,57,4,False,False,1,1,0,2
+"Otvovice","Rašovice,Mančice","02:08:16",False,10,9,35,11,False,False,0,2,1,3
+"Čížov","Druhanická","13:27:47",False,10,10,51,7,False,False,2,2,1,1
+"Libáň,aut.st.","Svojšice,Nová Ves III","04:18:38",True,8,4,29,10,False,False,0,0,0,3
+"Brambory","Horní Slivno","22:23:17",False,16,4,44,33,True,True,1,0,0,2
+"Mnichovo Hradiště,Sychrov,u rybníka","Viktoria Žižkov","00:53:52",False,13,12,25,8,False,False,0,3,2,3
+"Všetaty,rozc.","Klášter Hradiště n.Jiz.,Habr","07:51:05",False,18,10,35,4,True,True,0,3,1,3
+"Věšín,Buková","Starý Kolín","13:33:11",True,13,14,57,54,False,True,3,0,2,1
+"Hejtmanská","Brodecká","14:17:02",False,16,14,2,28,True,True,0,1,0,3
+"Vestec,Safina","Mladá Boleslav,Debř,škola","22:30:15",True,10,12,11,51,False,False,3,2,0,0
+"Mšeno,Podolec","Milín,Rtišovice,rozc.","09:01:18",True,16,12,22,19,True,True,0,0,1,2
+"Červený Újezd,U Náprstků","Brandýsek,Olšany","17:45:21",False,14,6,32,22,False,True,2,2,1,3
+"Semice,Břeha","Nový Jáchymov,háj.","15:39:42",True,8,8,48,28,False,False,1,1,1,0
+"Dobrovice,žel.st.","Tochovice,žel.st.","16:49:15",True,20,14,8,1,True,True,0,1,1,2
+"Chlístovice,Pivnisko","Náměstí Míru","11:36:05",False,11,4,44,41,False,False,3,1,0,2
+"Jestřabí Lhota","Lukavec,Bezděkov","16:17:02",False,12,8,44,6,False,True,0,3,2,0
+"Vinoř","Příšovice,Na Hořensku","04:00:32",False,15,7,37,34,True,False,3,2,1,2
+"Stará Lysá,hostinec","Brandýs n.L.-St.Bol.,Nám.","00:47:24",True,18,11,30,28,False,True,2,0,0,2
+"Kolín zastávka","Čistá,Zdeslav,statek","06:14:42",False,13,4,16,4,False,True,3,1,2,1
+"Štěpařská","Mratín,Cukrovar","22:42:54",False,18,8,30,9,True,False,2,2,0,2
+"Dolní Břežany,Na Spálence","Sobotka,Lavice,škola","11:59:27",True,20,6,37,34,False,True,0,0,2,3
+"Formanská","Průhonský háj","12:36:17",True,17,11,39,43,True,True,0,2,1,0
+"Dřínov,Drchkov","Vidice,Tuchotice,rozc.","23:50:33",False,20,13,54,49,False,True,0,0,0,0
+"Beroun,Hlinky","Karlovy Vary,Olšová Vrata,rozc.","01:17:47",False,20,6,29,55,True,False,0,2,0,2
+"Mšené-lázně,lázně","Vinařice,Tuháň","04:11:04",True,10,9,31,26,True,False,2,1,1,2
+"Libuň","Mukařov,škola","14:20:32",True,14,12,42,57,False,True,0,3,2,0
+"Stradonice","Davle,U Kiliána","22:45:53",True,16,4,30,16,True,False,1,1,1,1
+"Brechtova","Cerhovice,hřbitov","21:19:58",True,11,9,47,7,True,True,0,3,1,1
+"Horka I,Borek","Dománovice","11:27:48",False,14,12,5,24,True,False,2,0,0,0
+"Zmrzlík","Kvílice,I","21:51:33",True,15,10,59,42,False,False,2,1,1,3
+"Běštín,transformátor","Kladno,pekárna","03:38:20",True,15,15,2,4,False,False,3,3,1,3
+"Říčany,Strašín","Zálesí","03:27:45",True,12,12,11,43,False,False,3,3,1,2
+"Samopše","Očihov","03:14:41",False,14,14,12,21,True,False,3,1,2,0
+"Roztylské náměstí","Ralsko,Hradčany,háj.","15:05:07",False,17,8,6,35,True,True,1,0,2,3
+"Zruč nad Sázavou zast.","Dolní Břežany,Škola","04:55:36",False,16,3,19,38,False,True,1,1,1,3
+"Nový Bor,aut.nádr.","Slabce,Modřejovice","20:53:26",False,8,7,34,46,False,False,0,2,2,0
+"Jablonné v Podj.,Postřelná,hl.sil.","Blatná,žel.st.","16:56:37",False,16,14,22,29,False,True,1,0,0,3
+"Čistá,žel.st.","Loděnice","18:18:06",False,16,4,52,15,True,False,0,0,0,1
+"Zbizuby,Nechyba","Pátek,u hřiště","17:33:22",False,10,8,50,11,False,True,0,0,2,1
+"Týnec n.L.,Bílá Hora","Nový Slivenec","03:22:43",False,15,5,19,14,False,True,2,3,0,0
+"Lidečská","Libeř,Libeň,Oáza","18:13:03",False,13,14,32,17,False,False,1,0,2,0
+"Plaňany","Nádraží Klánovice-sever","14:12:49",True,10,10,47,42,True,False,3,2,1,0
+"Bělá p.Bezd.,Atmos","Křesetice,u rybníku","03:56:19",True,14,15,14,12,True,True,2,1,0,1
+"Mšeno,Sedlec","Nový Slivenec","10:11:34",True,8,11,7,9,False,False,1,0,2,2
+"Jílové u Prahy,Studené,Závod","Slovinská","14:15:00",True,15,7,56,29,True,True,1,1,1,1
+"Šípy","Šťáhlavy,u hřbitova","06:35:12",True,9,13,48,12,False,False,2,2,2,3
+"Kamenný Most,křiž.","Pramenná","16:05:15",True,20,10,45,55,True,True,1,3,0,1
+"Droužetice","Keblov","14:31:07",True,15,15,22,14,True,True,0,0,2,1
+"Rudná,V Brance","Balkova Lhota","20:19:25",False,18,14,44,16,True,True,2,1,0,0
+"Kamenný Most u Kralup n.Vlt.","Žloukovice","05:05:32",False,10,13,26,35,True,True,2,3,2,2
+"Vodňany,rybářská škola","Vrchlabí,nemocnice","17:52:43",True,11,15,26,21,False,False,1,0,2,3
+"Hůrka","Týnec n.Sáz.,Krusičany,Rozc.","18:05:53",False,15,13,27,29,True,True,0,2,2,2
+"Kněžmost,Srbsko","Nádraží Satalice","01:25:03",True,19,5,50,52,False,True,0,1,0,1
+"Zeleneč,Bezručova","Miličín,Petrovice,Loučka","04:54:49",False,13,9,2,29,False,True,2,3,1,2
+"Nová Ves u Kolína","Dvory","21:01:41",False,20,5,41,6,False,True,1,1,1,2
+"Velký Osek,Šanghaj","Heřmaničky,Jestřebice","03:00:05",True,16,13,45,17,False,False,0,0,2,3
+"Rápošovská","Postupice,Pozov","09:05:35",False,12,15,52,58,False,True,0,2,2,0
+"Vinařice,Tuháň","Mladá Boleslav,Viničná","12:28:00",True,19,4,13,20,True,False,0,0,0,3
+"Libeř","Mnetěš,rozc.","03:02:36",False,20,8,49,36,False,True,1,0,2,3
+"Kolín-Zálabí","Dobrovice,Holé Vrchy,Ctiměřická","20:12:04",True,18,9,54,36,True,False,0,3,1,3
+"Vlašim,Domašín,u transformátoru","Říčany,Marvánek","14:08:53",True,20,6,18,30,True,False,1,3,1,0
+"Horušice","Kutná Hora,Poličany,rozc.","16:49:00",False,18,15,32,9,False,True,3,2,1,1
+"Chodov","Příbram,Lidl","02:06:41",True,11,5,27,36,True,False,3,2,1,0
+"Hostín,V Lukách","Velké Všelisy","12:10:10",False,15,13,47,7,False,False,1,1,2,2
+"Benátky n.Jiz.,rozc.Sedlec","Vranov,Údolnice,rozc.","10:25:20",True,12,8,22,37,False,False,1,1,2,1
+"Zbraslavice,žel.st.","Říčany,Voděrádky","06:42:32",False,20,9,2,58,False,True,3,0,0,3
+"K Teplárně","Úherce,ZD","19:01:07",False,18,3,24,20,True,False,3,1,0,2
+"Drahobudice","Geologická","01:59:56",True,15,6,43,28,True,True,2,2,2,1
+"Dobrovítov,Dědice,rozc.","Brandýs n.L.-St.Bol.,Kasárna","11:49:09",True,17,6,55,3,False,True,2,2,0,3
+"Zeleneč","Mirotice,Strážovice","17:47:18",False,15,5,47,11,True,True,0,1,1,3
+"Koleje Větrník","Kamenný Most,křiž.","09:53:26",False,9,3,50,49,False,True,0,0,0,1
+"Svojšice,Karlov","Liběchov,Ješovice","04:48:30",True,18,8,5,3,False,True,0,0,0,1
+"Mladá Boleslav,Jaselská VZP","Mnichovo Hradiště,Veselá","02:46:17",False,20,5,7,43,False,False,1,2,1,2
+"Neustupov","Uhy,zámek","19:23:59",False,8,8,48,33,True,True,0,3,2,2
+"Zvěstov,Libouň","Unhošť,Dědkův mlýn","01:46:20",True,18,13,33,55,False,False,1,3,2,3
+"Příbram,Archiv","Poliklinika Petřiny","03:16:26",True,9,15,24,52,True,False,3,0,2,2
+"Louny,ČSAD","Mnichovo Hradiště,Dobrá Voda","20:12:41",True,18,14,40,7,True,False,2,3,2,3
+"Příbram,Nová Hospoda","Nečtiny,Hrad Nečtiny","23:34:59",True,12,14,50,36,True,True,1,2,1,0
+"Horčápsko,Hráze","Poděbrady,Jeronýmova","04:36:54",True,18,12,11,45,True,True,1,2,0,1
+"Světice,škola","Ohrada","11:30:14",False,17,7,19,53,True,False,0,0,2,1
+"Chotilsko,Záborná Lhota","Solenice","06:31:05",True,20,5,51,58,False,False,1,1,1,0
+"Olšanské hřbitovy","Nad Konvářkou","23:39:38",True,20,6,25,47,False,False,2,2,1,2
+"Baterie","Jičín","12:39:02",True,18,3,54,44,False,True,1,1,2,2
+"Stříbrná Skalice,Vozlín","Benešov,Bedrč","05:36:11",False,20,7,0,40,False,False,3,2,0,0
+"Roztylské náměstí","Liběchov,Žel.st.","09:39:31",False,12,11,26,36,False,True,3,3,0,0
+"Kolín,Štítary","Velké Popovice","03:53:16",False,18,6,8,57,True,True,1,3,2,2
+"Choratice,rozc.","Žatec,aut.nádr.","08:00:31",True,15,7,52,28,False,False,1,2,0,1
+"K Tuchoměřicům","Spomyšl","03:31:49",False,20,7,40,32,True,True,2,0,0,2
+"Lidice,Památník","Příbram,Jestřabinec","04:36:46",False,9,7,46,36,False,False,1,1,1,3
+"Hostivice,Jeneček","Beroun,Bezručova","17:25:07",False,10,15,39,8,True,False,0,2,2,2
+"Hradištko,Kersko Branaldova","Mukařov,odb.Tehovec","02:26:50",False,14,14,54,34,True,False,1,1,0,2
+"Malý Újezd,Vavřineč","Rudná,Zdrav.stř.","08:45:31",True,10,11,18,26,False,False,2,0,2,3
+"Horka nad Sázavou","Pchery,Theodor","14:03:56",True,17,9,39,15,False,False,3,2,1,2
+"Český Dub,Kněžičky,rozc.0.5","Andělská Hora,dolní obec","07:47:11",False,13,8,29,4,False,True,3,3,0,2
+"Kuňovice,rozc.","Nový Knín,Kozí Hory","09:41:09",True,19,7,51,45,False,True,0,3,2,0
+"K Austisu","Balkova Lhota,Knížata rozc.1.0","08:20:48",True,16,15,17,54,True,True,1,1,1,1
+"Červené Pečky,Dolany","Radomyšl,Rojice","18:50:07",True,17,11,14,14,False,True,2,3,2,3
+"Pavlov,žel.zast.","Březová,Pod hrází","07:22:41",False,12,8,38,2,True,True,2,2,0,0
+"Petrov,U Ručiček","Nadějkov,Petříkovice","12:11:28",True,13,7,7,8,False,False,1,3,1,3
+"Dvořákova","Senohraby","19:13:37",True,15,5,13,39,False,True,2,1,0,0
+"Praha-Vysočany","Sobotka,Lavice,odb.","18:43:23",True,16,9,8,32,True,False,0,1,1,0
+"Geologická","Slaný,sokolovna","03:34:06",False,13,6,14,42,False,False,3,0,1,3
+"Sídliště Na Groši","Mníšek p.Brdy,Stříbrná Lhota","08:29:05",True,14,8,44,43,True,False,0,0,2,1
+"U Mlejna","Štorkánova","05:04:41",False,16,11,29,42,True,True,2,0,1,0
+"Krčská","Louny,Brloh,rozc.Smolnice","22:51:28",True,9,8,44,40,True,False,1,0,2,2
+"Borek pod Troskami","Velké Přílepy,Kladenská","00:24:40",False,17,15,5,12,True,True,3,0,1,1
+"Hořovice,Valdek","Načeradec,Slavětín","04:55:06",True,11,13,31,12,True,True,0,0,0,0
+"Tuchoraz","Mníšek p.Brdy,Hladový Vrch","18:54:46",False,13,15,24,48,False,True,3,3,0,0
+"Budiměřice","Příbram,Hájecká","18:27:27",True,16,5,14,31,True,True,3,0,2,0
+"Chomutov,Pražská","Vysoký Chlumec,Hradce","12:40:48",True,18,12,54,28,True,False,2,3,2,3
+"Na Veselí","Beřovice,horní","11:41:42",False,8,10,20,1,False,False,1,2,2,0
+"Chotouchov","Jistebnice,Hůrka","01:17:31",True,13,13,13,54,False,True,1,3,0,3
+"Osov,škola","Všestary,Vávrov","23:24:59",False,10,9,57,30,False,True,1,3,0,0
+"Kladno,žel.zast.město","Lobeč,pivovar","10:32:40",False,12,6,40,8,True,False,3,0,1,2
+"Sibřina,škola","Čechtice,Nakvasovice","17:20:33",True,12,14,38,53,False,True,2,2,2,0
+"Tursko","Blatno u Jesenice","11:00:28",False,15,14,8,51,True,False,0,3,1,1
+"Slavošov","Šebestěnice","16:44:01",True,17,3,12,36,True,False,2,3,0,3
+"Benešov,Nezvalova","Maršovice,Vráce","15:58:46",False,20,15,47,20,True,False,2,1,2,3
+"Trhový Štěpánov,žel.st.","Zlatníky-Hodkovice,Slunečná","01:25:48",False,8,11,2,43,False,False,3,0,2,3
+"Průmstav","Osov","02:31:24",True,10,6,1,41,False,True,0,0,1,1
+"Horoměřice,Švejkova","Neratovice,Horňátky","07:17:33",False,14,4,0,25,True,False,0,2,1,1
+"Libkovice","Mimoň,Žitavská","22:02:35",True,10,7,3,9,False,False,1,1,1,2
+"Horoušany,Horoušánky,U Tří svatých","Horní Bukovina,Dolní Bukovina","04:53:11",False,9,8,5,12,True,False,3,2,1,3
+"Mnichovo Hradiště,Haškov","Kněžmost,Suhrovice","13:58:33",False,15,7,37,32,True,False,2,1,2,0
+"Vinařice,7.ulice","Vrdy,kult.dům","20:52:42",True,13,9,9,24,True,False,2,1,1,3
+"Chlustina,rest.","Mladá Boleslav,Na výstavišti","21:10:53",False,14,13,6,18,False,False,2,0,0,2
+"Kutná Hora,Sedlec,Čechova","Lochovice,Netolice,rozc.","17:50:21",True,8,13,26,34,True,False,3,1,2,2
+"Mokrovraty,Pouště,Rozc.","Rokycany,Pivovarská","10:23:06",True,15,10,49,4,False,False,3,1,2,2
+"Hybšmanka","Smilkov,dvůr","08:42:25",False,20,7,28,40,False,False,1,3,0,3
+"Střezimíř,žel.muzeum","Drazdecká","09:06:07",True,12,6,33,53,True,True,0,1,0,0
+"Postupice,Podlesí","Koněprusy","11:06:14",False,9,6,27,1,True,True,2,1,0,1
+"Želízy,Beránek","Třebětín,Hostkovice","15:50:27",True,11,7,59,21,False,False,0,0,0,1
+"Dolní Hbity,Třtí,horní","Rožmitál p.Tř.,Zalány,horní","12:42:04",True,8,11,42,52,True,False,2,2,2,1
+"Jiřice,Rokosky","Oleška,Brník","19:54:00",True,19,7,30,40,False,False,2,0,0,1
+"Čimice","Karlovy Vary,Prašná","22:25:33",True,9,13,5,48,False,True,2,2,0,0
+"Košík","Hutě","22:45:57",False,19,4,31,53,False,False,1,2,2,0
+"Kněžmost,Na Dolích","Záveská","01:18:33",False,20,13,2,18,True,False,3,3,1,1
+"Zelená","Týnec n.Sáz.,Podělusy","19:49:27",False,13,3,56,46,True,True,1,2,2,1
+"Byšice,Škola","V Chotejně","16:43:49",True,8,9,35,44,False,False,1,1,0,2
+"Poděbrady,žel.st.","Milevsko,škola I","22:46:03",False,19,8,59,56,False,True,3,1,0,1
+"Hospozín,závod","Benešov,MŠ Úsměv","02:07:41",False,12,10,54,28,True,True,2,2,1,2
+"Krnsko,zámek","Netvořice,Všetice","16:51:03",False,13,14,29,6,False,False,1,1,1,3
+"Golčův Jeníkov,Ráj","Kostelec n.Č.l.,U Křížku","14:44:26",False,20,5,39,0,False,False,0,1,0,0
+"Bystřice,Jírovice,rozc.","Příčovy,rozc.","20:22:33",True,13,7,51,34,True,False,0,1,1,1
+"Český Dub,nám.","Rudná,U Nádraží","04:45:10",False,15,10,13,11,False,True,3,2,1,1
+"Kublov","Benešov,Úročnice,rozc.Hrusice","14:48:01",True,11,3,30,2,False,False,3,3,1,1
+"Přímské náměstí","Ostrov,rozc.","16:26:19",False,9,10,26,23,False,False,3,3,1,1
+"Mirovická","Niměřice,Dolní Cetno","04:43:30",False,20,9,27,35,True,True,1,0,0,2
+"Kmetiněves,křižovatka","Semice,střed","03:42:11",True,20,4,26,19,True,False,2,1,2,0
+"Úvaly,Elektromechanika","U Belárie","14:30:36",False,9,5,9,43,False,False,0,3,0,2
+"Ke Xaverovu","Běleč","14:54:21",True,10,4,34,13,True,True,2,3,0,3
+"Zalužany,čerpací stanice","Klučov,Skramníky","22:21:49",False,13,4,4,39,True,False,2,1,0,2
+"Protivec","Březová-Oleško,Nová Březová","04:32:56",False,11,6,5,53,True,False,0,3,2,3
+"Zápy,Stavby mostů","Králův Dvůr,Zahořany,Pod Hájem","18:37:29",True,9,14,35,48,True,False,0,3,0,1
+"Mokrovraty,U Statku","Tmaň,Lounín","17:15:02",True,19,5,16,52,False,False,3,3,0,1
+"Radlická","Turnov,5.května","05:05:28",False,20,6,44,58,True,True,1,3,2,3
+"Vrchotovy Janovice,Sedlečko,Rozc.","Blatná,žel.st.","05:19:30",False,16,6,31,20,True,False,3,3,2,3
+"Sázava,Klášterní","Postupice,Kopaniny","12:43:08",False,20,5,54,15,False,True,2,2,1,0
+"Domousnice","Líbeznice,Zdrav.stř.","02:43:51",False,20,4,38,7,False,True,2,2,1,1
+"Úžice,Chrastná,rozc.","Dolní Hbity,Káciň,Hřibče","23:45:35",True,19,7,5,40,False,True,3,2,0,2
+"Jenštejn,Domov seniorů","Sídliště Kobylisy","12:05:21",False,8,5,38,4,True,True,2,2,2,2
+"Velký Chlumec,II","U Palaty","04:30:16",True,20,13,45,7,False,True,2,1,0,1
+"Skládka Ďáblice","Červené Pečky,Bojiště","17:22:40",True,12,6,14,1,False,False,2,0,2,1
+"Bohutín","Načeradec,Jizbice","03:30:51",False,10,9,24,59,True,False,1,2,2,3
+"Kolín,Zibohlavy","Divadlo Na Fidlovačce","08:02:10",True,13,7,41,4,True,False,3,1,2,2
+"Sídliště Jahodnice","Ralsko,Hradčany,háj.","17:36:03",False,20,14,20,0,False,True,1,0,0,0
+"Mačkov","Říčany,Pacov,U Hřbitova","21:03:16",True,8,4,14,40,True,False,0,1,2,1
+"Počepice","Sedlčany,Solopysky,rozc.","21:21:54",True,8,13,43,17,False,True,0,2,1,0
+"Zlíchov","Drazdecká","15:40:39",False,18,12,39,56,True,True,2,3,0,3
+"Kladno,celnice","Vojkovice","00:41:48",True,11,13,28,23,True,True,2,2,2,2
+"Rakovník","Blatce,Konrádov","00:05:44",True,10,3,28,52,True,True,2,2,0,3
+"Hostomice,Radouš","Úžice,Čekanov,Pražská","20:18:13",False,16,12,4,29,False,False,1,2,0,2
+"Krhanice","Nad Džbánem","09:41:21",True,11,12,23,42,False,False,1,1,2,0
+"Bechov","Hadovitá","18:21:18",False,15,3,7,10,False,True,0,2,1,0
+"Bělčice,nám.","Kutná Hora město","04:14:48",True,9,10,11,25,True,False,2,2,0,1
+"Nymburk,Na Hroudách","Trhový Štěpánov,nám.","04:54:41",False,17,11,57,53,True,True,0,0,0,0
+"Větrov","Městec Králové,kult.dům","23:24:46",False,12,11,55,16,False,True,0,1,0,2
+"Nové Vokovice","Libomyšl","01:14:01",True,12,8,52,19,True,True,3,2,2,2
+"Rataje nad Sázavou předměstí","Vinořský hřbitov","12:23:17",True,13,12,10,26,False,True,1,2,0,2
+"Zamašská","Zruč nad Sázavou zast.","21:31:21",True,14,3,53,7,True,False,1,2,2,3
+"Beroun-Závodí","Chrášťany,Chotouň","14:38:24",False,11,5,27,45,True,False,2,1,0,1
+"Zruč nad Sázavou zast.","Kralupy n.Vlt.,Lidové nám.","15:48:29",True,17,12,23,12,False,True,1,2,1,3
+"Drahlín,Malý Drahlín","Čáslav,Žacká","07:46:33",False,11,14,38,4,True,False,3,0,1,2
+"Cidlina","Čáslav,obchodní centrum","15:11:59",True,11,11,32,47,False,False,3,2,2,3
+"Ostrá,u kapličky","Vlkaneč,Přibyslavice,Kocanda rozc.","12:40:56",False,15,6,6,46,True,False,1,2,0,3
+"Jince,Rejkovice,žel.st.","Kněžmost,Suhrovice","16:41:09",False,10,8,50,7,False,True,3,3,0,3
+"Vonoklasy","Petroupim,Petroupec","22:06:49",True,14,12,35,52,True,False,1,0,1,1
+"Jablonec n.Jiz.,žel.st.","Kolín,Tesla","21:13:45",False,8,9,51,58,False,False,1,1,2,3
+"Sedlec-Prčice,Malkovice","Chotusice,Druhanice","03:51:42",False,18,7,1,3,False,True,2,1,0,2
+"Franty Kocourka","Rabyně,Loutí","11:54:36",True,17,8,53,5,True,True,0,1,1,0
+"Chřenovice-Podhradí","Zápy,Stavby mostů","16:15:19",False,11,4,45,18,False,False,1,0,1,1
+"Hořovice,nemocnice rozc.","Uhlířské Janovice,Kolínská","21:22:29",False,12,9,0,1,False,True,2,3,1,1
+"Kostelec n.Vlt.,Zahrádka,rozc.","Na Mlýnku","12:31:23",True,9,10,22,1,False,False,3,2,2,1
+"Družec,Na Rybárně","Bukovany,Rozc.","16:46:09",False,15,13,9,48,False,True,3,2,0,2
+"Lehovec","Vrchlabí,nemocnice","09:44:54",False,18,5,19,58,True,True,3,3,0,3
+"Černouček","Hořany","09:55:19",True,19,4,37,16,False,True,3,0,1,3
+"Bystřice,Mlýny,Rozc.","Úvaly,Pivovar","21:53:36",True,10,8,33,54,True,False,0,1,2,3
+"Příbram,Obecnická","Hostivice,Sportovců","12:36:30",False,11,11,14,15,True,False,1,0,2,3
+"Konárovice","Zlatá","20:15:37",True,11,10,51,45,False,False,2,3,1,1
+"Bohutín,Vysoká Pec,sídl.","Kožlí,Sechov,II","22:27:13",False,14,7,59,23,False,True,2,3,2,3
+"Votice,Buchov","Mladá Vožice,Chocov","06:14:07",False,14,9,8,13,True,True,1,3,0,3
+"Klecany,Astrapark","Studenec,pošta","01:21:16",True,12,3,52,6,False,True,0,2,0,2
+"Pavlíkov,křiž.","Cheznovice,ObÚ","23:14:48",True,14,9,55,50,True,True,1,2,0,3
+"Špindlerův Mlýn,aut.st.","Karlštejn","21:19:04",False,16,11,25,18,False,False,1,2,0,2
+"Velenka","Činěves,u kovárny","07:45:45",True,9,12,27,46,True,False,1,0,2,2
+"Čechtice,Malá Paseka","Lobeč,zámek","03:28:45",True,16,6,26,58,True,True,1,1,0,0
+"K Teplárně","Komárov,Lidový dům","04:46:06",True,14,9,54,13,True,True,0,1,1,3
+"Maršovice,Vráce","Libošovice,Podkost,hrad Kost","03:38:49",True,8,12,35,41,False,True,3,1,0,2
+"Sudoměř","Psáře,Lipina","13:36:11",True,10,11,9,52,True,True,1,2,1,3
+"Kazín","Tehov,Hačálka","14:13:25",True,13,8,36,2,True,True,3,1,2,0
+"Most Závodu míru","Svinaře","22:53:13",True,11,10,4,56,False,False,1,1,0,3
+"Sídliště Zbraslav","Úžice,Čekanov,Pražská","20:14:29",False,19,11,29,9,False,True,3,3,0,3
+"Vestec,Safina","Jílové u Prahy,Studené,Obec","16:49:47",False,16,5,34,52,False,True,1,2,1,1
+"Zdiby,Pod Hájem","Rožmitál p.Tř.,u Hořejších","05:19:00",False,13,8,3,15,True,True,2,1,0,3
+"Slibovice","Česká Lípa,Hrnčířská","09:00:13",True,19,5,5,11,False,False,1,2,0,2
+"Suchodol,Líha","Tochovice zast.","12:39:42",False,14,13,42,31,True,True,3,0,2,2
+"Horka I","Příčovy,rozc.","19:18:18",True,14,9,40,9,True,True,0,3,1,2
+"Mělník,Mladoboleslavská","Ratměřice,Skrýšov","23:09:48",True,18,3,27,20,True,True,3,1,0,0
+"Hrusice","Sobotka,koupaliště","17:34:29",True,16,9,1,31,False,True,3,0,0,1
+"Šedivého","Horky n.Jiz.","23:43:19",False,9,9,39,25,False,False,0,1,1,2
+"Farkáň","Černíny","16:50:12",True,11,6,28,48,False,False,1,2,2,0
+"Mnichovo Hradiště,Hněvousice","Újezd u Průhonic","18:59:48",False,12,5,37,21,False,True,2,2,0,0
+"Borotice,u lípy","Nádraží Braník","18:51:02",True,9,11,8,55,True,False,0,1,2,2
+"Vítkovice,škola","Rabyně,Měřín,Zotavovna","01:49:31",True,8,10,27,55,True,True,2,2,0,0
+"Kolín,U Červených","Velké Přílepy,Podmoráňská","07:21:20",False,19,11,14,54,True,True,2,2,0,3
+"Praha-Hlubočepy","Dělostřelecká","05:14:32",False,20,12,13,45,False,False,1,1,0,0
+"Horní Kruty,Dolní Kruty","Klokočná","01:51:21",True,15,14,12,30,False,True,3,1,0,3
+"Kralupy n.Vlt.,obchodní centrum","Praha hl.n.","08:11:09",True,18,11,56,44,True,True,2,3,2,0
+"Kosova Hora,Dohnalova Lhota","Podhajská pole","19:25:31",True,11,15,16,34,True,False,0,2,2,0
+"Čestín","Satalice","18:00:19",False,13,10,1,10,False,False,0,2,0,3
+"Chotoviny,Beranova Lhota","Mladá Boleslav,u nadjezdu","01:26:43",True,11,10,22,59,False,False,0,1,1,3
+"Křinec,žel.st.","Nový Jáchymov,háj.","07:58:38",True,18,4,7,33,True,True,2,0,2,0
+"Měňany,odb.Koda","Nové Sedlo","00:35:08",False,8,12,53,46,False,False,0,0,2,1
+"Sulice,Hlubočinka","Praha-Libeň","00:16:58",False,19,9,57,25,False,False,1,2,0,2
+"Zdice,nám.","Rašovice,Netušil","07:32:51",True,18,6,13,38,False,False,2,2,1,0
+"Albertov","Říčany,Terronská","02:16:28",True,15,13,21,7,False,True,3,3,1,2
+"Bratronice","Světlá nad Sázavou město","22:09:26",True,18,12,52,41,False,False,2,3,2,0
+"Rudná,Vypich","Všenory,žel.zast.","18:31:57",True,13,7,6,4,True,False,2,0,0,1
+"Voračice","Českolipská","04:36:23",True,14,8,53,50,True,False,2,3,1,0
+"Dubá,Křenov","Rožmitál p.Tř.,u Hořejších","00:29:02",True,11,15,36,6,False,True,0,3,1,2
+"Hudčice","Zlonice,Břešťany","07:34:46",True,8,12,15,11,True,False,1,3,1,3
+"Kladno,nám.Svobody","Opočnice,jídelna","07:55:09",False,15,11,49,33,True,False,0,3,0,2
+"Benešov,Nechyba","Bílichov","07:32:29",False,20,15,20,19,True,False,1,1,0,1
+"Brázdim,Starý Brázdim","Nymburk,Poliklinika","13:15:56",True,14,6,5,18,False,True,2,3,2,3
+"Šípy,Milíčov","Heřmaničky,žel.st.","04:40:18",True,11,8,42,35,True,False,3,3,2,3
+"Kounov,u mostu","Králův Dvůr,Levín,farma","02:33:01",False,20,12,18,39,False,True,2,2,0,0
+"Dětská nemocnice Karlov","Nový Knín,Kozí Hory,Besídka","14:56:02",True,11,14,55,6,True,False,3,1,0,1
+"Nedomice,Křížek","Jíkev,žel.zast.","18:22:08",True,12,9,42,38,False,False,0,0,1,1
+"Zákolany,u Kovár","Želivského","01:07:19",True,20,13,5,30,True,False,0,1,1,1
+"Chrášťovice","Úžice,logistické centrum","04:35:49",True,13,10,54,16,False,True,3,2,2,3
+"Třtice,Bucký rybník","Želízy","19:11:46",True,9,5,14,57,True,False,3,3,0,3
+"Na Formance","Plzeň-Doubravka","06:25:07",False,10,13,36,17,False,True,3,2,1,2
+"Borotice,Cholín","Kladno,ČSAD","16:16:20",False,10,13,26,37,False,False,3,0,0,2
+"Lčovice,rozc.1.0","Sídliště Spořilov","17:06:36",False,10,9,34,17,False,True,2,0,2,3
+"Svinaře,Halouny","Sedlec-Prčice,Vrchotice,Na Františku","14:09:07",True,15,12,29,18,True,False,0,2,2,0
+"Kutná Hora,Žižkov,Kouřimská","Nová Ves p.Pleší,Včelník","04:04:06",True,10,8,9,58,False,False,1,2,2,3
+"Kokořín,Kokořínský Důl,Podhradí","Sušice,Nádražní u samoobsluhy","00:51:36",False,13,8,33,32,True,False,2,1,1,0
+"Doksy,rozcestí","Tábor,Křižíkovo nám.","02:15:30",True,12,13,39,37,False,True,2,0,1,0
+"Praha-Běchovice střed","Chraštice,Chraštičky","20:52:37",True,20,14,47,47,True,True,3,3,0,1
+"Podlesí,Nové Podlesí","Pavlíkov,Chlum","14:02:28",False,9,3,54,32,True,True,0,3,1,0
+"Střelničná","Vrchlabí,Herlíkovice","16:02:23",False,19,4,54,52,True,True,0,0,1,2
+"Žďár,Příhrazská","Úvaly,Zálesí","07:10:15",False,20,8,32,11,True,False,3,0,0,1
+"Ke Klíčovu","Hlavečník,u pomníku","19:00:26",False,16,13,26,41,True,False,1,0,2,1
+"Vlašim,Domašín,nám.","Karlovy Vary,Olšová Vrata,rozc.","11:45:09",False,8,15,47,6,False,False,0,2,2,2
+"Záboří n.L.,Na Písku","Za Pavilonem","03:32:27",False,10,7,8,8,True,True,2,2,1,1
+"Okoř,Křižovatka","Šestajovice,Za Stodolami","15:01:01",True,9,3,49,35,False,True,0,3,0,0
+"Pertoltice,Machovice","Nové Sedlo","20:51:44",True,12,14,4,0,False,True,1,3,2,1
+"Čerčany","Stašov","03:02:17",True,15,9,52,54,True,True,2,0,2,1
+"Hlízov","Lhota u Příbramě,točna","10:05:49",True,19,8,46,47,True,True,1,3,0,0
+"Cholupický hřbitov","Kosova Hora,Janov","21:40:00",True,8,3,28,48,True,True,0,1,0,3
+"Pavelkova","Podbořany,nem.","20:06:29",False,14,7,15,44,False,False,1,2,0,0
+"U Radiály","Studenecká","15:19:07",True,13,4,12,30,False,False,0,0,2,0
+"Strenice,Podčejky","Ostrov,rozc.","11:46:37",False,18,7,32,46,False,False,2,1,2,2
+"Čížov","Dobrovíz-Amazon","17:18:47",True,18,14,7,59,True,True,1,2,0,1
+"Vojkovice,Bukol","Záboří nad Labem","02:09:23",True,20,9,20,35,False,False,0,1,0,0
+"Libiš,Ke Spolaně","Beroun,Školní náměstí","22:30:57",False,17,9,33,52,True,True,3,2,0,1
+"Benátky n.Jiz.,u hřbitova","Roztoky,Přemyslovská","14:07:23",True,10,4,49,26,True,False,1,2,1,0
+"Horoměřice,Švejkova","Blatná","14:44:34",False,18,6,29,1,True,False,1,1,0,3
+"Podbořany,nám.","Vyšehořovice","09:40:46",False,13,12,59,34,True,False,0,3,2,0
+"Mladotice","Rašovice,Mančice","20:31:34",False,9,8,57,21,False,False,1,0,1,1
+"Lány,náměstí","Králův Dvůr,škola","00:24:29",False,14,8,52,0,True,True,0,2,2,1
+"Říčany,Radošovice,ZŠ Bezručova","Říčany,ZŠ U Říčanského lesa","14:16:06",False,16,12,20,27,False,False,1,2,2,0
+"Měšice,Agropodnik","Škola Kolovraty","10:06:14",True,13,14,55,18,False,True,3,1,1,3
+"Přístaviště","Železný Brod,Splzov,host.","00:11:17",True,10,9,40,16,True,False,2,1,0,1
+"Louny,u cihelny","Neumětely,žel.zast.","22:50:02",False,17,15,3,15,False,True,3,3,2,1
+"Paceřická","Stochov,Čelechovice","19:04:03",False,13,10,44,37,True,False,1,3,1,1
+"Jenštejn,Domov seniorů","Dolní Bousov,nám.","05:57:30",False,13,10,26,0,True,True,3,2,2,2
+"Jablonec n.Jiz.,nám.","Uhlířské Janovice,Malejovice","04:53:23",False,9,8,44,49,False,False,2,2,0,2
+"Kamenný Přívoz,Žel.st.","Mutějovice","13:33:20",False,10,5,50,7,False,False,0,1,2,2
+"K Juliáně","Radíč,Dubliny","07:00:02",False,18,5,31,49,False,True,1,3,1,0
+"Kralupy n.Vlt.,Velvarská","Modletice,Doubravice","13:27:00",True,15,13,50,13,True,True,0,2,2,2
+"Ostrá,náves","Kadaň,aut.nádr.","06:24:43",False,11,3,36,29,True,False,3,2,2,3
+"Doksy,Bílá Labuť","Hlízov,u pomníku","02:52:11",False,14,4,36,53,True,True,3,1,1,0
+"Nymburská","Obrubce","09:01:55",True,10,13,28,42,False,False,0,0,1,0
+"Ke Xaverovu","Potěhy,škola","19:36:23",True,10,6,34,13,False,True,3,2,2,1
+"Žďár,Břehy,obecní úřad","Dolní Beřkovice,Vliněves","08:00:54",False,9,6,47,52,True,False,0,2,0,0
+"Nadějkov,Bezděkov","Chotusice,k letišti","10:51:02",True,15,9,55,46,False,True,2,0,0,3
+"Štvanice","Příbram,Pragovka","02:57:08",False,19,5,42,6,True,True,1,2,0,2
+"Plzeň-Doubravka","Letňany","17:54:23",True,11,15,30,13,True,True,3,2,1,3
+"Klášter Hradiště n.Jiz.,Habr","Hostivice-U hřbitova","00:40:38",False,14,4,40,35,True,True,1,3,2,0
+"Nádraží Hostivař","Slaný,odb.Drnov","13:56:19",False,10,12,30,57,True,False,0,3,1,2
+"Přerov n.L.,U Skanzenu","Ruda","18:17:16",False,18,6,12,21,False,False,1,3,0,1
+"U Jahodnice","Příšovice,hl.sil.","20:47:29",True,10,9,59,30,True,False,0,3,2,1
+"Mělník,Blata","Velim,Karlova","17:54:33",True,10,8,3,20,True,True,2,2,0,3
+"Horoměřice,Švejkova","Pošta Újezd nad Lesy","14:39:46",True,16,15,19,27,False,False,1,3,2,0
+"Vinařice,u kapličky","Srbeč,koup.","01:30:50",True,17,9,9,40,True,True,1,0,0,3
+"Čistá,hlavní silnice","Bořislavka","05:06:19",False,17,9,22,12,True,False,2,3,2,0
+"Zlosyň","Záběhlice","08:46:25",True,18,7,32,44,False,False,0,2,1,2
+"Benešov,Ke Stadionu","Vrchlabí,nám.T.G.Masaryka","02:52:44",False,16,14,1,51,False,False,0,1,0,2
+"Chýnice,Pod Radnicí","Nemocnice Bulovka","04:06:51",False,13,3,44,35,True,True,0,3,2,1
+"Veliš,bytovky","Horoměřice,Velká Brána","20:24:51",True,14,14,19,49,True,False,1,2,0,1
+"Skorkov,Otradovice,Křiž.","Beroun,pod dálnicí","11:25:13",True,9,3,13,50,True,False,2,2,1,2
+"Malešov,Dubina","Hostomice,Lštěň,rozc.","13:00:56",False,18,9,49,46,True,False,1,2,1,1
+"Petroupim","Vlastějovice,Milošovice,rozc.","13:41:41",True,11,15,4,59,False,False,3,3,2,0
+"Srbeč,koup.","Kácov,Zderadiny","15:44:37",True,8,9,26,56,True,False,3,1,1,2
+"Sudějovická","Mladotice","19:10:20",False,16,11,32,11,False,False,0,2,0,0
+"Všenory,U Kácovských","Nádraží Velká Chuchle","20:11:24",False,12,3,25,26,False,False,1,2,0,3
+"Popovice,Mladovice","Daleké Dušníky,Druhlice","20:04:00",True,9,4,23,17,False,False,1,0,1,0
+"Žatec,aut.nádr.","Přezletice,Horní náves","03:11:54",True,17,14,58,32,True,False,2,1,0,3
+"Obory,samoty","Horoměřice,Švejkova","00:27:37",False,9,9,46,38,False,True,3,0,1,1
+"Hlušice,Hlušičky","Údrnice,Únětice","13:21:43",True,11,14,10,23,True,False,3,1,2,0
+"Týnec n.Sáz.,Krusičanská","Černé Voděrady,ObÚ","12:39:05",True,11,14,13,58,True,True,0,3,1,1
+"Zlatníky-Hodkovice,U Prodejny","Kralupy n.Vlt.,Třebízského škola","01:25:16",False,16,15,43,34,False,False,3,3,2,3
+"Heřmaničky,Březina","Pod Nouzovem","15:54:04",True,15,9,8,57,True,False,1,0,2,2
+"Kněžmost,Čížovka,rozhledna","Kouty","11:03:26",False,20,11,48,11,True,False,1,0,1,2
+"Malinová","Libenice","16:42:51",False,9,11,5,53,True,True,2,1,1,2
+"Kovářov","Chocerady,žel.zast.","12:40:39",False,13,4,19,0,True,False,3,0,1,0
+"U Vodojemu","Zbenice","12:38:40",False,15,12,48,49,False,False,3,3,0,0
+"Rudná,Hewlett-Packard","Pyšely,Sokolovna","02:12:01",True,13,6,49,57,True,True,0,1,0,3
+"Nemyšl,garáž","Neustupov","00:41:54",False,10,6,19,27,False,False,3,2,0,3
+"Toušice,ObÚ","Zalužany,ObÚ","05:42:57",False,18,9,44,56,True,False,1,3,2,2
+"Kutná Hora,městské nádraží","Příbram,Koperníkova","11:48:41",True,9,4,54,48,False,True,3,3,2,0
+"Votice,koupaliště","Skorkov,Otradovice","07:50:20",False,11,10,48,12,True,False,2,1,1,3
+"Kralupy n.Vlt.,hřbitov","Bílkovice,mlýn","16:18:50",True,8,15,42,39,False,False,2,2,2,1
+"Úmonín,Lomec","Baně","14:02:38",True,17,15,7,4,True,False,1,2,2,3
+"Davle,Sloup,U Jeřábu","Mutějovice,Lhota p.Džbánem,hřbitov","01:15:26",True,18,12,54,25,False,False,2,2,1,3
+"Milín,Slivice","Záboří n.L.,Na Písku","16:01:05",True,14,6,13,26,True,False,1,3,1,3
+"Nádraží Vršovice","Úvaly,OC Pražská","12:24:36",True,18,10,30,5,False,False,1,2,1,2
+"Drozdov,škola","Vítkovice,myslivna","04:50:08",False,13,7,8,53,False,True,0,2,0,1
+"Sokoleč","Nepoměřice","03:44:00",True,10,13,38,2,True,True,1,3,1,0
+"Vítkovice,hotel Praha","Čelákovice-Jiřina","15:48:44",False,20,10,55,26,False,True,3,0,1,2
+"Svatý Jan,Drážkov","Vraný,Lukov","03:44:53",False,12,9,26,45,False,False,3,0,2,2
+"Ostrov,rozc.","Senožaty,ZŠ","03:15:52",False,9,4,20,4,False,False,3,3,0,2
+"Pavlov,žel.zast.","Benešov,Hráského","04:48:32",True,15,7,57,52,True,False,1,0,0,2
+"Nehvizdy,U Studánky","Karlínské náměstí","07:23:35",True,19,4,22,55,False,True,2,2,0,0
+"Chotusice,k letišti","Slaný,Těhul","19:09:55",False,9,11,0,28,False,False,2,2,0,2
+"Dubeč","Hvožďany,Javory","16:58:30",True,11,12,39,22,False,False,0,3,1,3
+"Kuňovice","Netvořice,Tuchyně,Rozc.","18:53:09",True,18,7,59,46,True,True,3,1,0,1
+"Bukovno,u sokolovny","Bečváry,Dolní Jelčany","16:58:24",True,13,5,0,16,False,False,2,2,1,1
+"Chyňava,Libečov,náves","Myštice,Vahlovice","22:59:29",False,19,6,0,4,True,True,0,1,0,1
+"Zbýšov,Klucké Chvalovice","Sedlčany,Sestrouň,Mastník","14:17:47",False,13,13,42,47,True,False,0,2,2,3
+"Přelouč","Neveklov,Zádolí","05:41:53",False,17,3,55,30,False,True,2,2,0,3
+"Kutná Hora hl.n.","Výzkumný ústav vodohospodářský","10:23:16",True,17,8,39,40,True,False,1,0,1,2
+"Strojírenská","Skalsko,Panské zahrady","16:00:05",False,18,4,9,38,True,True,0,0,0,2
+"Hostín,V Lukách","Vrdy,Horní Bučice,rozc.","21:52:33",False,11,13,24,3,True,True,3,2,0,0
+"Mrákovská","Davle,Sloup,U Jeřábu","19:44:51",True,14,12,20,7,True,False,3,3,1,2
+"Baba II","Opolany,u kostela","05:05:33",True,8,6,49,43,True,True,3,0,0,0
+"Rakovník,žel.zast.","Věšín,ozdravovna Brdy","10:21:55",True,10,6,49,26,True,False,0,3,1,0
+"Kotorská","Pod Říhákem","14:00:48",False,10,14,52,45,False,False,3,3,0,0
+"Beroun,Školní náměstí","Chotilsko,Křeničná","02:10:29",False,17,6,48,47,True,False,2,1,0,0
+"Lukavec","Benešov,Tyršova","11:17:10",True,20,8,24,53,False,False,2,1,2,1
+"Kamenice,Kuklík","Harrachov,centrum","14:02:45",True,9,12,56,40,False,False,2,3,1,2
+"Starý Plzenec,Bezručova","Zbizuby,Nechyba","02:10:28",False,10,12,22,34,True,False,0,0,0,3
+"Újezd nad Lesy","Lčovice,rozc.1.0","14:36:52",True,13,12,53,10,False,True,2,2,2,2
+"Tetín,Koledník","Jeviněves","17:20:01",True,14,4,37,15,True,False,0,2,2,3
+"Ronalda Reagana","Štipoklasy","07:32:29",True,18,10,4,19,True,False,2,1,1,1
+"Dobřejovice,Jesenická","Čáslav,Žacká","16:32:45",True,20,4,36,16,False,False,1,2,2,2
+"Prachatice,aut.nádr.","Mladá Boleslav,Nový hřbitov","16:09:40",False,20,15,47,55,True,False,1,1,0,0
+"Chlístovice,Žandov","Kralupy n.Vlt.,obchodní centrum","14:55:57",False,18,9,1,13,False,True,2,1,2,2
+"Týnec n.L.,u mostu","Podmoky,ObÚ","20:52:16",True,19,15,19,48,True,False,2,2,0,1
+"Vysoké n.Jiz.,nemocnice","Svojšice,Nová Ves III","04:45:22",True,15,9,23,5,False,True,1,0,0,2
+"Horky n.Jiz.,u hřbitova","Hobšovice,Křovice I","10:31:42",False,16,4,19,34,False,False,3,2,2,0
+"Příbram,DISA","Senomaty,Na Vyhlídce","16:02:26",False,13,4,46,51,True,False,0,0,1,2
+"Nové Pitkovice","Roudnice n.L.město","07:23:07",False,10,9,37,3,True,True,0,1,1,2
+"Načeradec,Daměnice","Budčice","16:05:12",False,10,6,32,58,False,False,1,2,2,1
+"Netřebice","Jablonec n.Jiz.,žel.st.","23:48:42",True,10,5,0,34,True,False,0,2,1,2
+"Čachovice,Struhy,Hostinec","Kněžská luka","14:29:11",False,19,14,2,31,False,True,0,3,2,1
+"Stříbrná Skalice,V Můstkách","Dobršín,rozc.0.4","06:00:15",False,8,4,45,0,True,True,3,2,1,0
+"Zákolany,Kováry","Zaječov,u mostu","18:30:25",True,20,14,19,55,True,False,1,0,1,1
+"Drevníky","Žerčice,Obecní úřad","04:15:40",True,17,6,27,6,False,True,3,1,1,2
+"Betonárka","Městečko","00:33:56",True,14,3,7,41,True,True,1,3,1,2
+"Slaný,Dolín,II","Klecany,U Hřbitova","12:01:52",True,18,9,26,57,True,False,1,1,0,0
+"Hořátev,ZD","Rovensko pod Troskami","02:43:58",True,18,8,10,39,True,True,1,1,2,3
+"Nelahozeves zámek","Staré Hrady,zámek","10:28:52",True,12,3,43,17,True,False,1,3,2,2
+"Poděbrady,V zahrádkách","Radomyšl,nákup.stř.","01:35:39",False,11,10,38,38,True,True,3,3,0,3
+"Pod Kesnerkou","Ořech,u sokolovny","16:15:35",True,14,5,28,5,True,True,0,3,1,2
+"Nučice,Pod Vinicí","Benešov,Plavecký stadion","03:01:15",False,11,7,41,15,False,True,0,1,1,0
+"Záluží","Sázavka","21:00:53",True,19,10,44,44,False,True,2,2,2,1
+"Kostelec n.Vlt.,Zahrádka","Černošice,Karlštejnská","20:41:46",True,19,11,7,0,True,True,0,2,2,3
+"Hříškov","Kostelní Hlavno,U Kostela","21:07:14",False,14,14,53,15,True,True,0,3,1,3
+"Benešov,Technické služby","Bohostice,Zalaby","05:06:59",True,13,13,16,40,False,True,2,2,2,0
+"Tatce,žel.zast.","Slatina,rozc.1.0","15:32:57",True,18,6,47,14,False,True,1,2,0,3
+"Pavlíkov,Skřivaň","Klučenice","08:56:27",True,18,13,59,26,False,True,2,2,1,3
+"Přezletice,Kocanda","Světlá nad Sázavou-Josefodol","08:38:27",False,16,7,14,51,False,True,0,2,0,2
+"Nižbor,Stradonice,u hřbitova","Václava Špačka","20:50:48",True,12,4,38,23,True,False,3,2,2,1
+"Králův Dvůr,Počaply,škola","Bystřice,Strženec","14:44:28",True,10,7,30,56,False,True,3,3,2,2
+"Železný Brod,nová škola","Kostomlaty pod Řípem","00:36:55",True,10,8,22,18,True,True,2,1,2,3
+"Nebušice","Cítov,Daminěves","03:20:28",True,10,14,58,29,True,False,2,2,2,1
+"Králův Dvůr,Počaply,škola","Stříbrná Skalice,Náměstí","08:18:46",False,10,13,52,0,True,False,2,3,1,2
+"Vinařice,Sokolovna","Branické náměstí","09:03:10",True,8,6,53,30,False,True,2,1,2,3
+"Unhošť,Nouzov Čeperka","Ratboř,Sedlov","17:48:15",True,19,9,40,26,True,True,3,0,1,1
+"Říčany,U Lípy","U Waltrovky","02:51:20",False,10,15,54,27,False,True,3,3,0,1
+"Budyně n.Ohří,Pražská","Bělá p.Bezd.,Dřevařská","17:41:58",True,16,9,10,16,True,True,1,0,1,0
+"Červené Pečky,Opatovice","Hluboš,Loudilka","13:58:59",False,19,6,37,48,True,True,3,1,1,3
+"Centrum Zahradní Město","Kácov zast.","13:35:39",True,8,14,8,43,False,True,0,3,1,1
+"Nemocnice pod Petřínem","Ratměřice,Habrovka","11:48:44",False,11,3,7,19,True,True,1,0,2,3
+"Velvary,Nové Uhy","Zbečno","14:55:49",False,11,13,26,17,True,False,2,2,1,2
+"Úmyslovice,Ostrov,odb.","Sedlec-Prčice,Nové Dvory,rozc.Myslkov","04:22:07",False,14,14,23,17,True,False,2,3,0,0
+"Vidice","Hradečno,Obora","06:34:28",False,19,10,0,39,True,False,2,3,2,0
+"Na Padesátníku","Lhotky,Ovčín","17:21:23",True,20,11,49,31,True,False,0,0,0,0
+"Štěpnice","Sluštice","04:52:30",True,9,13,19,52,False,False,1,0,1,2
+"Nádraží Běchovice střed","Brňany","13:57:40",False,16,9,42,58,True,True,0,0,1,1
+"Úžice,Chrastná","Vlašim,Březina","06:52:55",False,16,11,58,56,False,True,1,0,0,3
+"Mníšek p.Brdy,ÚVR","Bystřice,Jinošice,rozc.Hutě","11:04:05",True,9,7,22,24,True,True,0,1,2,3
+"Kněžmost,nám.","Přerov n.L.,Nový Přerov","03:40:40",False,8,14,22,18,True,False,2,3,2,0
+"Řevnice,Nádraží","Hrejkovice,Pechova Lhota","16:31:15",False,11,11,29,4,False,True,1,2,0,2
+"Kolín,nádraží","Srbeč,u mlýna","00:24:54",True,9,15,28,4,True,False,1,3,0,3
+"Klínec,U Hřiště","Kosova Hora,Dohnalova Lhota","22:23:35",False,8,5,5,25,True,True,0,2,1,3
+"Semily,Komenského nám.","Kolín,Zibohlavy","01:36:39",False,9,13,51,48,True,False,3,2,2,1
+"Pavlíkov,Tytry","Světlá nad Sázavou-Josefodol","18:00:07",True,10,11,17,13,False,True,0,3,0,3
+"Blatce,Blatečky","Kamenická","20:37:13",False,16,15,45,23,True,True,0,3,1,1
+"Chraštice","Onomyšl,Miletín","09:13:48",True,11,3,53,58,False,False,0,3,0,0
+"Příbram,Zdaboř,Komerční zóna","Kotorská","09:47:08",False,11,14,54,7,False,False,0,0,2,1
+"Krásná Hora n.Vlt.,Žákovec","Liberec,Dobiášova","10:25:08",False,9,7,37,46,False,False,3,0,2,2
+"Dětenice,Brodek","Kutná Hora,Karlov,Na Rovinách","01:49:25",False,13,6,5,28,True,False,3,1,1,3
+"U Václava","Hostomice,Radouš,u křížku","13:43:06",False,8,5,33,37,True,True,2,0,0,0
+"Strančice,rozc.Sklenka","Žižice","04:31:25",True,19,13,24,22,False,True,2,3,1,2
+"Na Mlýnku","Zbuzany","07:05:38",True,20,5,24,0,False,False,3,0,2,3
+"Vranov,Vranovská Lhota","Beroun,Vítězslava Hálka I","22:17:40",False,12,4,30,25,False,False,2,0,2,2
+"Hrnčíře","Staňkovice,Chlum,rozc.","09:58:05",True,13,11,21,47,True,True,0,3,2,0
+"Praha-Braník","Cvikov,sídliště","01:01:10",True,14,9,22,57,False,True,0,1,0,0
+"Chocnějovice,Ouč","Sedlčany,Sestrouň,Mastník","09:04:45",False,9,5,53,30,True,True,0,0,0,0
+"Nepřevázka,křižovatka","Hlavní","09:00:33",True,15,9,31,8,False,False,0,2,2,3
+"Jindřišská","Rožmitál p.Tř.,Strýčkovy","06:49:35",False,15,13,12,20,True,True,0,1,0,0
+"Baně","Nové Sedlo","03:00:17",False,12,5,5,10,True,False,2,3,0,1
+"Křečovice,Dráha","Kosmonosy,nám.","08:09:52",False,13,3,16,37,False,False,1,3,1,1
+"Kořenov,odb.","Vlašim,Jinošov","20:27:08",True,13,13,12,45,False,False,0,0,0,3
+"Tismice,Na Kopečku","Ptýrov,Maníkovice","10:26:48",False,14,14,39,55,False,True,3,0,0,1
+"Buštěhrad,U 7 komínů","Beroun,Hostímská","15:37:55",False,17,5,28,5,False,False,2,2,2,3
+"Trhový Štěpánov,žel.st.","Jindřichův Hradec,Děbolín","10:47:48",False,18,15,13,26,True,False,0,1,0,1
+"Semily,U 14 pomocníků","Zadní Třebaň","00:41:15",True,20,10,27,58,False,True,2,0,0,0
+"Cerhenice,Škola","Postupice,Kopaniny","10:08:21",False,15,10,7,3,False,False,3,0,2,1
+"Nad Jetelkou","V Remízku","16:38:10",False,13,9,10,34,False,True,2,3,1,3
+"Křesetice,u rybníku","Červené Pečky","12:18:29",False,14,4,18,18,True,False,0,1,1,2
+"Černé Voděrady","Chlum u Rakovníka","20:46:45",True,9,4,2,40,True,False,1,0,0,2
+"Televizní věž","Dolní Břežany,Zálepy","09:12:57",True,13,5,16,20,False,False,0,1,1,1
+"Pitkovice","Michnovka","10:12:58",False,10,10,29,5,True,True,0,1,0,1
+"Bečváry,žel.st.","Hořovičky","17:10:00",False,10,8,57,11,False,False,3,0,1,2
+"Želízy,Nové Tupadly","Brandýs n.L.-St.Bol.,Školní","23:59:56",False,10,10,54,48,True,True,1,3,0,0
+"Český Dub,host.","Zeleneč,Žel.zast.","13:49:21",True,18,4,39,24,True,False,3,3,0,0
+"Adamov","Svaté Pole","17:21:53",True,12,5,49,38,False,True,3,2,1,1
+"Krnsko,zámek","Sokoleč","19:39:48",True,15,8,47,0,True,False,3,2,1,3
+"Mělník,Na Brabčově","Kralupy nad Vltavou předměstí","09:05:18",True,8,14,32,17,True,False,2,3,1,0
+"Votice,rozc.Mladoušov","Vlastina","21:09:31",True,8,15,52,40,False,False,2,3,0,3
+"Louny,prům.zóna","Rakovník,Prokopova","10:56:48",False,19,4,44,5,True,True,1,3,0,3
+"Popovičky,Nebřenice","Votice,Hory","08:03:10",True,20,13,13,31,True,False,0,1,1,2
+"Vršovické náměstí","Samšina,Drštěkryje","09:55:40",True,13,3,43,41,True,True,1,1,2,0
+"Bořanovice","Na Svěcence","16:35:51",False,13,15,42,52,True,False,0,0,0,2
+"Strančice,Otice","Číčovice,Velké Číčovice","05:16:01",False,14,14,42,49,True,True,1,2,1,0
+"Dobřichovice,Pod Vinicí","Sadská,Hotel Modrá Hvězda","10:06:07",False,17,12,38,39,True,True,2,3,1,3
+"Králův Dvůr,Počaply,škola","Psáře,Veselka","17:57:32",True,20,10,23,46,False,True,0,0,2,3
+"Jilemnice,Vejrychovsko","Opočnice,rozc.Hradčany","08:41:07",True,18,13,0,28,True,False,1,3,0,1
+"Hostomice,škola","Korkyně,Křížov","15:31:07",False,14,14,24,13,False,True,1,3,1,0
+"Černý Most","Svatý Jan","10:01:37",False,10,12,12,5,False,True,0,3,2,0
+"Volha","Mníšek p.Brdy,Žel.zast.Rymaně","19:20:31",False,10,14,18,4,False,True,3,2,1,3
+"Pohoří","Horní Počaply,Elektrárna I","01:22:54",False,10,13,10,47,True,False,2,1,1,1
+"Kutná Hora,Hlouška,Tylovo divadlo","Stružná,rozc.","19:53:03",True,9,6,53,54,False,True,3,3,2,0
+"Vranov,Vranovská Lhota,u kovárny","Vinoř","02:50:10",False,17,8,15,31,False,False,2,2,1,3
+"Osek,Vystrkov","Mladá Vožice,Blanice,rozc.1.0","23:10:21",False,19,8,20,17,False,False,2,0,0,2
+"Hradčany","Liběchov,Ješovice,U Lípy","05:05:47",False,16,11,28,50,False,True,2,3,2,0
+"Žilina","Hloubětín","23:42:37",True,16,8,58,53,False,False,2,0,0,2
+"Petrovice II,Losiny","Ve Žlíbku","18:35:13",True,17,8,13,10,False,False,0,1,2,0
+"Neprobylice","Struhařov,Střížkov","21:10:48",True,10,15,51,42,False,False,0,3,2,3
+"Semily,Letná","Roztoky u Křivoklátu","21:34:04",True,14,13,16,55,True,True,3,3,1,1
+"Poděbrady,Přední Lhota,Hájovna","Zeleneč,U Hřiště","23:09:15",True,20,12,5,17,False,False,1,3,0,0
+"Postupice,Lísek","Liběchov,Žel.st.","13:31:03",False,10,11,45,34,True,False,1,2,1,1
+"Nákladové nádraží Žižkov","Kněževes,Skladový areál","11:51:28",True,17,13,51,59,True,False,0,3,2,1
+"Sedlec-Prčice,Matějov","Tismice,Hřbitov","21:24:53",True,11,15,34,32,True,True,0,3,0,0
+"Jílové u Prahy,Náměstí","Nemyšl,Dědice","19:10:22",True,9,6,11,54,False,True,1,0,2,1
+"Benešov,Jiřího Franka Dětské hřiště","Rakovník,střelnice","09:04:07",False,11,13,5,13,False,False,0,3,2,0
+"Malotice,Lhotky","Drahelčice","06:20:35",True,15,5,14,55,True,True,3,2,2,3
+"Horní Beřkovice,točna","Valtická","12:00:42",True,9,10,47,7,True,True,1,3,2,0
+"Zemědělská univerzita","Vojkov,Zahrádka","01:44:38",False,11,11,30,0,True,True,1,0,2,1
+"Těchařovice,Na Čmíně","Mšecké Žehrovice,Lodenice,rybník","22:01:48",True,14,13,28,0,True,True,1,0,0,1
+"Brandýsek,u kina","Benešov,Křižíkova","09:19:41",True,16,4,21,33,True,True,0,0,2,1
+"Choťánky,u trati","Netvořice,Všetice","14:18:16",True,19,6,8,11,True,False,0,1,0,2
+"Čechtice,Nakvasovice","Velvary,žel.st.","18:53:02",True,17,5,32,16,False,True,0,2,1,2
+"Příbram,Zavržice","Dobratická","06:49:08",True,11,4,1,1,False,False,3,0,1,3
+"Klínec,U Hřiště","Kolín,Štítary","16:25:49",False,13,4,55,54,False,True,0,1,2,2
+"Chleby,Draho","Mladá Boleslav,Nový hřbitov","17:09:29",False,14,4,25,21,False,True,2,3,0,1
+"Kladno,Dubská","Kněžmost,silo","06:53:16",False,10,9,38,5,True,True,2,2,2,3
+"Nupaky","Jičíněves,Labouň","04:38:55",False,16,5,36,16,False,False,1,1,1,0
+"Kvílice,II","Votice,Hostišov","14:11:58",True,19,6,12,24,False,False,1,1,1,3
+"Dubečská","Cítoliby","21:41:55",False,14,4,56,28,False,True,0,0,1,3
+"Křivoklát,Písky","Český Brod,Štolmíř","07:58:00",True,20,7,32,32,True,True,3,2,0,2
+"Voděrady","Slaný,Masarykovo nám.","11:01:35",False,19,9,52,20,False,True,3,0,2,2
+"Třebusice","Kojetice,Rozc.","07:40:53",False,20,14,43,5,True,False,0,1,0,1
+"Slaník,rozc.Řepice 0.6","Brandýs n.L.-St.Bol.,Continental","06:23:25",False,8,7,37,37,False,False,3,3,0,1
+"Žežulka","Senožaty,ObÚ","04:48:39",True,8,8,22,49,True,True,1,2,1,1
+"Chlumčany u Loun","Rokycany,Jiráskova","21:07:26",True,17,8,13,11,False,True,3,1,1,1
+"Klecany,Ahold","Brázdim,Starý Brázdim","14:35:55",False,11,3,48,40,False,False,3,3,1,1
+"Ruská","Šípy,u rybníka","01:35:30",True,20,15,46,30,False,True,2,2,0,1
+"Semily,Komenského nám.","Žloukovice","20:48:20",True,13,3,38,43,True,False,2,1,0,3
+"Kladruby,rehab.ústav","Týnec n.Sáz.,Brodce","14:30:31",True,20,8,54,5,False,False,1,1,1,0
+"Týnec n.Sáz.,Zbořený Kostelec","Zaječov,Kvaň,u Vrby","00:21:52",True,18,3,29,2,False,True,1,3,0,0
+"Nymburk,Zimní stadion","Hejtmanská","20:47:05",False,16,10,50,2,False,False,1,0,0,0
+"Lhotky,Ovčín","Týnec n.Sáz.,Krusičanská","15:10:27",False,10,15,57,58,False,False,1,3,0,3
+"Sedlčany,zemědělský areál","Křesetice,rozc.Úmonín","12:52:38",False,12,12,17,16,True,False,2,3,0,3
+"Libodřice","Pečky,Hynkův mlýn","17:49:31",False,15,12,5,48,True,True,2,2,2,2
+"Rakovník,nem.","Vraňany,U Nadjezdu","01:58:50",True,11,14,11,51,False,False,3,3,1,1
+"Jabkenice,hájovna","Louny,U spravedlnosti","18:39:10",False,15,10,58,40,False,False,2,1,0,2
+"Krakov","Nezvěstice,garáž ČSAD","04:08:54",True,19,13,34,37,True,False,2,3,2,0
+"Šebířov","Mačkov","10:51:50",False,15,11,15,27,False,False,0,2,2,0
+"Týnec n.Sáz.,Podělusy","Benešov,Dukelská","04:10:20",False,14,3,0,0,False,False,2,1,1,3
+"Chocnějovice,Křivolačiny","Slaný,Tomanova","19:08:15",False,17,8,18,32,False,False,2,2,1,2
+"Lužná,Masarykovo nám.","Ratibořské Hory,Ratibořice,rozc.1.5","12:06:55",True,14,3,3,25,True,False,1,3,0,3
+"Zbýšov,Krchlebská Lhota","Drnek,hl.sil.","19:39:45",True,8,4,24,15,True,False,0,3,0,2
+"Kostelec n.L.,U Starého Labe","Studenec,Na špici","13:43:34",False,20,10,11,27,False,False,1,3,1,3
+"Vrchotovy Janovice,Městečko","Vlašim,Palackého náměstí","20:40:20",False,17,9,54,8,True,False,1,1,2,1
+"Dobříš,Průmyslová zóna","Liteň,kino","09:28:13",True,15,8,15,38,True,True,2,2,2,3
+"Načeradec,rozc.Zdiměřice","Černošice,U Kamenného mostu","00:15:31",False,16,3,33,34,False,True,0,3,2,2
+"Nademlejnská","Týček","21:39:15",False,10,13,41,59,True,True,1,0,1,2
+"Veronské náměstí","Nádraží Cibulka","22:52:40",True,18,3,5,40,True,True,1,3,2,3
+"Příbram,Obecnická","Milevská","05:40:51",False,10,3,23,48,False,True,1,3,2,1
+"Stadion Strahov","Hřebeč","22:38:25",True,20,3,21,39,True,True,1,0,1,1
+"Rožmitál p.Tř.,Zalánská","Čáslav,u mostu","08:20:36",True,15,9,43,57,True,False,0,2,2,2
+"Chyše","Hrubý Jeseník,U Parku","08:30:35",True,10,9,22,32,False,True,3,1,2,1
+"Postupice,Žel.st.","Všejany","11:49:24",True,13,7,53,16,True,True,3,0,1,1
+"Svárov,Rymáň","Líský","21:54:54",False,15,9,4,25,False,False,0,0,0,3
+"Sázava,aut.st.","Liberec,aut.nádr.","13:35:06",False,11,12,27,9,True,False,0,1,0,1
+"Líbeznická","Tehov,rozc.Nemíž","22:06:03",True,12,13,36,1,False,True,3,1,2,3
+"Štětí,sídliště","Ujkovice,křižovatka","13:31:56",False,17,4,48,57,True,True,3,3,2,3
+"Poděbrady,u mlékárny","Za Horou","18:34:30",False,16,8,13,37,False,True,2,2,2,3
+"Spomyšl","Kladno,ČSAD","01:23:27",True,18,9,7,32,True,False,3,2,2,3
+"Židněves,Březenská","IKEA Černý Most","23:25:06",True,20,14,26,18,True,False,1,1,0,1
+"Svatý Jan,Řadovy,Radobyl","Štipoklasy","11:50:40",True,18,14,51,0,False,False,2,0,2,1
+"Ordovická","Milín,Nádražní","10:32:50",False,20,8,34,27,True,False,3,2,0,2
+"Čistá,hlavní silnice","Bykáň","12:19:13",False,20,13,56,42,True,True,1,1,0,1
+"Chbany,Malé Krhovice","Březnice,Zadní Poříčí,rozc.","17:22:06",False,13,10,52,56,True,False,3,3,1,3
+"Bělá pod Bezdězem","Vypich","11:57:04",True,11,13,19,6,False,True,1,2,0,0
+"Pavlíkov,Pošta","Svatý Jan,Skrýšov","11:57:54",True,13,5,15,26,True,False,3,1,1,3
+"Pelhřimov,aut.nádr.","Olešnice,ObÚ","14:09:50",True,18,14,45,10,False,False,1,1,2,3
+"Petrov,U Ručiček","Nádraží Cibulka","00:27:10",True,14,3,39,33,False,False,3,1,0,0
+"Sluštice","Krňany,Obec","19:01:32",False,11,7,20,27,False,True,1,1,1,2
+"Nehvizdy","Kostelec n.L.,Na Růžku","21:11:40",True,14,5,12,26,False,False,0,0,2,3
+"Kolešovice","Kozárovice,lom","03:55:08",False,13,11,21,28,True,True,1,2,0,3
+"Kojetice,Tůmovka","Klášter Hradiště n.Jiz.,Severní","00:20:22",False,11,14,35,22,True,False,1,3,0,1
+"Černošice,Kladenská","Poděbrady,Hřbitov","22:17:17",True,19,14,39,17,True,False,0,0,0,0
+"Vojkov,rozc.","Klecany,Ahold","05:39:35",True,9,12,21,17,False,False,3,0,0,1
+"Velenice","Koleč","15:15:41",False,17,4,41,53,True,False,1,1,0,0
+"Střížkov","Bohnické údolí","10:31:42",False,10,6,43,24,True,True,1,1,1,1
+"Zbuzany,Nádraží","Rakovník,Lišanská","03:10:44",True,15,14,21,14,True,False,3,1,0,0
+"Vracovice,u hřiště","Sídliště Petřiny","05:38:24",False,19,10,50,54,True,False,2,2,2,3
+"Bochov,nám.","Tábor,Křižíkovo nám.","16:02:22",False,16,11,14,54,True,True,0,3,2,1
+"Okoř,Křižovatka","Obchodní centrum Hostivař","17:18:25",True,14,11,13,8,True,False,1,3,2,3
+"Teplýšovice,Smilov","Brandýs n.L.-St.Bol.,Zdrav.stř.","01:43:47",True,15,10,53,58,True,False,3,3,1,0
+"Sedlec-Prčice,Mrákotice","Mělník,Vehlovice","04:55:35",False,10,5,19,52,True,True,0,0,2,1
+"Radomyšl,Domanice","Psáry","13:21:55",False,9,7,9,49,False,False,1,1,2,0
+"Opočno u Loun","Svémyslice","09:48:32",False,16,7,18,19,True,True,2,0,1,1
+"Roztoky,Masarykova","Přišimasy","18:18:10",False,11,9,46,31,True,True,3,2,1,2
+"Kutná Hora,Česká","Hořátev,prodejna","04:41:54",True,15,3,8,22,False,True,1,0,0,0
+"Zdice,Černín","Hrusice,Vlčí halíř","22:29:35",True,20,14,14,37,False,True,2,2,0,1
+"Chocerady,Komorní Hrádek","Kamýk n.Vlt.,škola","00:24:59",True,13,11,51,5,False,False,1,2,0,0
+"Žitovlice","Luštěnice,Zelená","01:36:14",True,19,6,9,5,True,False,0,3,0,2
+"Mladá Boleslav,Nový hřbitov","Zahrádky","06:47:50",True,9,7,41,44,True,False,0,2,0,1
+"Popovice,Mladovice,rozc.","Kardausova","16:33:00",False,12,4,2,1,False,False,1,3,1,1
+"Říčany,Pacov,ZŠ NEMO","Přívozní","23:09:38",False,9,8,6,0,False,False,2,0,0,3
+"Nové Strašecí,Karlovarská","Cítov,Mělnická","14:17:55",True,17,10,8,3,True,False,1,3,2,2
+"Bakov n.Jiz.,Podhradí","Nad Rybníky","09:19:08",True,13,13,25,19,False,True,2,3,1,2
+"Brandýs n.L.-St.Bol.,Na Radosti","Královka","06:21:08",False,14,8,31,59,False,True,1,1,1,3
+"Letňanská","Mstětice","16:14:24",True,17,12,30,9,True,True,0,1,0,1
+"Čím,Hrdlička","Kožlany,žel.st.","13:29:25",False,18,13,10,35,True,True,3,1,1,3
+"Košetice,rozc.Martinice u Onšova","Kateřinská","12:15:28",False,20,13,33,47,True,True,2,3,1,1
+"Filadelfie","Sobotka,škola","21:52:27",True,14,5,52,33,False,False,1,2,0,2
+"Hadovitá","Střemy,Štampach","02:23:41",False,10,4,51,36,True,False,3,1,0,1
+"Kařez,u Jednoty","Karlovy Vary,tržnice","09:13:18",False,19,7,13,43,True,False,1,0,1,2
+"Příbram,Nová Hospoda","Chrášťovice,Klínovice","12:39:45",True,19,11,28,14,False,False,2,0,1,2
+"Plaňany,Blinka","Tábor,U Reálky","04:24:02",True,13,3,7,16,False,False,3,0,1,0
+"Teplýšovice,Čeňovice,rozc.","Čím,Hrdlička","22:12:18",False,17,8,15,6,False,True,2,2,0,1
+"Za Novákovou zahradou","Nymburk,Nemocnice","19:53:40",False,11,6,42,22,False,True,0,0,1,1
+"Poděbrady,Hřbitov","Soběslav,Zimní stadion","12:33:28",True,19,8,14,23,True,False,2,2,1,3
+"Záhoří,Proseč","Stříbrná Skalice","02:08:26",True,16,4,38,48,True,True,2,2,0,2
+"Sulice","Strojírenská","18:19:58",True,15,6,24,29,True,True,2,0,1,3
+"Borotice,Čelina","Liberec,Kamenická","00:44:03",False,11,7,47,27,False,False,1,0,0,0
+"Řisuty","Slavínského","22:02:30",False,15,5,58,54,False,True,3,1,2,2
+"Nad Džbánem","Pod Oborou","18:39:13",False,8,15,3,20,False,False,1,1,0,2
+"Horky","Klučenice","22:27:07",True,11,8,32,12,False,False,2,0,0,2
+"Herink","Mlčechvosty","01:43:22",False,19,4,37,27,True,False,0,0,1,1
+"Černická","Řepín,Živonín","13:40:16",True,14,12,1,39,False,True,3,3,2,0
+"Tišice,Chrást","Vrbčany","01:05:25",True,19,11,34,21,True,True,3,3,1,2
+"Pečky","Kondrac","14:06:10",False,10,6,4,3,True,True,3,2,1,1
+"Ferrariho","Otakara Vrby","05:53:53",True,13,14,46,42,True,True,2,0,0,3
+"Chýně","Rokytá,Dolní Rokytá,rozc.","14:06:59",False,16,3,16,18,True,False,1,2,0,2
+"Český Brod,Sídliště","Kounice","19:12:12",False,8,10,58,55,False,True,2,0,1,0
+"Svojetín,Veclov","Svémyslice","14:20:31",False,12,7,12,32,True,True,0,3,2,2
+"Bělá,Tasice","Drevníky,Nechalov","13:52:21",False,17,14,57,13,True,True,1,2,1,0
+"Veselice,dvůr","Strančice,škola","14:29:25",True,12,12,25,47,False,True,3,1,1,0
+"Miřetice,rozc.","Rakovník,sídl.gen.Kholla","00:51:58",True,11,3,28,27,True,False,3,2,1,2
+"Beroun,Jarov,náves","Bazar","06:33:26",False,12,12,39,32,False,True,3,2,2,3
+"Čestín,Kněž","Žitovlice,Pojedy","03:16:29",True,19,13,25,58,True,True,2,3,0,0
+"Úžice,Netřeba","Rohozec,u kostela","09:07:23",True,16,10,18,21,False,True,3,0,1,0
+"Milín,Rtišovice,rozc.","Říčany,Masarykovo nám.","09:38:32",False,19,5,53,30,True,True,2,2,2,1
+"Benešov,Jiráskova Škola","Týnec nad Sázavou","03:57:16",True,18,6,14,16,True,False,0,2,1,3
+"Postupice,Pozov","Kladno,žel.zast.město","23:48:47",True,18,4,22,4,False,False,3,1,0,3
+"Nemyšl,Hoštice","Škola Štěrboholy","19:35:45",True,8,8,4,46,False,True,1,1,0,2
+"Niměřice","Třebovle","12:24:23",False,15,10,48,5,False,False,3,0,1,1
+"Vraňany","Roztoky,Přemyslovská","20:41:58",False,17,5,34,24,False,False,1,3,0,0
+"Dvůr Králové n.L.,ZOO","Čelákovice,U Hájku","07:21:37",True,18,3,31,33,False,True,0,0,1,0
+"Lysá n.L.,škola","Kostelec n.Vlt.,U rybníka","11:17:45",False,16,4,8,38,False,True,0,2,0,1
+"Hvožďany,Leletice","Vlašim,Budvar","02:25:27",False,12,5,19,20,False,True,0,3,0,1
+"Velké Přílepy,Podmoráňská","Netřeba","16:48:21",False,17,5,40,30,True,False,0,3,0,2
+"Zvěřínek","Jíloviště,Výzkumný ústav","16:01:39",False,18,10,12,11,True,True,0,0,2,1
+"Hrdlořezská","Vinice Hrdlořezy","02:07:54",False,18,8,28,43,True,True,2,2,1,1
+"Neveklov,Přibyšice","Na Palouku","02:28:02",False,15,12,22,37,True,True,0,2,1,2
+"Dřínov,U Rybníka","Lysá n.L.,rozc.Dvorce","15:09:34",True,19,7,49,42,False,True,1,2,0,2
+"Heřmaničky,Dědkov","Nymburk,Lada dvůr","04:11:09",True,17,9,41,30,False,False,0,1,1,2
+"Polní Chrčice","Tochovice,ObÚ","01:10:09",True,8,7,37,42,False,True,1,3,1,1
+"U Elektry","Špindlerův Mlýn,Volský Důl Kukačka","02:16:06",True,9,15,57,0,False,False,3,0,0,0
+"Nučice","Nehvizdy,U Studánky","11:35:08",True,20,8,2,50,True,True,2,1,0,2
+"Jistebnice,Vlásenice","Chbany,rozc.Chudeřín","17:06:13",False,18,7,20,59,True,True,2,2,2,1
+"Neveklov,Chvojínek,Rozc.","Strojírenská","11:16:55",True,14,5,44,47,True,False,2,0,1,3
+"Pavlíkov,křiž.","Nalžovice,Chlum,Lihovar","23:48:04",False,15,15,18,53,False,True,2,2,1,3
+"Rašovice,Jindice","Tachovské náměstí","00:13:21",True,14,10,8,28,False,True,1,1,1,0
+"Lužec n.Vlt.","Korkyně","21:39:32",False,10,6,46,0,True,False,3,2,1,3
+"Kazín","Zásmuky,Doubravčany","11:26:20",False,11,12,34,29,True,False,2,0,0,0
+"Loděnice,Jánská,I","Kostomlaty n.L.,Vápensko","14:03:50",False,15,9,9,59,True,True,3,1,1,3
+"Votice,Beztahov","Nučice,Nádraží","11:31:24",True,19,7,43,2,True,True,3,1,1,0
+"Písková Lhota,hl.sil.","Křenice,V Polníku","00:39:44",True,8,12,59,12,True,True,0,3,2,3
+"Jince,Sokolovna","Kyšice","09:36:20",False,16,6,53,44,False,False,3,0,1,3
+"Benešov,Pivovar Ferdinand","Vojkovice,Křivousy","08:47:49",False,15,4,51,36,True,True,3,3,0,3
+"Ždírec,náves","Chlístovice,Kralice","03:18:35",True,18,5,14,10,False,True,2,3,1,0
+"Čáslav,Vrcha","Krakov","06:36:02",False,14,9,3,15,True,True,1,1,2,0
+"Starodejvická","Bavorov,Svinětice","21:20:26",False,8,5,0,59,False,False,0,1,2,3
+"Svatý Jan,v jedlinách","Zlonice","19:30:40",True,17,12,22,49,False,True,1,1,0,1
+"Kolín","Miřetice,rozc.","13:18:30",True,13,3,0,44,False,True,2,2,2,1
+"Krematorium Motol","Nová Ves,Nové Ouholice,U Havlínů","16:15:44",True,10,7,40,25,True,False,0,2,0,3
+"Slaný,Kvíc","Neratovice,Dům kultury","08:35:20",True,12,7,28,2,True,True,1,3,1,0
+"Osadní","Čáslav,Kalabousek","06:59:06",True,15,13,43,26,False,True,2,3,2,3
+"Rašovice,Mančice,rozc.","Doubravčice,Na Čtvrtích","06:49:55",True,19,3,36,13,False,True,1,1,0,3
+"Rakovník,Mýtská","Hořovice,u zámku","22:38:04",True,19,3,36,9,True,False,3,3,0,2
+"Tetín,Koledník","Vinec,u hřbitova","11:56:00",False,15,10,27,38,True,False,3,0,0,2
+"Kostelec n.L.,U Váhy","Pacoldova vápenka","15:57:16",False,20,4,7,33,True,False,1,1,1,1
+"Mělník,Zádušní","Kostelec n.Vlt.","09:47:19",True,15,3,42,7,True,True,3,1,2,0
+"Žitovlice","Hudčice","05:42:02",True,12,12,46,55,False,True,0,1,0,3
+"Slaný,U Sloupu","Opolany,u mostu","11:11:17",False,17,13,36,38,False,False,0,1,2,0
+"Žďár,Příhrazská","Kladno,Růžové pole","14:54:18",True,13,5,2,15,True,True,3,2,2,2
+"Bratčice","Špindlerův Mlýn,parkovací terminál","02:52:24",False,20,3,22,1,True,True,1,3,1,2
+"Velké Přílepy,Roztocká","Lány,Vašírovská lísa","10:06:38",True,15,12,5,10,False,True,3,0,1,1
+"Praha-Vršovice","Křečovice,Nová Živohošť","13:17:37",True,16,8,47,27,False,True,3,1,0,2
+"Příbram,Zdaboř,Komerční zóna","Choratice","15:36:57",True,16,8,48,19,True,False,0,2,0,3
+"Chrást,Lisovice","Nemocnice pod Petřínem","17:43:05",False,14,4,13,53,True,False,1,3,2,1
+"Hrnčíře","Benešov,Benea","11:09:56",True,19,6,44,37,False,True,0,3,0,0
+"Černošice,Javorová","Říčany,Nemocnice","15:45:35",False,19,15,31,39,False,True,0,2,0,3
+"Nová Ves,Staré Ouholice","Hvozdec,myslivna","02:08:18",True,18,10,15,56,True,False,0,3,1,0
+"Rataje n.Sáz.","Lány,náměstí","13:57:19",True,14,10,47,4,True,False,2,1,0,0
+"Vlkava,kulturní dům","Zbraslavice,Radvančice,rozc.","08:03:42",True,20,6,0,34,False,True,1,2,2,2
+"Bystřice,Jírovice,rozc.","Bazén Hloubětín","15:30:22",False,14,10,40,27,False,True,2,2,2,3
+"Čistá,hřiště","Jakobiho","21:00:59",True,17,13,35,1,False,True,1,2,0,2
+"Mnichovo Hradiště,Sychrov","Poděbrady,Kluk","22:44:53",False,16,5,16,29,False,False,0,1,1,1
+"U Včely","Kralupy n.Vlt.,žel.st.","16:01:42",True,14,10,4,13,False,False,2,0,1,1
+"Postupice,Dobříčkov","Říčany,Radošovice,Mozartova","05:01:18",True,17,14,54,17,False,False,0,3,0,3
+"Jenštejn,Hradní","Modřovice","21:20:24",False,18,8,40,57,True,False,3,1,0,0
+"Krabčice,Vesce,rozc.1.0","Kavčí hory","00:49:40",True,18,4,39,15,False,False,2,0,0,3
+"Beřovice,Bakov","Občov","19:37:03",False,17,7,3,2,True,True,1,3,2,0
+"Rokytnice n.Jiz.,Horní Rokytnice","Pod Vinicí","07:39:38",True,13,3,56,36,True,False,0,1,2,1
+"Mělník,Vehlovice","Mladá Boleslav,Jemníky","20:32:45",True,12,13,52,26,False,False,3,1,0,0
+"Pod Kyjovem","Praha-Vršovice","02:33:28",True,12,11,55,6,False,False,0,2,1,2
+"Kokořín,Kokořínský Důl,Rapín","Jirčanská","17:06:01",True,9,15,28,10,True,True,3,1,2,0
+"Chocerady,Vestec","Říčany,ZŠ U Říčanského lesa","03:46:51",True,20,6,40,0,True,False,2,0,2,0
+"Malý Berlín","Vlašim,Bolina,Rozc.","22:34:03",False,15,11,33,1,False,True,1,3,1,1
+"Dolní Pohleď,záv.","Řevničov,Rozc.K Žel.st.","18:13:03",True,18,13,16,8,True,True,0,0,2,3
+"Velim,Novoveská","Šeberák","06:25:15",True,17,3,42,28,False,True,2,1,0,0
+"Zahrádky,křiž.","Všenory","01:29:19",True,20,13,34,10,True,True,2,2,1,2
+"Jirny,LE&CO","Vitice,Dobré Pole","17:14:44",False,19,8,52,52,False,True,1,3,2,3
+"Velký Osek,škola","Plaňany,Poboří","23:56:33",False,15,6,51,1,False,False,2,0,0,3
+"Střezimíř,rozc.Bonkovice","Chlumec n.Cidl.,nemocnice","22:10:57",False,10,5,53,2,True,False,1,0,1,1
+"Čechtice,Otročice","Luka pod Medníkem","12:43:51",False,20,15,12,22,False,False,2,3,2,3
+"Dolní Lochov,hlavní silnice","Louňovice p.Blaníkem,Škola","23:41:09",True,12,3,29,53,True,False,2,0,2,2
+"Hvozdec,Mrtník","Kmetiněves,žel.st.","07:17:13",True,13,5,25,19,True,False,3,3,2,2
+"Kostelec n.Č.l.,Truba","Libčice n.Vlt.,Žel.zast.Letky","14:21:38",True,18,4,13,25,True,True,0,2,2,0
+"Mnichovo Hradiště,Dolení Kruhy","Sportovní centrum Horní Počernice","04:52:15",False,9,14,51,54,False,True,0,0,2,1
+"Malý Břevnov","Praha Masarykovo nádr.","19:09:21",True,17,4,47,15,True,True,2,2,1,0
+"Brandýs n.L.-St.Bol.,U Brány","Ořešská","00:35:48",True,10,9,10,27,True,True,2,0,2,3
+"Terminál 1","Beroun,Plzeňská brána","16:22:43",True,12,5,59,54,False,True,1,2,0,0
+"Neustupov,Chlístov","Milín,Stěžov","19:10:32",True,14,5,18,0,True,False,3,3,2,1
+"Česká Lípa,aut.nádr.","Drhovy,Homole","07:40:37",True,16,14,53,38,True,True,3,1,0,1
+"Chotětov,Hřivno","Kralupy n.Vlt.,V Zátiší","10:22:49",True,18,4,25,35,True,True,0,3,2,0
+"Dlouhá Lhota,U Zachařů","Betonárka","18:39:13",False,13,3,23,17,True,False,3,2,1,3
+"Vrátno","Svaté Pole,Dolní Svaté Pole","08:52:33",True,9,13,48,36,False,False,1,0,1,1
+"Čakovická","Kamenice,Valnovka","18:10:59",True,18,6,18,16,False,True,0,3,0,1
+"Tábor,Vožická Elektroizola","Ralsko,Hradčany,háj.","06:22:30",True,15,15,32,26,True,False,1,1,1,2
+"Bohdalec","Benátky n.Jiz.,Dražická","00:15:50",False,17,6,14,16,False,True,1,1,0,0
+"Mladý Smolivec,Starý Smolivec,I","Sídliště Na Dědině","07:15:44",False,8,5,46,52,True,False,0,1,1,2
+"Vraný","Šebířov,Křekovická Lhota,rozc.0.5","09:57:31",True,18,9,38,33,False,True,2,2,2,1
+"Štvanice","Mělník,Chloumek","10:14:02",True,18,4,56,55,False,True,3,0,2,2
+"Vodochody,U Školy","Velké Přítočno","06:16:32",True,16,6,36,46,False,True,2,1,1,3
+"Sídliště Radotín","Mníšek p.Brdy,ÚVR","20:36:08",True,17,14,52,10,True,True,0,3,0,2
+"Chyňava,škola","Řeřichy","01:50:51",False,19,14,35,34,False,True,2,3,0,1
+"Líbeznice,I","Říčany,Prům.areál Černokostelecká","06:03:49",False,19,11,18,12,True,False,3,3,0,3
+"Šebířov,Popovice,rozc.0.5","Klučov,Skramníky","10:09:00",False,13,15,12,12,False,True,1,2,0,3
+"Cholupice","Hostomice pod Brdy","06:20:09",True,15,13,2,48,True,False,0,1,1,3
+"Budyně n.Ohří,Slánská","Brusnice","23:53:46",True,8,5,12,52,False,False,2,1,2,0
+"Černošice-Mokropsy","Lomnická","08:51:57",False,14,4,9,37,True,False,1,2,2,0
+"Roblín","Amforová","02:41:09",True,19,9,16,48,True,True,1,3,0,3
+"V Lískách","Ke Smrčině","15:09:13",False,8,7,10,24,False,True,3,2,1,2
+"Kadlín","Jičín,aut.st.","22:25:01",False,9,7,51,49,True,True,2,3,2,1
+"Hříškov","Milešov,Přední Chlum","02:12:37",True,19,11,58,37,False,False,2,3,0,1
+"Mnichovo Hradiště,U Bažantnice","Bratčice,křiž.","10:44:49",False,17,10,30,36,True,True,2,0,0,0
+"Třebotov,Škola","U Kundratky","01:50:02",False,16,12,10,53,False,False,1,2,1,1
+"Nová Ves,Staré Ouholice","Brandýs n.L.-St.Bol.,Continental","14:23:46",True,11,4,1,51,False,False,3,1,0,2
+"Mochov","Nechvalice,Bratříkovice,rozc.","19:14:22",True,11,13,56,58,True,True,2,1,2,0
+"Chyňava,Libečov,u křížku","Roztoky,Solníky","00:26:13",True,8,4,43,6,True,True,2,3,0,3
+"Petrovice,Radešice","Roztoky,Chaloupky","19:32:17",True,12,11,15,40,False,True,2,1,1,3
+"Petrov,Ve Vilách","U Jahodnice","18:43:49",True,8,9,52,52,True,True,0,3,0,1
+"Rtyňská","Liberec,Košická","07:54:44",True,18,11,9,49,True,True,0,3,0,1
+"Hradečno,Nová Ves","Náměstí Republiky","03:28:19",True,8,10,48,13,True,False,3,1,0,1
+"Želivec","Olbramovice,Křešice","15:37:40",True,17,11,14,42,False,True,0,2,1,1
+"Roztoky,škola","Divišov,nám.","06:19:27",False,8,3,55,54,False,True,1,3,2,3
+"Botanická zahrada Malešice","Noutonice","01:58:10",True,19,5,58,22,True,True,2,1,0,2
+"Stašov","Kostomlaty n.L.,rozc.k Šibicům","12:08:39",True,9,5,8,7,True,False,3,1,0,1
+"Desná,centrum","Mělník,silo","15:45:44",False,10,15,42,56,False,False,3,2,2,0
+"Vilémovice","Dvory,Veleliby,hlavní silnice","17:28:10",False,20,12,35,13,False,True,0,3,2,0
+"Příbram,Březové Hory,domov seniorů","Březí","11:06:49",True,15,3,25,35,False,True,1,2,1,0
+"Poliklinika Vysočany","Za Avií","14:03:25",False,16,6,52,44,True,True,3,0,1,0
+"Semily,Cimbál","Drahlín","06:31:41",True,8,13,51,26,False,True,3,0,2,3
+"Nový Slivenec","Březnice,žel.st.","20:53:30",True,12,4,2,3,True,False,3,2,1,0
+"Husinec,Samota","Olbramovice,parcely","11:01:58",False,14,14,9,10,False,True,0,3,1,1
+"Ondřejov,Turkovice","Libáň,Křešice","00:58:51",False,20,7,18,11,False,False,2,2,1,3
+"Droužetice","Braškov","01:33:39",False,9,7,45,18,True,False,0,2,0,3
+"Borotín,Libenice,rozc.0.8","Šestajovice,Pražská","22:30:56",False,18,3,56,18,False,False,0,0,0,3
+"Uzeničky","Rožmitál p.Tř.,Pňovice","03:36:48",True,18,9,51,11,False,True,0,0,1,2
+"Rohatsko","Výžerky","10:36:20",True,13,6,4,33,False,True,3,2,0,1
+"Poděbrady,u mlékárny","Terminál 3","15:56:50",True,15,15,34,38,True,False,0,3,1,3
+"Březnice,Tochovická","Jankov","08:12:39",False,13,3,50,58,False,True,1,3,2,0
+"Budčeves","Straškov-Vodochody,škola","17:07:38",False,11,6,14,16,False,True,1,2,1,0
+"Říčany,Radošovice,Větrník","Chyše","07:13:26",False,11,5,58,6,True,False,1,1,0,0
+"Doksy,aut.st.","Rakovník,Na Sekyře","22:41:22",True,19,8,14,3,False,False,1,3,2,3
+"Sýkořice","Řitonice","04:38:23",True,20,6,31,10,True,False,2,0,2,2
+"Klíčovská","Říčany,Wolkerova","05:34:25",True,17,9,44,15,False,True,2,1,0,2
+"Poštovice","Brázdim,Rozc.Veliký Brázdim","16:51:16",False,20,9,47,3,False,False,3,0,0,1
+"Hostomice,nám.","Čáslav,Budín","23:33:01",False,19,5,15,42,False,False,1,0,1,3
+"Milíčov","Ústav mateřství","00:56:01",False,19,14,11,58,False,True,3,0,0,0
+"Turnov město","Vitice","11:58:13",False,9,15,50,44,False,False,0,0,1,0
+"Mokrá","Boseň,pod Valečovem","13:00:09",True,20,11,26,47,False,True,0,2,2,3
+"Vysoký Chlumec,Vápenice,u sloupu","Radovesnice II","00:13:37",True,8,7,51,21,False,False,3,0,2,3
+"Huntířovská","Chbany,Poláky","05:29:12",True,13,13,44,6,True,True,0,3,2,3
+"Březnice","Na Formance","14:48:40",False,16,7,36,42,False,False,1,1,0,3
+"Obecnice,U Hlinovky","Kralupy n.Vlt.,Lidové nám.","23:45:02",True,19,4,50,26,True,True,1,2,2,0
+"Kunice,Vidovice,zámek","Křelovice,Číhovice","10:08:21",False,13,12,50,19,True,False,0,1,2,0
+"Libáň,aut.st.","Mělník,Mlazice","03:30:41",False,10,7,10,13,False,True,2,3,1,3
+"Týnec n.L.,Lžovice","Žebrák,Sokolská","15:22:27",False,18,13,55,47,True,False,2,1,0,0
+"Tetín,U Rozvodny","Dobrovice","10:01:21",False,14,7,9,50,True,True,3,3,1,0
+"U Libušské sokolovny","Zámky","18:32:50",False,9,13,13,41,True,True,3,1,2,3
+"Martinice v Krk.,Kult.dům","Stehelčeves,u brůdku","22:43:54",True,13,11,59,7,True,True,3,3,2,0
+"Opolany,u mostu","Ostrá,náves","23:11:48",False,14,6,33,56,True,False,2,0,0,2
+"Čisovice,Pod Horou","Slabce,ovčín","10:00:29",True,13,11,30,50,True,True,2,3,0,3
+"Žiželice,Hradišťko II","Červené Pečky,Čertovka","02:53:38",False,10,4,59,58,False,True,2,0,2,3
+"Sázava","Borotice,Dražetice,rozc.","12:25:40",False,10,6,26,40,False,False,3,0,0,2
+"Neveklov,Dalešice","Klamovka","07:41:56",False,11,12,29,35,True,True,2,1,1,3
+"Milovice,Balonka","Uhlířské Janovice,Kochánov","10:32:16",False,17,7,15,31,False,True,3,2,1,2
+"Lhotky,Řehnice","Benešov,Na Bezděkově","08:16:36",True,8,4,2,17,False,True,2,0,2,3
+"Postupice,Pozov","Klučenice,Planá,rozc.","08:00:14",False,19,8,47,34,True,True,0,3,0,1
+"Neveklov,Zádolí","Železný Brod,nová škola","20:12:15",False,14,11,7,56,True,True,0,2,0,2
+"Příbram,Zdaboř,Nemocnice","Tmaň,Slavíky,rozc.1.0","18:53:21",False,12,15,37,17,False,True,2,0,1,1
+"Postupice,Pozov","Varnsdorf,sportovní hala","03:05:34",False,10,8,14,34,False,True,2,0,1,1
+"Miskovice,Mezholezy","Bártlova","12:48:41",True,12,12,23,8,True,False,1,2,1,2
+"Bernartice,SSÚD","Otročiněves,I","05:43:25",False,13,11,17,47,True,True,1,0,1,1
+"Kamýk n.Vlt.,u poříční správy","Nový Střížkov","22:29:10",True,19,5,43,48,True,False,1,1,1,1
+"Úholičky,Na Habří","Jeřmanice,hl.sil.","10:35:42",True,17,15,3,9,False,False,2,3,1,2
+"Newtonova","Škvořetice,Pacelice","19:53:34",False,11,15,51,19,True,False,3,2,1,1
+"Zásmuky,rozc.Vršice","Hýskov","08:15:00",True,17,13,20,57,False,False,2,3,2,3
+"Křečhoř,Bříství","Liběchov,Rašínky","18:10:25",False,19,15,40,0,False,False,2,1,2,0
+"Příbram,III.poliklinika","Krásná Hora n.Vlt.,Zhoř,rozc.","07:45:02",False,12,10,40,23,False,False,2,2,0,0
+"Malešov,Maxovna","Malé Přítočno,U Hrnčírny","03:13:53",True,9,15,36,28,True,True,2,0,0,1
+"Hořovice","Jankovcova","12:45:31",False,13,5,59,53,True,False,2,3,0,2
+"Polní Chrčice","Zdiby,Brnky","21:07:06",True,20,7,13,36,True,False,1,0,1,0
+"Opočnice","Příbramská","19:19:11",False,20,8,17,28,True,False,1,1,2,2
+"Šlapanice,křižovatka","Sídliště Spořilov","23:44:20",True,10,14,37,7,True,False,2,0,1,1
+"Ujkovice,křižovatka","Sedlec-Prčice,Jetřichovice,Záhoří","05:40:05",False,10,13,25,54,True,True,1,0,0,0
+"Branov,háj.","Hostivice-Sadová","10:06:28",False,13,9,16,33,True,True,1,0,2,2
+"Popovice","Přerov n.L.,Nový Přerov","15:44:11",False,17,4,7,59,True,True,3,1,0,1
+"Kovářov,Zahořany,rozc.1.1","Postupice,Lísek","15:39:06",True,19,7,20,39,True,False,0,0,2,0
+"Vojická","Dětská nemocnice Karlov","19:06:06",True,11,14,36,56,False,True,0,2,1,3
+"Deštnice","Brandýs nad Labem","02:27:08",False,15,15,58,10,True,True,2,1,1,1
+"Soběšín","Mimoň,Malá","12:35:40",True,13,7,38,38,True,True,2,1,1,2
+"Dunajecká","Petrov,U Ručiček","06:18:38",True,11,11,30,20,True,False,3,0,1,2
+"Čestlice,aquapark","Písková Lhota,hl.sil.","00:55:07",False,8,14,45,34,True,True,3,3,1,3
+"Pelhřimov,aut.nádr.","Nučice,Pod Vinicí","01:47:51",True,12,8,40,39,True,False,1,2,0,2
+"Roztoky,most","Wattova","00:17:11",False,19,6,47,40,True,False,1,0,2,3
+"Varnsdorf,Severní dráha","Obecnice,Oseč,Pod Třemošnou","19:30:52",True,13,14,40,29,False,False,0,2,2,3
+"Horní Maršov,most","Sedlec-Prčice,Chotětice","09:52:43",True,12,13,3,51,True,False,0,2,2,1
+"Braškov","Postupice,Benešovská","21:05:31",True,8,14,47,36,False,True,2,2,1,1
+"Tuchoměřice,Outlet","Vlačice,Výčapy","03:31:14",True,14,6,14,9,False,True,0,0,0,3
+"Kolín místní nádraží","Vrdy,Horní Bučice,kult.dům","04:09:54",False,16,9,29,7,False,False,3,1,0,3
+"Dolní Beřkovice","Na Beránku","14:13:38",False,16,5,13,42,False,True,0,3,2,2
+"Benešov,Čechova","Suchodol,Líha","13:17:32",True,15,15,55,40,False,True,0,1,2,0
+"Postupice,Lísek","Bystřice,Nesvačily,Rest.","21:03:17",True,11,12,48,59,False,False,0,1,2,3
+"Kryry,Strojetice,křiž.","Kladno,Meta","12:05:42",False,15,3,4,30,False,False,0,1,2,2
+"Slaný,Masarykovo nám.","Nehvizdy,Škola","19:23:39",True,18,10,12,44,True,True,0,1,0,2
+"Chorušice,Velký Újezd","Neveklov,Doloplazy,Rozc.","02:36:44",True,16,6,41,12,False,False,0,2,2,1
+"Nechvalice","U Uhříněveské obory","08:14:55",True,14,11,44,59,True,True,3,2,1,2
+"U Kaštanu","Jablonná,Placy","15:36:21",False,19,5,24,54,True,True,2,0,0,0
+"Mořina,Trněný Újezd,rozc.","Zruč n.Sáz.,Nesměřice","19:11:38",False,12,4,23,45,True,False,3,1,0,2
+"Mišovice,Slavkovická Hora","Stránka,Ostrý,rozc.","17:20:16",False,15,10,0,0,False,False,1,1,1,0
+"Brechtova","Milešov,Přední Chlum,Popelíky","16:35:33",False,20,7,47,38,False,False,0,2,2,3
+"Rokytá,Dolní Rokytá,ObÚ","Březová-Oleško,U Topolů","10:01:58",False,11,9,37,52,False,False,3,1,2,1
+"Žežulka","Brandýsek,Olšany","01:45:38",False,17,9,52,28,True,True,2,1,1,1
+"Sídliště Novodvorská","Dobrovíz,Komerční zóna","13:44:09",False,11,3,25,28,False,True,3,0,2,3
+"Tmaň,Slavíky,rozc.1.0","Ratboř,žel.st.","10:23:26",True,13,6,20,23,True,False,2,3,1,3
+"Tuklaty,Akátová","Bechlín,ObÚ","19:00:26",True,9,10,2,13,False,True,2,2,0,0
+"Velká Chmelištná","Lukavec,Bezděkov","22:09:44",False,20,3,29,3,True,True,1,3,1,2
+"Kožlí,Sechov","Miličín,Podměští","11:19:42",False,10,13,45,22,False,False,3,0,1,1
+"Sedlčany,Solopysky,kamenolom","Netřeba","17:47:14",True,16,3,25,21,False,True,1,0,1,2
+"Dřetovice","Neustupov,Chlístov","00:25:04",False,11,6,32,11,False,False,0,0,1,2
+"Jesenice,Horní Jirčany,Vodárna","Jevany,Penčice","12:42:44",True,8,6,50,45,False,False,3,0,1,3
+"Třinecká","Kolín,PZKO - Thermo King","09:39:58",False,8,8,57,31,True,False,2,3,1,3
+"Ke Klíčovu","Dobršín,rozc.0.4","15:52:19",False,20,8,31,42,False,True,3,2,0,0
+"Svinařov","Vysokovská","19:34:45",True,13,15,2,12,True,False,1,1,1,3
+"Benešov,Černý les","Jestřabí Lhota","00:37:53",False,12,9,4,31,True,False,3,0,1,0
+"Barchovice,Radlice,rozc.","Kodaňská","14:34:17",True,11,7,14,6,True,True,2,2,2,2
+"Senomaty","Říčany,Kuří","20:32:51",True,8,8,36,58,True,False,0,3,2,0
+"Kralupy nad Vltavou předměstí","Vrchlabí,Herlíkovice","18:44:24",False,16,10,45,13,True,False,0,0,0,0
+"Herink","Úžice,Chrastná,rozc.","18:31:14",False,20,15,11,14,False,True,0,2,1,3
+"Rakovník,sídl.gen.Kholla","Polesná","20:14:55",True,10,4,28,8,True,False,2,1,0,1
+"Depo Kačerov","Mnichovo Hradiště,Hoškovice,u trati","06:36:14",False,10,6,38,6,False,False,1,1,1,3
+"Počepice,Oukřtalov","Okřesaneč","02:15:42",True,12,6,12,18,False,False,2,0,2,0
+"Kostelec n.Vlt.,Přílepov,rozc.1.5","Mladá Vožice,u hřbitova","06:21:27",False,17,11,45,43,False,True,0,2,0,3
+"Červený Újezd u Votic zast.","Cetyně","16:29:35",True,14,4,34,11,False,False,0,1,0,2
+"Holešovická tržnice","Benešov,Buková Lhota","14:18:39",True,20,9,30,23,False,False,1,2,2,0
+"Kobylnice,rozc.","Holotín,rozc.","20:27:16",True,13,11,0,30,False,True,3,0,1,1
+"Říčany,Radošovice,sokolovna","Struhařov,Věřice,rozc.","02:06:44",False,15,11,4,42,False,True,2,2,2,3
+"Obořiště,Lhotka","Karlštejnská","03:46:35",True,8,14,18,30,False,False,0,2,0,2
+"Koleč,zámek","Špindlerův Mlýn,aut.st.","16:17:13",False,12,4,29,12,False,False,1,2,0,3
+"Řendějov,Jiřice","Na Jelenách","04:40:40",False,19,3,8,19,False,True,3,0,1,3
+"Starochuchelská","Benešov,Jiřího Franka Dětské hřiště","09:56:08",False,17,12,44,44,True,True,2,0,1,0
+"Vestec,Obecní úřad","Spolská","05:34:19",False,15,10,2,24,False,False,2,2,1,0
+"Nosálov,Libovice","Řepínská","13:24:32",False,12,5,29,25,True,False,3,2,0,3
+"Mníšek p.Brdy,OPS Magdaléna","Stružná,rozc.","20:34:14",False,14,10,57,7,False,True,2,1,2,2
+"Struhařov,Střížkov","Veselí n.Luž.,aut.st.","10:04:09",False,18,5,58,57,False,True,1,3,1,3
+"Svatý Jan,Brzina","Přezletice,Horní náves","02:01:58",True,19,10,58,47,False,False,3,2,2,0
+"Hluboký Důl","Nemyčeves","07:10:38",False,18,14,13,0,False,False,1,0,1,1
+"Dělostřelecká","Sudoměř u Ml.Boleslavi","12:20:52",False,9,14,20,40,False,False,3,0,2,1
+"Doubravčice,V Edenu","Blatce,Konrádov","17:23:40",False,15,7,38,39,True,True,1,3,0,1
+"Sídlištní","Benešov,Purkyňova","21:54:02",False,15,14,27,31,False,False,3,2,0,3
+"Praha-Komořany","Píškova","13:43:49",False,20,12,58,13,False,True,0,0,1,0
+"Mnichovo Hradiště,Hoření Kruhy","Dvory,Veleliby,hlavní silnice","10:26:11",False,17,14,43,22,False,True,0,1,0,1
+"Úholičky,Žel.zast.","Lhota u Příbramě,točna","09:49:06",True,8,13,54,21,True,True,1,2,1,2
+"U Dálnice","Studeněves,Krkavčí mlýn","09:19:12",False,8,7,35,16,False,True,1,1,2,1
+"Mládí","Žleby,Kamenné Mosty","00:29:28",False,15,7,31,8,False,False,2,2,2,2
+"Hornocholupická","Kosmonosy,nám.","07:15:12",False,13,6,23,56,True,True,3,1,1,2
+"Felbabka","Kovošrot","20:31:54",False,18,3,22,9,True,False,1,0,2,0
+"Sídlištní","Bechov","15:47:48",True,18,8,32,43,True,False,2,3,0,0
+"Zamašská","Hybšmanka","11:47:18",True,13,10,32,31,False,True,3,2,1,0
+"Janské Lázně,kolonáda","Lhotka,Hleďsebe","23:44:01",True,8,6,29,27,False,True,2,3,1,1
+"Strašnov","Kozmice,Kácova Lhota","01:49:07",False,14,8,32,23,False,True,0,3,2,2
+"Čimice","Březnice,nám.","18:42:13",False,12,9,20,30,False,True,0,2,2,0
+"Nučice,Sokolská","Libuš","08:23:42",False,18,14,9,28,True,False,0,1,1,2
+"Budiměřice","Borotice,Rozc.Smilovice","04:33:16",True,19,12,5,57,True,True,3,0,2,1
+"Slánská","Libčice nad Vltavou","13:39:58",False,10,12,22,27,True,False,0,1,2,3
+"Číhošť,Hlohov","Městečko,Pařeziny","13:36:20",True,14,15,22,54,False,True,1,2,0,2
+"Vodslivy","Plazy,Kolomutská","17:19:20",True,17,9,59,10,False,True,2,0,0,0
+"Toušice,Mlékovice","Heřmaničky","08:52:28",True,17,6,36,25,True,False,0,3,2,3
+"Popovičky,Nebřenice","Bohutín,zbrojnice","12:36:53",True,8,6,17,53,True,True,3,0,1,1
+"Jemnická","Koleje Strahov","09:02:22",True,11,5,18,14,False,False,2,0,2,3
+"Strunkovice n.Blan.,Svojnice","Dobříš,lom","18:53:36",False,20,14,52,11,True,True,0,3,0,2
