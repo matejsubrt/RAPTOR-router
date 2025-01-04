@@ -14,12 +14,10 @@ namespace RAPTOR_Router.RouteFinders
     /// </summary>
     public class DelayUpdater
     {
-        private TransitModel transitModel;
         private IDelayModel delayModel;
 
-        internal DelayUpdater(TransitModel transitModel, IDelayModel delayModel)
+        internal DelayUpdater(IDelayModel delayModel)
         {
-            this.transitModel = transitModel;
             this.delayModel = delayModel;
         }
 

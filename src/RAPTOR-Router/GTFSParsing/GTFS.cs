@@ -14,31 +14,31 @@ namespace RAPTOR_Router.GTFSParsing
         /// <summary>
         /// A dictionary of all GTFS agencies within the GTFS data, indexed by their id
         /// </summary>
-        public Dictionary<string, GTFSAgency> Agencies { get; private set; } = new();
+        public Dictionary<string, GTFSAgency> Agencies { get; set; } = new();
         /// <summary>
         /// A dictionary of all GTFS calendars within the GTFS data, indexed by their service id
         /// </summary>
-        public Dictionary<string, GTFSCalendar> Calendars { get; private set; } = new();
+        public Dictionary<string, GTFSCalendar> Calendars { get; set; } = new();
         /// <summary>
         /// A dictionary indexed by service ids, holding for each service the list of its GTFS calendar dates
         /// </summary>
-        public Dictionary<string, List<GTFSCalendarDate>> CalendarDates { get; private set; } = new();
+        public Dictionary<string, List<GTFSCalendarDate>> CalendarDates { get; set; } = new();
         /// <summary>
         /// A dictionary of all GTFS routes within the GTFS data, indexed by their id
         /// </summary>
-        public Dictionary<string, GTFSRoute> Routes { get; private set; } = new();
+        public Dictionary<string, GTFSRoute> Routes { get; set; } = new();
         /// <summary>
         /// A dictionary of all GTFS stops within the GTFS data, indexed by their id
         /// </summary>
-        public Dictionary<string, GTFSStop> Stops { get; private set; } = new();
+        public Dictionary<string, GTFSStop> Stops { get; set; } = new();
         /// <summary>
         /// A dictionary indexed by trip Ids, holding for each trip the list of its GTFS stop times
         /// </summary>
-        public Dictionary<string, List<GTFSStopTime>> StopTimes { get; private set; } = new();
+        public Dictionary<string, List<GTFSStopTime>> StopTimes { get; set; } = new();
         /// <summary>
         /// A dictionary of all GTFS trips within the GTFS data, indexed by their id
         /// </summary>
-        public Dictionary<string, GTFSTrip> Trips { get; private set; } = new();
+        public Dictionary<string, GTFSTrip> Trips { get; set; } = new();
 
 
         private static async Task DownloadZipFile(string url, string filePath)

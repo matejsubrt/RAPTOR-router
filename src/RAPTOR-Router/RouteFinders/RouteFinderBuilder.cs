@@ -513,7 +513,7 @@ namespace RAPTOR_Router.RouteFinders
             ValidateTransitModelLoaded();
             ValidateDelayModelLoaded();
 
-            DelayUpdater updater = new DelayUpdater(transitModel!, delayModel!);
+            DelayUpdater updater = new DelayUpdater(delayModel!);
             return updater;
         }
     }

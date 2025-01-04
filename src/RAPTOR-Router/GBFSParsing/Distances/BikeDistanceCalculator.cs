@@ -145,14 +145,14 @@ namespace RAPTOR_Router.GBFSParsing.Distances
                     else if (!CheckConnectivity(s1))
                     {
                         // The start station is not connected to network
-                        addUnresolvableStation(s1.Id, unresolvableStations);
+                        AddUnresolvableStation(s1.Id, unresolvableStations);
                         AddDistance(s1, s2, -1);
                         Console.WriteLine("Station " + s1.Id + " is not connected");
                     }
                     else if (!CheckConnectivity(s2))
                     {
                         // The end station is not connected to network
-                        addUnresolvableStation(s2.Id, unresolvableStations);
+                        AddUnresolvableStation(s2.Id, unresolvableStations);
                         AddDistance(s1, s2, -1);
                         Console.WriteLine("Station " + s2.Id + " is not connected");
                     }
@@ -173,18 +173,18 @@ namespace RAPTOR_Router.GBFSParsing.Distances
                         {
                             if (errorType == ErrorType.START_RESOLVE_ERROR)
                             {
-                                addUnresolvableStation(s1.Id, unresolvableStations);
+                                AddUnresolvableStation(s1.Id, unresolvableStations);
                                 Console.WriteLine($"Start station resolve error from {s1.Id}: {s1.Name}");
                             }
                             else if (errorType == ErrorType.END_RESOLVE_ERROR)
                             {
-                                addUnresolvableStation(s2.Id, unresolvableStations);
+                                AddUnresolvableStation(s2.Id, unresolvableStations);
                                 Console.WriteLine($"End station resolve error from {s2.Id}: {s2.Name}");
                             }
                             else if (errorType == ErrorType.ROUTE_CALCULATION_ERROR)
                             {
                                 //addUnresolvableStation(Stations[i].Id);
-                                addUnresolvableStation(s2.Id, unresolvableStations);
+                                AddUnresolvableStation(s2.Id, unresolvableStations);
                                 Console.WriteLine($"Route calculation error from {s1.Id}: {s1.Name} to {s2.Id}: {s2.Name}");
                             }
                         }
@@ -207,7 +207,7 @@ namespace RAPTOR_Router.GBFSParsing.Distances
 
                 Console.WriteLine("Didnt have distance from " + from.Id + " to " + to.Id + ": " + distance + "m");
             }
-            void addUnresolvableStation(string id, Dictionary<string, int> unresolvableStations)
+            void AddUnresolvableStation(string id, Dictionary<string, int> unresolvableStations)
             {
                 if (unresolvableStations.ContainsKey(id))
                 {
