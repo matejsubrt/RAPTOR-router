@@ -77,7 +77,6 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="#properties">Properties</a> &#124;
 <a href="class_r_a_p_t_o_r___router_1_1_structures_1_1_configuration_1_1_settings-members.html">List of all members</a>  </div>
@@ -120,16 +119,69 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a8a79a5a307b788aa3f746f4661b72207" id="r_a8a79a5a307b788aa3f746f4661b72207"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8a79a5a307b788aa3f746f4661b72207">GetAdjustedWalkingTransferTime</a> (int distance)</td></tr>
 <tr class="memdesc:a8a79a5a307b788aa3f746f4661b72207"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the time it takes to perform a walking transfer of the given distance according to the settings.  <br /></td></tr>
 <tr class="separator:a8a79a5a307b788aa3f746f4661b72207"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
-Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a657eb7d0b20d2cdbfbf811ab6baa1008" id="r_a657eb7d0b20d2cdbfbf811ab6baa1008"><td class="memItemLeft" align="right" valign="top"><a id="a657eb7d0b20d2cdbfbf811ab6baa1008" name="a657eb7d0b20d2cdbfbf811ab6baa1008"></a>
-static <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_configuration_1_1_settings.html">Settings</a>&#160;</td><td class="memItemRight" valign="bottom"><b>GetDefaultSettings</b> ()</td></tr>
-<tr class="memdesc:a657eb7d0b20d2cdbfbf811ab6baa1008"><td class="mdescLeft">&#160;</td><td class="mdescRight">The default settings to use if none were provided. <br /></td></tr>
-<tr class="separator:a657eb7d0b20d2cdbfbf811ab6baa1008"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89b8a2be867052dc541fbc5eac45531d" id="r_a89b8a2be867052dc541fbc5eac45531d"><td class="memItemLeft" align="right" valign="top"><a id="a89b8a2be867052dc541fbc5eac45531d" name="a89b8a2be867052dc541fbc5eac45531d"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>GetTransferTime</b> (int distance)</td></tr>
+<tr class="separator:a89b8a2be867052dc541fbc5eac45531d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
+<tr class="memitem:acf7b88c166ca09fffb28a51261e8f3f5" id="r_acf7b88c166ca09fffb28a51261e8f3f5"><td class="memItemLeft" align="right" valign="top"><a id="acf7b88c166ca09fffb28a51261e8f3f5" name="acf7b88c166ca09fffb28a51261e8f3f5"></a>
+const int&#160;</td><td class="memItemRight" valign="bottom"><b>MAX_WALK_DISTANCE_LOW</b> = 250</td></tr>
+<tr class="separator:acf7b88c166ca09fffb28a51261e8f3f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2efb789823ac6b553d762a39900f62a" id="r_ad2efb789823ac6b553d762a39900f62a"><td class="memItemLeft" align="right" valign="top"><a id="ad2efb789823ac6b553d762a39900f62a" name="ad2efb789823ac6b553d762a39900f62a"></a>
+const int&#160;</td><td class="memItemRight" valign="bottom"><b>MAX_WALK_DISTANCE_NORMAL</b> = 400</td></tr>
+<tr class="separator:ad2efb789823ac6b553d762a39900f62a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08f32495a74d21eca4ce5e336470d285" id="r_a08f32495a74d21eca4ce5e336470d285"><td class="memItemLeft" align="right" valign="top"><a id="a08f32495a74d21eca4ce5e336470d285" name="a08f32495a74d21eca4ce5e336470d285"></a>
+const int&#160;</td><td class="memItemRight" valign="bottom"><b>MAX_WALK_DISTANCE_HIGH</b> = 750</td></tr>
+<tr class="separator:a08f32495a74d21eca4ce5e336470d285"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3f614a78a843e63de1a0db4871882af" id="r_aa3f614a78a843e63de1a0db4871882af"><td class="memItemLeft" align="right" valign="top"><a id="aa3f614a78a843e63de1a0db4871882af" name="aa3f614a78a843e63de1a0db4871882af"></a>
+const double&#160;</td><td class="memItemRight" valign="bottom"><b>MOVING_TRANSFER_MPL_NONE</b> = 1.0</td></tr>
+<tr class="separator:aa3f614a78a843e63de1a0db4871882af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7d6d78cacbb6695c19ba830915cee1e" id="r_ad7d6d78cacbb6695c19ba830915cee1e"><td class="memItemLeft" align="right" valign="top"><a id="ad7d6d78cacbb6695c19ba830915cee1e" name="ad7d6d78cacbb6695c19ba830915cee1e"></a>
+const double&#160;</td><td class="memItemRight" valign="bottom"><b>MOVING_TRANSFER_MPL_SHORT</b> = 1.0</td></tr>
+<tr class="separator:ad7d6d78cacbb6695c19ba830915cee1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a84b7cc017eed116df371123da9addd" id="r_a7a84b7cc017eed116df371123da9addd"><td class="memItemLeft" align="right" valign="top"><a id="a7a84b7cc017eed116df371123da9addd" name="a7a84b7cc017eed116df371123da9addd"></a>
+const double&#160;</td><td class="memItemRight" valign="bottom"><b>MOVING_TRANSFER_MPL_NORMAL</b> = 1.25</td></tr>
+<tr class="separator:a7a84b7cc017eed116df371123da9addd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81a55fd302a06b142d35adf51a6b5d55" id="r_a81a55fd302a06b142d35adf51a6b5d55"><td class="memItemLeft" align="right" valign="top"><a id="a81a55fd302a06b142d35adf51a6b5d55" name="a81a55fd302a06b142d35adf51a6b5d55"></a>
+const double&#160;</td><td class="memItemRight" valign="bottom"><b>MOVING_TRANSFER_MPL_LONG</b> = 1.5</td></tr>
+<tr class="separator:a81a55fd302a06b142d35adf51a6b5d55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f7caeef150428b0dcd275f9778942c8" id="r_a0f7caeef150428b0dcd275f9778942c8"><td class="memItemLeft" align="right" valign="top"><a id="a0f7caeef150428b0dcd275f9778942c8" name="a0f7caeef150428b0dcd275f9778942c8"></a>
+const int&#160;</td><td class="memItemRight" valign="bottom"><b>STATIONARY_TRANSFER_MIN_NONE</b> = 0</td></tr>
+<tr class="separator:a0f7caeef150428b0dcd275f9778942c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1a38876c42b461e597a20e80bab6c12" id="r_ae1a38876c42b461e597a20e80bab6c12"><td class="memItemLeft" align="right" valign="top"><a id="ae1a38876c42b461e597a20e80bab6c12" name="ae1a38876c42b461e597a20e80bab6c12"></a>
+const int&#160;</td><td class="memItemRight" valign="bottom"><b>STATIONARY_TRANSFER_MIN_SHORT</b> = 30</td></tr>
+<tr class="separator:ae1a38876c42b461e597a20e80bab6c12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acfe20c8d1796558b0fd2d7d6520f3311" id="r_acfe20c8d1796558b0fd2d7d6520f3311"><td class="memItemLeft" align="right" valign="top"><a id="acfe20c8d1796558b0fd2d7d6520f3311" name="acfe20c8d1796558b0fd2d7d6520f3311"></a>
+const int&#160;</td><td class="memItemRight" valign="bottom"><b>STATIONARY_TRANSFER_MIN_NORMAL</b> = 60</td></tr>
+<tr class="separator:acfe20c8d1796558b0fd2d7d6520f3311"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac74c4efdf5ed4ea3415c4b381a43d686" id="r_ac74c4efdf5ed4ea3415c4b381a43d686"><td class="memItemLeft" align="right" valign="top"><a id="ac74c4efdf5ed4ea3415c4b381a43d686" name="ac74c4efdf5ed4ea3415c4b381a43d686"></a>
+const int&#160;</td><td class="memItemRight" valign="bottom"><b>STATIONARY_TRANSFER_MIN_LONG</b> = 60</td></tr>
+<tr class="separator:ac74c4efdf5ed4ea3415c4b381a43d686"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96fb72beb5260ecc3cf519033568ed74" id="r_a96fb72beb5260ecc3cf519033568ed74"><td class="memItemLeft" align="right" valign="top"><a id="a96fb72beb5260ecc3cf519033568ed74" name="a96fb72beb5260ecc3cf519033568ed74"></a>
+const double&#160;</td><td class="memItemRight" valign="bottom"><b>BIKE_TRIP_MPL_NONE</b> = 1.0</td></tr>
+<tr class="separator:a96fb72beb5260ecc3cf519033568ed74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45e7ec26eed0daba3295b862c3a06899" id="r_a45e7ec26eed0daba3295b862c3a06899"><td class="memItemLeft" align="right" valign="top"><a id="a45e7ec26eed0daba3295b862c3a06899" name="a45e7ec26eed0daba3295b862c3a06899"></a>
+const double&#160;</td><td class="memItemRight" valign="bottom"><b>BIKE_TRIP_MPL_SHORT</b> = 1.1</td></tr>
+<tr class="separator:a45e7ec26eed0daba3295b862c3a06899"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f8c06508f697a04a8386012a34f7019" id="r_a6f8c06508f697a04a8386012a34f7019"><td class="memItemLeft" align="right" valign="top"><a id="a6f8c06508f697a04a8386012a34f7019" name="a6f8c06508f697a04a8386012a34f7019"></a>
+const double&#160;</td><td class="memItemRight" valign="bottom"><b>BIKE_TRIP_MPL_NORMAL</b> = 1.25</td></tr>
+<tr class="separator:a6f8c06508f697a04a8386012a34f7019"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f83aa379062edb856590d5564b43ccc" id="r_a0f83aa379062edb856590d5564b43ccc"><td class="memItemLeft" align="right" valign="top"><a id="a0f83aa379062edb856590d5564b43ccc" name="a0f83aa379062edb856590d5564b43ccc"></a>
+const double&#160;</td><td class="memItemRight" valign="bottom"><b>BIKE_TRIP_MPL_LONG</b> = 1.5</td></tr>
+<tr class="separator:a0f83aa379062edb856590d5564b43ccc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e478efee7bfc71dc8cfd886132ea10a" id="r_a6e478efee7bfc71dc8cfd886132ea10a"><td class="memItemLeft" align="right" valign="top"><a id="a6e478efee7bfc71dc8cfd886132ea10a" name="a6e478efee7bfc71dc8cfd886132ea10a"></a>
+const int&#160;</td><td class="memItemRight" valign="bottom"><b>TRANSFER_PENALTY_SHORTESTABSOLUTE</b> = 0</td></tr>
+<tr class="separator:a6e478efee7bfc71dc8cfd886132ea10a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a18f0da9251b7375e6f3f4b7a73f4b002" id="r_a18f0da9251b7375e6f3f4b7a73f4b002"><td class="memItemLeft" align="right" valign="top"><a id="a18f0da9251b7375e6f3f4b7a73f4b002" name="a18f0da9251b7375e6f3f4b7a73f4b002"></a>
+const int&#160;</td><td class="memItemRight" valign="bottom"><b>TRANSFER_PENALTY_SHORTEST</b> = 2 * 60</td></tr>
+<tr class="separator:a18f0da9251b7375e6f3f4b7a73f4b002"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adea9e23a6c11566a2e092014a2674b6f" id="r_adea9e23a6c11566a2e092014a2674b6f"><td class="memItemLeft" align="right" valign="top"><a id="adea9e23a6c11566a2e092014a2674b6f" name="adea9e23a6c11566a2e092014a2674b6f"></a>
+const int&#160;</td><td class="memItemRight" valign="bottom"><b>TRANSFER_PENALTY_BALANCED</b> = 4 * 60</td></tr>
+<tr class="separator:adea9e23a6c11566a2e092014a2674b6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9988dcb342386569fa34d198a1e8d516" id="r_a9988dcb342386569fa34d198a1e8d516"><td class="memItemLeft" align="right" valign="top"><a id="a9988dcb342386569fa34d198a1e8d516" name="a9988dcb342386569fa34d198a1e8d516"></a>
+const int&#160;</td><td class="memItemRight" valign="bottom"><b>TRANSFER_PENALTY_LEASTTRANSFERS</b> = 10 * 60</td></tr>
+<tr class="separator:a9988dcb342386569fa34d198a1e8d516"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a21cfbbed9d3bd89952eb2470d2f11a3c" id="r_a21cfbbed9d3bd89952eb2470d2f11a3c"><td class="memItemLeft" align="right" valign="top"><a id="a21cfbbed9d3bd89952eb2470d2f11a3c" name="a21cfbbed9d3bd89952eb2470d2f11a3c"></a>
 const int&#160;</td><td class="memItemRight" valign="bottom"><b>ROUNDS</b> = 5</td></tr>
 <tr class="memdesc:a21cfbbed9d3bd89952eb2470d2f11a3c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The maximum number of trips to be used for the searched connection. <br /></td></tr>
@@ -165,10 +217,10 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>UseSharedBikes</b> = 
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>BikeMax15Minutes</b> = true<code> [get, set]</code></td></tr>
 <tr class="memdesc:a9488a90ec96de90eb25115e9f2f3e3bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies if the bike trip length should be limited to 15 minutes. <br /></td></tr>
 <tr class="separator:a9488a90ec96de90eb25115e9f2f3e3bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abd6a07739c601ef8a1b5192713c20881" id="r_abd6a07739c601ef8a1b5192713c20881"><td class="memItemLeft" align="right" valign="top"><a id="abd6a07739c601ef8a1b5192713c20881" name="abd6a07739c601ef8a1b5192713c20881"></a>
-<a class="el" href="namespace_r_a_p_t_o_r___router_1_1_structures_1_1_configuration.html#aea38283bf67b447b5e5488558e026ccd">TransferTime</a>&#160;</td><td class="memItemRight" valign="bottom"><b>TransferTime</b> = <a class="el" href="namespace_r_a_p_t_o_r___router_1_1_structures_1_1_configuration.html#aea38283bf67b447b5e5488558e026ccda960b44c579bc2f6818d2daaf9e4c16f0">TransferTime.Normal</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:abd6a07739c601ef8a1b5192713c20881"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies the selected transfer length to use in the connection search - i.e. how aggressive and risky the transfers can be. <br /></td></tr>
-<tr class="separator:abd6a07739c601ef8a1b5192713c20881"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d1651816546dacaf992cd0a5f0d9fde" id="r_a2d1651816546dacaf992cd0a5f0d9fde"><td class="memItemLeft" align="right" valign="top"><a id="a2d1651816546dacaf992cd0a5f0d9fde" name="a2d1651816546dacaf992cd0a5f0d9fde"></a>
+<a class="el" href="namespace_r_a_p_t_o_r___router_1_1_structures_1_1_configuration.html#a883c3c5fe902cc546f423de4c8417dab">TransferBuffer</a>&#160;</td><td class="memItemRight" valign="bottom"><b>TransferBuffer</b> = <a class="el" href="namespace_r_a_p_t_o_r___router_1_1_structures_1_1_configuration.html#a883c3c5fe902cc546f423de4c8417daba960b44c579bc2f6818d2daaf9e4c16f0">TransferBuffer.Normal</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a2d1651816546dacaf992cd0a5f0d9fde"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies the selected transfer length to use in the connection search - i.e. how aggressive and risky the transfers can be. <br /></td></tr>
+<tr class="separator:a2d1651816546dacaf992cd0a5f0d9fde"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a936b316744da07eca7b3c84c1c07ac23" id="r_a936b316744da07eca7b3c84c1c07ac23"><td class="memItemLeft" align="right" valign="top"><a id="a936b316744da07eca7b3c84c1c07ac23" name="a936b316744da07eca7b3c84c1c07ac23"></a>
 <a class="el" href="namespace_r_a_p_t_o_r___router_1_1_structures_1_1_configuration.html#a82520fc90f52c1e9df79a97efed6ad8e">ComfortBalance</a>&#160;</td><td class="memItemRight" valign="bottom"><b>ComfortBalance</b> = <a class="el" href="namespace_r_a_p_t_o_r___router_1_1_structures_1_1_configuration.html#a82520fc90f52c1e9df79a97efed6ad8eac6589f5236c0c434d0c63dc5f9a856f2">ComfortBalance.Balanced</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:a936b316744da07eca7b3c84c1c07ac23"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies the comfort balance to be used in the connection search - i.e. how strongly less transfers should be preferred over shortest time. <br /></td></tr>
@@ -181,6 +233,10 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>BikeMax15Minutes</b> 
 <a class="el" href="namespace_r_a_p_t_o_r___router_1_1_structures_1_1_configuration.html#aaf2d30d7e26f5c1648d7b2af2b998b56">BikeTripBuffer</a>&#160;</td><td class="memItemRight" valign="bottom"><b>BikeTripBuffer</b> = <a class="el" href="namespace_r_a_p_t_o_r___router_1_1_structures_1_1_configuration.html#aaf2d30d7e26f5c1648d7b2af2b998b56a87f8a6ab85c9ced3702b4ea641ad4bb5">BikeTripBuffer.Medium</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:a9765ecdfdeb67b6f75ada0604f757baa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies how large the time buffer for bike trips should be. <br /></td></tr>
 <tr class="separator:a9765ecdfdeb67b6f75ada0604f757baa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92e93b0f75fd2ac23b265db5eb2ea39f" id="r_a92e93b0f75fd2ac23b265db5eb2ea39f"><td class="memItemLeft" align="right" valign="top"><a id="a92e93b0f75fd2ac23b265db5eb2ea39f" name="a92e93b0f75fd2ac23b265db5eb2ea39f"></a>
+static <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_configuration_1_1_settings.html">Settings</a>&#160;</td><td class="memItemRight" valign="bottom"><b>DEFAULT</b><code> [get]</code></td></tr>
+<tr class="memdesc:a92e93b0f75fd2ac23b265db5eb2ea39f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The default settings to use if none were provided. <br /></td></tr>
+<tr class="separator:a92e93b0f75fd2ac23b265db5eb2ea39f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class representing the settings to use for the connection search. </p>

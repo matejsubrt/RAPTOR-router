@@ -78,7 +78,9 @@ $(function() {
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pac-methods">Package Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="class_r_a_p_t_o_r___router_1_1_route_finders_1_1_range_route_finder-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">RAPTOR_Router.RouteFinders.RangeRouteFinder Class Reference</div></div>
 </div><!--header-->
@@ -104,9 +106,27 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:a6d83804722f2fae10f523027240122ba" id="r_a6d83804722f2fae10f523027240122ba"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6d83804722f2fae10f523027240122ba">RangeRouteFinder</a> (bool forward, <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_configuration_1_1_settings.html">Settings</a> <a class="el" href="#a46e0a449802eaa0458ccd6ad148fef2a">settings</a>, <a class="el" href="class_r_a_p_t_o_r___router_1_1_models_1_1_static_1_1_transit_model.html">TransitModel</a> <a class="el" href="#a8b2d6aa80c1eda3bdf99dac9f6c66796">transitModel</a>, <a class="el" href="class_r_a_p_t_o_r___router_1_1_models_1_1_static_1_1_bike_model.html">BikeModel</a> bikeModel, <a class="el" href="class_r_a_p_t_o_r___router_1_1_models_1_1_static_1_1_delay_model.html">DelayModel</a> delayModel)</td></tr>
-<tr class="memdesc:a6d83804722f2fae10f523027240122ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new BasicRouter object.  <br /></td></tr>
-<tr class="separator:a6d83804722f2fae10f523027240122ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a386e8b8448c24931c587f2f646cc0290" id="r_a386e8b8448c24931c587f2f646cc0290"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a386e8b8448c24931c587f2f646cc0290">RangeRouteFinder</a> (bool forward, <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_configuration_1_1_settings.html">Settings</a> <a class="el" href="#a46e0a449802eaa0458ccd6ad148fef2a">settings</a>, <a class="el" href="class_r_a_p_t_o_r___router_1_1_models_1_1_static_1_1_transit_model.html">TransitModel</a> <a class="el" href="#a8b2d6aa80c1eda3bdf99dac9f6c66796">transitModel</a>, <a class="el" href="class_r_a_p_t_o_r___router_1_1_models_1_1_static_1_1_bike_model.html">BikeModel</a> <a class="el" href="#ae06af248ce031ff0f2195c5d7af5503e">bikeModel</a>, <a class="el" href="interface_r_a_p_t_o_r___router_1_1_models_1_1_static_1_1_i_delay_model.html">IDelayModel</a> <a class="el" href="#a37027f89d159cf195ccca3ece0dc089d">delayModel</a>)</td></tr>
+<tr class="memdesc:a386e8b8448c24931c587f2f646cc0290"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new BasicRouter object.  <br /></td></tr>
+<tr class="separator:a386e8b8448c24931c587f2f646cc0290"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a51bc6d9785c7ce7c016e98f59aa43111" id="r_a51bc6d9785c7ce7c016e98f59aa43111"><td class="memItemLeft" align="right" valign="top"><a id="a51bc6d9785c7ce7c016e98f59aa43111" name="a51bc6d9785c7ce7c016e98f59aa43111"></a>
+Dictionary&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_stop.html">Stop</a>, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>GetSearchBeginStopsWithTransferTimes</b> (<a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_requests_1_1_connection_request.html">ConnectionRequest</a> request)</td></tr>
+<tr class="separator:a51bc6d9785c7ce7c016e98f59aa43111"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa042aa61d5f23b0a7f16635ddd8f0bc4" id="r_aa042aa61d5f23b0a7f16635ddd8f0bc4"><td class="memItemLeft" align="right" valign="top"><a id="aa042aa61d5f23b0a7f16635ddd8f0bc4" name="aa042aa61d5f23b0a7f16635ddd8f0bc4"></a>
+List&lt; DateTime &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>GetNOrderedTripTimes</b> (Dictionary&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_stop.html">Stop</a>, int &gt; searchBeginStopsWithTransferTimes, DateTime dateTime, bool byEarliestDeparture)</td></tr>
+<tr class="separator:aa042aa61d5f23b0a7f16635ddd8f0bc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a00c851d43a4a65380d9b592a57e4a90d" id="r_a00c851d43a4a65380d9b592a57e4a90d"><td class="memItemLeft" align="right" valign="top"><a id="a00c851d43a4a65380d9b592a57e4a90d" name="a00c851d43a4a65380d9b592a57e4a90d"></a>
+List&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_models_1_1_results_1_1_search_result.html">SearchResult</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>CleanupResults</b> (List&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_models_1_1_results_1_1_search_result.html">SearchResult</a> &gt; results)</td></tr>
+<tr class="separator:a00c851d43a4a65380d9b592a57e4a90d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4bc659a790a23e4e52daa1b8d297c55" id="r_ad4bc659a790a23e4e52daa1b8d297c55"><td class="memItemLeft" align="right" valign="top"><a id="ad4bc659a790a23e4e52daa1b8d297c55" name="ad4bc659a790a23e4e52daa1b8d297c55"></a>
+DateTime&#160;</td><td class="memItemRight" valign="bottom"><b>GetBestReachTime</b> (List&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_models_1_1_results_1_1_search_result.html">SearchResult</a> &gt; results)</td></tr>
+<tr class="separator:ad4bc659a790a23e4e52daa1b8d297c55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8f713f8be1cc38743f070ed6c52ebc2" id="r_ac8f713f8be1cc38743f070ed6c52ebc2"><td class="memItemLeft" align="right" valign="top"><a id="ac8f713f8be1cc38743f070ed6c52ebc2" name="ac8f713f8be1cc38743f070ed6c52ebc2"></a>
+List&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_models_1_1_results_1_1_search_result.html">SearchResult</a> &gt;?&#160;</td><td class="memItemRight" valign="bottom"><b>FindConnections</b> (bool srcByCoords, bool destByCoords, double srcLat, double srcLon, double destLat, double destLon, string srcStopName, string destStopName, DateTime dateTime, bool reverseDirection=false)</td></tr>
+<tr class="separator:ac8f713f8be1cc38743f070ed6c52ebc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -116,10 +136,12 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a8b2d6aa80c1eda3bdf99dac9f6c66796"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae06af248ce031ff0f2195c5d7af5503e" id="r_ae06af248ce031ff0f2195c5d7af5503e"><td class="memItemLeft" align="right" valign="top"><a id="ae06af248ce031ff0f2195c5d7af5503e" name="ae06af248ce031ff0f2195c5d7af5503e"></a>
 <a class="el" href="class_r_a_p_t_o_r___router_1_1_models_1_1_static_1_1_bike_model.html">BikeModel</a>&#160;</td><td class="memItemRight" valign="bottom"><b>bikeModel</b></td></tr>
+<tr class="memdesc:ae06af248ce031ff0f2195c5d7af5503e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The bike model holding the bike data. <br /></td></tr>
 <tr class="separator:ae06af248ce031ff0f2195c5d7af5503e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a057e91b3e1a536e9d95e680cc31e65cf" id="r_a057e91b3e1a536e9d95e680cc31e65cf"><td class="memItemLeft" align="right" valign="top"><a id="a057e91b3e1a536e9d95e680cc31e65cf" name="a057e91b3e1a536e9d95e680cc31e65cf"></a>
-<a class="el" href="class_r_a_p_t_o_r___router_1_1_models_1_1_static_1_1_delay_model.html">DelayModel</a>&#160;</td><td class="memItemRight" valign="bottom"><b>delayModel</b></td></tr>
-<tr class="separator:a057e91b3e1a536e9d95e680cc31e65cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37027f89d159cf195ccca3ece0dc089d" id="r_a37027f89d159cf195ccca3ece0dc089d"><td class="memItemLeft" align="right" valign="top"><a id="a37027f89d159cf195ccca3ece0dc089d" name="a37027f89d159cf195ccca3ece0dc089d"></a>
+<a class="el" href="interface_r_a_p_t_o_r___router_1_1_models_1_1_static_1_1_i_delay_model.html">IDelayModel</a>&#160;</td><td class="memItemRight" valign="bottom"><b>delayModel</b></td></tr>
+<tr class="memdesc:a37027f89d159cf195ccca3ece0dc089d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The delay model holding the current delay information. <br /></td></tr>
+<tr class="separator:a37027f89d159cf195ccca3ece0dc089d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac718a41d66938cd26e1d756f0a346c66" id="r_ac718a41d66938cd26e1d756f0a346c66"><td class="memItemLeft" align="right" valign="top"><a id="ac718a41d66938cd26e1d756f0a346c66" name="ac718a41d66938cd26e1d756f0a346c66"></a>
 HashSet&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_stop.html">Stop</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>markedStops</b> = new()</td></tr>
 <tr class="memdesc:ac718a41d66938cd26e1d756f0a346c66"><td class="mdescLeft">&#160;</td><td class="mdescRight">A set of currently marked stops. <br /></td></tr>
@@ -130,7 +152,7 @@ HashSet&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_bi
 <tr class="separator:aacf9e5aaf21236f0881f5d20e4809a57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aec0fa5f59db9dc678e6d9f72ddf0b59f" id="r_aec0fa5f59db9dc678e6d9f72ddf0b59f"><td class="memItemLeft" align="right" valign="top"><a id="aec0fa5f59db9dc678e6d9f72ddf0b59f" name="aec0fa5f59db9dc678e6d9f72ddf0b59f"></a>
 Dictionary&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_route.html">Route</a>, <a class="el" href="class_r_a_p_t_o_r___router_1_1_route_finders_1_1_reached_trip.html">ReachedTrip</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>markedRoutesWithReachedTrips</b> = new()</td></tr>
-<tr class="memdesc:aec0fa5f59db9dc678e6d9f72ddf0b59f"><td class="mdescLeft">&#160;</td><td class="mdescRight">A dictionary storing for every currently marked route the stop at which it first can be boarded - i.e. the first marked stop it passes through. <br /></td></tr>
+<tr class="memdesc:aec0fa5f59db9dc678e6d9f72ddf0b59f"><td class="mdescLeft">&#160;</td><td class="mdescRight">A dictionary holding for each marked route the reached trip on it. <br /></td></tr>
 <tr class="separator:aec0fa5f59db9dc678e6d9f72ddf0b59f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a46e0a449802eaa0458ccd6ad148fef2a" id="r_a46e0a449802eaa0458ccd6ad148fef2a"><td class="memItemLeft" align="right" valign="top"><a id="a46e0a449802eaa0458ccd6ad148fef2a" name="a46e0a449802eaa0458ccd6ad148fef2a"></a>
 <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_configuration_1_1_settings.html">Settings</a>&#160;</td><td class="memItemRight" valign="bottom"><b>settings</b></td></tr>
@@ -148,12 +170,18 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>forward</b></td></tr>
 <tr class="memitem:a75babbc414c7c620fcf2be5ef53a0524" id="r_a75babbc414c7c620fcf2be5ef53a0524"><td class="memItemLeft" align="right" valign="top"><a id="a75babbc414c7c620fcf2be5ef53a0524" name="a75babbc414c7c620fcf2be5ef53a0524"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>timeMpl</b></td></tr>
 <tr class="separator:a75babbc414c7c620fcf2be5ef53a0524"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:a25dbd0497e0675e38a07251e2e751d54" id="r_a25dbd0497e0675e38a07251e2e751d54"><td class="memItemLeft" align="right" valign="top"><a id="a25dbd0497e0675e38a07251e2e751d54" name="a25dbd0497e0675e38a07251e2e751d54"></a>
+const int&#160;</td><td class="memItemRight" valign="bottom"><b>startTimeCount</b> = 5</td></tr>
+<tr class="separator:a25dbd0497e0675e38a07251e2e751d54"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A route finder that finds a set of the best connections within a given time range. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a6d83804722f2fae10f523027240122ba" name="a6d83804722f2fae10f523027240122ba"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6d83804722f2fae10f523027240122ba">&#9670;&#160;</a></span>RangeRouteFinder()</h2>
+<a id="a386e8b8448c24931c587f2f646cc0290" name="a386e8b8448c24931c587f2f646cc0290"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a386e8b8448c24931c587f2f646cc0290">&#9670;&#160;</a></span>RangeRouteFinder()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -184,7 +212,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>timeMpl</b></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="class_r_a_p_t_o_r___router_1_1_models_1_1_static_1_1_delay_model.html">DelayModel</a></td>          <td class="paramname"><span class="paramname"><em>delayModel</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="interface_r_a_p_t_o_r___router_1_1_models_1_1_static_1_1_i_delay_model.html">IDelayModel</a></td>          <td class="paramname"><span class="paramname"><em>delayModel</em></span>&#160;)</td>
         </tr>
       </table>
   </td>

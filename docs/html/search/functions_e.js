@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['rangeroutefinder_0',['RangeRouteFinder',['../class_r_a_p_t_o_r___router_1_1_route_finders_1_1_range_route_finder.html#a6d83804722f2fae10f523027240122ba',1,'RAPTOR_Router::RouteFinders::RangeRouteFinder']]],
+  ['rangeroutefinder_0',['RangeRouteFinder',['../class_r_a_p_t_o_r___router_1_1_route_finders_1_1_range_route_finder.html#a386e8b8448c24931c587f2f646cc0290',1,'RAPTOR_Router::RouteFinders::RangeRouteFinder']]],
   ['reachedtrip_1',['ReachedTrip',['../class_r_a_p_t_o_r___router_1_1_route_finders_1_1_reached_trip.html#adbdbbb42921611c848cbf799afe9328a',1,'RAPTOR_Router::RouteFinders::ReachedTrip']]],
   ['reachtimeatstopinroundisbetterthanallearlierrounds_2',['ReachTimeAtStopInRoundIsBetterThanAllEarlierRounds',['../class_r_a_p_t_o_r___router_1_1_models_1_1_dynamic_1_1_search_model.html#a2f40c8c9d0bcce33ebf3a2fdd0512d5f',1,'RAPTOR_Router::Models::Dynamic::SearchModel']]],
   ['reachtimeimprovescurrbest_3',['ReachTimeImprovesCurrBest',['../class_r_a_p_t_o_r___router_1_1_models_1_1_dynamic_1_1_search_model.html#abe07825b76d0a4ffc65262c6077073c9',1,'RAPTOR_Router::Models::Dynamic::SearchModel']]],

@@ -1,13 +1,13 @@
 var searchData=
 [
   ['loadagencies_0',['LoadAgencies',['../class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s.html#a1804e2de051fd3084e9996ad47e9c662',1,'RAPTOR_Router::GTFSParsing::GTFS']]],
-  ['loadalldata_1',['LoadAllData',['../class_r_a_p_t_o_r___router_1_1_route_finders_1_1_route_finder_builder.html#a3ff5f40a670b638257f1f56b95b9708e',1,'RAPTOR_Router::RouteFinders::RouteFinderBuilder']]],
+  ['loadalldata_1',['LoadAllData',['../class_r_a_p_t_o_r___router_1_1_route_finders_1_1_route_finder_builder.html#a514187d15c16b48a4f427d38b98acb06',1,'RAPTOR_Router::RouteFinders::RouteFinderBuilder']]],
   ['loadcalendardates_2',['LoadCalendarDates',['../class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s.html#a264aa4011470880b787e3bbfdcadc4a1',1,'RAPTOR_Router::GTFSParsing::GTFS']]],
   ['loadcalendars_3',['LoadCalendars',['../class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s.html#ac89fd4e7c466824a8db432e7196b2e81',1,'RAPTOR_Router::GTFSParsing::GTFS']]],
   ['loaddatafromgtfs_4',['LoadDataFromGtfs',['../class_r_a_p_t_o_r___router_1_1_models_1_1_static_1_1_transit_model.html#ac800e15fc40ab2237218a1b75e585703',1,'RAPTOR_Router::Models::Static::TransitModel']]],
   ['loadforbiddencrossings_5',['LoadForbiddenCrossings',['../class_r_a_p_t_o_r___router_1_1_route_finders_1_1_route_finder_builder.html#a4df40a1b43cc5439186c73e33017c0b6',1,'RAPTOR_Router::RouteFinders::RouteFinderBuilder']]],
-  ['loadgbfsdata_6',['LoadGbfsData',['../class_r_a_p_t_o_r___router_1_1_route_finders_1_1_route_finder_builder.html#ac38b730da95f78ec5d56db1e03511fc2',1,'RAPTOR_Router::RouteFinders::RouteFinderBuilder']]],
-  ['loadgtfsdata_7',['LoadGtfsData',['../class_r_a_p_t_o_r___router_1_1_route_finders_1_1_route_finder_builder.html#a37689808c8d664c3a49e7db78e93576e',1,'RAPTOR_Router::RouteFinders::RouteFinderBuilder']]],
+  ['loadgbfsdata_6',['LoadGbfsData',['../class_r_a_p_t_o_r___router_1_1_route_finders_1_1_route_finder_builder.html#acea416bb6955e51807e81a3a9f6e4b21',1,'RAPTOR_Router::RouteFinders::RouteFinderBuilder']]],
+  ['loadgtfsdata_7',['LoadGtfsData',['../class_r_a_p_t_o_r___router_1_1_route_finders_1_1_route_finder_builder.html#a8497735a5302c0e9e07298ab66e747df',1,'RAPTOR_Router::RouteFinders::RouteFinderBuilder']]],
   ['loadroutes_8',['LoadRoutes',['../class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s.html#a21495b9ff8d3760fa5d23e6e8a54cbb2',1,'RAPTOR_Router.GTFSParsing.GTFS.LoadRoutes()'],['../class_r_a_p_t_o_r___router_1_1_models_1_1_static_1_1_transit_model.html#a827435233caed4ef793d30e58644109f',1,'RAPTOR_Router.Models.Static.TransitModel.LoadRoutes()']]],
   ['loadstationdistances_9',['LoadStationDistances',['../interface_r_a_p_t_o_r___router_1_1_g_b_f_s_parsing_1_1_data_sources_1_1_i_bike_data_source.html#a36dd495c6ca02114e7434fe6f74c7ce1',1,'RAPTOR_Router::GBFSParsing::DataSources::IBikeDataSource']]],
   ['loadstations_10',['LoadStations',['../interface_r_a_p_t_o_r___router_1_1_g_b_f_s_parsing_1_1_data_sources_1_1_i_bike_data_source.html#a6a8b53146b07016fe6a4a70171339c78',1,'RAPTOR_Router.GBFSParsing.DataSources.IBikeDataSource.LoadStations()'],['../class_r_a_p_t_o_r___router_1_1_g_b_f_s_parsing_1_1_data_sources_1_1_nextbike_data_source.html#a9565d6986a33c63f989ef2d48f92f517',1,'RAPTOR_Router.GBFSParsing.DataSources.NextbikeDataSource.LoadStations()']]],

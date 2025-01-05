@@ -137,18 +137,18 @@ required <a class="el" href="struct_r_a_p_t_o_r___router_1_1_structures_1_1_gene
 required <a class="el" href="namespace_r_a_p_t_o_r___router_1_1_structures_1_1_transit.html#abfe130744ab306fbb0b0bae2f795f4e5">VehicleType</a>&#160;</td><td class="memItemRight" valign="bottom"><b>vehicleType</b><code> [get, set]</code></td></tr>
 <tr class="memdesc:a25301ac6ad098dba0ee780839ce727d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">The vehicle type of the trip. <br /></td></tr>
 <tr class="separator:a25301ac6ad098dba0ee780839ce727d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae8a04e1de43f5de95df03a32aeb32479" id="r_ae8a04e1de43f5de95df03a32aeb32479"><td class="memItemLeft" align="right" valign="top"><a id="ae8a04e1de43f5de95df03a32aeb32479" name="ae8a04e1de43f5de95df03a32aeb32479"></a>
-required bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasDelayInfo</b><code> [get, set]</code></td></tr>
-<tr class="memdesc:ae8a04e1de43f5de95df03a32aeb32479"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether the trip has current delay information available (i.e. this typically means the trip is en-route, or will be in the soon future) <br /></td></tr>
-<tr class="separator:ae8a04e1de43f5de95df03a32aeb32479"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a90578cf39b711e5f0fb481adfe089eae" id="r_a90578cf39b711e5f0fb481adfe089eae"><td class="memItemLeft" align="right" valign="top"><a id="a90578cf39b711e5f0fb481adfe089eae" name="a90578cf39b711e5f0fb481adfe089eae"></a>
-required int&#160;</td><td class="memItemRight" valign="bottom"><b>delayWhenBoarded</b><code> [get, set]</code></td></tr>
-<tr class="memdesc:a90578cf39b711e5f0fb481adfe089eae"><td class="mdescLeft">&#160;</td><td class="mdescRight">The delay of the trip at the getOnStop - this can either mean the expected delay there (if the trip has not yet arrived there), or the actual delay at that stop (if the trip has already been there) <br /></td></tr>
-<tr class="separator:a90578cf39b711e5f0fb481adfe089eae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5847de09ad702ca3677066e2c55c1f9c" id="r_a5847de09ad702ca3677066e2c55c1f9c"><td class="memItemLeft" align="right" valign="top"><a id="a5847de09ad702ca3677066e2c55c1f9c" name="a5847de09ad702ca3677066e2c55c1f9c"></a>
-required int&#160;</td><td class="memItemRight" valign="bottom"><b>currentDelay</b><code> [get, set]</code></td></tr>
-<tr class="memdesc:a5847de09ad702ca3677066e2c55c1f9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The delay of the trip at the moment of the search. This can be different from delayWhenBoarded if the connection is (partly) in the past - i.e. the trip has already been through the getOnStop, but has not yet ended. The value is only valid at the moment of the search, and it is expected that the client will update this value as time progresses using the TODO: API delay update endpoint. <br /></td></tr>
-<tr class="separator:a5847de09ad702ca3677066e2c55c1f9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ea399f124ffae56630841a0d418806d" id="r_a5ea399f124ffae56630841a0d418806d"><td class="memItemLeft" align="right" valign="top"><a id="a5ea399f124ffae56630841a0d418806d" name="a5ea399f124ffae56630841a0d418806d"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasDelayInfo</b><code> [get, set]</code></td></tr>
+<tr class="memdesc:a5ea399f124ffae56630841a0d418806d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether the trip has current delay information available (i.e. this typically means the trip is en-route, or will be in the soon future) <br /></td></tr>
+<tr class="separator:a5ea399f124ffae56630841a0d418806d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8dfb27e57b38ff53e837f35ab3965aa5" id="r_a8dfb27e57b38ff53e837f35ab3965aa5"><td class="memItemLeft" align="right" valign="top"><a id="a8dfb27e57b38ff53e837f35ab3965aa5" name="a8dfb27e57b38ff53e837f35ab3965aa5"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>delayWhenBoarded</b><code> [get, set]</code></td></tr>
+<tr class="memdesc:a8dfb27e57b38ff53e837f35ab3965aa5"><td class="mdescLeft">&#160;</td><td class="mdescRight">The delay of the trip at the getOnStop - this can either mean the expected delay there (if the trip has not yet arrived there), or the actual delay at that stop (if the trip has already been there) <br /></td></tr>
+<tr class="separator:a8dfb27e57b38ff53e837f35ab3965aa5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd110a4a1e7b87631a149df5602e84ec" id="r_acd110a4a1e7b87631a149df5602e84ec"><td class="memItemLeft" align="right" valign="top"><a id="acd110a4a1e7b87631a149df5602e84ec" name="acd110a4a1e7b87631a149df5602e84ec"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>currentDelay</b><code> [get, set]</code></td></tr>
+<tr class="memdesc:acd110a4a1e7b87631a149df5602e84ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">The delay of the trip at the moment of the search. This can be different from delayWhenBoarded if the connection is (partly) in the past - i.e. the trip has already been through the getOnStop, but has not yet ended. The value is only valid at the moment of the search, and it is expected that the client will update this value as time progresses using the TODO: API delay update endpoint. <br /></td></tr>
+<tr class="separator:acd110a4a1e7b87631a149df5602e84ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7932092796035a22d86a6a7f575da08b" id="r_a7932092796035a22d86a6a7f575da08b"><td class="memItemLeft" align="right" valign="top"><a id="a7932092796035a22d86a6a7f575da08b" name="a7932092796035a22d86a6a7f575da08b"></a>
 required string&#160;</td><td class="memItemRight" valign="bottom"><b>tripId</b><code> [get, set]</code></td></tr>
 <tr class="memdesc:a7932092796035a22d86a6a7f575da08b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The trip Id of the associated trip. <br /></td></tr>

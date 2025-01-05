@@ -77,7 +77,6 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="class_r_a_p_t_o_r___router_1_1_extensions_1_1_distance_extensions-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">RAPTOR_Router.Extensions.DistanceExtensions Class Reference</div></div>
@@ -98,27 +97,24 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a041baf43ea2dcd6f513fc41d0b46560f" id="r_a041baf43ea2dcd6f513fc41d0b46560f"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a041baf43ea2dcd6f513fc41d0b46560f">DistanceBetween</a> (<a class="el" href="struct_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_coordinates.html">Coordinates</a> c1, <a class="el" href="struct_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_coordinates.html">Coordinates</a> c2)</td></tr>
 <tr class="memdesc:a041baf43ea2dcd6f513fc41d0b46560f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the real-world distance between two GPS coordinates.  <br /></td></tr>
 <tr class="separator:a041baf43ea2dcd6f513fc41d0b46560f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abbedc130de12af0e6d8c81eaebefdc2a" id="r_abbedc130de12af0e6d8c81eaebefdc2a"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abbedc130de12af0e6d8c81eaebefdc2a">SimplifiedDistanceBetween</a> (double lat1, double lon1, double lat2, double lon2)</td></tr>
+<tr class="memdesc:abbedc130de12af0e6d8c81eaebefdc2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the approximate distance between two GPS coordinates - works specifically for the 50th parallel (i.e. south of Prague)  <br /></td></tr>
+<tr class="separator:abbedc130de12af0e6d8c81eaebefdc2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a59474f2f6db99fe28c8305e9a7708841" id="r_a59474f2f6db99fe28c8305e9a7708841"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a59474f2f6db99fe28c8305e9a7708841">SimplifiedDistanceBetween</a> (<a class="el" href="interface_r_a_p_t_o_r___router_1_1_structures_1_1_interfaces_1_1_i_route_point.html">IRoutePoint</a> rp1, <a class="el" href="interface_r_a_p_t_o_r___router_1_1_structures_1_1_interfaces_1_1_i_route_point.html">IRoutePoint</a> rp2)</td></tr>
 <tr class="memdesc:a59474f2f6db99fe28c8305e9a7708841"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the approximate distance between two RoutePoints - works specifically for the 50th parallel (i.e. south of Prague)  <br /></td></tr>
 <tr class="separator:a59474f2f6db99fe28c8305e9a7708841"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac70e2002aa75013f32e8eac185620bb2" id="r_ac70e2002aa75013f32e8eac185620bb2"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac70e2002aa75013f32e8eac185620bb2">SimplifiedDistanceBetween</a> (<a class="el" href="struct_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_coordinates.html">Coordinates</a> c1, <a class="el" href="struct_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_coordinates.html">Coordinates</a> c2)</td></tr>
 <tr class="memdesc:ac70e2002aa75013f32e8eac185620bb2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the approximate distance between two GPS coordinates - works specifically for the 50th parallel (i.e. south of Prague)  <br /></td></tr>
 <tr class="separator:ac70e2002aa75013f32e8eac185620bb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0878ada1d405c77d3785b2ea15e20bb4" id="r_a0878ada1d405c77d3785b2ea15e20bb4"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0878ada1d405c77d3785b2ea15e20bb4">TooFarInOneDirection</a> (double lat1, double lon1, double lat2, double lon2, int maxMeters)</td></tr>
+<tr class="memdesc:a0878ada1d405c77d3785b2ea15e20bb4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates whether two GPS coordinates are too far apart in one direction (N/S or E/W) to be worth calculating the real distance.  <br /></td></tr>
+<tr class="separator:a0878ada1d405c77d3785b2ea15e20bb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aec46532d1c74dbb0ef50be64e6f4cf42" id="r_aec46532d1c74dbb0ef50be64e6f4cf42"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aec46532d1c74dbb0ef50be64e6f4cf42">TooFarInOneDirection</a> (<a class="el" href="interface_r_a_p_t_o_r___router_1_1_structures_1_1_interfaces_1_1_i_route_point.html">IRoutePoint</a> rp1, <a class="el" href="interface_r_a_p_t_o_r___router_1_1_structures_1_1_interfaces_1_1_i_route_point.html">IRoutePoint</a> rp2, int maxMeters)</td></tr>
 <tr class="memdesc:aec46532d1c74dbb0ef50be64e6f4cf42"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates whether two RoutePoints are too far apart in one direction (N/S or E/W) to be worth calculating the real distance.  <br /></td></tr>
 <tr class="separator:aec46532d1c74dbb0ef50be64e6f4cf42"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad4bcb2485833cd4178ac9f70930ce5a8" id="r_ad4bcb2485833cd4178ac9f70930ce5a8"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad4bcb2485833cd4178ac9f70930ce5a8">TooFarInOneDirection</a> (<a class="el" href="struct_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_coordinates.html">Coordinates</a> c1, <a class="el" href="struct_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_coordinates.html">Coordinates</a> c2, int maxMeters)</td></tr>
 <tr class="memdesc:ad4bcb2485833cd4178ac9f70930ce5a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates whether two GPS coordinates are too far apart in one direction (N/S or E/W) to be worth calculating the real distance.  <br /></td></tr>
 <tr class="separator:ad4bcb2485833cd4178ac9f70930ce5a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
-Static Private Member Functions</h2></td></tr>
-<tr class="memitem:abbedc130de12af0e6d8c81eaebefdc2a" id="r_abbedc130de12af0e6d8c81eaebefdc2a"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abbedc130de12af0e6d8c81eaebefdc2a">SimplifiedDistanceBetween</a> (double lat1, double lon1, double lat2, double lon2)</td></tr>
-<tr class="memdesc:abbedc130de12af0e6d8c81eaebefdc2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the approximate distance between two GPS coordinates - works specifically for the 50th parallel (i.e. south of Prague)  <br /></td></tr>
-<tr class="separator:abbedc130de12af0e6d8c81eaebefdc2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0878ada1d405c77d3785b2ea15e20bb4" id="r_a0878ada1d405c77d3785b2ea15e20bb4"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0878ada1d405c77d3785b2ea15e20bb4">TooFarInOneDirection</a> (double lat1, double lon1, double lat2, double lon2, int maxMeters)</td></tr>
-<tr class="memdesc:a0878ada1d405c77d3785b2ea15e20bb4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates whether two GPS coordinates are too far apart in one direction (N/S or E/W) to be worth calculating the real distance.  <br /></td></tr>
-<tr class="separator:a0878ada1d405c77d3785b2ea15e20bb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
@@ -303,7 +299,7 @@ const double&#160;</td><td class="memItemRight" valign="bottom"><b>lonConst50N</
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -430,7 +426,7 @@ const double&#160;</td><td class="memItemRight" valign="bottom"><b>lonConst50N</
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

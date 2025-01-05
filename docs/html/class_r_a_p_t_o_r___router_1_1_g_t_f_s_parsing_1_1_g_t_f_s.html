@@ -79,6 +79,7 @@ $(function() {
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#properties">Properties</a> &#124;
+<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">RAPTOR_Router.GTFSParsing.GTFS Class Reference</div></div>
 </div><!--header-->
@@ -126,41 +127,89 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a21c9e8a71fed91627eef91521494ab87" id="r_a21c9e8a71fed91627eef91521494ab87"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s.html">GTFS</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a21c9e8a71fed91627eef91521494ab87">ParseZipFile</a> (string pathToZipFile)</td></tr>
 <tr class="memdesc:a21c9e8a71fed91627eef91521494ab87"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads all the necessary GTFS data from the specified zip archive into strongly typed objects in memory.  <br /></td></tr>
 <tr class="separator:a21c9e8a71fed91627eef91521494ab87"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0282cd4b8c603f2035939cd431050d27" id="r_a0282cd4b8c603f2035939cd431050d27"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s.html">GTFS</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0282cd4b8c603f2035939cd431050d27">DownloadAndParseZipFile</a> (string pathToZipFile, bool downloadNewIfFileOld=true)</td></tr>
+<tr class="memdesc:a0282cd4b8c603f2035939cd431050d27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Downloads and parses the GTFS data from the specified zip archive file.  <br /></td></tr>
+<tr class="separator:a0282cd4b8c603f2035939cd431050d27"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
 <tr class="memitem:af6e65d0fbd583df6d9219ceb5d739ecc" id="r_af6e65d0fbd583df6d9219ceb5d739ecc"><td class="memItemLeft" align="right" valign="top"><a id="af6e65d0fbd583df6d9219ceb5d739ecc" name="af6e65d0fbd583df6d9219ceb5d739ecc"></a>
-Dictionary&lt; string, <a class="el" href="class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_agency.html">GTFSAgency</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>Agencies</b> = new()<code> [get, private set]</code></td></tr>
+Dictionary&lt; string, <a class="el" href="class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_agency.html">GTFSAgency</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>Agencies</b> = new()<code> [get, set]</code></td></tr>
 <tr class="memdesc:af6e65d0fbd583df6d9219ceb5d739ecc"><td class="mdescLeft">&#160;</td><td class="mdescRight">A dictionary of all GTFS agencies within the GTFS data, indexed by their id. <br /></td></tr>
 <tr class="separator:af6e65d0fbd583df6d9219ceb5d739ecc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf0108e42e08f6ce4a21f51b6725c9e6" id="r_adf0108e42e08f6ce4a21f51b6725c9e6"><td class="memItemLeft" align="right" valign="top"><a id="adf0108e42e08f6ce4a21f51b6725c9e6" name="adf0108e42e08f6ce4a21f51b6725c9e6"></a>
-Dictionary&lt; string, <a class="el" href="class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_calendar.html">GTFSCalendar</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>Calendars</b> = new()<code> [get, private set]</code></td></tr>
+Dictionary&lt; string, <a class="el" href="class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_calendar.html">GTFSCalendar</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>Calendars</b> = new()<code> [get, set]</code></td></tr>
 <tr class="memdesc:adf0108e42e08f6ce4a21f51b6725c9e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">A dictionary of all GTFS calendars within the GTFS data, indexed by their service id. <br /></td></tr>
 <tr class="separator:adf0108e42e08f6ce4a21f51b6725c9e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a497a2489bd5069410db286b0d18a2911" id="r_a497a2489bd5069410db286b0d18a2911"><td class="memItemLeft" align="right" valign="top"><a id="a497a2489bd5069410db286b0d18a2911" name="a497a2489bd5069410db286b0d18a2911"></a>
-Dictionary&lt; string, List&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_calendar_date.html">GTFSCalendarDate</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>CalendarDates</b> = new()<code> [get, private set]</code></td></tr>
+Dictionary&lt; string, List&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_calendar_date.html">GTFSCalendarDate</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>CalendarDates</b> = new()<code> [get, set]</code></td></tr>
 <tr class="memdesc:a497a2489bd5069410db286b0d18a2911"><td class="mdescLeft">&#160;</td><td class="mdescRight">A dictionary indexed by service ids, holding for each service the list of its GTFS calendar dates. <br /></td></tr>
 <tr class="separator:a497a2489bd5069410db286b0d18a2911"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a41a0642748a109d254b2618e357e1879" id="r_a41a0642748a109d254b2618e357e1879"><td class="memItemLeft" align="right" valign="top"><a id="a41a0642748a109d254b2618e357e1879" name="a41a0642748a109d254b2618e357e1879"></a>
-Dictionary&lt; string, <a class="el" href="class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_route.html">GTFSRoute</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>Routes</b> = new()<code> [get, private set]</code></td></tr>
+Dictionary&lt; string, <a class="el" href="class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_route.html">GTFSRoute</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>Routes</b> = new()<code> [get, set]</code></td></tr>
 <tr class="memdesc:a41a0642748a109d254b2618e357e1879"><td class="mdescLeft">&#160;</td><td class="mdescRight">A dictionary of all GTFS routes within the GTFS data, indexed by their id. <br /></td></tr>
 <tr class="separator:a41a0642748a109d254b2618e357e1879"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3fbfe731ecefc117ea3a231e747dab29" id="r_a3fbfe731ecefc117ea3a231e747dab29"><td class="memItemLeft" align="right" valign="top"><a id="a3fbfe731ecefc117ea3a231e747dab29" name="a3fbfe731ecefc117ea3a231e747dab29"></a>
-Dictionary&lt; string, <a class="el" href="class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_stop.html">GTFSStop</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>Stops</b> = new()<code> [get, private set]</code></td></tr>
+Dictionary&lt; string, <a class="el" href="class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_stop.html">GTFSStop</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>Stops</b> = new()<code> [get, set]</code></td></tr>
 <tr class="memdesc:a3fbfe731ecefc117ea3a231e747dab29"><td class="mdescLeft">&#160;</td><td class="mdescRight">A dictionary of all GTFS stops within the GTFS data, indexed by their id. <br /></td></tr>
 <tr class="separator:a3fbfe731ecefc117ea3a231e747dab29"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4412d4d8650a3e6bc73eaf1130780604" id="r_a4412d4d8650a3e6bc73eaf1130780604"><td class="memItemLeft" align="right" valign="top"><a id="a4412d4d8650a3e6bc73eaf1130780604" name="a4412d4d8650a3e6bc73eaf1130780604"></a>
-Dictionary&lt; string, List&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_stop_time.html">GTFSStopTime</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>StopTimes</b> = new()<code> [get, private set]</code></td></tr>
+Dictionary&lt; string, List&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_stop_time.html">GTFSStopTime</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>StopTimes</b> = new()<code> [get, set]</code></td></tr>
 <tr class="memdesc:a4412d4d8650a3e6bc73eaf1130780604"><td class="mdescLeft">&#160;</td><td class="mdescRight">A dictionary indexed by trip Ids, holding for each trip the list of its GTFS stop times. <br /></td></tr>
 <tr class="separator:a4412d4d8650a3e6bc73eaf1130780604"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7894a2936fa2e364686ed70b413d0720" id="r_a7894a2936fa2e364686ed70b413d0720"><td class="memItemLeft" align="right" valign="top"><a id="a7894a2936fa2e364686ed70b413d0720" name="a7894a2936fa2e364686ed70b413d0720"></a>
-Dictionary&lt; string, <a class="el" href="class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_trip.html">GTFSTrip</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>Trips</b> = new()<code> [get, private set]</code></td></tr>
+Dictionary&lt; string, <a class="el" href="class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s_trip.html">GTFSTrip</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>Trips</b> = new()<code> [get, set]</code></td></tr>
 <tr class="memdesc:a7894a2936fa2e364686ed70b413d0720"><td class="mdescLeft">&#160;</td><td class="mdescRight">A dictionary of all GTFS trips within the GTFS data, indexed by their id. <br /></td></tr>
 <tr class="separator:a7894a2936fa2e364686ed70b413d0720"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
+Static Private Member Functions</h2></td></tr>
+<tr class="memitem:af2ac1ff628e21e6312454768dc23a271" id="r_af2ac1ff628e21e6312454768dc23a271"><td class="memItemLeft" align="right" valign="top"><a id="af2ac1ff628e21e6312454768dc23a271" name="af2ac1ff628e21e6312454768dc23a271"></a>
+static async Task&#160;</td><td class="memItemRight" valign="bottom"><b>DownloadZipFile</b> (string url, string filePath)</td></tr>
+<tr class="separator:af2ac1ff628e21e6312454768dc23a271"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class representing all the loaded GTFS data. Typically used for parsing the GTFS files to objects in memory, which later will be used to construct the objects useful for the connection searching. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a0282cd4b8c603f2035939cd431050d27" name="a0282cd4b8c603f2035939cd431050d27"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0282cd4b8c603f2035939cd431050d27">&#9670;&#160;</a></span>DownloadAndParseZipFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="class_r_a_p_t_o_r___router_1_1_g_t_f_s_parsing_1_1_g_t_f_s.html">GTFS</a> RAPTOR_Router.GTFSParsing.GTFS.DownloadAndParseZipFile </td>
+          <td>(</td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>pathToZipFile</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>downloadNewIfFileOld</em><span class="paramdefsep"> = </span><span class="paramdefval">true</span></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Downloads and parses the GTFS data from the specified zip archive file. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pathToZipFile</td><td>The path to the zip file that should be overwritten with the new downloaded one</td></tr>
+    <tr><td class="paramname">downloadNewIfFileOld</td><td>Whether to download a fresh GTFS archive if the one present is old</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The parsed GTFS object</dd></dl>
+
+</div>
+</div>
 <a id="a1804e2de051fd3084e9996ad47e9c662" name="a1804e2de051fd3084e9996ad47e9c662"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1804e2de051fd3084e9996ad47e9c662">&#9670;&#160;</a></span>LoadAgencies()</h2>
 

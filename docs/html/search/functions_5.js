@@ -5,6 +5,5 @@ var searchData=
   ['forbiddencrossingline_2',['ForbiddenCrossingLine',['../class_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_forbidden_crossing_line.html#a9a65322f3c5d8ab08356e7ad3ace11be',1,'RAPTOR_Router::Structures::Generic::ForbiddenCrossingLine']]],
   ['forbiddencrossingpoint_3',['ForbiddenCrossingPoint',['../class_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_forbidden_crossing_point.html#aeae1a4b0b99cc6374f26963106e4dfa3',1,'RAPTOR_Router::Structures::Generic::ForbiddenCrossingPoint']]],
   ['forbidstransferbetween_4',['ForbidsTransferBetween',['../class_r_a_p_t_o_r___router_1_1_extensions_1_1_forbidden_crossing_extensions.html#a9c2cd912d5354d4738b8dee1b6aa2272',1,'RAPTOR_Router::Extensions::ForbiddenCrossingExtensions']]],
-  ['frombiketransfer_5',['FromBikeTransfer',['../class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_from_bike_transfer.html#a192a36b6c18e50f33621293ed8e23ce9',1,'RAPTOR_Router::Structures::Bike::FromBikeTransfer']]],
-  ['fromdateandtime_6',['FromDateAndTime',['../class_r_a_p_t_o_r___router_1_1_extensions_1_1_date_time_extensions.html#a8288dce2f3c1116c931a2f3dcfabb782',1,'RAPTOR_Router::Extensions::DateTimeExtensions']]]
+  ['frombiketransfer_5',['FromBikeTransfer',['../class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_from_bike_transfer.html#a192a36b6c18e50f33621293ed8e23ce9',1,'RAPTOR_Router::Structures::Bike::FromBikeTransfer']]]
 ];

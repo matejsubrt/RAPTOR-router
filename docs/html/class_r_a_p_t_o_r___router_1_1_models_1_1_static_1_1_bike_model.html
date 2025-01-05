@@ -96,13 +96,13 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9862d241329a0a0affde5a2ab334436d" id="r_a9862d241329a0a0affde5a2ab334436d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9862d241329a0a0affde5a2ab334436d">AddDataSource</a> (<a class="el" href="interface_r_a_p_t_o_r___router_1_1_g_b_f_s_parsing_1_1_data_sources_1_1_i_bike_data_source.html">IBikeDataSource</a> source)</td></tr>
 <tr class="memdesc:a9862d241329a0a0affde5a2ab334436d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a new data source to the model, and merges its data with the existing data.  <br /></td></tr>
 <tr class="separator:a9862d241329a0a0affde5a2ab334436d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a052be5b982c7f002d05e76727689c15f" id="r_a052be5b982c7f002d05e76727689c15f"><td class="memItemLeft" align="right" valign="top"><a id="a052be5b982c7f002d05e76727689c15f" name="a052be5b982c7f002d05e76727689c15f"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>StartUpdateTimer</b> ()</td></tr>
-<tr class="memdesc:a052be5b982c7f002d05e76727689c15f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the bike count for all stations and starts the timer to update the status of the stations periodically. <br /></td></tr>
-<tr class="separator:a052be5b982c7f002d05e76727689c15f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abc19c6d71b296238e19125c28c68a090" id="r_abc19c6d71b296238e19125c28c68a090"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abc19c6d71b296238e19125c28c68a090">UpdateAllStationStatus</a> (object? source, ElapsedEventArgs e)</td></tr>
-<tr class="memdesc:abc19c6d71b296238e19125c28c68a090"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the status (bike count) of all stations in all data sources.  <br /></td></tr>
-<tr class="separator:abc19c6d71b296238e19125c28c68a090"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad40920f6bdcc0bdc0d332df33c753e2c" id="r_ad40920f6bdcc0bdc0d332df33c753e2c"><td class="memItemLeft" align="right" valign="top"><a id="ad40920f6bdcc0bdc0d332df33c753e2c" name="ad40920f6bdcc0bdc0d332df33c753e2c"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>MockStationStatus</b> ()</td></tr>
+<tr class="memdesc:ad40920f6bdcc0bdc0d332df33c753e2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the bike count for all stations to 1 - to be used for testing purposes. <br /></td></tr>
+<tr class="separator:ad40920f6bdcc0bdc0d332df33c753e2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a567be8754ff10256f9e67a03000b2b54" id="r_a567be8754ff10256f9e67a03000b2b54"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a567be8754ff10256f9e67a03000b2b54">UpdateAllStationStatus</a> ()</td></tr>
+<tr class="memdesc:a567be8754ff10256f9e67a03000b2b54"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the status (bike count) of all stations in all data sources.  <br /></td></tr>
+<tr class="separator:a567be8754ff10256f9e67a03000b2b54"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae9987e12a5c1719eb0a2df421cd89ea4" id="r_ae9987e12a5c1719eb0a2df421cd89ea4"><td class="memItemLeft" align="right" valign="top">Dictionary&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_bike_station.html">BikeStation</a>, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae9987e12a5c1719eb0a2df421cd89ea4">GetDistancesFromStation</a> (<a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_bike_1_1_bike_station.html">BikeStation</a> station)</td></tr>
 <tr class="memdesc:ae9987e12a5c1719eb0a2df421cd89ea4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the dictionary of distances from a given station to all other stations.  <br /></td></tr>
 <tr class="separator:ae9987e12a5c1719eb0a2df421cd89ea4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -137,9 +137,6 @@ Dictionary&lt; string, <a class="el" href="class_r_a_p_t_o_r___router_1_1_struct
 <tr class="memitem:abe4d85043cfa9a513f443e37c4af3474" id="r_abe4d85043cfa9a513f443e37c4af3474"><td class="memItemLeft" align="right" valign="top"><a id="abe4d85043cfa9a513f443e37c4af3474" name="abe4d85043cfa9a513f443e37c4af3474"></a>
 List&lt; <a class="el" href="interface_r_a_p_t_o_r___router_1_1_g_b_f_s_parsing_1_1_data_sources_1_1_i_bike_data_source.html">IBikeDataSource</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>bikeDataSources</b></td></tr>
 <tr class="separator:abe4d85043cfa9a513f443e37c4af3474"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4dd1c866727e5b1a14b0a0f0aef9ebbb" id="r_a4dd1c866727e5b1a14b0a0f0aef9ebbb"><td class="memItemLeft" align="right" valign="top"><a id="a4dd1c866727e5b1a14b0a0f0aef9ebbb" name="a4dd1c866727e5b1a14b0a0f0aef9ebbb"></a>
-Timer&#160;</td><td class="memItemRight" valign="bottom"><b>statusUpdateTimer</b></td></tr>
-<tr class="separator:a4dd1c866727e5b1a14b0a0f0aef9ebbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class holding all the information about all used shared bike systems and their stations. </p>
@@ -319,8 +316,8 @@ Timer&#160;</td><td class="memItemRight" valign="bottom"><b>statusUpdateTimer</b
 
 </div>
 </div>
-<a id="abc19c6d71b296238e19125c28c68a090" name="abc19c6d71b296238e19125c28c68a090"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abc19c6d71b296238e19125c28c68a090">&#9670;&#160;</a></span>UpdateAllStationStatus()</h2>
+<a id="a567be8754ff10256f9e67a03000b2b54" name="a567be8754ff10256f9e67a03000b2b54"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a567be8754ff10256f9e67a03000b2b54">&#9670;&#160;</a></span>UpdateAllStationStatus()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -328,12 +325,8 @@ Timer&#160;</td><td class="memItemRight" valign="bottom"><b>statusUpdateTimer</b
         <tr>
           <td class="memname">void RAPTOR_Router.Models.Static.BikeModel.UpdateAllStationStatus </td>
           <td>(</td>
-          <td class="paramtype">object?</td>          <td class="paramname"><span class="paramname"><em>source</em>, </span></td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><span class="paramname"></span></td><td>)</td>
           <td></td>
-          <td class="paramtype">ElapsedEventArgs</td>          <td class="paramname"><span class="paramname"><em>e</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">

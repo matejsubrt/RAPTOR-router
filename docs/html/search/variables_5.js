@@ -1,8 +1,5 @@
 var searchData=
 [
-  ['markedbikestations_0',['markedBikeStations',['../class_r_a_p_t_o_r___router_1_1_route_finders_1_1_basic_route_finder.html#ad6ab021db3f207a86743a666d7b66375',1,'RAPTOR_Router.RouteFinders.BasicRouteFinder.markedBikeStations'],['../class_r_a_p_t_o_r___router_1_1_route_finders_1_1_range_route_finder.html#aacf9e5aaf21236f0881f5d20e4809a57',1,'RAPTOR_Router.RouteFinders.RangeRouteFinder.markedBikeStations']]],
-  ['markedrouteswithreachedtrips_1',['markedRoutesWithReachedTrips',['../class_r_a_p_t_o_r___router_1_1_route_finders_1_1_basic_route_finder.html#a8c90ed2656c53833f22c52640dbca739',1,'RAPTOR_Router.RouteFinders.BasicRouteFinder.markedRoutesWithReachedTrips'],['../class_r_a_p_t_o_r___router_1_1_route_finders_1_1_range_route_finder.html#aec0fa5f59db9dc678e6d9f72ddf0b59f',1,'RAPTOR_Router.RouteFinders.RangeRouteFinder.markedRoutesWithReachedTrips']]],
-  ['markedstops_2',['markedStops',['../class_r_a_p_t_o_r___router_1_1_route_finders_1_1_basic_route_finder.html#aaa347290cde9fe4a323044ac73382703',1,'RAPTOR_Router.RouteFinders.BasicRouteFinder.markedStops'],['../class_r_a_p_t_o_r___router_1_1_route_finders_1_1_range_route_finder.html#ac718a41d66938cd26e1d756f0a346c66',1,'RAPTOR_Router.RouteFinders.RangeRouteFinder.markedStops']]],
-  ['max_5ftransfer_5fdistance_3',['MAX_TRANSFER_DISTANCE',['../class_r_a_p_t_o_r___router_1_1_models_1_1_static_1_1_transit_model.html#acf617a55bbe15f9472c060c597cc4be6',1,'RAPTOR_Router::Models::Static::TransitModel']]],
-  ['max_5ftrip_5flength_5fdays_4',['MAX_TRIP_LENGTH_DAYS',['../class_r_a_p_t_o_r___router_1_1_structures_1_1_configuration_1_1_settings.html#acd3678f9ef2359b3e47d4ac1f6307664',1,'RAPTOR_Router::Structures::Configuration::Settings']]]
+  ['id_0',['Id',['../class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_trip.html#a69decc076c3c8b5be527b9becc77fcca',1,'RAPTOR_Router::Structures::Transit::Trip']]],
+  ['indexcomp_1',['indexComp',['../class_r_a_p_t_o_r___router_1_1_route_finders_1_1_basic_route_finder.html#a61832434a43e5427dc8b6207f5da1e33',1,'RAPTOR_Router::RouteFinders::BasicRouteFinder']]]
 ];

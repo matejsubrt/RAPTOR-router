@@ -101,12 +101,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad2e4de9ebd76b97e30220e78eb0dfbb7" id="r_ad2e4de9ebd76b97e30220e78eb0dfbb7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad2e4de9ebd76b97e30220e78eb0dfbb7">GetLastStopIndex</a> (<a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_stop.html">Stop</a> stop)</td></tr>
 <tr class="memdesc:ad2e4de9ebd76b97e30220e78eb0dfbb7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds the last index of a specified stop in the route's list of stops.  <br /></td></tr>
 <tr class="separator:ad2e4de9ebd76b97e30220e78eb0dfbb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae24ebbdf26bef97d54dd106015e6fa75" id="r_ae24ebbdf26bef97d54dd106015e6fa75"><td class="memItemLeft" align="right" valign="top">List&lt; DateTime &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae24ebbdf26bef97d54dd106015e6fa75">GetFirstNTripTimesAtStop</a> (<a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_stop.html">Stop</a> stop, DateTime dateTime, int count, bool forward, int dateTimeOffsetSeconds=0)</td></tr>
+<tr class="memdesc:ae24ebbdf26bef97d54dd106015e6fa75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the first n trip times at a stop reachable at the specified time.  <br /></td></tr>
+<tr class="separator:ae24ebbdf26bef97d54dd106015e6fa75"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae689322e388ac293bef7aa9bc2298300" id="r_ae689322e388ac293bef7aa9bc2298300"><td class="memItemLeft" align="right" valign="top">List&lt; DateTime &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae689322e388ac293bef7aa9bc2298300">GetTripTimesAtStopWithinRange</a> (<a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_stop.html">Stop</a> stop, DateTime rangeStart, DateTime rangeEnd, bool forward)</td></tr>
 <tr class="memdesc:ae689322e388ac293bef7aa9bc2298300"><td class="mdescLeft">&#160;</td><td class="mdescRight">For the given stop and a time range, finds all regular departure/arrival times of trips at the stop within the range.  <br /></td></tr>
 <tr class="separator:ae689322e388ac293bef7aa9bc2298300"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa6b06c9c7793c5a3f31abd6554c549f9" id="r_aa6b06c9c7793c5a3f31abd6554c549f9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_trip.html">Trip</a>?&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa6b06c9c7793c5a3f31abd6554c549f9">GetFirstTransferableTripAtStopByReachTime</a> (bool forward, <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_stop.html">Stop</a> stop, DateTime dateTime, <a class="el" href="class_r_a_p_t_o_r___router_1_1_models_1_1_static_1_1_delay_model.html">DelayModel</a> delayModel, out DateOnly tripStartDate)</td></tr>
-<tr class="memdesc:aa6b06c9c7793c5a3f31abd6554c549f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">For the given direction, stop and time, finds the first trip that can be transferred to/from at the stop at the given time.  <br /></td></tr>
-<tr class="separator:aa6b06c9c7793c5a3f31abd6554c549f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a045753178c879155cb8d1cf6f9aa814f" id="r_a045753178c879155cb8d1cf6f9aa814f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_trip.html">Trip</a>?&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a045753178c879155cb8d1cf6f9aa814f">GetFirstTransferableTripAtStopByReachTime</a> (bool forward, <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_stop.html">Stop</a> stop, DateTime dateTime, <a class="el" href="interface_r_a_p_t_o_r___router_1_1_models_1_1_static_1_1_i_delay_model.html">IDelayModel</a> delayModel, out DateOnly tripStartDate)</td></tr>
+<tr class="memdesc:a045753178c879155cb8d1cf6f9aa814f"><td class="mdescLeft">&#160;</td><td class="mdescRight">For the given direction, stop and time, finds the first trip that can be transferred to/from at the stop at the given time.  <br /></td></tr>
+<tr class="separator:a045753178c879155cb8d1cf6f9aa814f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa1bf53beb8756d12d804d639e842afd8" id="r_aa1bf53beb8756d12d804d639e842afd8"><td class="memItemLeft" align="right" valign="top">override string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa1bf53beb8756d12d804d639e842afd8">ToString</a> ()</td></tr>
 <tr class="memdesc:aa1bf53beb8756d12d804d639e842afd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a string representation of the route object.  <br /></td></tr>
 <tr class="separator:aa1bf53beb8756d12d804d639e842afd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -148,12 +151,12 @@ Dictionary&lt; DateOnly, List&lt; <a class="el" href="class_r_a_p_t_o_r___router
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a953287dda951fb32740034e5371e804c" id="r_a953287dda951fb32740034e5371e804c"><td class="memItemLeft" align="right" valign="top"><a id="a953287dda951fb32740034e5371e804c" name="a953287dda951fb32740034e5371e804c"></a>
-<a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_trip.html">Trip</a>?&#160;</td><td class="memItemRight" valign="bottom"><b>GetEarliestTripDepartingAfterTimeAtStop</b> (<a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_stop.html">Stop</a> stop, DateTime dateTime, <a class="el" href="class_r_a_p_t_o_r___router_1_1_models_1_1_static_1_1_delay_model.html">DelayModel</a> delayModel, out DateOnly tripStartDate)</td></tr>
-<tr class="separator:a953287dda951fb32740034e5371e804c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4fb83736745a7d5bb47b6c2433176784" id="r_a4fb83736745a7d5bb47b6c2433176784"><td class="memItemLeft" align="right" valign="top"><a id="a4fb83736745a7d5bb47b6c2433176784" name="a4fb83736745a7d5bb47b6c2433176784"></a>
-<a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_trip.html">Trip</a>?&#160;</td><td class="memItemRight" valign="bottom"><b>GetLatestTripArrivingBeforeTimeAtStop</b> (<a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_stop.html">Stop</a> stop, DateTime dateTime, <a class="el" href="class_r_a_p_t_o_r___router_1_1_models_1_1_static_1_1_delay_model.html">DelayModel</a> delayModel, out DateOnly tripStartDate)</td></tr>
-<tr class="separator:a4fb83736745a7d5bb47b6c2433176784"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c089965fdd93ba97a299ebb648b0ca8" id="r_a5c089965fdd93ba97a299ebb648b0ca8"><td class="memItemLeft" align="right" valign="top"><a id="a5c089965fdd93ba97a299ebb648b0ca8" name="a5c089965fdd93ba97a299ebb648b0ca8"></a>
+<a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_trip.html">Trip</a>?&#160;</td><td class="memItemRight" valign="bottom"><b>GetEarliestTripDepartingAfterTimeAtStop</b> (<a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_stop.html">Stop</a> stop, DateTime dateTime, <a class="el" href="interface_r_a_p_t_o_r___router_1_1_models_1_1_static_1_1_i_delay_model.html">IDelayModel</a> delayModel, out DateOnly tripStartDate)</td></tr>
+<tr class="separator:a5c089965fdd93ba97a299ebb648b0ca8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b1b0fee74f4ee851f26f4b08a221707" id="r_a5b1b0fee74f4ee851f26f4b08a221707"><td class="memItemLeft" align="right" valign="top"><a id="a5b1b0fee74f4ee851f26f4b08a221707" name="a5b1b0fee74f4ee851f26f4b08a221707"></a>
+<a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_trip.html">Trip</a>?&#160;</td><td class="memItemRight" valign="bottom"><b>GetLatestTripArrivingBeforeTimeAtStop</b> (<a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_stop.html">Stop</a> stop, DateTime dateTime, <a class="el" href="interface_r_a_p_t_o_r___router_1_1_models_1_1_static_1_1_i_delay_model.html">IDelayModel</a> delayModel, out DateOnly tripStartDate)</td></tr>
+<tr class="separator:a5b1b0fee74f4ee851f26f4b08a221707"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class representing an unique public transit route. </p>
@@ -232,6 +235,55 @@ Private Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="ae24ebbdf26bef97d54dd106015e6fa75" name="ae24ebbdf26bef97d54dd106015e6fa75"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae24ebbdf26bef97d54dd106015e6fa75">&#9670;&#160;</a></span>GetFirstNTripTimesAtStop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">List&lt; DateTime &gt; RAPTOR_Router.Structures.Transit.Route.GetFirstNTripTimesAtStop </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_stop.html">Stop</a></td>          <td class="paramname"><span class="paramname"><em>stop</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">DateTime</td>          <td class="paramname"><span class="paramname"><em>dateTime</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>count</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>forward</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>dateTimeOffsetSeconds</em><span class="paramdefsep"> = </span><span class="paramdefval">0</span></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets the first n trip times at a stop reachable at the specified time. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">stop</td><td>The stop</td></tr>
+    <tr><td class="paramname">dateTime</td><td>The time</td></tr>
+    <tr><td class="paramname">count</td><td>The number of trip times to get</td></tr>
+    <tr><td class="paramname">forward</td><td>Whether the search is run forward</td></tr>
+    <tr><td class="paramname">dateTimeOffsetSeconds</td><td>The offset of the time (used when we reach the stop by a transfer)</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The list of dateTimes of trip departures/arrivals after/before the specified time</dd></dl>
+
+</div>
+</div>
 <a id="af2243b1ff4b779afa3f7ab5d5e62ecc5" name="af2243b1ff4b779afa3f7ab5d5e62ecc5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af2243b1ff4b779afa3f7ab5d5e62ecc5">&#9670;&#160;</a></span>GetFirstStopIndex()</h2>
 
@@ -264,8 +316,8 @@ Private Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aa6b06c9c7793c5a3f31abd6554c549f9" name="aa6b06c9c7793c5a3f31abd6554c549f9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa6b06c9c7793c5a3f31abd6554c549f9">&#9670;&#160;</a></span>GetFirstTransferableTripAtStopByReachTime()</h2>
+<a id="a045753178c879155cb8d1cf6f9aa814f" name="a045753178c879155cb8d1cf6f9aa814f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a045753178c879155cb8d1cf6f9aa814f">&#9670;&#160;</a></span>GetFirstTransferableTripAtStopByReachTime()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -288,7 +340,7 @@ Private Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="class_r_a_p_t_o_r___router_1_1_models_1_1_static_1_1_delay_model.html">DelayModel</a></td>          <td class="paramname"><span class="paramname"><em>delayModel</em>, </span></td>
+          <td class="paramtype"><a class="el" href="interface_r_a_p_t_o_r___router_1_1_models_1_1_static_1_1_i_delay_model.html">IDelayModel</a></td>          <td class="paramname"><span class="paramname"><em>delayModel</em>, </span></td>
         </tr>
         <tr>
           <td class="paramkey"></td>

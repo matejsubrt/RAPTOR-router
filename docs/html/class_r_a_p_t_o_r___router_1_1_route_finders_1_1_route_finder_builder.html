@@ -76,6 +76,7 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="#pri-static-attribs">Static Private Attributes</a> &#124;
@@ -87,11 +88,23 @@ $(function() {
 <p>A class used for creating separate routers to be used for connection searching.  
  <a href="#details">More...</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_a_p_t_o_r___router_1_1_route_finders_1_1_route_finder_builder_1_1_daily_gtfs_job.html">DailyGtfsJob</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_a_p_t_o_r___router_1_1_route_finders_1_1_route_finder_builder_1_1_periodic_bike_station_status_update_job.html">PeriodicBikeStationStatusUpdateJob</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_a_p_t_o_r___router_1_1_route_finders_1_1_route_finder_builder_1_1_periodic_delay_update_job.html">PeriodicDelayUpdateJob</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a3ff5f40a670b638257f1f56b95b9708e" id="r_a3ff5f40a670b638257f1f56b95b9708e"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3ff5f40a670b638257f1f56b95b9708e">LoadAllData</a> (string? alternativeGtfsArchiveLocation=null)</td></tr>
-<tr class="memdesc:a3ff5f40a670b638257f1f56b95b9708e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads all the GTFS, GBFS and forbidden crossing data from the locations provided in the config file and bike data sources.  <br /></td></tr>
-<tr class="separator:a3ff5f40a670b638257f1f56b95b9708e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab93127afa5736d336db12cdc9b049c00" id="r_ab93127afa5736d336db12cdc9b049c00"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab93127afa5736d336db12cdc9b049c00">SetDelayModel</a> (<a class="el" href="interface_r_a_p_t_o_r___router_1_1_models_1_1_static_1_1_i_delay_model.html">IDelayModel</a> <a class="el" href="#a1864bfe922e0d56302eb31e4a9e2758b">delayModel</a>)</td></tr>
+<tr class="memdesc:ab93127afa5736d336db12cdc9b049c00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the delay model - to be used for testing purposes.  <br /></td></tr>
+<tr class="separator:ab93127afa5736d336db12cdc9b049c00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a514187d15c16b48a4f427d38b98acb06" id="r_a514187d15c16b48a4f427d38b98acb06"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a514187d15c16b48a4f427d38b98acb06">LoadAllData</a> (string? alternativeGtfsArchiveLocation=null, bool useMocks=false)</td></tr>
+<tr class="memdesc:a514187d15c16b48a4f427d38b98acb06"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads all the GTFS, GBFS and forbidden crossing data from the locations provided in the config file and bike data sources.  <br /></td></tr>
+<tr class="separator:a514187d15c16b48a4f427d38b98acb06"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3baad4532915c8474693c753a981a0ae" id="r_a3baad4532915c8474693c753a981a0ae"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="interface_r_a_p_t_o_r___router_1_1_route_finders_1_1_i_simple_routing_provider.html">ISimpleRoutingProvider</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3baad4532915c8474693c753a981a0ae">CreateRoutingProvider</a> (bool forward, <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_configuration_1_1_settings.html">Settings</a> settings)</td></tr>
 <tr class="memdesc:a3baad4532915c8474693c753a981a0ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a routing provider that can be provided to a range route finder to provide its basic routing functionality.  <br /></td></tr>
 <tr class="separator:a3baad4532915c8474693c753a981a0ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -110,19 +123,22 @@ Static Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
+<tr class="memitem:a469ba2871e6bd89a2a9faad3e6d87171" id="r_a469ba2871e6bd89a2a9faad3e6d87171"><td class="memItemLeft" align="right" valign="top"><a id="a469ba2871e6bd89a2a9faad3e6d87171" name="a469ba2871e6bd89a2a9faad3e6d87171"></a>
+static async Task&#160;</td><td class="memItemRight" valign="bottom"><b>InitializeScheduler</b> ()</td></tr>
+<tr class="separator:a469ba2871e6bd89a2a9faad3e6d87171"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab47174697fe8c412caf14f27464eb0c7" id="r_ab47174697fe8c412caf14f27464eb0c7"><td class="memItemLeft" align="right" valign="top"><a id="ab47174697fe8c412caf14f27464eb0c7" name="ab47174697fe8c412caf14f27464eb0c7"></a>
 static void&#160;</td><td class="memItemRight" valign="bottom"><b>UpdateDelayModel</b> (object? state)</td></tr>
 <tr class="separator:ab47174697fe8c412caf14f27464eb0c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae92220f5bb2dab5be67274416b8f6d0d" id="r_ae92220f5bb2dab5be67274416b8f6d0d"><td class="memItemLeft" align="right" valign="top"><a id="ae92220f5bb2dab5be67274416b8f6d0d" name="ae92220f5bb2dab5be67274416b8f6d0d"></a>
 static async Task&#160;</td><td class="memItemRight" valign="bottom"><b>UpdateDelayModelAsync</b> ()</td></tr>
 <tr class="separator:ae92220f5bb2dab5be67274416b8f6d0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a37689808c8d664c3a49e7db78e93576e" id="r_a37689808c8d664c3a49e7db78e93576e"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a37689808c8d664c3a49e7db78e93576e">LoadGtfsData</a> (string gtfsZipArchiveLocation, List&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_forbidden_crossing_line.html">ForbiddenCrossingLine</a> &gt; forbiddenCrossings)</td></tr>
-<tr class="memdesc:a37689808c8d664c3a49e7db78e93576e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses the provided gtfs zip archive and creates a data model for the connection searches to use.  <br /></td></tr>
-<tr class="separator:a37689808c8d664c3a49e7db78e93576e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac38b730da95f78ec5d56db1e03511fc2" id="r_ac38b730da95f78ec5d56db1e03511fc2"><td class="memItemLeft" align="right" valign="top"><a id="ac38b730da95f78ec5d56db1e03511fc2" name="ac38b730da95f78ec5d56db1e03511fc2"></a>
-static void&#160;</td><td class="memItemRight" valign="bottom"><b>LoadGbfsData</b> (string nextbikeDbFileLocation)</td></tr>
-<tr class="memdesc:ac38b730da95f78ec5d56db1e03511fc2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads the data from the bike data sources and creates a data model for the connection searches to use. <br /></td></tr>
-<tr class="separator:ac38b730da95f78ec5d56db1e03511fc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8497735a5302c0e9e07298ab66e747df" id="r_a8497735a5302c0e9e07298ab66e747df"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8497735a5302c0e9e07298ab66e747df">LoadGtfsData</a> (string gtfsZipArchiveLocation, List&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_forbidden_crossing_line.html">ForbiddenCrossingLine</a> &gt; forbiddenCrossings, bool downloadNewIfFileOld=true)</td></tr>
+<tr class="memdesc:a8497735a5302c0e9e07298ab66e747df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses the provided gtfs zip archive and creates a data model for the connection searches to use.  <br /></td></tr>
+<tr class="separator:a8497735a5302c0e9e07298ab66e747df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acea416bb6955e51807e81a3a9f6e4b21" id="r_acea416bb6955e51807e81a3a9f6e4b21"><td class="memItemLeft" align="right" valign="top"><a id="acea416bb6955e51807e81a3a9f6e4b21" name="acea416bb6955e51807e81a3a9f6e4b21"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>LoadGbfsData</b> (string nextbikeDbFileLocation, bool useMocks=false)</td></tr>
+<tr class="memdesc:acea416bb6955e51807e81a3a9f6e4b21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads the data from the bike data sources and creates a data model for the connection searches to use. <br /></td></tr>
+<tr class="separator:acea416bb6955e51807e81a3a9f6e4b21"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4df40a1b43cc5439186c73e33017c0b6" id="r_a4df40a1b43cc5439186c73e33017c0b6"><td class="memItemLeft" align="right" valign="top">static List&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_forbidden_crossing_line.html">ForbiddenCrossingLine</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4df40a1b43cc5439186c73e33017c0b6">LoadForbiddenCrossings</a> (string pointsLocation, string linesLocation)</td></tr>
 <tr class="memdesc:a4df40a1b43cc5439186c73e33017c0b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads the forbidden crossing data from the provided locations.  <br /></td></tr>
 <tr class="separator:a4df40a1b43cc5439186c73e33017c0b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -152,12 +168,18 @@ static ? <a class="el" href="class_r_a_p_t_o_r___router_1_1_models_1_1_static_1_
 static ? <a class="el" href="class_r_a_p_t_o_r___router_1_1_models_1_1_static_1_1_bike_model.html">BikeModel</a>&#160;</td><td class="memItemRight" valign="bottom"><b>bikeModel</b></td></tr>
 <tr class="memdesc:a582d9d9f096173fe9ff976d237e9d660"><td class="mdescLeft">&#160;</td><td class="mdescRight">The bike model the routers should use. <br /></td></tr>
 <tr class="separator:a582d9d9f096173fe9ff976d237e9d660"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a59c6b26995f4f85df8741fb81d993f9a" id="r_a59c6b26995f4f85df8741fb81d993f9a"><td class="memItemLeft" align="right" valign="top"><a id="a59c6b26995f4f85df8741fb81d993f9a" name="a59c6b26995f4f85df8741fb81d993f9a"></a>
-static ? <a class="el" href="class_r_a_p_t_o_r___router_1_1_models_1_1_static_1_1_delay_model.html">DelayModel</a>&#160;</td><td class="memItemRight" valign="bottom"><b>delayModel</b></td></tr>
-<tr class="separator:a59c6b26995f4f85df8741fb81d993f9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af600ddacbb5ef44301a6317f00304e3d" id="r_af600ddacbb5ef44301a6317f00304e3d"><td class="memItemLeft" align="right" valign="top"><a id="af600ddacbb5ef44301a6317f00304e3d" name="af600ddacbb5ef44301a6317f00304e3d"></a>
-static ? Timer&#160;</td><td class="memItemRight" valign="bottom"><b>_timer</b></td></tr>
-<tr class="separator:af600ddacbb5ef44301a6317f00304e3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1864bfe922e0d56302eb31e4a9e2758b" id="r_a1864bfe922e0d56302eb31e4a9e2758b"><td class="memItemLeft" align="right" valign="top"><a id="a1864bfe922e0d56302eb31e4a9e2758b" name="a1864bfe922e0d56302eb31e4a9e2758b"></a>
+static ? <a class="el" href="interface_r_a_p_t_o_r___router_1_1_models_1_1_static_1_1_i_delay_model.html">IDelayModel</a>&#160;</td><td class="memItemRight" valign="bottom"><b>delayModel</b></td></tr>
+<tr class="memdesc:a1864bfe922e0d56302eb31e4a9e2758b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The delay model that the routers should use. <br /></td></tr>
+<tr class="separator:a1864bfe922e0d56302eb31e4a9e2758b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02510cfa8a59c76ec681e742d3f9e49d" id="r_a02510cfa8a59c76ec681e742d3f9e49d"><td class="memItemLeft" align="right" valign="top"><a id="a02510cfa8a59c76ec681e742d3f9e49d" name="a02510cfa8a59c76ec681e742d3f9e49d"></a>
+static ? List&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_forbidden_crossing_line.html">ForbiddenCrossingLine</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>forbiddenCrossingLines</b></td></tr>
+<tr class="memdesc:a02510cfa8a59c76ec681e742d3f9e49d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The list of lines forbidden to cross via a transfer. <br /></td></tr>
+<tr class="separator:a02510cfa8a59c76ec681e742d3f9e49d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8836788aa0b11f50c7f3ea1fa3c0af20" id="r_a8836788aa0b11f50c7f3ea1fa3c0af20"><td class="memItemLeft" align="right" valign="top"><a id="a8836788aa0b11f50c7f3ea1fa3c0af20" name="a8836788aa0b11f50c7f3ea1fa3c0af20"></a>
+static ? IScheduler&#160;</td><td class="memItemRight" valign="bottom"><b>_scheduler</b></td></tr>
+<tr class="memdesc:a8836788aa0b11f50c7f3ea1fa3c0af20"><td class="mdescLeft">&#160;</td><td class="mdescRight">The timer that periodically updates the delay model. <br /></td></tr>
+<tr class="separator:a8836788aa0b11f50c7f3ea1fa3c0af20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A class used for creating separate routers to be used for connection searching. </p>
@@ -368,8 +390,8 @@ static ? Timer&#160;</td><td class="memItemRight" valign="bottom"><b>_timer</b><
 
 </div>
 </div>
-<a id="a3ff5f40a670b638257f1f56b95b9708e" name="a3ff5f40a670b638257f1f56b95b9708e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3ff5f40a670b638257f1f56b95b9708e">&#9670;&#160;</a></span>LoadAllData()</h2>
+<a id="a514187d15c16b48a4f427d38b98acb06" name="a514187d15c16b48a4f427d38b98acb06"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a514187d15c16b48a4f427d38b98acb06">&#9670;&#160;</a></span>LoadAllData()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -380,8 +402,12 @@ static ? Timer&#160;</td><td class="memItemRight" valign="bottom"><b>_timer</b><
         <tr>
           <td class="memname">static void RAPTOR_Router.RouteFinders.RouteFinderBuilder.LoadAllData </td>
           <td>(</td>
-          <td class="paramtype">string?</td>          <td class="paramname"><span class="paramname"><em>alternativeGtfsArchiveLocation</em><span class="paramdefsep"> = </span><span class="paramdefval">null</span></span></td><td>)</td>
+          <td class="paramtype">string?</td>          <td class="paramname"><span class="paramname"><em>alternativeGtfsArchiveLocation</em><span class="paramdefsep"> = </span><span class="paramdefval">null</span>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>useMocks</em><span class="paramdefsep"> = </span><span class="paramdefval">false</span></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -440,8 +466,8 @@ static ? Timer&#160;</td><td class="memItemRight" valign="bottom"><b>_timer</b><
 
 </div>
 </div>
-<a id="a37689808c8d664c3a49e7db78e93576e" name="a37689808c8d664c3a49e7db78e93576e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a37689808c8d664c3a49e7db78e93576e">&#9670;&#160;</a></span>LoadGtfsData()</h2>
+<a id="a8497735a5302c0e9e07298ab66e747df" name="a8497735a5302c0e9e07298ab66e747df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8497735a5302c0e9e07298ab66e747df">&#9670;&#160;</a></span>LoadGtfsData()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -457,7 +483,12 @@ static ? Timer&#160;</td><td class="memItemRight" valign="bottom"><b>_timer</b><
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">List&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_forbidden_crossing_line.html">ForbiddenCrossingLine</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>forbiddenCrossings</em></span>&#160;)</td>
+          <td class="paramtype">List&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_forbidden_crossing_line.html">ForbiddenCrossingLine</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>forbiddenCrossings</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>downloadNewIfFileOld</em><span class="paramdefsep"> = </span><span class="paramdefval">true</span></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -472,6 +503,40 @@ static ? Timer&#160;</td><td class="memItemRight" valign="bottom"><b>_timer</b><
   <table class="params">
     <tr><td class="paramname">gtfsZipArchiveLocation</td><td>The location of the zip gtfs archive</td></tr>
     <tr><td class="paramname">forbiddenCrossings</td><td>The list of lines forbidden to cross via a transfer</td></tr>
+    <tr><td class="paramname">downloadNewIfFileOld</td><td>Whether to download a fresh GTFS archive if the one present is old</td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ab93127afa5736d336db12cdc9b049c00" name="ab93127afa5736d336db12cdc9b049c00"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab93127afa5736d336db12cdc9b049c00">&#9670;&#160;</a></span>SetDelayModel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void RAPTOR_Router.RouteFinders.RouteFinderBuilder.SetDelayModel </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interface_r_a_p_t_o_r___router_1_1_models_1_1_static_1_1_i_delay_model.html">IDelayModel</a></td>          <td class="paramname"><span class="paramname"><em>delayModel</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the delay model - to be used for testing purposes. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">delayModel</td><td>The delay model to be set</td></tr>
   </table>
   </dd>
 </dl>

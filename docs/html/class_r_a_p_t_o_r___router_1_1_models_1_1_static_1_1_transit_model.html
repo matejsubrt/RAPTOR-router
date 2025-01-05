@@ -102,6 +102,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3aa5bf02fc78896b4c85f408338f2c26" id="r_a3aa5bf02fc78896b4c85f408338f2c26"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_stop.html">Stop</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3aa5bf02fc78896b4c85f408338f2c26">GetStopsByLocation</a> (<a class="el" href="struct_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_coordinates.html">Coordinates</a> coords, int radius)</td></tr>
 <tr class="memdesc:a3aa5bf02fc78896b4c85f408338f2c26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets all the stops within the given radius of the given coordinates.  <br /></td></tr>
 <tr class="separator:a3aa5bf02fc78896b4c85f408338f2c26"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a223e8abb7b192342e24acdc6f8cedf8d" id="r_a223e8abb7b192342e24acdc6f8cedf8d"><td class="memItemLeft" align="right" valign="top">Dictionary&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_stop.html">Stop</a>, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a223e8abb7b192342e24acdc6f8cedf8d">GetStopsWithDistancesByLocation</a> (<a class="el" href="struct_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_coordinates.html">Coordinates</a> coords, int radius)</td></tr>
+<tr class="memdesc:a223e8abb7b192342e24acdc6f8cedf8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets all the stops within the given radius of the given coordinates and the distances of the stops from the coordinates.  <br /></td></tr>
+<tr class="separator:a223e8abb7b192342e24acdc6f8cedf8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad173aefb80e6362cdbac58cbb2f49caa" id="r_ad173aefb80e6362cdbac58cbb2f49caa"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad173aefb80e6362cdbac58cbb2f49caa">NearStopExists</a> (<a class="el" href="struct_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_coordinates.html">Coordinates</a> coords, int radius)</td></tr>
 <tr class="memdesc:ad173aefb80e6362cdbac58cbb2f49caa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds out whether a stop exists within the given radius of the given coordinates.  <br /></td></tr>
 <tr class="separator:ad173aefb80e6362cdbac58cbb2f49caa"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -228,6 +231,37 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>LoadStopRoutes</b> ()
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>List of all the stops with the specified name</dd></dl>
+
+</div>
+</div>
+<a id="a223e8abb7b192342e24acdc6f8cedf8d" name="a223e8abb7b192342e24acdc6f8cedf8d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a223e8abb7b192342e24acdc6f8cedf8d">&#9670;&#160;</a></span>GetStopsWithDistancesByLocation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Dictionary&lt; <a class="el" href="class_r_a_p_t_o_r___router_1_1_structures_1_1_transit_1_1_stop.html">Stop</a>, int &gt; RAPTOR_Router.Models.Static.TransitModel.GetStopsWithDistancesByLocation </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_r_a_p_t_o_r___router_1_1_structures_1_1_generic_1_1_coordinates.html">Coordinates</a></td>          <td class="paramname"><span class="paramname"><em>coords</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>radius</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets all the stops within the given radius of the given coordinates and the distances of the stops from the coordinates. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">coords</td><td>The coordinates at which to look for the stops</td></tr>
+    <tr><td class="paramname">radius</td><td>The maximum distance of a near stop from the coordinates</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Dictionary indexed by the near stops with the distance to each of them</dd></dl>
 
 </div>
 </div>
