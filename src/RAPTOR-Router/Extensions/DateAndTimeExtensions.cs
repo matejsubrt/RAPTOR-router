@@ -1,5 +1,8 @@
 ﻿namespace RAPTOR_Router.Extensions
 {
+    /// <summary>
+    /// Extension methods for the TimeOnly class
+    /// </summary>
     public static class TimeOnlyExtensions
     {
         /// <summary>

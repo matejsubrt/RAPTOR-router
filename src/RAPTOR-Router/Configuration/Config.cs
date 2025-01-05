@@ -49,7 +49,7 @@ namespace RAPTOR_Router.Configuration
             }
         }
 
-        static string GetFullPath(string key)
+        static string? GetFullPath(string key)
         {
             var relativePath = _config?[key];
 
@@ -87,6 +87,9 @@ namespace RAPTOR_Router.Configuration
         /// </summary>
         public static string? NextbikeDbPath => GetFullPath("nextbikeDbPath");//_config?["nextbikeDbPath"];
 
+        /// <summary>
+        /// The location of the nextbike database file for testing purposes
+        /// </summary>
         public static string? NextbikeDbTestPath => GetFullPath("nextbikeDbTestPath");//_config?["nextbikeTestDbPath"];
 
         /// <summary>
@@ -103,6 +106,9 @@ namespace RAPTOR_Router.Configuration
         /// </summary>
         public static string? ConnectionTestDataFilePath => GetFullPath("connectionTestDataFilePath");//_config?["testDataFilePath"];
 
+        /// <summary>
+        /// The location of the file containing test data for testing alternative trips finding
+        /// </summary>
         public static string? AltTripTestDataFilePath => GetFullPath("altTripTestDataFilePath");//_config?["altTripTestDataFilePath"];
 
         /// <summary>

@@ -4,6 +4,9 @@ using RAPTOR_Router.Structures.Interfaces;
 
 namespace RAPTOR_Router.Extensions
 {
+    /// <summary>
+    /// Class holding helpful list extensions
+    /// </summary>
     public static class ListExtensions
     {
         /// <summary>
@@ -23,7 +26,9 @@ namespace RAPTOR_Router.Extensions
     }
     
 
-    
+    /// <summary>
+    /// Class holding extensions helpful for manipulating forbidden crossing lines
+    /// </summary>
     public static class ForbiddenCrossingExtensions
     {
         /// <summary>

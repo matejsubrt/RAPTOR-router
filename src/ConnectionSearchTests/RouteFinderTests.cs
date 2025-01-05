@@ -1,4 +1,5 @@
-﻿using System;
+﻿#pragma warning disable CS8614
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -37,7 +38,7 @@ namespace ConnectionSearchTests
             }
         }
 
-        public string GetDisplayName(MethodInfo methodInfo, object[] data)
+        public string? GetDisplayName(MethodInfo methodInfo, object[] data)
         {
             if (data != null)
                 return string.Format(CultureInfo.CurrentCulture, "{0} ({1})", methodInfo.Name, string.Join(",", data));
@@ -67,7 +68,7 @@ namespace ConnectionSearchTests
             }
         }
 
-        public string GetDisplayName(MethodInfo methodInfo, object[] data)
+        public string? GetDisplayName(MethodInfo methodInfo, object[] data)
         {
             if (data != null)
                 return string.Format(CultureInfo.CurrentCulture, "{0} ({1})", methodInfo.Name, string.Join(",", data));
@@ -100,9 +101,6 @@ namespace ConnectionSearchTests
             RouteFinderBuilder.LoadAllData(gtfsZipArchiveLocation, true);
 
             RouteFinderBuilder.SetDelayModel(new MockDelayModel());
-
-
-            //Thread.Sleep(2000); // Wait for delay data to be downloaded
         }
     }
 
@@ -1013,7 +1011,7 @@ namespace ConnectionSearchTests
             Assert.IsNotNull(result);
             Assert.AreEqual(ConnectionSearchError.NoError, result.Error);
 
-            DateTime lastResultDepTime = result.Results[0].DepartureDateTime;
+            DateTime lastResultDepTime = result.Results![0].DepartureDateTime;
             foreach (var searchResult in result.Results)
             {
                 Assert.IsTrue(lastResultDepTime <= searchResult.DepartureDateTime);
@@ -1053,7 +1051,7 @@ namespace ConnectionSearchTests
             Assert.IsNotNull(result);
             Assert.AreEqual(ConnectionSearchError.NoError, result.Error);
 
-            DateTime lastResultDepTime = result.Results[0].DepartureDateTime;
+            DateTime lastResultDepTime = result.Results![0].DepartureDateTime;
             foreach (var searchResult in result.Results)
             {
                 Assert.IsTrue(lastResultDepTime <= searchResult.ArrivalDateTime);
@@ -1093,7 +1091,7 @@ namespace ConnectionSearchTests
             Assert.IsNotNull(result);
             Assert.AreEqual(ConnectionSearchError.NoError, result.Error);
 
-            DateTime lastResultDepTime = result.Results[0].DepartureDateTime;
+            DateTime lastResultDepTime = result.Results![0].DepartureDateTime;
             foreach (var searchResult in result.Results)
             {
                 Assert.IsTrue(lastResultDepTime <= searchResult.ArrivalDateTime);
@@ -1133,7 +1131,7 @@ namespace ConnectionSearchTests
             Assert.IsNotNull(result);
             Assert.AreEqual(ConnectionSearchError.NoError, result.Error);
 
-            DateTime lastResultDepTime = result.Results[0].DepartureDateTime;
+            DateTime lastResultDepTime = result.Results![0].DepartureDateTime;
             foreach (var searchResult in result.Results)
             {
                 Assert.IsTrue(lastResultDepTime <= searchResult.ArrivalDateTime);
@@ -1165,7 +1163,7 @@ namespace ConnectionSearchTests
 
             AlternativesRouteFinder router = RouteFinderBuilder.CreateDirectRouteFinder();
 
-            var result = router.GetAlternativeTrips(request);
+            var result = router.GetAlternativeTrips(request, true);
 
             Assert.IsNotNull(result);
             Assert.AreEqual(AlternativesSearchError.NoError, result.Error);
@@ -1214,7 +1212,7 @@ namespace ConnectionSearchTests
 
             AlternativesRouteFinder router = RouteFinderBuilder.CreateDirectRouteFinder();
 
-            var result = router.GetAlternativeTrips(request);
+            var result = router.GetAlternativeTrips(request, true);
 
             Assert.IsNotNull(result);
             Assert.AreEqual(AlternativesSearchError.NoError, result.Error);
@@ -1244,3 +1242,4 @@ namespace ConnectionSearchTests
         }
     }
 }
+#pragma warning restore CS8614

@@ -113,3 +113,4 @@
 /src/RAPTOR-Router/bin/Debug/net7.0
 /src/RAPTOR-Router/.vs
 /src/RAPTOR-Router/bin/Release/net7.0
+/src/data/bike_distances/bike_distances_test_new.db

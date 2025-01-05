@@ -46,12 +46,16 @@ namespace RAPTOR_Router.Structures.Requests
         /// Validates the request
         /// </summary>
         /// <param name="transitModel">The transit model used for searches</param>
+        /// <param name="testing">Specifies, whether this is a testing run - in that case we do not check the date</param>
         /// <returns>The error type for the request object</returns>
-        public AlternativesSearchError Validate(TransitModel transitModel)
+        public AlternativesSearchError Validate(TransitModel transitModel, bool testing = false)
         {
             if (dateTime < DateTime.Now.AddDays(-14) || dateTime > DateTime.Now.AddDays(14))
             {
-                return AlternativesSearchError.InvalidDateTime;
+                if (!testing)
+                {
+                    return AlternativesSearchError.InvalidDateTime;
+                }
             }
 
             bool srcStopIdValid = srcStopId is not null && transitModel.stops.ContainsKey(srcStopId);

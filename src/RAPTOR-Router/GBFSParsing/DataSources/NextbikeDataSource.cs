@@ -67,7 +67,6 @@ namespace RAPTOR_Router.GBFSParsing.DataSources
                 }
                 catch (HttpRequestException e)
                 {
-                    // Handle any errors that occurred during the request
                     Console.WriteLine("\nException Caught!");
                     Console.WriteLine("Message :{0} ", e.Message);
                 }
@@ -104,7 +103,6 @@ namespace RAPTOR_Router.GBFSParsing.DataSources
                 }
                 catch (HttpRequestException e)
                 {
-                    // Handle any errors that occurred during the request
                     Console.WriteLine("\nException Caught!");
                     Console.WriteLine("Message :{0} ", e.Message);
                 }

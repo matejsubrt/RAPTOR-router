@@ -42,7 +42,7 @@ namespace ConnectionSearchTests
             return delay % 2 == 0;
         }
 
-        public TripStopDelays GetTripStopDelaysUnsafe(DateOnly tripStartDate, string tripId)
+        public TripStopDelays? GetTripStopDelaysUnsafe(DateOnly tripStartDate, string tripId)
         {
             string tripIdLast2Chars = tripId.Substring(tripId.Length - 2);
             int delay = int.Parse(tripIdLast2Chars);

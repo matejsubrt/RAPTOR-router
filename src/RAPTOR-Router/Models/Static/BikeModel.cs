@@ -68,18 +68,9 @@ namespace RAPTOR_Router.Models.Static
             bikeDataSources.Add(source);
         }
 
-        ///// <summary>
-        ///// Sets the bike count for all stations and starts the timer to update the status of the stations periodically.
-        ///// </summary>
-        //public void StartUpdateTimer()
-        //{
-        //    foreach (IBikeDataSource dataSource in bikeDataSources)
-        //    {
-        //        dataSource.UpdateStationStatus();
-        //    }
-        //    //statusUpdateTimer.Start();
-        //}
-
+        /// <summary>
+        /// Sets the bike count for all stations to 1 - to be used for testing purposes
+        /// </summary>
         public void MockStationStatus()
         {
             foreach (var bikeStation in Stations)

@@ -1,4 +1,4 @@
-﻿
+﻿#pragma warning disable CS1591
 
 namespace RAPTOR_Router.Structures.Configuration
 {
@@ -365,3 +365,4 @@ namespace RAPTOR_Router.Structures.Configuration
         Long = 3
     }
 }
+#pragma warning restore CS1591

@@ -265,6 +265,7 @@ namespace RAPTOR_Router.GTFSParsing
         /// Downloads and parses the GTFS data from the specified zip archive file
         /// </summary>
         /// <param name="pathToZipFile">The path to the zip file that should be overwritten with the new downloaded one</param>
+        /// <param name="downloadNewIfFileOld">Whether to download a fresh GTFS archive if the one present is old</param>
         /// <returns>The parsed GTFS object</returns>
         public static GTFS DownloadAndParseZipFile(string pathToZipFile, bool downloadNewIfFileOld = true)
         {

@@ -122,12 +122,13 @@ namespace RAPTOR_Router.RouteFinders
         /// Gets the list of alternative trips between two stops
         /// </summary>
         /// <param name="request">The alternative trips request to respond to</param>
+        /// <param name="testing">Specifies, whether this is a testing run - in that case we do not check the date</param>
         /// <returns>The result of the search</returns>
-        public AlternativeTripsApiResponseResult GetAlternativeTrips(AlternativeTripsRequest request)
+        public AlternativeTripsApiResponseResult GetAlternativeTrips(AlternativeTripsRequest request, bool testing = false)
         {
             AlternativeTripsApiResponseResult result = new();
 
-            AlternativesSearchError error = request.Validate(transitModel);
+            AlternativesSearchError error = request.Validate(transitModel, testing);
             if (error != AlternativesSearchError.NoError)
             {
                 result.Error = error;
@@ -274,7 +275,7 @@ namespace RAPTOR_Router.RouteFinders
                 {
                     return 0;
                 }
-                TripStopDelays stopDelays = delayModel.GetTripStopDelaysUnsafe(tripStartDate, trip.Id);
+                TripStopDelays stopDelays = delayModel.GetTripStopDelaysUnsafe(tripStartDate, trip.Id)!;
                 List<StopTime> stopTimes = trip.StopTimes;
 
                 TimeZoneInfo timeZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Prague");

@@ -300,7 +300,7 @@ namespace RAPTOR_Router.Models.Dynamic
 
             int GetCurrentTripDelay(Trip trip, DateOnly tripStartDate)
             {
-                TripStopDelays stopDelays = delayModel.GetTripStopDelaysUnsafe(tripStartDate, trip.Id);
+                TripStopDelays stopDelays = delayModel.GetTripStopDelaysUnsafe(tripStartDate, trip.Id)!;
                 List<StopTime> stopTimes = trip.StopTimes;
 
                 TimeZoneInfo timeZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Prague");

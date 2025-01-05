@@ -1,4 +1,6 @@
-﻿using System;
+﻿// AI has been used to create/modify some of the tests in this file
+#pragma warning disable CS8618
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -48,8 +50,6 @@ namespace UnitTests
 			
 
 			globalResult.AddUsedTrip(trip1, new DateOnly(), s1, s2, false, 1, 2, true);
-            //globalResult.UsedTrips[0].getOnStopIndex = 0;
-			//globalResult.UsedTrips[0].getOffStopIndex = 1;
 
 			globalResult.AddUsedTransfer(new Transfer(s1, s2, 100), true);
 
@@ -96,8 +96,6 @@ namespace UnitTests
 
 
             globalResult.AddUsedTrip(trip1, new DateOnly(), s1, s2, false, 1, 2, true);
-            //globalResult.UsedTrips[0].getOnStopIndex = 0;
-            //globalResult.UsedTrips[0].getOffStopIndex = 1;
 
             globalResult.AddUsedTransfer(new Transfer(s2, s2, 0), true);
 
@@ -224,12 +222,9 @@ namespace UnitTests
 			ResetGlobalResult();
 
 			Assert.IsTrue(
-				//globalResult.TripCount == 1 &&
 				globalResult.UsedTrips.Count == 1 &&
 				globalResult.UsedSegmentTypes.Count == 3 &&
-				//globalResult.TransferCount == 1 &&
 				globalResult.UsedTransfers.Count == 1 &&
-				//globalResult.BikeTripCount == 1 &&
 			    globalResult.UsedBikeTrips.Count == 1
 			);
 
@@ -315,3 +310,4 @@ namespace UnitTests
 
 
 }
+#pragma warning restore CS8618

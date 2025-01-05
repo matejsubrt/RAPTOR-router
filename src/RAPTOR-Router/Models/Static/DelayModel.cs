@@ -6,15 +6,47 @@ using System.Threading.Tasks;
 
 namespace RAPTOR_Router.Models.Static
 {
+    /// <summary>
+    /// Interface for a Delay Model
+    /// </summary>
     public interface IDelayModel
     {
+        /// <summary>
+        /// Adds a delay value to the model
+        /// </summary>
+        /// <param name="tripStartDate">The start date of the trip for which to add the delay</param>
+        /// <param name="tripId">The id of the trip</param>
+        /// <param name="arrivalDelay">The arrival delay</param>
+        /// <param name="departureDelay">The departure delay</param>
         public void AddDelay(DateOnly tripStartDate, string tripId, int arrivalDelay, int departureDelay);
 
+        /// <summary>
+        /// Tries to get the delay for the specified trip
+        /// </summary>
+        /// <param name="tripStartDate">The start date of the trip for which to get the delay</param>
+        /// <param name="tripId">The id of the trip</param>
+        /// <param name="stopIndex">The index of the desired stop</param>
+        /// <param name="arrivalDelay">The arrival delay</param>
+        /// <param name="departureDelay">The departure delay</param>
+        /// <returns>Whether the delay was present</returns>
         public bool TryGetDelay(DateOnly tripStartDate, string tripId, int stopIndex, out int arrivalDelay, out int departureDelay);
 
+        /// <summary>
+        /// Finds out whether there is delay data present for the trip
+        /// </summary>
+        /// <param name="tripStartDate">The start date of the trip for which to get the information</param>
+        /// <param name="tripId">The id of the trip</param>
+        /// <returns>Whether delay data for the trip is present</returns>
         public bool TripHasDelayData(DateOnly tripStartDate, string tripId);
 
-        public TripStopDelays GetTripStopDelaysUnsafe(DateOnly tripStartDate, string tripId);
+        /// <summary>
+        /// Gets the trip stop delays for the trip.
+        /// </summary>
+        /// <param name="tripStartDate">The start date of the trip for which to get the information</param>
+        /// <param name="tripId">The id of the trip</param>
+        /// <remarks>Fails if trip does not have delay data present</remarks>
+        /// <returns>The trip's stops' delays</returns>
+        public TripStopDelays? GetTripStopDelaysUnsafe(DateOnly tripStartDate, string tripId);
     }
 
 

@@ -209,6 +209,10 @@ namespace RAPTOR_Router.RouteFinders
             }
         }
 
+        /// <summary>
+        /// Sets the delay model - to be used for testing purposes
+        /// </summary>
+        /// <param name="delayModel">The delay model to be set</param>
         public static void SetDelayModel(IDelayModel delayModel)
         {
             RouteFinderBuilder.delayModel = delayModel;
@@ -286,6 +290,8 @@ namespace RAPTOR_Router.RouteFinders
         /// </summary>
         /// <param name="gtfsZipArchiveLocation">The location of the zip gtfs archive</param>
         /// <param name="forbiddenCrossings">The list of lines forbidden to cross via a transfer</param>
+        /// <param name="downloadNewIfFileOld">Whether to download a fresh GTFS archive if the one present is old</param>
+
         private static void LoadGtfsData(string gtfsZipArchiveLocation, List<ForbiddenCrossingLine> forbiddenCrossings, bool downloadNewIfFileOld = true)
         {
             forbiddenCrossingLines = forbiddenCrossings;

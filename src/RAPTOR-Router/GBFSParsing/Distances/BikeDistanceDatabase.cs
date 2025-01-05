@@ -59,7 +59,7 @@ public class BikeDistanceDatabase
         {
             connection.Open();
 
-            // Insert or replace the distance value for a given pair
+            // Insert or replace the distance value for the given pair
             string insertQuery = @"
             INSERT OR REPLACE INTO Distances (StationA, StationB, Distance) 
             VALUES (@StationA, @StationB, @Distance)";
