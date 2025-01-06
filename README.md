@@ -1,30 +1,35 @@
-# A Prague public transport app
+# RAPTOR Router
+
+## Overview
+
+- Application for routing in Prague's public transit network
 - Finds the fastest possible connection between two stops in Prague using public transit and Nextbike shared bikes.
     - Easily extendable to support additional shared bike providers in the future.
-- Offers advanced user configuration options for more personalized transit planning.
+- Offers advanced user configuration options for more personalized transit planning, including setting own walking pace, safety time buffers and more
 - Designed to function as a backend server-side application with a REST API.
     - The Android app [PragO](https://github.com/matejsubrt/PragO) is being developed as the primary frontend interface for the user accessing the search algorithm.
-    - For development purposes, the app also includes basic CLI and GUI interfaces for connection searching.
-
-------------
-
-Please note that this is a work in progress and most parts of the application are still being developed. Currently, the RAPTOR-Router, WebAPI-light and CLIApp modules are up to date. The rest of the project will get updated when the core base functionality is finalized.
+- Implemented completely in C\# language
 
 ------------
 
 ## Documentation
 
+### User documentation
+
+For information on how to use the API, please refer to section 3.3 of the [thesis](https://github.com/matejsubrt/bachelor-thesis) related to this project.
+
 ### Developer documentation
 
-For generated developer documentation, see [Dev docs](https://matejsubrt.github.io/RAPTOR-router/html/index.html). This documentation is related to an older version of the project and will be updated soon.
+For generated developer documentation, see [Dev docs](https://matejsubrt.github.io/RAPTOR-router/html/index.html). For an overview of the codebase, please refer to section 4.1 of the [thesis](https://github.com/matejsubrt/bachelor-thesis) related to this project.
 
 ### RAPTOR Algorithm documentation
 
-For information about the RAPTOR algorithm that is being used by the application, see [RAPTOR docs](https://www.microsoft.com/en-us/research/wp-content/uploads/2012/01/raptor_alenex.pdf)
+For information about the RAPTOR algorithm that the application uses and extends, see [RAPTOR docs](https://www.microsoft.com/en-us/research/wp-content/uploads/2012/01/raptor_alenex.pdf).
 
 
-### MFF Individual project documentation
+
+### Deprecated - MFF Individual project documentation
 
 - For Individual project developer documentation, see [Individual Project Dev Docs](docs/individual_project/developer.md)
 - For Individual project user documentation, see [Individual Project User Docs](docs/individual_project/user.md)
-- (Note that the information in this documentation is now partly deprecated, as the application is still being developed even after the Individual project part of it has been finished)
+- (Note that the information in this documentation is now partly deprecated, as the application is still being developed even after the work on the Individual project part has been finished)
