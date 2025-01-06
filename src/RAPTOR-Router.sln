@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RAPTOR-Router", "RAPTOR-Rou
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAPI", "WebAPI\WebAPI.csproj", "{80F68170-185A-48C3-BB06-2DEEA35DD7FD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConnectionSearchTests", "ConnectionSearchTests\ConnectionSearchTests.csproj", "{74E6CB43-A629-499E-82B5-4C1D0CA82EF0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "ConnectionSearchTests\Tests.csproj", "{74E6CB43-A629-499E-82B5-4C1D0CA82EF0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Individual Project Documentation", "Individual Project Documentation", "{C8694F36-0E21-48E6-B44A-B1A33BD05049}"
 	ProjectSection(SolutionItems) = preProject

@@ -114,3 +114,9 @@
 /src/RAPTOR-Router/.vs
 /src/RAPTOR-Router/bin/Release/net7.0
 /src/data/bike_distances/bike_distances_test_new.db
+/external-testing/postman-allrandom-errors-run1.json
+/external-testing/postman-allrandom-errors-run2.json
+/external-testing/postman-allrandom-errors-run3-monday.json
+/external-testing/postman-allrandom-run1.json
+/external-testing/postman-run1.json
+/external-testing/postman-run2.json
