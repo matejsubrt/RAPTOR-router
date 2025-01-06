@@ -20,7 +20,7 @@ For information on how to use the API, please refer to section 3.3 of the [thesi
 
 ### Developer documentation
 
-For generated developer documentation, see [Dev docs](https://matejsubrt.github.io/RAPTOR-router/html/index.html). For an overview of the codebase, please refer to section 4.1 of the [thesis](https://github.com/matejsubrt/bachelor-thesis) related to this project.
+For generated developer documentation, see [Dev docs](https://matejsubrt.github.io/RAPTOR-router/html/index.html). For installation instructions and an overview of the codebase, please refer to section 4.1 of the [thesis](https://github.com/matejsubrt/bachelor-thesis) related to this project.
 
 ### RAPTOR Algorithm documentation
 
