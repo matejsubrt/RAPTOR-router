@@ -98,7 +98,7 @@ namespace ConnectionSearchTests
                 throw new InternalTestFailureException("Invalid gtfs zip archive path. Check the testConfig.json file");
             }
 
-            RouteFinderBuilder.LoadAllData(gtfsZipArchiveLocation, true);
+            RouteFinderBuilder.LoadAllData(true, gtfsZipArchiveLocation, true);
 
             RouteFinderBuilder.SetDelayModel(new MockDelayModel());
         }

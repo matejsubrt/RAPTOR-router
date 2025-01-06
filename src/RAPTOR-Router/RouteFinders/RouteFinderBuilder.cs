@@ -31,16 +31,17 @@ namespace RAPTOR_Router.RouteFinders
         {
             public Task Execute(IJobExecutionContext context)
             {
-                string? gtfsZipArchiveLocation = Config.DefaultGTFSPath;
-                if (gtfsZipArchiveLocation is null)
-                {
-                    throw new ApplicationException("GTFS Zip archive location must be set");
-                }
-                else if (forbiddenCrossingLines is null)
-                {
-                    throw new ApplicationException("Forbidden crossing lines must be set");
-                }
-                LoadGtfsData(gtfsZipArchiveLocation, forbiddenCrossingLines);
+                //string? gtfsZipArchiveLocation = Config.DefaultGTFSPath;
+                //if (gtfsZipArchiveLocation is null)
+                //{
+                //    throw new ApplicationException("GTFS Zip archive location must be set");
+                //}
+                //else if (forbiddenCrossingLines is null)
+                //{
+                //    throw new ApplicationException("Forbidden crossing lines must be set");
+                //}
+                LoadAllData(false);
+                //LoadGtfsData(gtfsZipArchiveLocation, forbiddenCrossingLines);
                 Console.WriteLine("GTFS data reloaded at " + DateTime.Now);
                 return Task.CompletedTask;
             }
@@ -106,7 +107,7 @@ namespace RAPTOR_Router.RouteFinders
 
             ITrigger dailyTrigger = TriggerBuilder.Create()
                 .WithIdentity("dailyGtfsTrigger", "group1")
-                .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(3, 00)) // Executes at 3:00 AM every day
+                .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(4, 30)) // Executes at 4:30 AM every day
                 .StartNow()
                 .Build();
 
@@ -222,7 +223,7 @@ namespace RAPTOR_Router.RouteFinders
         /// Loads all the GTFS, GBFS and forbidden crossing data from the locations provided in the config file and bike data sources
         /// </summary>
         /// <exception cref="Exception">The configuration is wrong</exception>
-        public static void LoadAllData(string? alternativeGtfsArchiveLocation = null, bool useMocks = false)
+        public static void LoadAllData(bool first = true, string? alternativeGtfsArchiveLocation = null, bool useMocks = false)
         {
             // Retrieve configuration values
             string? gtfsZipArchiveLocation = Config.DefaultGTFSPath;
@@ -259,7 +260,7 @@ namespace RAPTOR_Router.RouteFinders
             // Connect the transit and bike models through transfers
             ConnectModelsThroughTransfers(forbiddenCrossings);
 
-            if (!useMocks)
+            if (!useMocks && first)
             {
                 // Start the timer that periodically updates the delay and transit models
                 InitializeScheduler().GetAwaiter().GetResult();
