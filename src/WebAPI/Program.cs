@@ -4,7 +4,6 @@ using RAPTOR_Router.Models.Results;
 using RAPTOR_Router.RouteFinders;
 using RAPTOR_Router.Structures.Configuration;
 using RAPTOR_Router.Structures.Requests;
-using System.Web.Http;
 
 namespace WebAPI
 {

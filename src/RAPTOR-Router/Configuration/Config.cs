@@ -35,11 +35,19 @@ namespace RAPTOR_Router.Configuration
             //    basePath = Path.GetFullPath(Path.Combine(basePath, ".."));
             //}
 
-
-            _config = new ConfigurationBuilder()
-                .SetBasePath(basePath)
-                .AddJsonFile("config.json", optional: false, reloadOnChange: true)
-                .Build();
+            try
+            {
+                _config = new ConfigurationBuilder()
+                    .SetBasePath(basePath)
+                    .AddJsonFile("config.json", optional: false, reloadOnChange: true)
+                    .Build();
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("The application was not launched from the directory containing the .csproj file. To ensure the application is able to find the config.json file, please ensure that you launch the app from within the src/WebAPI or src/WebAPI-light directory.");
+                Environment.Exit(1);
+            }
+            
 
             Console.WriteLine("Base Path: " + basePath);
 
