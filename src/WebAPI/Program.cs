@@ -56,16 +56,17 @@ namespace WebAPI
             app.Run();
         }
 
-        static async Task<ActionResult<IEnumerable<SearchResult>>> HandleConnectionRequest(ConnectionRequest request)
+        static async Task<IResult> HandleConnectionRequest(ConnectionRequest request)
         {
             if (request.settings is null)
             {
-                return new BadRequestObjectResult(new ProblemDetails
+                var problemDetails = new ProblemDetails
                 {
                     Status = StatusCodes.Status400BadRequest,
                     Title = "Invalid settings",
                     Detail = ConnectionSearchError.InvalidSettings.ToMessage()
-                });
+                };
+                return Results.BadRequest(problemDetails);
             }
 
             ConnectionApiResponseResult apiResponseResult;
@@ -83,25 +84,27 @@ namespace WebAPI
             switch (apiResponseResult.Error)
             {
                 case ConnectionSearchError.NoError:
-                    return new OkObjectResult(apiResponseResult.Results);
+                    return Results.Ok(apiResponseResult.Results);
                 case ConnectionSearchError.NoConnectionFound:
-                    return new NotFoundObjectResult(new ProblemDetails
+                    var notFoundDetails = new ProblemDetails
                     {
                         Status = StatusCodes.Status404NotFound,
                         Title = "No connection found",
                         Detail = apiResponseResult.Error.ToMessage()
-                    });
+                    };
+                    return Results.NotFound(notFoundDetails);
                 default:
-                    return new BadRequestObjectResult(new ProblemDetails
+                    var badRequestDetails = new ProblemDetails
                     {
                         Status = StatusCodes.Status400BadRequest,
                         Title = "Bad request",
                         Detail = apiResponseResult.Error.ToMessage()
-                    });
+                    };
+                    return Results.BadRequest(badRequestDetails);
             }
         }
 
-        static ActionResult<IEnumerable<SearchResult.UsedTrip>> HandleAlternativeTripsRequest(AlternativeTripsRequest request)
+        static IResult HandleAlternativeTripsRequest(AlternativeTripsRequest request)
         {
             var routeFinder = RouteFinderBuilder.CreateDirectRouteFinder();
             AlternativeTripsApiResponseResult result = routeFinder.GetAlternativeTrips(request);
@@ -109,30 +112,32 @@ namespace WebAPI
             switch (result.Error)
             {
                 case AlternativesSearchError.NoError:
-                    return new OkObjectResult(result.Alternatives);
+                    return Results.Ok(result.Alternatives);
                 case AlternativesSearchError.NoTripsFound:
-                    return new NotFoundObjectResult(new ProblemDetails
+                    var notFoundDetails = new ProblemDetails
                     {
                         Status = StatusCodes.Status404NotFound,
                         Title = "No alternative trips found",
                         Detail = result.Error.ToMessage()
-                    });
+                    };
+                    return Results.NotFound(notFoundDetails);
                 default:
-                    return new BadRequestObjectResult(new ProblemDetails
+                    var badRequestDetails = new ProblemDetails
                     {
                         Status = StatusCodes.Status400BadRequest,
                         Title = "Bad request",
                         Detail = result.Error.ToMessage()
-                    });
+                    };
+                    return Results.BadRequest(badRequestDetails);
             }
         }
 
-        static ActionResult<IEnumerable<SearchResult>> HandleUpdateDelaysRequest(List<SearchResult> results)
+        static IResult HandleUpdateDelaysRequest(List<SearchResult> results)
         {
             var delayUpdater = RouteFinderBuilder.CreateDelayUpdater();
-            delayUpdater.UpdateDelays(results);
+            var newResults = delayUpdater.UpdateDelays(results);
 
-            return new OkObjectResult(results);
+            return Results.Ok(newResults);
         }
     }
 }

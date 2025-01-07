@@ -18,12 +18,8 @@ namespace WebAPI_light
             var appBuilder = WebApplication.CreateBuilder(args);
             appBuilder.Services.AddAuthorization();
             appBuilder.Services.AddEndpointsApiExplorer();
-            appBuilder.Services.AddSwaggerGen();
 
             var app = appBuilder.Build();
-            //app.UseSwagger();
-            //app.UseSwaggerUI();
-            //app.MapSwagger();
             app.UseHttpsRedirection();
             app.UseExceptionHandler(exceptionHandlerApp
                 => exceptionHandlerApp.Run(async context
