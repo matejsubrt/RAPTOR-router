@@ -122,3 +122,6 @@
 /external-testing/postman-run2.json
 /src/WebAPI-light/WebAPI-light.csproj.user
 /src/WebAPI/WebAPI.csproj.user
+/src/WebAPI/bin/Debug/net9.0
+/src/RAPTOR-Router/bin/Debug/net9.0
+/src/ConnectionSearchTests/bin/Debug/net9.0
