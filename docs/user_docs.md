@@ -1,35 +1,31 @@
-# Basic RAPTOR Router user documentation
-The project consists of 3 separate parts (subprojects). One of them contains the implementation of the data loading and the algorithm itself - RAPTOR-Router. It has no UI and is to be used only as a library, which the other 2 projects use.
+# RAPTOR Router API usage documentation
 
-The CLIApp project uses the library interface to provide you with the possibility of using the command line to search for public transit connections. You enter the names of the stops between which you wish to search for a connection and the departure time, and it will show you a text represetation of the resulting connection.
+There are 3 distinct POST endpoints - a connection search endpoint, a trip alternatives endpoint, and a delay updating endpoint. Let's go over them and explain their purpose. Note that when running the server-side application in the WebAPI (and not WebAPI-light) configuration, the exact schemas of the requests and responses, as well as other information about the API, can be found at `<BASE-URL>/swagger/index.html`, so we will not be showing them here. More information can be found in the [developer documentation](dev_docs.md).
 
-The WebAPI project uses the library interface to run an API with one entry point - /connection with query parameters srcStopName, destStopName and departureTime, which returns a json representation of the resulting best connection.
+### Connection Search Endpoint
 
-## Using the program as a console application
-To use the program as a console app is very easy. 
+The connection search endpoint at the address `<BASE-URL>/connection` is the main endpoint for connection searching. It takes a connection request object containing all the search parameters, including the source and target locations, the specified time, and the settings for the search. It returns a list of the first relevant connections for the search parameters. This endpoint is also used for search expanding - in case the client already has some results and wants to request later ones, it can send the same request with the time set to the departure of the last existing result and the `byEarliestDeparture` parameter set to `true`. Similarly, when expanding to the past, the time is set to the arrival time of the earliest existing connection and `byEarliestDeparture` to `false`.
 
-First, you will need to download a GTFS zip archive to be used for the connection search. (See [GTFS documentation](https://gtfs.org/schedule/reference/) for more information about the GTFS format). For Prague, you can use the [GTFS archive for Prague public transit](http://data.pid.cz/PID_GTFS.zip).
+This endpoint may respond with the following codes:
 
-Second, you configure the path to the zip archive in the config.json file.
+- `200: OK` if the connection search was successfully performed.
+- `404: Not Found` in case no connection was found for the parameters.
+- `400: Bad Request` in case any of the provided parameters or setting values were invalid. In that case, the response will contain a message with the reason for the failure.
 
-Then, you build and run the CLIApp program. It will start processing the GTFS data to build a timetable model to be used by the connection search algorithm. Depending on the performance of your computer, this can take between 20-40 seconds.
+### Trip Alternatives Endpoint
 
-After the model has been successfully loaded, it will prompt you to first enter the source stop name and then the destination stop name. You have to enter these exactly as they appear in the GTFS files, i.e. use the correct case and interpunction. (For example, in Prague for the stop "Nádraží Holešovice" neither "Nádraží holešovice" nor "Nadrazi Holesovice" will work). If the input name does not exist in the gtfs archive, the program will prompt you to re-enter the name.
+This endpoint exists at the address `<BASE-URL>/alternative-trips` and serves the purpose of finding alternative direct trips. The client needs to provide the IDs of 2 stops between which direct trips run, the ID of the trip for which it wants to find the alternatives, a time, and a parameter specifying whether to find earlier or later alternatives. The API will then respond with a list of alternative direct trips. 
 
-After you press enter, the program will prompt you to enter the departure time in the DD/MM/YYYY hh:mm:ss format, i.e. for 2.1.2023, 3:04:05, you should enter "02/01/2023 03:04:05".
+The possible response codes are:
 
-The program will then run the RAPTOR connection-search algorithm itself and show you a text representation of the fastest connection possible between the two stops you entered, that leaves after the specified departure time. Immediately after, you will be able to search for another connection if you wish to.
+- `200: OK` if alternatives were found correctly.
+- `400: Bad Request` when some of the parameters were invalid.
+- `404: Not Found` when the alternative trips could not be found.
 
-To exit the program, press Ctrl+C.
+### Delay Updating Endpoint
 
-## Using the program as a Web API
+This endpoint at the address `<BASE-URL>/update-delays` has the same input and output parameters. It takes a list of existing results, goes through all trip alternatives of all trip segments of all the results, and updates all their delay data. Then it returns these newly updated results.
 
-You can then build and run the program. It will prompt you to enter the path to the GTFS zip archive you want to use. After you provide this, the program will start processing the GTFS data to build a timetable model to be used by the connection search algorithm. Depending on the performance of your computer, this can take between 20-40 seconds.
+This endpoint only returns the code:
 
-After it has finished, it will display information about the web application that has been launched.
-
-To use the running API, all you need is to go to the shown address (http://localhost:5000) and send a GET request to /connection with parameters srcStopName, destStopName, dateTime in the query. Once again, the names have to be exact (and encoded for web use) and the departureTime (dateTime) has to be in the format of YYYYMMDDhhmmss. For example http://localhost:5000/connection?srcStopName=Malostransk%C3%A9%20n%C3%A1m%C4%9Bst%C3%AD&destStopName=Kuchy%C5%88ka&dateTime=20230707070707 will return you a json representation of the best connection from Malostranské náměstí to Kuchyňka at 7.7.2023 at 7:07:07.
-
-The resulting json is obtained by serializing the SearchResult object (see [Dev docs](https://matejsubrt.github.io/RAPTOR-router/html/index.html)). 
-
-Once again, to end the application, press Ctrl+C.
+- `200: OK`, as it is always able to return at least the results in the request as they were in case no delay information could be found.

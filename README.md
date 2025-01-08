@@ -16,11 +16,11 @@
 
 ### User documentation
 
-For information on how to use the API, please refer to section 3.3 of the [thesis](https://github.com/matejsubrt/bachelor-thesis) related to this project.
+For information on how to use the API, see [user documentation](docs/user_docs.md) or refer to section 3.3 of the [thesis](https://github.com/matejsubrt/bachelor-thesis) related to this project.
 
 ### Developer documentation
 
-For generated developer documentation, see [Dev docs](https://matejsubrt.github.io/RAPTOR-router/html/index.html). For installation instructions and an overview of the codebase, please refer to section 4.1 of the [thesis](https://github.com/matejsubrt/bachelor-thesis) related to this project.
+For generated developer documentation, see the [documentation website](https://matejsubrt.github.io/RAPTOR-router/html/index.html). For installation instructions and an overview of the codebase, please refer to the [developer documentation](docs/dev_docs.md) or see section 4.1 of the [thesis](https://github.com/matejsubrt/bachelor-thesis) related to this project.
 
 ### RAPTOR Algorithm documentation
 
