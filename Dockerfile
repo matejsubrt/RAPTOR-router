@@ -16,6 +16,8 @@ WORKDIR /app
 # Create non-root user and ensure /app is writable for auto-downloaded GTFS data
 RUN adduser --disabled-password --gecos "" appuser
 COPY --from=build /app/publish .
+COPY --from=build /repo/src/WebAPI/WebAPI.csproj .
+COPY --from=build /repo/src/WebAPI/config.json* .
 RUN chown -R appuser:appuser /app
 USER appuser
 
