@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,28 +23,39 @@ namespace RAPTOR_Router.Configuration
         /// <exception cref="FileNotFoundException">Thrown if the config.json file was not found in its location</exception>
         static Config()
         {
-            basePath = Directory.GetCurrentDirectory();
-            basePath = Path.GetFullPath(Path.Combine(basePath, ".."));
+            string currentDir = Directory.GetCurrentDirectory();
+            string parentDir = Path.GetFullPath(Path.Combine(currentDir, ".."));
+            string appDir = AppDomain.CurrentDomain.BaseDirectory;
 
-            //if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            //{
-            //    basePath = Path.GetFullPath(Path.Combine(basePath, "..", "..", "..", ".."));
-            //}
-            //else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            //{
-            //    basePath = Path.GetFullPath(Path.Combine(basePath, ".."));
-            //}
+            if (File.Exists(Path.Combine(currentDir, "config.json")))
+            {
+                basePath = currentDir;
+            }
+            else if (File.Exists(Path.Combine(parentDir, "config.json")))
+            {
+                basePath = parentDir;
+            }
+            else if (File.Exists(Path.Combine(appDir, "config.json")))
+            {
+                basePath = appDir;
+            }
+            else
+            {
+                basePath = currentDir;
+            }
 
             try
             {
                 _config = new ConfigurationBuilder()
                     .SetBasePath(basePath)
                     .AddJsonFile("config.json", optional: false, reloadOnChange: true)
+                    .AddEnvironmentVariables()
                     .Build();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                Console.WriteLine("The application was not launched from the directory containing the .csproj file. To ensure the application is able to find the config.json file, please ensure that you launch the app from within the src/WebAPI or src/WebAPI-light directory.");
+                Console.WriteLine($"Failed to load config.json from {basePath}: {ex.Message}");
+                Console.WriteLine("To ensure the application is able to find the config.json file, ensure config.json is in the working directory, parent directory, or app directory.");
                 Environment.Exit(1);
             }
             

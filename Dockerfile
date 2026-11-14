@@ -11,15 +11,21 @@ COPY . .
 RUN dotnet publish src/WebAPI/WebAPI.csproj -c Release -o /app/publish /p:UseAppHost=false
 
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
-WORKDIR /repo/src/WebAPI
+WORKDIR /app
 
-# Create non-root user and ensure /repo is writable for auto-downloaded GTFS data
+# Create non-root user
 RUN adduser --disabled-password --gecos "" appuser
+
+# Copy published binaries
 COPY --from=build /app/publish .
-COPY --from=build /repo/src/WebAPI/WebAPI.csproj .
-COPY --from=build /repo/config.json* /repo/
-COPY --from=build /repo/src/WebAPI/config.json* .
-RUN chown -R appuser:appuser /repo
+
+# Copy config and required static data
+COPY src/config.json .
+COPY src/data/forbidden_lines ./data/forbidden_lines
+COPY src/data/bike_distances ./data/bike_distances
+
+# Ensure app directory (including data downloads) is writable by appuser
+RUN mkdir -p /app/data/gtfs && chown -R appuser:appuser /app
 USER appuser
 
 EXPOSE 8080
